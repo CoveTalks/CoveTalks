@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - CoveTalks</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        /* Base styles same as other pages */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: white;
+            color: #333;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c5aa0;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #2c5aa0;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #2c5aa0;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e3d6f;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #2c5aa0;
+            border: 2px solid #2c5aa0;
+        }
+
+        .btn-secondary:hover {
+            background: #2c5aa0;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 6rem;
+            min-height: 100vh;
+            background: #f8f9fa;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Registration Options */
+        .registration-section {
+            padding: 4rem 0;
+        }
+
+        .registration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .registration-card {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .registration-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .registration-card.featured {
+            border: 3px solid #f39c12;
+            position: relative;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #f39c12;
+            color: white;
+            padding: 0.5rem 2rem;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            color: #2c5aa0;
+            margin-bottom: 1rem;
+        }
+
+        .card-description {
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .card-features {
+            list-style: none;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .card-features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .card-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .price-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c5aa0;
+            margin-bottom: 1rem;
+        }
+
+        .price-note {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Form Styles */
+        .registration-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2c5aa0;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #f39c12;
+        }
+
+        .footer-section a {
+            color: #bdc3c7;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #f39c12;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #34495e;
+            padding-top: 1rem;
+            text-align: center;
+            color: #bdc3c7;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .registration-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .registration-card {
+                padding: 2rem;
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2c5aa0;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">CoveTalks</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="members.html">Members</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="register.html" class="btn btn-secondary">Join Community</a>
+                <button id="loginBtn" class="btn btn-primary">Login</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1>Join CoveTalks</h1>
+            <p>Choose your membership type and start connecting today</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Registration Options -->
+            <div class="registration-section">
+                <div class="registration-grid">
+                    <!-- Speaker Registration -->
+                    <div class="registration-card">
+                        <div class="card-icon">🎤</div>
+                        <h2 class="card-title">Join as Speaker</h2>
+                        <p class="card-description">
+                            Share your expertise and connect with organizations seeking speakers
+                        </p>
+                        <ul class="card-features">
+                            <li>Access to speaking opportunities</li>
+                            <li>Profile in member directory</li>
+                            <li>Direct contact with organizations</li>
+                            <li>Booking management tools</li>
+                            <li>Review and rating system</li>
+                        </ul>
+                        <div class="price-display">Subscription Required</div>
+                        <p class="price-note">Choose from Standard, Plus, or Premium plans</p>
+                        <a href="pricing.html" class="btn btn-primary">View Pricing Plans</a>
+                    </div>
+
+                    <!-- Organization Registration -->
+                    <div class="registration-card featured">
+                        <div class="featured-badge">FREE FOR ORGANIZATIONS</div>
+                        <div class="card-icon">🏢</div>
+                        <h2 class="card-title">Join as Organization</h2>
+                        <p class="card-description">
+                            Find expert speakers for your events completely free
+                        </p>
+                        <ul class="card-features">
+                            <li>Free access to speaker database</li>
+                            <li>Post speaking opportunities</li>
+                            <li>Contact speakers directly</li>
+                            <li>Event management tools</li>
+                            <li>Review speakers</li>
+                        </ul>
+                        <div class="price-display">FREE</div>
+                        <p class="price-note">Always free for non-profits, schools, and organizations</p>
+                        <button id="orgRegisterBtn" class="btn btn-primary">
+                            <span id="orgRegisterText">Register Free</span>
+                            <span id="orgRegisterLoader" class="loading hidden"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Organization Registration Form -->
+                <div id="organizationForm" class="registration-form hidden">
+                    <h3>Organization Registration</h3>
+                    <form id="orgForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="orgName">Organization Name *</label>
+                                <input type="text" id="orgName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="orgType">Organization Type *</label>
+                                <select id="orgType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="Non-Profit">Non-Profit</option>
+                                    <option value="School">School/Educational</option>
+                                    <option value="Religious">Religious/Church</option>
+                                    <option value="Youth Group">Youth Group</option>
+                                    <option value="Chamber">Chamber of Commerce</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contactName">Primary Contact Name *</label>
+                                <input type="text" id="contactName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail">Contact Email *</label>
+                                <input type="email" id="contactEmail" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contactPhone">Contact Phone</label>
+                                <input type="tel" id="contactPhone">
+                            </div>
+                            <div class="form-group">
+                                <label for="orgWebsite">Website</label>
+                                <input type="url" id="orgWebsite" placeholder="https://">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="orgLocation">Location (City, State/Country) *</label>
+                            <input type="text" id="orgLocation" required placeholder="Phoenix, AZ, USA">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="orgDescription">About Your Organization</label>
+                            <textarea id="orgDescription" placeholder="Brief description of your organization and the types of events you host..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="speakingTopics">Speaking Topics of Interest</label>
+                            <input type="text" id="speakingTopics" placeholder="Business, Health, Technology, Education...">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            Complete Free Registration
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CoveTalks</h3>
+                    <p>Connecting speakers with organizations worldwide</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="index.html">Home</a>
+                    <a href="members.html">Members</a>
+                    <a href="register.html">Register</a>
+                    <a href="pricing.html">Pricing</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <a href="#">Help Center</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">Facebook</a>
+                    <a href="#">Email</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 CoveTalks. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            STRIPE: {
+                PUBLISHABLE_KEY: 'pk_live_51RrABe1Fvl67fP5VrtH3hkNvl4chaiFtlskEMSHJIw6M1tAHdcgZ21pgup7DCEajjyQFUDM1jnIE7W1KrGBDjieV002ztaIRXk'
+            },
+            API_BASE: window.location.hostname === 'localhost' ? 'http://localhost:3001' : '/.netlify/functions/api'
+        };
+
+        // Initialize Stripe
+        const stripe = Stripe(CONFIG.STRIPE.PUBLISHABLE_KEY);
+
+        // DOM Elements
+        const orgRegisterBtn = document.getElementById('orgRegisterBtn');
+        const organizationForm = document.getElementById('organizationForm');
+        const orgForm = document.getElementById('orgForm');
+        const loginBtn = document.getElementById('loginBtn');
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthStatus();
+        });
+
+        orgRegisterBtn.addEventListener('click', showOrganizationForm);
+        orgForm.addEventListener('submit', handleOrganizationRegistration);
+        loginBtn.addEventListener('click', () => window.location.href = 'index.html#login');
+
+        // Show organization registration form
+        function showOrganizationForm() {
+            organizationForm.classList.remove('hidden');
+            organizationForm.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Handle organization registration
+        async function handleOrganizationRegistration(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('orgName').value,
+                type: document.getElementById('orgType').value,
+                contactName: document.getElementById('contactName').value,
+                email: document.getElementById('contactEmail').value,
+                phone: document.getElementById('contactPhone').value,
+                website: document.getElementById('orgWebsite').value,
+                location: document.getElementById('orgLocation').value,
+                description: document.getElementById('orgDescription').value,
+                speakingTopics: document.getElementById('speakingTopics').value
+            };
+
+            // Show loading state
+            document.getElementById('orgRegisterText').textContent = 'Processing...';
+            document.getElementById('orgRegisterLoader').classList.remove('hidden');
+            orgRegisterBtn.disabled = true;
+
+            try {
+                // Create Stripe checkout session for free organization signup
+                const response = await fetch(`${CONFIG.API_BASE}/stripe/create-session`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        plan: 'organization',
+                        period: 'monthly',
+                        userType: 'organization',
+                        organizationData: formData
+                    })
+                });
+
+                const session = await response.json();
+                
+                if (session.url) {
+                    // Redirect to Stripe checkout
+                    window.location.href = session.url;
+                } else {
+                    throw new Error('Failed to create registration session');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert('Registration failed. Please try again.');
+            } finally {
+                // Reset loading state
+                document.getElementById('orgRegisterText').textContent = 'Register Free';
+                document.getElementById('orgRegisterLoader').classList.add('hidden');
+                orgRegisterBtn.disabled = false;
+            }
+        }
+
+        // Check authentication status
+        function checkAuthStatus() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                loginBtn.textContent = 'Dashboard';
+                loginBtn.onclick = () => window.location.href = 'members.html';
+            }
+        }
+    </script>
+</body>
+</html>

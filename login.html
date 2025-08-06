@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CoveTalks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c5aa0;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #2c5aa0;
+        }
+
+        /* Login Container */
+        .login-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 1rem 3rem;
+        }
+
+        .login-box {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 600px;
+        }
+
+        .login-form-section {
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-info-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .form-header {
+            margin-bottom: 2rem;
+        }
+
+        .form-header h2 {
+            color: #2c5aa0;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-header p {
+            color: #666;
+        }
+
+        .form-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e1e8ed;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            color: #666;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .tab-btn.active {
+            color: #2c5aa0;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #2c5aa0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2c5aa0;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .forgot-link {
+            color: #2c5aa0;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #2c5aa0;
+            color: white;
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-primary:hover {
+            background: #1e3d6f;
+            transform: translateY(-2px);
+        }
+
+        .btn-google {
+            background: white;
+            color: #333;
+            border: 2px solid #e1e8ed;
+            width: 100%;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-google:hover {
+            background: #f8f9fa;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e1e8ed;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            position: relative;
+            color: #666;
+        }
+
+        .signup-prompt {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #666;
+        }
+
+        .signup-prompt a {
+            color: #2c5aa0;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .signup-prompt a:hover {
+            text-decoration: underline;
+        }
+
+        /* Info Section Content */
+        .info-icon {
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .feature-list {
+            text-align: left;
+            max-width: 300px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-icon {
+            width: 30px;
+            height: 30px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Messages */
+        .message {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2c5aa0;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .login-box {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+
+            .login-info-section {
+                display: none;
+            }
+
+            .login-form-section {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">CoveTalks</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="members.html">Members</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Login Container -->
+    <div class="login-container">
+        <div class="login-box">
+            <!-- Login Form Section -->
+            <div class="login-form-section">
+                <div class="form-header">
+                    <h2>Welcome Back</h2>
+                    <p>Login to access your account</p>
+                </div>
+
+                <!-- Tabs -->
+                <div class="form-tabs">
+                    <button class="tab-btn active" onclick="switchTab('member')">Member Login</button>
+                    <button class="tab-btn" onclick="switchTab('organization')">Organization Login</button>
+                </div>
+
+                <!-- Messages -->
+                <div id="errorMessage" class="message error-message"></div>
+                <div id="successMessage" class="message success-message"></div>
+
+                <!-- Login Form -->
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required placeholder="Enter your email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required placeholder="Enter your password">
+                    </div>
+
+                    <div class="remember-forgot">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember" name="remember">
+                            <label for="remember">Remember me</label>
+                        </div>
+                        <a href="#" class="forgot-link" onclick="showForgotPassword()">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <span id="loginText">Login</span>
+                        <span id="loginLoader" class="loading" style="display: none;"></span>
+                    </button>
+                </form>
+
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+
+                <button class="btn btn-google" onclick="loginWithGoogle()">
+                    <img src="https://www.google.com/favicon.ico" width="20" alt="Google">
+                    Continue with Google
+                </button>
+
+                <div class="signup-prompt">
+                    Don't have an account? <a href="register.html">Sign up now</a>
+                </div>
+            </div>
+
+            <!-- Info Section -->
+            <div class="login-info-section">
+                <div class="info-icon">🎯</div>
+                <div class="info-content">
+                    <h3>Connect & Inspire</h3>
+                    <p>Join thousands of speakers and organizations creating meaningful connections worldwide.</p>
+                    
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>Access to 10,000+ members</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>Direct booking capabilities</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>Secure payment processing</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>Real-time notifications</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000;">
+        <div style="background: white; max-width: 400px; margin: 10% auto; padding: 2rem; border-radius: 15px;">
+            <h3 style="color: #2c5aa0; margin-bottom: 1rem;">Reset Password</h3>
+            <p style="color: #666; margin-bottom: 1.5rem;">Enter your email address and we'll send you a link to reset your password.</p>
+            <form id="forgotForm">
+                <div class="form-group">
+                    <input type="email" id="resetEmail" placeholder="Enter your email" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Reset Link</button>
+            </form>
+            <button onclick="closeForgotPassword()" style="margin-top: 1rem; background: none; border: none; color: #666; cursor: pointer;">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            API_BASE: window.location.hostname === 'localhost' ? 
+                'http://localhost:3001' : '/.netlify/functions/api'
+        };
+
+        let currentTab = 'member';
+
+        // Check if already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                // Verify token and redirect if valid
+                verifyAndRedirect(token);
+            }
+
+            // Check for redirect from registration
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('registered') === 'true') {
+                showMessage('success', 'Registration successful! Please login to continue.');
+            }
+        });
+
+        // Form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+            
+            // Show loading
+            document.getElementById('loginText').textContent = 'Logging in...';
+            document.getElementById('loginLoader').style.display = 'inline-block';
+            
+            try {
+                const response = await fetch(`${CONFIG.API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        email, 
+                        password,
+                        userType: currentTab 
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    // Store token
+                    if (remember) {
+                        localStorage.setItem('token', result.token);
+                        localStorage.setItem('user', JSON.stringify(result.user));
+                    } else {
+                        sessionStorage.setItem('token', result.token);
+                        sessionStorage.setItem('user', JSON.stringify(result.user));
+                    }
+                    
+                    showMessage('success', 'Login successful! Redirecting...');
+                    
+                    // Redirect based on user type
+                    setTimeout(() => {
+                        if (result.user.type === 'Organization') {
+                            window.location.href = 'organization-dashboard.html';
+                        } else {
+                            window.location.href = 'members.html';
+                        }
+                    }, 1000);
+                } else {
+                    showMessage('error', result.message || 'Invalid email or password');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showMessage('error', 'Network error. Please try again.');
+            } finally {
+                // Reset button
+                document.getElementById('loginText').textContent = 'Login';
+                document.getElementById('loginLoader').style.display = 'none';
+            }
+        });
+
+        // Switch tabs
+        function switchTab(tab) {
+            currentTab = tab;
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Show message
+        function showMessage(type, message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            
+            if (type === 'error') {
+                errorDiv.textContent = message;
+                errorDiv.classList.add('show');
+                successDiv.classList.remove('show');
+            } else {
+                successDiv.textContent = message;
+                successDiv.classList.add('show');
+                errorDiv.classList.remove('show');
+            }
+            
+            // Hide after 5 seconds
+            setTimeout(() => {
+                errorDiv.classList.remove('show');
+                successDiv.classList.remove('show');
+            }, 5000);
+        }
+
+        // Forgot password
+        function showForgotPassword() {
+            document.getElementById('forgotModal').style.display = 'block';
+        }
+
+        function closeForgotPassword() {
+            document.getElementById('forgotModal').style.display = 'none';
+        }
+
+        document.getElementById('forgotForm')?.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('resetEmail').value;
+            
+            try {
+                const response = await fetch(`${CONFIG.API_BASE}/auth/forgot-password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                });
+                
+                if (response.ok) {
+                    showMessage('success', 'Password reset link sent to your email');
+                    closeForgotPassword();
+                } else {
+                    showMessage('error', 'Email not found');
+                }
+            } catch (error) {
+                showMessage('error', 'Failed to send reset email');
+            }
+        });
+
+        // Google login (placeholder)
+        function loginWithGoogle() {
+            // This would integrate with Google OAuth
+            alert('Google login integration coming soon!');
+        }
+
+        // Verify token and redirect
+        async function verifyAndRedirect(token) {
+            try {
+                const response = await fetch(`${CONFIG.API_BASE}/auth/verify`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.valid) {
+                        // Already logged in, redirect to dashboard
+                        window.location.href = 'members.html';
+                    }
+                }
+            } catch (error) {
+                console.error('Token verification failed:', error);
+            }
+        }
+    </script>
+</body>
+</html>

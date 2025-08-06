@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoveTalks - Where Connections Ignite Opportunities</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: white;
+            color: #333;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c5aa0;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #2c5aa0;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #2c5aa0;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e3d6f;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #2c5aa0;
+            border: 2px solid #2c5aa0;
+        }
+
+        .btn-secondary:hover {
+            background: #2c5aa0;
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8rem 0 4rem;
+            text-align: center;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-content {
+            width: 100%;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            margin-top: 2rem;
+        }
+
+        /* Two Ways Section */
+        .two-ways {
+            padding: 4rem 0;
+            background: #f8f9fa;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .ways-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .way-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .way-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .way-card h3 {
+            color: #2c5aa0;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Meet Our CoveTalkers Section */
+        .meet-section {
+            padding: 4rem 0;
+            background: white;
+        }
+
+        .speakers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .speaker-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .speaker-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .speaker-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+        }
+
+        .speaker-card h4 {
+            color: #2c5aa0;
+            margin-bottom: 0.5rem;
+        }
+
+        .speaker-specialty {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .premium-overlay {
+            background: rgba(44, 90, 160, 0.9);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        /* Organizations Section with Tabs */
+        .organizations {
+            padding: 4rem 0;
+            background: #f8f9fa;
+        }
+
+        .org-tabs {
+            margin-top: 3rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 1rem 2rem;
+            background: white;
+            border: 2px solid #e1e8ed;
+            border-radius: 30px;
+            color: #666;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            border-color: #2c5aa0;
+            color: #2c5aa0;
+        }
+
+        .tab-btn.active {
+            background: #2c5aa0;
+            color: white;
+            border-color: #2c5aa0;
+        }
+
+        .tab-content {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        .tab-inner {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .tab-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-inner h3 {
+            color: #2c5aa0;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-inner p {
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: #666;
+        }
+
+        /* Steps Section */
+        .steps-section {
+            padding: 4rem 0;
+            background: white;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .step {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: #2c5aa0;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+        }
+
+        .step h3 {
+            color: #2c5aa0;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #f39c12;
+        }
+
+        .footer-section a {
+            color: #bdc3c7;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #f39c12;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #34495e;
+            padding-top: 1rem;
+            text-align: center;
+            color: #bdc3c7;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+
+        .close:hover {
+            color: #2c3e50;
+        }
+
+        .auth-form {
+            margin-top: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2c5aa0;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .success-message {
+            color: #27ae60;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .ways-grid,
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .org-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Pricing Styles */
+        .pricing-section {
+            padding: 4rem 0;
+            background: white;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            border: 2px solid #e1e8ed;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .pricing-card:hover {
+            border-color: #2c5aa0;
+            transform: translateY(-5px);
+        }
+
+        .pricing-card.popular {
+            border-color: #f39c12;
+            background: linear-gradient(135deg, #fff, #fff8e1);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #f39c12;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #2c5aa0;
+            margin: 1rem 0;
+        }
+
+        .price-period {
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+
+        .features {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .features li:last-child {
+            border-bottom: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2c5aa0;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">CoveTalks</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="members.html">Members</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="register.html" class="btn btn-secondary">Join Community</a>
+                <button id="loginBtn" class="btn btn-primary">Login</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Where in the world can we help you with your outreach?</h1>
+                <div class="subtitle">Community Outreach. voices everywhere.</div>
+                <p>CoveTalks fulfills the speaking needs of charitable, service, educational, philanthropic and religious organizations around the world.</p>
+                <div class="hero-cta">
+                    <a href="register.html" class="btn btn-primary">Join the Community</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Find Your Voice Section -->
+    <section class="two-ways">
+        <div class="container">
+            <div class="section-title">
+                <h2>Find your voice. Inspire your audience.</h2>
+                <p>Unlock the unique power of authentic and inspiring industry expert speakers. COVETALKS connects Subject Matter Experts and industry experts directly with the organizations that need their unique voice and knowledge.</p>
+            </div>
+            
+            <div class="section-title">
+                <h3>TWO WAYS TO UTILIZE COVETALKS:</h3>
+            </div>
+            
+            <div class="ways-grid">
+                <div class="way-card">
+                    <h3>BECOME A REGISTERED COVETALKER</h3>
+                    <p>Our registered members can take advantage of our extensive database of CoveTalking opportunities. From nonprofits to Fortune 500 companies, everyone needs an expert to come and speak about something.</p>
+                    <a href="register.html" class="btn btn-primary">Become a CoveTalker</a>
+                </div>
+                <div class="way-card">
+                    <h3>LIST YOUR NEED FOR A COVETALKER</h3>
+                    <p>Organizations of all sizes can utilize COVETALKS to post speaking opportunities as the need arises. Our members quickly submit their proposal for consideration, and a speaker is quickly and easily booked.</p>
+                    <a href="register.html" class="btn btn-primary">List Your Need</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Meet Our CoveTalkers -->
+    <section class="meet-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>MEET OUR COVETALKERS</h2>
+                <p>Looking for a specific topic or specialty? Use the filters of our most popular topics to see the top rated CoveTalker in that field.</p>
+            </div>
+            
+            <div class="speakers-grid" id="speakersGrid">
+                <!-- Sample speakers will be loaded here -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="members.html" class="btn btn-secondary">View More</a>
+                <br><br>
+                <p>Not seeing what you're looking for? <a href="register.html" style="color: #2c5aa0;">Submit a new category or speaker now!</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Organizations Section with Tabs -->
+    <section class="organizations">
+        <div class="container">
+            <div class="section-title">
+                <h2>JOIN THE WORLD'S LEADING COVETALK SERVICE</h2>
+                <p>COVETALKS is an inter-active website connecting your organization to individuals who are willing to speak without charging a fee.</p>
+            </div>
+            
+            <!-- Organization Tabs -->
+            <div class="org-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="nonprofits">NON-PROFITS</button>
+                    <button class="tab-btn" data-tab="education">EDUCATION/SCHOOLS</button>
+                    <button class="tab-btn" data-tab="religious">RELIGIOUS/CHURCHES</button>
+                    <button class="tab-btn" data-tab="youth">YOUTH GROUPS</button>
+                </div>
+                
+                <div class="tab-content">
+                    <div id="nonprofits" class="tab-pane active">
+                        <div class="tab-inner">
+                            <div class="tab-icon">🏢</div>
+                            <h3>Non-Profits</h3>
+                            <p>Non-profits and Classrooms gain substantial advantages by engaging external experts for training and development, as these specialists bring new perspectives and targeted expertise that may not be readily available within the organization. Experts can introduce staff to the latest strategies in fundraising, volunteer management, community outreach, and digital tools that improve operational efficiency and expand impact. By learning from professionals deeply versed in specific areas, non-profit teams can enhance their skills and adapt more effectively to the evolving needs of the communities they serve.</p>
+                            <a href="register.html" class="btn btn-primary">Register Your Non-Profit</a>
+                        </div>
+                    </div>
+                    
+                    <div id="education" class="tab-pane">
+                        <div class="tab-inner">
+                            <div class="tab-icon">🎓</div>
+                            <h3>Education/Schools</h3>
+                            <p>Schools and educational institutions benefit immensely from bringing in external experts for training and professional development, as these professionals offer fresh perspectives and specialized knowledge that may not be present within the institution. Experts can introduce educators to the latest research-based teaching strategies, classroom management techniques, and technology tools that enhance student engagement and learning outcomes. By learning from those who are deeply knowledgeable in specific fields, teachers can expand their skill sets and adapt more effectively to the evolving educational landscape.</p>
+                            <a href="register.html" class="btn btn-primary">Register Your School</a>
+                        </div>
+                    </div>
+                    
+                    <div id="religious" class="tab-pane">
+                        <div class="tab-inner">
+                            <div class="tab-icon">⛪</div>
+                            <h3>Religious/Churches</h3>
+                            <p>Religious organizations and churches benefit significantly from bringing in external experts for training and development, as these professionals offer fresh insights and specialized knowledge that may not be available within the congregation. Experts can introduce ministry teams to effective community outreach strategies, volunteer engagement techniques, and technology tools that enhance worship and communication. By learning from those who are deeply knowledgeable in specific areas, faith leaders and staff can expand their capabilities and adapt more readily to the evolving needs of their community.</p>
+                            <a href="register.html" class="btn btn-primary">Register Your Organization</a>
+                        </div>
+                    </div>
+                    
+                    <div id="youth" class="tab-pane">
+                        <div class="tab-inner">
+                            <div class="tab-icon">👥</div>
+                            <h3>Youth Groups</h3>
+                            <p>Youth groups gain tremendous value from bringing in external experts for training and skill development, as these professionals provide fresh perspectives and expertise that complement the organization's mission. Experts can introduce leaders to innovative approaches in youth mentoring, team-building exercises, outdoor skills, and safety practices that enhance program quality and engagement. By learning from specialists in various fields, youth group leaders can broaden their skillsets and adapt to the evolving interests and needs of young members.</p>
+                            <a href="register.html" class="btn btn-primary">Register Your Youth Group</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Steps Section -->
+    <section class="steps-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>WHAT ARE THE NEXT STEPS?</h2>
+            </div>
+            
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>REGISTER</h3>
+                    <p>Whether you're a CoveTalker or an organization, registration is FREE. Take advantage of our search tools and find the best fit for you.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>CONNECT</h3>
+                    <p>Search for the best fit for you and your goals. Find an industry expert or more information on an up and coming topic. We've got it all!</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>REVIEW</h3>
+                    <p>Leaving a review of your experience helps the community grow and learn what works, and what doesn't.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CoveTalks</h3>
+                    <p>Connecting speakers with organizations worldwide to create meaningful opportunities and lasting relationships.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="#home">Home</a>
+                    <a href="members.html">Members</a>
+                    <a href="register.html">Register</a>
+                    <a href="pricing.html">Pricing</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <a href="#">Help Center</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">Facebook</a>
+                    <a href="#">Email</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 CoveTalks. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Member Login</h2>
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                <div id="loginError" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            AIRTABLE: {
+                API_KEY: 'patI3b0QZgesfoKWh.3160fe85c7238ed5cc4a0d6153bec4cef493d3c086233d3304e1211c41fbfd69',
+                BASE_ID: 'appa7KVa8HcVheTOo',
+                TABLE_ID: 'tblHWh5J8t4oPDeI5'
+            },
+            STRIPE: {
+                PUBLISHABLE_KEY: 'pk_live_51RrABe1Fvl67fP5VrtH3hkNvl4chaiFtlskEMSHJIw6M1tAHdcgZ21pgup7DCEajjyQFUDM1jnIE7W1KrGBDjieV002ztaIRXk'
+            },
+            API_BASE: window.location.hostname === 'localhost' ? 'http://localhost:3001' : '/.netlify/functions/api'
+        };
+
+        // Global state
+        let currentUser = null;
+
+        // Initialize Stripe
+        const stripe = Stripe(CONFIG.STRIPE.PUBLISHABLE_KEY);
+
+        // DOM Elements
+        const loginModal = document.getElementById('loginModal');
+        const loginBtn = document.getElementById('loginBtn');
+        const closeModal = document.querySelector('.close');
+        const loginForm = document.getElementById('loginForm');
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSampleSpeakers();
+            checkAuthStatus();
+            setupTabs();
+        });
+
+        loginBtn.addEventListener('click', () => loginModal.style.display = 'block');
+        closeModal.addEventListener('click', () => loginModal.style.display = 'none');
+        window.addEventListener('click', (e) => {
+            if (e.target === loginModal) loginModal.style.display = 'none';
+        });
+        loginForm.addEventListener('submit', handleLogin);
+
+        // Setup tabs functionality
+        function setupTabs() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.dataset.tab;
+
+                    // Remove active class from all buttons and panes
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabPanes.forEach(pane => pane.classList.remove('active'));
+
+                    // Add active class to clicked button and corresponding pane
+                    button.classList.add('active');
+                    document.getElementById(targetTab).classList.add('active');
+                });
+            });
+        }
+
+        // Load sample speakers for home page
+        function loadSampleSpeakers() {
+            const sampleSpeakers = [
+                { name: 'John Smith', specialty: 'Business Leadership', initials: 'JS' },
+                { name: 'Sarah Johnson', specialty: 'Technology Innovation', initials: 'SJ' },
+                { name: 'Dr. Mike Davis', specialty: 'Healthcare & Wellness', initials: 'MD' },
+                { name: 'Lisa Chen', specialty: 'Environmental Sustainability', initials: 'LC' },
+                { name: 'Robert Williams', specialty: 'Financial Planning', initials: 'RW' },
+                { name: 'Emily Brown', specialty: 'Education & Training', initials: 'EB' }
+            ];
+
+            const speakersGrid = document.getElementById('speakersGrid');
+            speakersGrid.innerHTML = sampleSpeakers.map(speaker => `
+                <div class="speaker-card">
+                    <div class="speaker-avatar">${speaker.initials}</div>
+                    <h4>${speaker.name}</h4>
+                    <div class="speaker-specialty">${speaker.specialty}</div>
+                    <div class="premium-overlay">
+                        <p><strong>Premium Feature</strong></p>
+                        <p>Contact details available to registered members</p>
+                        <a href="pricing.html" class="btn btn-secondary" style="margin-top: 0.5rem;">Upgrade Now</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Authentication functions
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+
+            try {
+                const response = await fetch(`${CONFIG.API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    currentUser = result.user;
+                    localStorage.setItem('token', result.token);
+                    loginModal.style.display = 'none';
+                    updateAuthUI();
+                    showSuccess('Login successful!');
+                    // Redirect to members page
+                    window.location.href = 'members.html';
+                } else {
+                    errorDiv.textContent = result.message || 'Login failed';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'Network error. Please try again.';
+            }
+        }
+
+        function checkAuthStatus() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                // Verify token with backend
+                fetch(`${CONFIG.API_BASE}/auth/verify`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.valid) {
+                        currentUser = result.user;
+                        updateAuthUI();
+                    } else {
+                        localStorage.removeItem('token');
+                    }
+                })
+                .catch(error => {
+                    console.error('Auth verification failed:', error);
+                    localStorage.removeItem('token');
+                });
+            }
+        }
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            if (currentUser) {
+                loginBtn.textContent = 'Dashboard';
+                loginBtn.onclick = () => window.location.href = 'members.html';
+            } else {
+                loginBtn.textContent = 'Login';
+                loginBtn.onclick = () => loginModal.style.display = 'block';
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('token');
+            updateAuthUI();
+        }
+
+        // Utility functions
+        function showError(message) {
+            alert(message);
+        }
+
+        function showSuccess(message) {
+            alert(message);
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

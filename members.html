@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members - CoveTalks</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        /* Include the same base styles from index.html */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: white;
+            color: #333;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c5aa0;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #2c5aa0;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #2c5aa0;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e3d6f;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #2c5aa0;
+            border: 2px solid #2c5aa0;
+        }
+
+        .btn-secondary:hover {
+            background: #2c5aa0;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 6rem;
+            min-height: 100vh;
+            background: #f8f9fa;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Search Section */
+        .search-section {
+            padding: 3rem 0;
+        }
+
+        .search-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .search-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: #2c5aa0;
+        }
+
+        /* Results Section */
+        .results-section {
+            margin-top: 2rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .member-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .member-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .member-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .member-info h3 {
+            margin-bottom: 0.25rem;
+            color: #2c5aa0;
+        }
+
+        .member-type {
+            background: #2c5aa0;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+
+        .member-details {
+            margin-bottom: 1rem;
+        }
+
+        .member-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background: #e8f4fd;
+            color: #2c5aa0;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .contact-info {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .premium-blur {
+            filter: blur(3px);
+            pointer-events: none;
+        }
+
+        .upgrade-overlay {
+            position: relative;
+            text-align: center;
+            margin-top: -2rem;
+            z-index: 2;
+        }
+
+        .auth-required {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2c5aa0;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .search-filters {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">CoveTalks</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="members.html">Members</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="register.html" class="btn btn-secondary">Join Community</a>
+                <button id="loginBtn" class="btn btn-primary">Login</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1>Member Directory</h1>
+            <p>Find speakers and organizations in our community</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Search Section -->
+            <div class="search-section">
+                <div class="search-container">
+                    <h2>Search Members</h2>
+                    <div class="search-filters">
+                        <div class="filter-group">
+                            <label for="searchTerm">Search</label>
+                            <input type="text" id="searchTerm" placeholder="Name, expertise, or keyword">
+                        </div>
+                        <div class="filter-group">
+                            <label for="typeFilter">Type</label>
+                            <select id="typeFilter">
+                                <option value="">All</option>
+                                <option value="Speaker">Speakers</option>
+                                <option value="Organization">Organizations</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="locationFilter">Location</label>
+                            <input type="text" id="locationFilter" placeholder="City, State, or Country">
+                        </div>
+                        <div class="filter-group">
+                            <label for="specialtyFilter">Specialty</label>
+                            <input type="text" id="specialtyFilter" placeholder="Business, Health, Technology...">
+                        </div>
+                    </div>
+                    
+                    <button id="searchBtn" class="btn btn-primary">
+                        <span id="searchBtnText">Search</span>
+                        <span id="searchLoader" class="loading hidden"></span>
+                    </button>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results-section">
+                    <div id="authRequired" class="auth-required hidden">
+                        <h3>Member Access Required</h3>
+                        <p>Please log in or register to view our member directory and access contact information.</p>
+                        <div style="margin-top: 1rem;">
+                            <a href="pricing.html" class="btn btn-primary">View Pricing</a>
+                            <a href="register.html" class="btn btn-secondary">Register Free</a>
+                        </div>
+                    </div>
+
+                    <div id="searchResults" class="results-grid">
+                        <!-- Results will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            AIRTABLE: {
+                API_KEY: 'patI3b0QZgesfoKWh.3160fe85c7238ed5cc4a0d6153bec4cef493d3c086233d3304e1211c41fbfd69',
+                BASE_ID: 'appa7KVa8HcVheTOo',
+                TABLE_ID: 'tblHWh5J8t4oPDeI5'
+            },
+            API_BASE: window.location.hostname === 'localhost' ? 'http://localhost:3001' : '/.netlify/functions/api'
+        };
+
+        // Global state
+        let currentUser = null;
+
+        // DOM Elements
+        const searchBtn = document.getElementById('searchBtn');
+        const searchResults = document.getElementById('searchResults');
+        const authRequired = document.getElementById('authRequired');
+        const loginBtn = document.getElementById('loginBtn');
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthStatus();
+            loadInitialData();
+        });
+
+        searchBtn.addEventListener('click', performSearch);
+        loginBtn.addEventListener('click', () => window.location.href = 'index.html#login');
+
+        // Check authentication status
+        function checkAuthStatus() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                fetch(`${CONFIG.API_BASE}/auth/verify`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.valid) {
+                        currentUser = result.user;
+                        updateAuthUI();
+                        authRequired.classList.add('hidden');
+                    } else {
+                        localStorage.removeItem('token');
+                        showAuthRequired();
+                    }
+                })
+                .catch(error => {
+                    console.error('Auth verification failed:', error);
+                    localStorage.removeItem('token');
+                    showAuthRequired();
+                });
+            } else {
+                showAuthRequired();
+            }
+        }
+
+        function showAuthRequired() {
+            authRequired.classList.remove('hidden');
+            searchResults.style.display = 'none';
+        }
+
+        function updateAuthUI() {
+            if (currentUser) {
+                loginBtn.textContent = 'Dashboard';
+                loginBtn.onclick = () => window.location.href = 'dashboard.html';
+            }
+        }
+
+        // Load initial data
+        function loadInitialData() {
+            if (currentUser) {
+                loadSampleData();
+            } else {
+                // Show sample data with limited access
+                loadLimitedSampleData();
+            }
+        }
+
+        // Sample data for authenticated users
+        function loadSampleData() {
+            const sampleData = [
+                {
+                    id: 'sample1',
+                    Name: 'John Smith',
+                    Type: 'Speaker',
+                    Location: 'New York, NY',
+                    Specialty: 'Business Leadership, Entrepreneurship, Digital Transformation',
+                    Bio: 'Former Fortune 500 CEO with 20+ years of experience in business transformation and leadership development.',
+                    Email: 'john.smith@example.com',
+                    Phone: '(555) 123-4567',
+                    Website: 'https://johnsmithspeaker.com'
+                },
+                {
+                    id: 'sample2',
+                    Name: 'Sarah Johnson',
+                    Type: 'Speaker',
+                    Location: 'San Francisco, CA',
+                    Specialty: 'Technology, Innovation, Women in Tech, Artificial Intelligence',
+                    Bio: 'Tech executive and advocate for diversity in technology. Expert in AI implementation and digital innovation.',
+                    Email: 'sarah.johnson@techspeaker.com',
+                    Phone: '(555) 987-6543',
+                    Website: 'https://sarahjohnsontech.com'
+                },
+                {
+                    id: 'sample3',
+                    Name: 'Phoenix Chamber of Commerce',
+                    Type: 'Organization',
+                    Location: 'Phoenix, AZ',
+                    Specialty: 'Business Networking, Economic Development, Community Growth',
+                    Bio: 'Leading business organization hosting monthly speaker events and networking opportunities for local entrepreneurs.',
+                    Email: 'events@phoenixchamber.org',
+                    Phone: '(602) 555-0123',
+                    Website: 'https://phoenixchamber.org'
+                },
+                {
+                    id: 'sample4',
+                    Name: 'Dr. Mike Davis',
+                    Type: 'Speaker',
+                    Location: 'Chicago, IL',
+                    Specialty: 'Healthcare, Wellness, Mental Health, Medical Innovation',
+                    Bio: 'Board-certified physician and wellness expert specializing in preventive medicine and mental health awareness.',
+                    Email: 'dr.davis@healthspeaker.com',
+                    Phone: '(312) 555-7890',
+                    Website: 'https://drmikewellness.com'
+                }
+            ];
+
+            displayResults(sampleData);
+        }
+
+        // Limited sample data for non-authenticated users
+        function loadLimitedSampleData() {
+            const limitedData = [
+                {
+                    id: 'sample1',
+                    Name: 'John Smith',
+                    Type: 'Speaker',
+                    Location: 'New York, NY',
+                    Specialty: 'Business Leadership, Entrepreneurship',
+                    Bio: 'Former Fortune 500 CEO with 20+ years of experience...',
+                    Email: '••••••@email.com',
+                    Phone: '•••-•••-••••'
+                },
+                {
+                    id: 'sample2',
+                    Name: 'Sarah Johnson',
+                    Type: 'Speaker',
+                    Location: 'San Francisco, CA',
+                    Specialty: 'Technology, Innovation',
+                    Bio: 'Tech executive and advocate for diversity...',
+                    Email: '••••••@email.com',
+                    Phone: '•••-•••-••••'
+                }
+            ];
+
+            displayResults(limitedData, false);
+        }
+
+        // Search functionality
+        async function performSearch() {
+            if (!currentUser) {
+                alert('Please log in to access search functionality');
+                return;
+            }
+
+            const searchTerm = document.getElementById('searchTerm').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+            const locationFilter = document.getElementById('locationFilter').value;
+            const specialtyFilter = document.getElementById('specialtyFilter').value;
+
+            // Show loading state
+            document.getElementById('searchBtnText').textContent = 'Searching...';
+            document.getElementById('searchLoader').classList.remove('hidden');
+            searchBtn.disabled = true;
+
+            try {
+                const response = await fetch(`${CONFIG.API_BASE}/search`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({
+                        searchTerm,
+                        typeFilter,
+                        locationFilter,
+                        specialtyFilter
+                    })
+                });
+
+                const results = await response.json();
+                
+                if (results.success) {
+                    displayResults(results.data);
+                } else {
+                    alert('Search failed: ' + results.message);
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+                alert('Search failed. Please try again.');
+            } finally {
+                // Reset loading state
+                document.getElementById('searchBtnText').textContent = 'Search';
+                document.getElementById('searchLoader').classList.add('hidden');
+                searchBtn.disabled = false;
+            }
+        }
+
+        // Display results
+        function displayResults(results, showContactInfo = true) {
+            if (results.length === 0) {
+                searchResults.innerHTML = '<p style="text-align: center; color: #7f8c8d; grid-column: 1/-1;">No results found. Try adjusting your search criteria.</p>';
+                return;
+            }
+
+            searchResults.innerHTML = results.map(member => {
+                const initials = member.Name.split(' ').map(n => n[0]).join('').toUpperCase();
+                const tags = member.Specialty ? member.Specialty.split(',').map(tag => tag.trim()) : [];
+                
+                // Profile image or initials
+                const profileImage = member.Profile_Image ? 
+                    `<img src="${member.Profile_Image}" alt="${member.Name}" class="member-avatar" style="object-fit: cover;">` :
+                    `<div class="member-avatar">${initials}</div>`;
+                
+                const contactInfo = showContactInfo && currentUser ? 
+                    `<div class="contact-info">
+                        <p><strong>Email:</strong> ${member.Email}</p>
+                        <p><strong>Phone:</strong> ${member.Phone}</p>
+                        ${member.Website ? `<p><strong>Website:</strong> <a href="${member.Website}" target="_blank">Visit Site</a></p>` : ''}
+                        ${member.Booking_Link ? `<p><strong>Booking:</strong> <a href="${member.Booking_Link}" target="_blank">Schedule</a></p>` : ''}
+                    </div>` :
+                    `<div class="contact-info premium-blur">
+                        <p><strong>Email:</strong> ${member.Email}</p>
+                        <p><strong>Phone:</strong> ${member.Phone}</p>
+                    </div>
+                    <div class="upgrade-overlay">
+                        <button class="btn btn-primary" onclick="window.location.href='pricing.html'">
+                            Upgrade to View Contact Info
+                        </button>
+                    </div>`;
+
+                return `
+                    <div class="member-card" onclick="viewProfile('${member.id || member.Name}', '${member.Type}')">
+                        <div class="member-header">
+                            ${profileImage}
+                            <div class="member-info">
+                                <h3>${member.Name}</h3>
+                                <span class="member-type">${member.Type}</span>
+                            </div>
+                        </div>
+                        <div class="member-details">
+                            <p><strong>Location:</strong> ${member.Location}</p>
+                            <p>${member.Bio}</p>
+                        </div>
+                        <div class="member-tags">
+                            ${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        ${contactInfo}
+                        <div style="text-align: center; margin-top: 1rem;">
+                            <button class="btn btn-secondary" onclick="event.stopPropagation(); viewProfile('${member.id || member.Name}', '${member.Type}')">
+                                View Full Profile
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // View profile function
+        function viewProfile(id, type) {
+            if (type === 'Speaker') {
+                window.location.href = `profile.html?id=${encodeURIComponent(id)}`;
+            } else {
+                // For organizations, you might want a different page or just show contact info
+                alert('Organization profiles coming soon!');
+            }
+        }
+    </script>
+</body>
+</html>

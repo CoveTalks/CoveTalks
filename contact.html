@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - CoveTalks</title>
+    <style>
+        /* Copy all existing base styles from your pages */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles - matching existing */
+        header {
+            background: white;
+            color: #333;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c5aa0;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #2c5aa0;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #2c5aa0;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e3d6f;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #2c5aa0;
+            border: 2px solid #2c5aa0;
+        }
+
+        .btn-secondary:hover {
+            background: #2c5aa0;
+            color: white;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8rem 0 4rem;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 3rem 0;
+            min-height: 60vh;
+            background: #f8f9fa;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            margin-top: -4rem;
+        }
+
+        .contact-info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .contact-info-card h2 {
+            color: #2c5aa0;
+            margin-bottom: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .contact-details h3 {
+            color: #2c5aa0;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-details p {
+            color: #666;
+        }
+
+        /* Contact Form */
+        .contact-form-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .contact-form-card h2 {
+            color: #2c5aa0;
+            margin-bottom: 1rem;
+        }
+
+        .form-subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2c5aa0;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin-top: 4rem;
+            padding: 3rem 0;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .faq-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .faq-card h3 {
+            color: #2c5aa0;
+            margin-bottom: 1rem;
+        }
+
+        .faq-card p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #f39c12;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: #bdc3c7;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #f39c12;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #34495e;
+            padding-top: 1rem;
+            text-align: center;
+            color: #bdc3c7;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2c5aa0;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .contact-section {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">CoveTalks</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="members.html">Members</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="register.html" class="btn btn-secondary">Join Community</a>
+                <button id="loginBtn" class="btn btn-primary">Login</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1>Get in Touch</h1>
+            <p>We're here to help you connect with the perfect speakers and organizations</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="contact-section">
+                <!-- Contact Information -->
+                <div class="contact-info-card">
+                    <h2>Contact Information</h2>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div class="contact-details">
+                            <h3>Email</h3>
+                            <p>support@covetalks.com</p>
+                            <p>partnerships@covetalks.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">📞</div>
+                        <div class="contact-details">
+                            <h3>Phone</h3>
+                            <p>1-800-COVE-TALK</p>
+                            <p>Mon-Fri, 9AM-6PM PST</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div class="contact-details">
+                            <h3>Office</h3>
+                            <p>Phoenix, Arizona</p>
+                            <p>United States</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">🌐</div>
+                        <div class="contact-details">
+                            <h3>Social Media</h3>
+                            <p><a href="#" style="color: #2c5aa0;">LinkedIn</a></p>
+                            <p><a href="#" style="color: #2c5aa0;">Twitter</a></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="contact-form-card">
+                    <h2>Send us a Message</h2>
+                    <p class="form-subtitle">Fill out the form below and we'll get back to you within 24 hours</p>
+                    
+                    <div id="successMessage" class="success-message">
+                        Thank you for your message! We'll get back to you soon.
+                    </div>
+                    
+                    <div id="errorMessage" class="error-message">
+                        There was an error sending your message. Please try again.
+                    </div>
+                    
+                    <form id="contactForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name <span class="required">*</span></label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name <span class="required">*</span></label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email <span class="required">*</span></label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="tel" id="phone" name="phone">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Subject <span class="required">*</span></label>
+                            <select id="subject" name="subject" required>
+                                <option value="">Select a subject</option>
+                                <option value="General">General Inquiry</option>
+                                <option value="Support">Technical Support</option>
+                                <option value="Booking">Speaker Booking</option>
+                                <option value="Partnership">Partnership Opportunity</option>
+                                <option value="Billing">Billing Question</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Message <span class="required">*</span></label>
+                            <textarea id="message" name="message" required placeholder="Tell us how we can help you..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary submit-btn">
+                            <span id="submitText">Send Message</span>
+                            <span id="submitLoader" class="loading" style="display: none;"></span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="faq-section">
+                <h2 style="text-align: center; color: #2c5aa0; margin-bottom: 2rem;">Frequently Asked Questions</h2>
+                <div class="faq-grid">
+                    <div class="faq-card">
+                        <h3>How do I become a speaker?</h3>
+                        <p>Simply register for a speaker account, choose your subscription plan, and complete your profile. You'll immediately gain access to our database of speaking opportunities.</p>
+                    </div>
+                    <div class="faq-card">
+                        <h3>Is it really free for organizations?</h3>
+                        <p>Yes! Non-profits, schools, churches, and similar organizations can access our platform completely free. No hidden fees or charges.</p>
+                    </div>
+                    <div class="faq-card">
+                        <h3>How quickly can I find a speaker?</h3>
+                        <p>Most organizations find suitable speakers within 24-48 hours. Our searchable database makes it easy to find the perfect match for your event.</p>
+                    </div>
+                    <div class="faq-card">
+                        <h3>What if I need to cancel my subscription?</h3>
+                        <p>You can cancel your subscription at any time from your dashboard. Your access will continue until the end of your current billing period.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CoveTalks</h3>
+                    <p>Connecting speakers with organizations worldwide</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="index.html">Home</a>
+                    <a href="members.html">Members</a>
+                    <a href="register.html">Register</a>
+                    <a href="pricing.html">Pricing</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="help.html">Help Center</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">Facebook</a>
+                    <a href="#">Newsletter</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 CoveTalks. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            AIRTABLE: {
+                API_KEY: 'patI3b0QZgesfoKWh.3160fe85c7238ed5cc4a0d6153bec4cef493d3c086233d3304e1211c41fbfd69',
+                BASE_ID: 'appa7KVa8HcVheTOo',
+                TABLE_NAME: 'Contact_Submissions'
+            },
+            API_BASE: window.location.hostname === 'localhost' ? 
+                'http://localhost:3001' : '/.netlify/functions/api'
+        };
+
+        // Handle form submission
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            document.getElementById('submitText').textContent = 'Sending...';
+            document.getElementById('submitLoader').style.display = 'inline-block';
+            
+            // Get form data
+            const formData = {
+                Name: `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}`,
+                Email: document.getElementById('email').value,
+                Phone: document.getElementById('phone').value,
+                Subject: document.getElementById('subject').value,
+                Message: document.getElementById('message').value,
+                Type: document.getElementById('subject').value,
+                Status: 'New',
+                Response_Sent: false
+            };
+            
+            try {
+                // Send to Airtable via API endpoint
+                const response = await fetch(`${CONFIG.API_BASE}/contact`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (response.ok) {
+                    // Show success message
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('errorMessage').style.display = 'none';
+                    
+                    // Reset form
+                    document.getElementById('contactForm').reset();
+                    
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        document.getElementById('successMessage').style.display = 'none';
+                    }, 5000);
+                } else {
+                    throw new Error('Failed to send message');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('successMessage').style.display = 'none';
+            } finally {
+                // Reset button state
+                document.getElementById('submitText').textContent = 'Send Message';
+                document.getElementById('submitLoader').style.display = 'none';
+            }
+        });
+
+        // Check auth status
+        const loginBtn = document.getElementById('loginBtn');
+        const token = localStorage.getItem('token');
+        if (token) {
+            loginBtn.textContent = 'Dashboard';
+            loginBtn.onclick = () => window.location.href = 'members.html';
+        } else {
+            loginBtn.onclick = () => window.location.href = 'index.html#login';
+        }
+    </script>
+</body>
+</html>
