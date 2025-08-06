@@ -245,26 +245,321 @@
                 font-size: 2rem;
             }
         }
+
+        * Mobile Navigation Additions */
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Hamburger Menu */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    z-index: 1002;
+    background: none;
+    border: none;
+    padding: 5px;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: #333;
+    margin: 3px 0;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-menu-overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+/* Mobile Menu Panel */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 300px;
+    height: 100vh;
+    background: white;
+    z-index: 1001;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+}
+
+.mobile-menu.show {
+    right: 0;
+}
+
+.mobile-menu-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e1e8ed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mobile-menu-close {
+    width: 30px;
+    height: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #666;
+}
+
+.mobile-nav-links {
+    list-style: none;
+    padding: 1rem 0;
+}
+
+.mobile-nav-links li {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.mobile-nav-links a {
+    display: block;
+    padding: 1rem 1.5rem;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.mobile-nav-links a:hover {
+    background: #f8f9fa;
+    color: #2c5aa0;
+    padding-left: 2rem;
+}
+
+.mobile-nav-links a.active {
+    color: #2c5aa0;
+    background: #e8f4fd;
+}
+
+.mobile-user-section {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e1e8ed;
+    background: #f8f9fa;
+}
+
+.mobile-user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.mobile-user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.mobile-user-details h3 {
+    margin: 0;
+    color: #333;
+}
+
+.mobile-user-details p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.mobile-auth-buttons {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.mobile-auth-buttons .btn {
+    width: 100%;
+    text-align: center;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+    
+    .auth-buttons.desktop-only {
+        display: none;
+    }
+    
+    .hamburger {
+        display: flex;
+    }
+    
+    header {
+        padding: 0.75rem 0;
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+    }
+
+    body {
+        padding-top: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mobile-menu {
+        width: 85vw;
+        right: -85vw;
+    }
+}
     </style>
 </head>
 <body>
     <!-- Header -->
     <header>
-        <nav class="container">
-            <div class="logo">CoveTalks</div>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="members.html">Members</a></li>
-                <li><a href="register.html">Register</a></li>
-                <li><a href="pricing.html">Pricing</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            <div class="auth-buttons">
-                <a href="register.html" class="btn btn-secondary">Join Community</a>
-                <button id="loginBtn" class="btn btn-primary">Login</button>
-            </div>
-        </nav>
+        <div class="nav-container">
+            <nav>
+                <!-- Logo -->
+                <a href="index.html" class="logo">CoveTalks</a>
+                
+                <!-- Desktop Navigation - UPDATE ACTIVE CLASS FOR CURRENT PAGE -->
+                <ul class="nav-links">
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="opportunities.html">Opportunities</a></li>
+                    <li><a href="bookings.html">My Bookings</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                </ul>
+    
+                <!-- Right Side Navigation -->
+                <div class="nav-right">
+                    <!-- For Logged In Users -->
+                    <div class="user-menu" id="userMenuDesktop" style="display: none;">
+                        <div class="user-dropdown">
+                            <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
+                            <div class="dropdown-menu" id="dropdownMenu">
+                                <a href="profile-edit.html">Edit Profile</a>
+                                <a href="settings.html">Settings</a>
+                                <a href="billing.html">Billing</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" onclick="logout()">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- For Logged Out Users -->
+                    <div class="auth-buttons desktop-only" id="authButtonsDesktop">
+                        <a href="register.html" class="btn btn-secondary">Join</a>
+                        <a href="login.html" class="btn btn-primary">Login</a>
+                    </div>
+    
+                    <!-- Hamburger Menu Button -->
+                    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
     </header>
+
+    <!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+<!-- Mobile Menu Panel -->
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+        <div class="logo">CoveTalks</div>
+        <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+    </div>
+
+    <!-- Mobile User Section (for logged in users) -->
+    <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
+        <div class="mobile-user-info">
+            <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
+            <div class="mobile-user-details">
+                <h3 id="mobileUserName">John Doe</h3>
+                <p id="mobileUserType">Speaker - Plus Plan</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation Links - UPDATE ACTIVE CLASS FOR CURRENT PAGE -->
+    <ul class="mobile-nav-links">
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="members.html">Find Speakers</a></li>
+        <li><a href="opportunities.html">Opportunities</a></li>
+        <li><a href="bookings.html">My Bookings</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li><a href="billing.html">Billing</a></li>
+        <li><a href="help.html">Help & Support</a></li>
+    </ul>
+
+    <!-- Mobile Auth Buttons (for logged out users) -->
+    <div class="mobile-auth-buttons" id="mobileAuthButtons">
+        <a href="register.html" class="btn btn-secondary">Join Community</a>
+        <a href="login.html" class="btn btn-primary">Login</a>
+    </div>
+
+    <!-- Mobile Logout Button (for logged in users) -->
+    <div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
+        <button class="btn btn-primary" onclick="logout()">Logout</button>
+    </div>
+</div>
 
     <!-- Page Header -->
     <div class="page-header">
@@ -434,5 +729,115 @@
             loginBtn.onclick = () => window.location.href = 'index.html#login';
         }
     </script>
+    <script>
+        // Mobile Navigation Functions
+        function toggleMobileMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('show');
+            overlay.classList.toggle('show');
+            
+            if (mobileMenu.classList.contains('show')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
+        
+        function closeMobileMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            
+            hamburger.classList.remove('active');
+            mobileMenu.classList.remove('show');
+            overlay.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        
+        // Update user menu based on auth status
+        function updateNavAuth() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            
+            if (token && user) {
+                // Show logged in state
+                document.getElementById('userMenuDesktop').style.display = 'flex';
+                document.getElementById('authButtonsDesktop').style.display = 'none';
+                document.getElementById('mobileUserSection').style.display = 'block';
+                document.getElementById('mobileAuthButtons').style.display = 'none';
+                document.getElementById('mobileLogoutSection').style.display = 'block';
+                
+                // Update user info
+                const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
+                document.getElementById('userAvatar').textContent = initials;
+                document.getElementById('mobileUserAvatar').textContent = initials;
+                document.getElementById('mobileUserName').textContent = user.name || 'User';
+                document.getElementById('mobileUserType').textContent = user.type || 'Member';
+            } else {
+                // Show logged out state
+                if (document.getElementById('userMenuDesktop')) {
+                    document.getElementById('userMenuDesktop').style.display = 'none';
+                }
+                document.getElementById('authButtonsDesktop').style.display = 'flex';
+                
+                if (document.getElementById('mobileUserSection')) {
+                    document.getElementById('mobileUserSection').style.display = 'none';
+                }
+                document.getElementById('mobileAuthButtons').style.display = 'flex';
+                if (document.getElementById('mobileLogoutSection')) {
+                    document.getElementById('mobileLogoutSection').style.display = 'none';
+                }
+            }
+        }
+        
+        // Toggle dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.classList.toggle('show');
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdownMenu');
+            const avatar = document.getElementById('userAvatar');
+            
+            if (dropdown && avatar && !avatar.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+        
+        // Logout function - UPDATE IF YOU HAVE DIFFERENT LOGOUT LOGIC
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('user');
+            window.location.href = 'login.html';
+        }
+        
+        // Close mobile menu on resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                closeMobileMenu();
+            }
+        });
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNavAuth();
+            
+            // Set active page - UPDATE FOR EACH PAGE
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        </script>
 </body>
 </html>
