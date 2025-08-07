@@ -5,20 +5,36 @@
 [functions]
   node_bundler = "esbuild"
 
+# Redirect API calls to Netlify Functions
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
 
+# Stripe Checkout success/cancel redirects
 [[redirects]]
   from = "/billing-success"
   to = "/billing.html?success=true"
   status = 200
 
 [[redirects]]
-  from = "/billing-cancel"  
+  from = "/billing-cancel"
   to = "/billing.html?canceled=true"
   status = 200
 
+# OPTIONAL: Clean URLs (remove .html from routes)
+# Uncomment if you want /pricing instead of /pricing.html
+# [[redirects]]
+#   from = "/pricing"
+#   to = "/pricing.html"
+#   status = 200
+
+#   [more clean URLs...]
+# [[redirects]]
+#   from = "/register"
+#   to = "/register.html"
+#   status = 200
+
+# Set Node version for functions
 [context.production.environment]
   NODE_VERSION = "18"
