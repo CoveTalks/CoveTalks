@@ -1,16 +1,21 @@
+// netlify/functions/utils/auth.js
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
 function generateToken(userId, email) {
-  return jwt.sign({ userId, email }, JWT_SECRET, { expiresIn: '7d' });
+  return jwt.sign(
+    { userId, email },
+    JWT_SECRET,
+    { expiresIn: '7d' }
+  );
 }
 
 function verifyToken(token) {
   try {
     return jwt.verify(token, JWT_SECRET);
-  } catch {
+  } catch (error) {
     return null;
   }
 }
@@ -24,17 +29,30 @@ async function verifyPassword(password, hash) {
 }
 
 function getTokenFromHeaders(headers) {
-  const token = headers.authorization?.replace('Bearer ', '');
+  const authorization = headers.authorization || '';
+  const token = authorization.replace('Bearer ', '');
   return token;
 }
 
 async function requireAuth(event) {
   const token = getTokenFromHeaders(event.headers);
-  if (!token) return { statusCode: 401, body: JSON.stringify({ error: 'No token provided' }) };
-
+  
+  if (!token) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({ error: 'No token provided' })
+    };
+  }
+  
   const decoded = verifyToken(token);
-  if (!decoded) return { statusCode: 401, body: JSON.stringify({ error: 'Invalid token' }) };
-
+  
+  if (!decoded) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({ error: 'Invalid token' })
+    };
+  }
+  
   return decoded;
 }
 
