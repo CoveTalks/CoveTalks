@@ -949,5 +949,94 @@
             checkUrlParams();
         });
     </script>
+    <!-- Add before closing </body> tag on ALL pages -->
+<script src="/js/app.js"></script>
+<script src="/js/navigation.js"></script>
+<script>
+  // Initialize page-specific functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check auth and update navigation
+    updateNavigation();
+    
+    // Page-specific initialization
+    if (typeof initializePage === 'function') {
+      initializePage();
+    }
+  });
+</script>
+// Add to dashboard.html, bookings.html, settings.html, etc.
+<script>
+function initializePage() {
+  // Check authentication first
+  if (!requireAuth()) return;
+  
+  // Load page-specific data
+  loadDashboardData();
+}
+
+async function loadDashboardData() {
+  try {
+    // TODO: Connect to Airtable via API
+    // const profile = await api.getProfile();
+    // const bookings = await api.getBookings();
+    
+    // Placeholder for now
+    console.log('Loading dashboard data...');
+    
+    // Update UI with data
+    // updateDashboardUI(profile, bookings);
+  } catch (error) {
+    console.error('Failed to load dashboard:', error);
+  }
+}
+</script>
+// billing.html
+<script>
+async function initializePage() {
+  if (!requireAuth()) return;
+  
+  const user = api.getCurrentUser();
+  
+  // Only show billing for speakers
+  if (user.memberType !== 'Speaker') {
+    document.getElementById('billingContent').innerHTML = 
+      '<p>Billing is only for speaker accounts. Organizations use CoveTalks for free!</p>';
+    return;
+  }
+  
+  loadSubscriptionInfo();
+}
+
+async function loadSubscriptionInfo() {
+  try {
+    // TODO: Stripe Integration
+    // const subscription = await api.getSubscription();
+    
+    // Placeholder
+    const subscription = {
+      plan: 'Plus',
+      status: 'Active',
+      nextBilling: '2024-02-01',
+      amount: 19.99
+    };
+    
+    displaySubscription(subscription);
+  } catch (error) {
+    console.error('Error loading subscription:', error);
+  }
+}
+
+function changePlan() {
+  // TODO: Stripe Checkout Integration
+  // api.createCheckoutSession(priceId, planType, billingPeriod);
+  console.log('Opening Stripe checkout...');
+}
+
+function openBillingPortal() {
+  // TODO: Stripe Portal Integration
+  // api.openBillingPortal();
+  console.log('Opening Stripe billing portal...');
+}
+</script>
 </body>
 </html>

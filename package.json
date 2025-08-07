@@ -1,0 +1,65 @@
+{
+  "name": "covetalks-backend",
+  "version": "1.0.0",
+  "description": "CoveTalks MVP Backend - Connecting speakers with organizations",
+  "main": "index.js",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'No build needed for static site'",
+    "test": "node test-integration.js",
+    "test:browser": "echo 'Open http://localhost:8888/test.html in your browser'",
+    "deploy": "netlify deploy",
+    "deploy:prod": "netlify deploy --prod",
+    "deploy:check": "netlify deploy --dry-run",
+    "functions:list": "netlify functions:list",
+    "functions:serve": "netlify functions:serve",
+    "env:list": "netlify env:list",
+    "env:set": "netlify env:set",
+    "logs": "netlify logs:function",
+    "stripe:listen": "stripe listen --forward-to localhost:8888/.netlify/functions/stripe-webhook",
+    "stripe:test": "stripe trigger payment_intent.succeeded",
+    "airtable:test": "node scripts/test-airtable.js",
+    "clean": "rm -rf .netlify node_modules",
+    "reinstall": "npm run clean && npm install",
+    "check:security": "npm audit",
+    "check:updates": "npm outdated"
+  },
+  "keywords": [
+    "netlify",
+    "serverless",
+    "airtable",
+    "stripe",
+    "authentication",
+    "jwt"
+  ],
+  "author": "CoveTalks",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "airtable": "^0.12.2",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "stripe": "^14.10.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.10.1",
+    "node-fetch": "^2.7.0",
+    "dotenv": "^16.3.1",
+    "eslint": "^8.56.0",
+    "prettier": "^3.1.1"
+  },
+  "optionalDependencies": {
+    "@stripe/stripe-js": "^2.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CoveTalks/CoveTalks.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CoveTalks/CoveTalks/issues"
+  },
+  "homepage": "https://covetalks.netlify.app"
+}

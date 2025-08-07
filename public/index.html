@@ -1515,5 +1515,20 @@
             });
         });
         </script>
+        <!-- Add before closing </body> tag on ALL pages -->
+<script src="/js/app.js"></script>
+<script src="/js/navigation.js"></script>
+<script>
+  // Initialize page-specific functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check auth and update navigation
+    updateNavigation();
+    
+    // Page-specific initialization
+    if (typeof initializePage === 'function') {
+      initializePage();
+    }
+  });
+</script>
 </body>
 </html>

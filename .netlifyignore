@@ -1,0 +1,127 @@
+# .netlifyignore - Files and directories to exclude from Netlify deployment
+# This works similar to .gitignore but for Netlify deployments
+
+# Test files - never deploy to production
+test-integration.js
+public/test.html
+test-*.js
+__tests__/
+*.test.js
+tests/
+spec/
+test/
+
+# Development files
+*.log
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.sublime-*
+
+# Documentation
+README.md
+CONTRIBUTING.md
+CHANGELOG.md
+LICENSE
+docs/
+*.md
+
+# Configuration files
+.env
+.env.*
+!.env.example
+.nvmrc
+.prettierrc
+.eslintrc*
+.editorconfig
+.gitignore
+.gitattributes
+
+# Source control
+.git/
+.github/
+.gitlab/
+.svn/
+.hg/
+
+# Package files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+shrinkwrap.yaml
+
+# Build artifacts (if any)
+dist/
+build/
+*.map
+coverage/
+.nyc_output/
+
+# Dependencies (Netlify will install these)
+node_modules/
+bower_components/
+
+# Scripts and tools
+scripts/test-*.js
+scripts/*-local.js
+tools/
+bin/
+
+# Temporary files
+tmp/
+temp/
+cache/
+*.tmp
+*.bak
+*.backup
+
+# Database files
+*.sqlite
+*.sqlite3
+*.db
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# OS generated files
+Desktop.ini
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# IDE files
+*.iml
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Optional: Exclude certain images or assets
+# *.psd
+# *.ai
+# *.sketch
+# raw-assets/
+
+# Development-only pages
+public/test*.html
+public/debug*.html
+public/admin-test.html
+
+# Backup files
+backup/
+backups/
+*.backup
+*.old
+
+# Local configuration
+config.local.js
+settings.local.json

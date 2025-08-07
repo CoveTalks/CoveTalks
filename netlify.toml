@@ -1,0 +1,124 @@
+# Netlify Configuration File for CoveTalks
+# https://docs.netlify.com/configure-builds/file-based-configuration/
+
+# Build settings
+[build]
+  # Directory to publish (contains all static files)
+  publish = "public"
+  
+  # Directory containing serverless functions
+  functions = "netlify/functions"
+  
+  # Build command (not needed for static site, but required field)
+  command = "echo 'No build needed for static site'"
+
+# Function settings
+[functions]
+  # Use esbuild for faster function bundling
+  node_bundler = "esbuild"
+  
+  # Include files in all functions
+  included_files = ["netlify/functions/**"]
+
+# Development settings
+[dev]
+  # Port for local development
+  port = 8888
+  
+  # Directory to serve
+  publish = "public"
+  
+  # Auto-open browser
+  autoLaunch = false
+  
+  # Framework detection
+  framework = "#static"
+
+# Headers for security and performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Security headers
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # CORS headers (adjust as needed)
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
+    
+    # Caching for static assets
+    Cache-Control = "public, max-age=3600"
+
+# Specific headers for images
+[[headers]]
+  for = "/Images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Headers for CSS and JS files
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# API endpoint redirects
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+  force = true
+
+# Stripe success/cancel redirects
+[[redirects]]
+  from = "/billing-success"
+  to = "/billing.html?success=true"
+  status = 200
+
+[[redirects]]
+  from = "/billing-cancel"
+  to = "/billing.html?canceled=true"
+  status = 200
+
+# Authentication redirects
+[[redirects]]
+  from = "/logout"
+  to = "/login.html?logout=true"
+  status = 200
+
+# SPA fallback for 404s
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
+
+# Environment-specific settings
+[context.production]
+  # Production environment variables
+  [context.production.environment]
+    NODE_VERSION = "18"
+    NODE_ENV = "production"
+
+[context.deploy-preview]
+  # Settings for deploy previews
+  [context.deploy-preview.environment]
+    NODE_ENV = "development"
+    PREVIEW = "true"
+
+[context.branch-deploy]
+  # Settings for branch deploys
+  [context.branch-deploy.environment]
+    NODE_ENV = "development"
+
+[context.dev]
+  # Local development environment
+  [context.dev.environment]
+    NODE_ENV = "development"
+    DEBUG = "true"

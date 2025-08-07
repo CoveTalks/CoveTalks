@@ -1418,5 +1418,91 @@
             // Generate calendar event file or integrate with calendar API
         }
     </script>
+    <!-- Add before closing </body> tag on ALL pages -->
+<script src="/js/app.js"></script>
+<script src="/js/navigation.js"></script>
+<script>
+  // Initialize page-specific functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check auth and update navigation
+    updateNavigation();
+    
+    // Page-specific initialization
+    if (typeof initializePage === 'function') {
+      initializePage();
+    }
+  });
+</script>
+// Add to dashboard.html, bookings.html, settings.html, etc.
+<script>
+function initializePage() {
+  // Check authentication first
+  if (!requireAuth()) return;
+  
+  // Load page-specific data
+  loadDashboardData();
+}
+
+async function loadDashboardData() {
+  try {
+    // TODO: Connect to Airtable via API
+    // const profile = await api.getProfile();
+    // const bookings = await api.getBookings();
+    
+    // Placeholder for now
+    console.log('Loading dashboard data...');
+    
+    // Update UI with data
+    // updateDashboardUI(profile, bookings);
+  } catch (error) {
+    console.error('Failed to load dashboard:', error);
+  }
+}
+</script>
+// bookings.html
+<script>
+async function initializePage() {
+  if (!requireAuth()) return;
+  
+  try {
+    // TODO: Airtable Integration
+    // const bookings = await api.getBookings();
+    
+    // Placeholder data
+    const bookings = [
+      {
+        id: '1',
+        title: 'Sample Event',
+        date: '2024-02-15',
+        status: 'Confirmed',
+        organization: 'Test Org'
+      }
+    ];
+    
+    displayBookings(bookings);
+  } catch (error) {
+    console.error('Error loading bookings:', error);
+  }
+}
+
+function displayBookings(bookings) {
+  const container = document.getElementById('bookingsContainer');
+  
+  if (bookings.length === 0) {
+    container.innerHTML = '<p>No bookings yet.</p>';
+    return;
+  }
+  
+  // Render bookings
+  container.innerHTML = bookings.map(booking => `
+    <div class="booking-card">
+      <h3>${booking.title}</h3>
+      <p>Date: ${booking.date}</p>
+      <p>Status: ${booking.status}</p>
+      <p>Organization: ${booking.organization}</p>
+    </div>
+  `).join('');
+}
+</script>
 </body>
 </html>
