@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Speaking Opportunity - CoveTalks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header - Organization Green Theme */
+        header {
+            background: white;
+            color: #333;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #27ae60;
+            border: 2px solid #27ae60;
+        }
+
+        .btn-secondary:hover {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        /* Page Header - Green Theme */
+        .page-header {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            padding: 8rem 0 4rem;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 3rem 0;
+            margin-top: -4rem;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .progress-step::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: -50%;
+            right: 50%;
+            height: 2px;
+            background: #e1e8ed;
+            z-index: -1;
+        }
+
+        .progress-step:first-child::before {
+            display: none;
+        }
+
+        .progress-step.completed::before {
+            background: #27ae60;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e1e8ed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .progress-step.active .step-circle {
+            background: #27ae60;
+        }
+
+        .progress-step.completed .step-circle {
+            background: #27ae60;
+        }
+
+        .step-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .progress-step.active .step-label {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        /* Form Sections */
+        .form-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .form-section h2 {
+            color: #27ae60;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #27ae60;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+
+        /* Character Counter */
+        .char-counter {
+            text-align: right;
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+
+        .char-counter.warning {
+            color: #f39c12;
+        }
+
+        .char-counter.error {
+            color: #e74c3c;
+        }
+
+        /* Tag Input */
+        .tag-input-container {
+            border: 2px solid #e1e8ed;
+            border-radius: 5px;
+            padding: 0.5rem;
+            min-height: 50px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .tag-input-container:focus-within {
+            border-color: #27ae60;
+        }
+
+        .tag {
+            background: #27ae60;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tag-remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .tag-input {
+            border: none;
+            outline: none;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        /* Date & Time Picker */
+        .datetime-group {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Preview Card */
+        .preview-card {
+            background: #f8f9fa;
+            border: 2px dashed #27ae60;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .preview-title {
+            color: #27ae60;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        /* Action Buttons */
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Success Message */
+        .success-banner {
+            background: #d4edda;
+            color: #27ae60;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .success-banner.show {
+            display: block;
+        }
+
+        /* Error Message */
+        .error-banner {
+            background: #f8d7da;
+            color: #e74c3c;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-banner.show {
+            display: block;
+        }
+
+        /* Tips Sidebar */
+        .tips-card {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .tips-card h3 {
+            margin-bottom: 1rem;
+        }
+
+        .tips-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-card li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .tips-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        /* Loading State */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #27ae60;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .datetime-group {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-step .step-label {
+                font-size: 0.8rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .action-group {
+                width: 100%;
+            }
+
+            .action-group .btn {
+                flex: 1;
+            }
+        }
+        /* Mobile Navigation Styles */
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Hamburger Menu */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    z-index: 1002;
+    background: none;
+    border: none;
+    padding: 5px;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: #333;
+    margin: 3px 0;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-menu-overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+/* Mobile Menu Panel */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 300px;
+    height: 100vh;
+    background: white;
+    z-index: 1001;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+}
+
+.mobile-menu.show {
+    right: 0;
+}
+
+.mobile-menu-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e1e8ed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mobile-menu-close {
+    width: 30px;
+    height: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #666;
+}
+
+.mobile-nav-links {
+    list-style: none;
+    padding: 1rem 0;
+}
+
+.mobile-nav-links li {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.mobile-nav-links a {
+    display: block;
+    padding: 1rem 1.5rem;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.mobile-nav-links a:hover {
+    background: #f8f9fa;
+    color: #2c5aa0;
+    padding-left: 2rem;
+}
+
+.mobile-nav-links a.active {
+    color: #2c5aa0;
+    background: #e8f4fd;
+}
+
+.mobile-user-section {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e1e8ed;
+    background: #f8f9fa;
+}
+
+.mobile-user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.mobile-user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.mobile-user-details h3 {
+    margin: 0;
+    color: #333;
+}
+
+.mobile-user-details p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.mobile-auth-buttons {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.mobile-auth-buttons .btn {
+    width: 100%;
+    text-align: center;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none !important;
+    }
+    
+    .auth-buttons.desktop-only {
+        display: none !important;
+    }
+    
+    .hamburger {
+        display: flex;
+    }
+    
+    header {
+        padding: 0.75rem 0;
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+    }
+
+    body {
+        padding-top: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mobile-menu {
+        width: 85vw;
+        right: -85vw;
+    }
+}
+    </style>
+</head>
+<body class="organization-theme">
+    <header>
+        <div class="nav-container">
+            <nav>
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <!-- Logged Out Navigation -->
+                <ul class="nav-links nav-logged-out" id="navLoggedOut">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                
+                <!-- Logged In Navigation (Speakers) -->
+                <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="opportunities.html">Opportunities</a></li>
+                    <li><a href="bookings.html">My Bookings</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                </ul>
+                
+                <!-- Logged In Navigation (Organizations) -->
+                <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
+                    <li><a href="organization-dashboard.html">Dashboard</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
+                    <li><a href="my-opportunities.html">My Opportunities</a></li>
+                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
+                </ul>
+        
+                <!-- Right Side Navigation -->
+                <div class="nav-right">
+                    <!-- For Logged In Users -->
+                    <div class="user-menu" id="userMenuDesktop" style="display: none;">
+                        <div class="user-dropdown">
+                            <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
+                            <div class="dropdown-menu" id="dropdownMenu">
+                                <a href="profile-edit.html">Edit Profile</a>
+                                <a href="settings.html">Settings</a>
+                                <a href="billing.html">Billing</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" onclick="logout()">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <!-- For Logged Out Users -->
+                    <div class="auth-buttons desktop-only" id="authButtonsDesktop">
+                        <a href="register.html" class="btn btn-secondary">Join</a>
+                        <a href="login.html" class="btn btn-primary">Login</a>
+                    </div>
+        
+                    <!-- Hamburger Menu Button -->
+                    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+        </header>
+        
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+        
+        <!-- Mobile Menu Panel -->
+        <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+        <a href="index.html" class="logo">
+            <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+        </a>
+        <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+        </div>
+        
+        <!-- Mobile User Section (for logged in users) -->
+        <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
+        <div class="mobile-user-info">
+            <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
+            <div class="mobile-user-details">
+                <h3 id="mobileUserName">John Doe</h3>
+                <p id="mobileUserType">Speaker - Plus Plan</p>
+            </div>
+        </div>
+        </div>
+        
+        <!-- Mobile Navigation Links -->
+        <!-- Logged Out Mobile Navigation -->
+        <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="members.html">Find Speakers</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="register.html">Register</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="help.html">Help Center</a></li>
+        </ul>
+        
+        <!-- Logged In Mobile Navigation (Speakers) -->
+        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="members.html">Find Speakers</a></li>
+        <li><a href="opportunities.html">Opportunities</a></li>
+        <li><a href="bookings.html">My Bookings</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li><a href="billing.html">Billing</a></li>
+        <li><a href="help.html">Help & Support</a></li>
+        </ul>
+        
+        <!-- Logged In Mobile Navigation (Organizations) -->
+        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
+        <li><a href="organization-dashboard.html">Dashboard</a></li>
+        <li><a href="members.html">Find Speakers</a></li>
+        <li><a href="post-opportunity.html">Post Opportunity</a></li>
+        <li><a href="my-opportunities.html">My Opportunities</a></li>
+        <li><a href="saved-speakers.html">Saved Speakers</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li><a href="team.html">Team Members</a></li>
+        <li><a href="help.html">Help & Support</a></li>
+        </ul>
+        
+        <!-- Mobile Auth Buttons (for logged out users) -->
+        <div class="mobile-auth-buttons" id="mobileAuthButtons">
+        <a href="register.html" class="btn btn-secondary">Join Community</a>
+        <a href="login.html" class="btn btn-primary">Login</a>
+        </div>
+        
+        <!-- Mobile Logout Button (for logged in users) -->
+        <div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
+        <button class="btn btn-primary" onclick="logout()">Logout</button>
+        </div>
+        </div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1>Post a Speaking Opportunity</h1>
+            <p>Find the perfect speaker for your event - completely free!</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="form-container">
+                <!-- Success/Error Messages -->
+                <div class="success-banner" id="successBanner">
+                    ✅ Your opportunity has been posted successfully! Speakers will start applying soon.
+                </div>
+                
+                <div class="error-banner" id="errorBanner">
+                    ⚠️ Please fill in all required fields before submitting.
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress-bar">
+                    <div class="progress-steps">
+                        <div class="progress-step active" id="step1">
+                            <div class="step-circle">1</div>
+                            <div class="step-label">Event Details</div>
+                        </div>
+                        <div class="progress-step" id="step2">
+                            <div class="step-circle">2</div>
+                            <div class="step-label">Requirements</div>
+                        </div>
+                        <div class="progress-step" id="step3">
+                            <div class="step-circle">3</div>
+                            <div class="step-label">Review & Post</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips Card -->
+                <div class="tips-card">
+                    <h3>💡 Tips for a Great Posting</h3>
+                    <ul>
+                        <li>Be specific about your event and audience</li>
+                        <li>Include the event date and duration</li>
+                        <li>Mention any travel or expense coverage</li>
+                        <li>Describe the impact speakers can make</li>
+                        <li>Set a reasonable application deadline</li>
+                    </ul>
+                </div>
+
+                <!-- Form -->
+                <form id="opportunityForm">
+                    <!-- Step 1: Event Details -->
+                    <div class="form-section" id="section1">
+                        <h2>Event Details</h2>
+                        
+                        <div class="form-group">
+                            <label for="eventTitle">Event Title <span class="required">*</span></label>
+                            <input type="text" id="eventTitle" name="eventTitle" required 
+                                   placeholder="e.g., Annual Business Summit 2024">
+                            <div class="help-text">Choose a clear, descriptive title that speakers will understand</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="speakerRole">Speaker Role <span class="required">*</span></label>
+                            <select id="speakerRole" name="speakerRole" required>
+                                <option value="">Select a role</option>
+                                <option value="Keynote Speaker">Keynote Speaker</option>
+                                <option value="Workshop Facilitator">Workshop Facilitator</option>
+                                <option value="Panel Moderator">Panel Moderator</option>
+                                <option value="Panel Participant">Panel Participant</option>
+                                <option value="Training Instructor">Training Instructor</option>
+                                <option value="Breakout Session Speaker">Breakout Session Speaker</option>
+                                <option value="Webinar Presenter">Webinar Presenter</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventDescription">Event Description <span class="required">*</span></label>
+                            <textarea id="eventDescription" name="eventDescription" required 
+                                      placeholder="Describe your event, its purpose, and what you're looking for in a speaker..."></textarea>
+                            <div class="char-counter" id="descCounter">0 / 500 characters</div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventDate">Event Date <span class="required">*</span></label>
+                                <input type="date" id="eventDate" name="eventDate" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="eventTime">Event Time <span class="required">*</span></label>
+                                <input type="time" id="eventTime" name="eventTime" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="duration">Speaking Duration <span class="required">*</span></label>
+                                <select id="duration" name="duration" required>
+                                    <option value="">Select duration</option>
+                                    <option value="15 minutes">15 minutes</option>
+                                    <option value="30 minutes">30 minutes</option>
+                                    <option value="45 minutes">45 minutes</option>
+                                    <option value="1 hour">1 hour</option>
+                                    <option value="90 minutes">90 minutes</option>
+                                    <option value="2 hours">2 hours</option>
+                                    <option value="Half day">Half day (3-4 hours)</option>
+                                    <option value="Full day">Full day (6-8 hours)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="eventFormat">Event Format <span class="required">*</span></label>
+                                <select id="eventFormat" name="eventFormat" required>
+                                    <option value="">Select format</option>
+                                    <option value="In-Person">In-Person</option>
+                                    <option value="Virtual">Virtual/Online</option>
+                                    <option value="Hybrid">Hybrid (In-Person + Virtual)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventLocation">Event Location <span class="required">*</span></label>
+                            <input type="text" id="eventLocation" name="eventLocation" required 
+                                   placeholder="e.g., Phoenix Convention Center, Phoenix, AZ or Virtual">
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="saveDraft()">Save as Draft</button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next: Requirements →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Requirements -->
+                    <div class="form-section" id="section2" style="display: none;">
+                        <h2>Speaker Requirements</h2>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="audienceSize">Expected Audience Size <span class="required">*</span></label>
+                                <select id="audienceSize" name="audienceSize" required>
+                                    <option value="">Select size</option>
+                                    <option value="< 25">Less than 25</option>
+                                    <option value="25-50">25-50</option>
+                                    <option value="50-100">50-100</option>
+                                    <option value="100-250">100-250</option>
+                                    <option value="250-500">250-500</option>
+                                    <option value="500+">500+</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="audienceType">Audience Type <span class="required">*</span></label>
+                                <input type="text" id="audienceType" name="audienceType" required 
+                                       placeholder="e.g., Business executives, Students, Healthcare professionals">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="topics">Topics/Categories (Add up to 5)</label>
+                            <div class="tag-input-container" id="topicsContainer">
+                                <input type="text" class="tag-input" id="topicInput" 
+                                       placeholder="Type and press Enter to add topic">
+                            </div>
+                            <div class="help-text">Add relevant topics like: Leadership, Technology, Health, etc.</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="speakerRequirements">Specific Speaker Requirements</label>
+                            <textarea id="speakerRequirements" name="speakerRequirements" 
+                                      placeholder="Any specific expertise, experience, or qualifications needed?"></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="compensation">Compensation</label>
+                                <select id="compensation" name="compensation">
+                                    <option value="Volunteer">Volunteer (No payment)</option>
+                                    <option value="Honorarium">Honorarium Provided</option>
+                                    <option value="Paid">Paid Speaking Fee</option>
+                                    <option value="Negotiable">Negotiable</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="travelCoverage">Travel/Expenses</label>
+                                <select id="travelCoverage" name="travelCoverage">
+                                    <option value="Not Covered">Not Covered</option>
+                                    <option value="Local Travel">Local Travel Covered</option>
+                                    <option value="Full Travel">Full Travel & Accommodation</option>
+                                    <option value="Negotiable">Negotiable</option>
+                                    <option value="N/A">N/A (Virtual Event)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="applicationDeadline">Application Deadline <span class="required">*</span></label>
+                            <input type="date" id="applicationDeadline" name="applicationDeadline" required>
+                            <div class="help-text">Give speakers at least 1-2 weeks to apply</div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="previousStep(1)">← Previous</button>
+                            <div class="action-group">
+                                <button type="button" class="btn btn-secondary" onclick="saveDraft()">Save as Draft</button>
+                                <button type="button" class="btn btn-primary" onclick="nextStep(3)">Next: Review →</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Review & Post -->
+                    <div class="form-section" id="section3" style="display: none;">
+                        <h2>Review Your Opportunity</h2>
+                        
+                        <div class="preview-card">
+                            <div class="preview-header">
+                                <div class="preview-title">Preview</div>
+                                <button type="button" class="btn btn-secondary" onclick="editSection(1)">Edit Details</button>
+                            </div>
+                            
+                            <div id="previewContent">
+                                <!-- Preview content will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="additionalNotes">Additional Notes for Applicants (Optional)</label>
+                            <textarea id="additionalNotes" name="additionalNotes" 
+                                      placeholder="Any other information speakers should know?"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="agreeTerms" required>
+                                I agree to the <a href="terms.html" target="_blank">Terms of Service</a> and confirm that this is a legitimate speaking opportunity
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="emailNotifications" checked>
+                                Send me email notifications when speakers apply
+                            </label>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="previousStep(2)">← Previous</button>
+                            <div class="action-group">
+                                <button type="button" class="btn btn-secondary" onclick="saveDraft()">Save as Draft</button>
+                                <button type="submit" class="btn btn-primary">Post Opportunity</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            API_BASE: window.location.hostname === 'localhost' ? 
+                'http://localhost:3001' : '/.netlify/functions/api'
+        };
+
+        let currentStep = 1;
+        let topics = [];
+
+        // Check authentication
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            setupEventListeners();
+            loadDraft();
+        });
+
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            
+            if (!token || user.type !== 'Organization') {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Form submission
+            document.getElementById('opportunityForm').addEventListener('submit', handleSubmit);
+            
+            // Character counter
+            document.getElementById('eventDescription').addEventListener('input', updateCharCounter);
+            
+            // Topic input
+            document.getElementById('topicInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addTopic();
+                }
+            });
+            
+            // Set minimum date for deadline
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('eventDate').setAttribute('min', today);
+            document.getElementById('applicationDeadline').setAttribute('min', today);
+        }
+
+        // Character counter
+        function updateCharCounter() {
+            const textarea = document.getElementById('eventDescription');
+            const counter = document.getElementById('descCounter');
+            const length = textarea.value.length;
+            const max = 500;
+            
+            counter.textContent = `${length} / ${max} characters`;
+            
+            if (length > max) {
+                counter.classList.add('error');
+                textarea.value = textarea.value.substring(0, max);
+            } else if (length > max * 0.9) {
+                counter.classList.add('warning');
+            } else {
+                counter.classList.remove('warning', 'error');
+            }
+        }
+
+        // Topic management
+        function addTopic() {
+            const input = document.getElementById('topicInput');
+            const topic = input.value.trim();
+            
+            if (topic && topics.length < 5 && !topics.includes(topic)) {
+                topics.push(topic);
+                renderTopics();
+                input.value = '';
+            }
+        }
+
+        function removeTopic(index) {
+            topics.splice(index, 1);
+            renderTopics();
+        }
+
+        function renderTopics() {
+            const container = document.getElementById('topicsContainer');
+            const input = container.querySelector('.tag-input');
+            
+            // Clear existing tags
+            container.querySelectorAll('.tag').forEach(tag => tag.remove());
+            
+            // Add tags before input
+            topics.forEach((topic, index) => {
+                const tag = document.createElement('div');
+                tag.className = 'tag';
+                tag.innerHTML = `
+                    ${topic}
+                    <span class="tag-remove" onclick="removeTopic(${index})">×</span>
+                `;
+                container.insertBefore(tag, input);
+            });
+        }
+
+        // Step navigation
+        function nextStep(step) {
+            if (validateStep(currentStep)) {
+                showStep(step);
+                if (step === 3) {
+                    updatePreview();
+                }
+            }
+        }
+
+        function previousStep(step) {
+            showStep(step);
+        }
+
+        function showStep(step) {
+            // Hide all sections
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show current section
+            document.getElementById(`section${step}`).style.display = 'block';
+            
+            // Update progress bar
+            document.querySelectorAll('.progress-step').forEach((el, index) => {
+                if (index < step) {
+                    el.classList.add('completed');
+                    el.classList.remove('active');
+                } else if (index === step - 1) {
+                    el.classList.add('active');
+                    el.classList.remove('completed');
+                } else {
+                    el.classList.remove('active', 'completed');
+                }
+            });
+            
+            currentStep = step;
+            window.scrollTo(0, 0);
+        }
+
+        function editSection(step) {
+            showStep(step);
+        }
+
+        // Validation
+        function validateStep(step) {
+            let isValid = true;
+            const section = document.getElementById(`section${step}`);
+            
+            section.querySelectorAll('[required]').forEach(field => {
+                if (!field.value) {
+                    field.style.borderColor = '#e74c3c';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '#e1e8ed';
+                }
+            });
+            
+            if (!isValid) {
+                showError('Please fill in all required fields');
+            }
+            
+            return isValid;
+        }
+
+        // Preview
+        function updatePreview() {
+            const preview = document.getElementById('previewContent');
+            const formData = new FormData(document.getElementById('opportunityForm'));
+            
+            preview.innerHTML = `
+                <h3>${formData.get('eventTitle')}</h3>
+                <p><strong>Role:</strong> ${formData.get('speakerRole')}</p>
+                <p><strong>Date:</strong> ${formData.get('eventDate')} at ${formData.get('eventTime')}</p>
+                <p><strong>Location:</strong> ${formData.get('eventLocation')}</p>
+                <p><strong>Duration:</strong> ${formData.get('duration')}</p>
+                <p><strong>Format:</strong> ${formData.get('eventFormat')}</p>
+                <p><strong>Audience:</strong> ${formData.get('audienceSize')} ${formData.get('audienceType')}</p>
+                <p><strong>Compensation:</strong> ${formData.get('compensation')}</p>
+                <p><strong>Travel:</strong> ${formData.get('travelCoverage')}</p>
+                <p><strong>Description:</strong><br>${formData.get('eventDescription')}</p>
+                ${topics.length > 0 ? `<p><strong>Topics:</strong> ${topics.join(', ')}</p>` : ''}
+            `;
+        }
+
+        // Form submission
+        async function handleSubmit(e) {
+            e.preventDefault();
+            
+            if (!validateStep(3)) {
+                return;
+            }
+            
+            if (!document.getElementById('agreeTerms').checked) {
+                showError('Please agree to the terms of service');
+                return;
+            }
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            data.topics = topics;
+            
+            showLoading(true);
+            
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${CONFIG.API_BASE}/opportunities`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    showSuccess('Your opportunity has been posted successfully!');
+                    setTimeout(() => {
+                        window.location.href = 'my-opportunities.html';
+                    }, 2000);
+                } else {
+                    showError('Failed to post opportunity. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error posting opportunity:', error);
+                showError('An error occurred. Please try again.');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Save draft
+        function saveDraft() {
+            const formData = new FormData(document.getElementById('opportunityForm'));
+            const data = Object.fromEntries(formData);
+            data.topics = topics;
+            
+            localStorage.setItem('opportunityDraft', JSON.stringify(data));
+            showSuccess('Draft saved successfully!');
+        }
+
+        // Load draft
+        function loadDraft() {
+            const draft = localStorage.getItem('opportunityDraft');
+            if (draft) {
+                const data = JSON.parse(draft);
+                Object.keys(data).forEach(key => {
+                    const field = document.getElementById(key);
+                    if (field && key !== 'topics') {
+                        field.value = data[key];
+                    }
+                });
+                
+                if (data.topics) {
+                    topics = data.topics;
+                    renderTopics();
+                }
+            }
+        }
+
+        // UI helpers
+        function showSuccess(message) {
+            const banner = document.getElementById('successBanner');
+            banner.textContent = '✅ ' + message;
+            banner.classList.add('show');
+            setTimeout(() => banner.classList.remove('show'), 5000);
+        }
+
+        function showError(message) {
+            const banner = document.getElementById('errorBanner');
+            banner.textContent = '⚠️ ' + message;
+            banner.classList.add('show');
+            setTimeout(() => banner.classList.remove('show'), 5000);
+        }
+
+        function showLoading(show) {
+            document.getElementById('loadingOverlay').classList.toggle('show', show);
+        }
+    </script>
+</body>
+</html>
