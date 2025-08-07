@@ -245,23 +245,6 @@
             transform: none;
         }
 
-        .btn-google {
-            background: white;
-            color: #333;
-            border: 2px solid #e1e8ed;
-            width: 100%;
-            padding: 1rem;
-            margin-top: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .btn-google:hover {
-            background: #f8f9fa;
-        }
-
         .divider {
             text-align: center;
             margin: 1.5rem 0;
@@ -878,15 +861,6 @@
                     </button>
                 </form>
 
-                <div class="divider">
-                    <span>OR</span>
-                </div>
-
-                <button class="btn btn-google" onclick="loginWithGoogle()">
-                    <img src="https://www.google.com/favicon.ico" width="20" alt="Google">
-                    Continue with Google
-                </button>
-
                 <div class="signup-prompt">
                     Don't have an account? <a href="register.html">Sign up now</a>
                 </div>
@@ -1135,16 +1109,6 @@
             // 2. Email service to send reset links
             // 3. A reset password page to handle the token
         });
-
-        // Google login placeholder
-        function loginWithGoogle() {
-            // This would integrate with Google OAuth
-            showMessage('error', 'Google login is not yet configured. Please use email/password login.');
-        }
-
-        // ============================================
-        // NAVIGATION JAVASCRIPT (Keeping your existing code)
-        // ============================================
         
         // Update navigation based on auth status
         function updateNavAuth() {
