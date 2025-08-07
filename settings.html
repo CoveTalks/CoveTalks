@@ -1202,32 +1202,21 @@
         document.getElementById('profileForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // TODO: Update profile data in Airtable
             const formData = {
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                bio: document.getElementById('bio').value,
-                expertise: document.getElementById('expertise').value,
-                experience: document.getElementById('experience').value,
-                rate: document.getElementById('rate').value
+              name: document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value,
+              phone: document.getElementById('phone').value,
+              bio: document.getElementById('bio').value,
+              expertise: document.getElementById('expertise').value.split(','),
+              location: document.getElementById('location').value
             };
             
-            console.log('Saving profile:', formData);
-            
-            // Show loading state
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-            submitBtn.classList.add('btn--loading');
-            submitBtn.innerHTML = '<span class="spinner"></span> Saving...';
-            
-            // Simulate API call
-            setTimeout(() => {
-                submitBtn.classList.remove('btn--loading');
-                submitBtn.textContent = 'Save Changes';
-                alert('Profile updated successfully!');
-            }, 1500);
-        });
+            try {
+              await api.updateProfile(formData);
+              alert('Profile updated successfully!');
+            } catch (error) {
+              alert('Failed to update profile: ' + error.message);
+            }
+          });
 
         // Avatar upload
         function uploadAvatar() {

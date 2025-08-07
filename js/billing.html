@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing & Subscription - CoveTalks</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #22c55e;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+        }
+
+        /* Navigation */
+        .nav {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav__container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav__logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .nav__logo:hover {
+            opacity: 0.8;
+        }
+
+        .nav__menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav__link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav__link:hover,
+        .nav__link--active {
+            color: var(--primary-color);
+        }
+
+        .nav__mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header__title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header__subtitle {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+        }
+
+        /* Current Plan Card */
+        .current-plan {
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+            color: white;
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .current-plan::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+
+        .current-plan__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .current-plan__label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .current-plan__name {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .current-plan__price {
+            font-size: 1.25rem;
+            opacity: 0.95;
+        }
+
+        .plan-badge {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .current-plan__features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .plan-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .plan-feature__icon {
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Billing Info Cards */
+        .billing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .billing-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .billing-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .billing-card__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .billing-card__title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .billing-card__icon {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+        }
+
+        .billing-card__content {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .billing-card__value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .payment-methods__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-methods__title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .payment-method:hover {
+            border-color: var(--primary-color);
+            background: var(--bg-secondary);
+        }
+
+        .payment-method__info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .payment-method__icon {
+            width: 48px;
+            height: 32px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .payment-method__details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .payment-method__type {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .payment-method__number {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+        }
+
+        .payment-method__badge {
+            background: var(--success-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Billing History */
+        .billing-history {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .billing-history__header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .billing-history__title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .billing-table {
+            width: 100%;
+        }
+
+        .billing-table__row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr auto;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .billing-table__row:hover {
+            background: var(--bg-secondary);
+        }
+
+        .billing-table__header {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+        }
+
+        .billing-table__cell {
+            font-size: 0.875rem;
+            color: var(--text-primary);
+        }
+
+        .billing-table__date {
+            color: var(--text-secondary);
+        }
+
+        .billing-table__amount {
+            font-weight: 600;
+        }
+
+        .billing-table__status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success-color);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn--primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn--primary:hover {
+            background: var(--primary-hover);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn--secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn--secondary:hover {
+            background: var(--bg-primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn--stripe {
+            background: #635bff;
+            color: white;
+        }
+
+        .btn--stripe:hover {
+            background: #5548d3;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn--ghost {
+            background: transparent;
+            color: var(--primary-color);
+            padding: 0.5rem;
+        }
+
+        .btn--ghost:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Alert Banner */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .alert--info {
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            color: var(--primary-color);
+        }
+
+        .alert__icon {
+            flex-shrink: 0;
+        }
+
+        .alert__content {
+            flex: 1;
+        }
+
+        .alert__title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .alert__text {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav__menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--bg-primary);
+                border-bottom: 1px solid var(--border-color);
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav__menu--open {
+                display: flex;
+            }
+
+            .nav__mobile-toggle {
+                display: block;
+            }
+
+            .page-header__title {
+                font-size: 1.5rem;
+            }
+
+            .billing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .current-plan__features {
+                grid-template-columns: 1fr;
+            }
+
+            .billing-table__row {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+
+            .billing-table__header {
+                display: none;
+            }
+
+            .billing-table__cell:nth-child(3),
+            .billing-table__cell:nth-child(4) {
+                display: none;
+            }
+        }
+
+        /* Loading States */
+        .skeleton {
+            background: linear-gradient(90deg, 
+                var(--bg-secondary) 25%, 
+                var(--border-color) 50%, 
+                var(--bg-secondary) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: var(--radius-sm);
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Focus styles */
+        button:focus-visible,
+        a:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav__container">
+            <a href="/" class="nav__logo">CoveTalks</a>
+            <button class="nav__mobile-toggle" aria-label="Toggle menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12h18M3 6h18M3 18h18"/>
+                </svg>
+            </button>
+            <div class="nav__menu">
+                <a href="/dashboard.html" class="nav__link">Dashboard</a>
+                <a href="/bookings.html" class="nav__link">Bookings</a>
+                <a href="/opportunities.html" class="nav__link">Opportunities</a>
+                <a href="/billing.html" class="nav__link nav__link--active">Billing</a>
+                <a href="/settings.html" class="nav__link">Settings</a>
+                <button class="btn btn--secondary" onclick="handleLogout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Page Header -->
+        <header class="page-header">
+            <h1 class="page-header__title">Billing & Subscription</h1>
+            <p class="page-header__subtitle">Manage your subscription and payment methods</p>
+        </header>
+
+        <!-- Alert Banner (if needed) -->
+        <div class="alert alert--info" id="billingAlert" style="display: none;">
+            <svg class="alert__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 16v-4M12 8h.01"></path>
+            </svg>
+            <div class="alert__content">
+                <div class="alert__title">Payment method expiring soon</div>
+                <div class="alert__text">Your card ending in 4242 expires this month. Please update your payment method.</div>
+            </div>
+        </div>
+
+        <!-- Current Plan -->
+        <div class="current-plan">
+            <div class="current-plan__header">
+                <div>
+                    <div class="current-plan__label">Current Plan</div>
+                    <div class="current-plan__name" id="planName">Professional</div>
+                    <div class="current-plan__price" id="planPrice">$49/month</div>
+                </div>
+                <span class="plan-badge">Active</span>
+            </div>
+            <div class="current-plan__features">
+                <div class="plan-feature">
+                    <div class="plan-feature__icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="white" stroke="none">
+                            <path d="M20 6L9 17l-5-5" stroke="white" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <span>Unlimited speaking opportunities</span>
+                </div>
+                <div class="plan-feature">
+                    <div class="plan-feature__icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="white" stroke="none">
+                            <path d="M20 6L9 17l-5-5" stroke="white" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <span>Advanced profile analytics</span>
+                </div>
+                <div class="plan-feature">
+                    <div class="plan-feature__icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="white" stroke="none">
+                            <path d="M20 6L9 17l-5-5" stroke="white" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <span>Priority support</span>
+                </div>
+                <div class="plan-feature">
+                    <div class="plan-feature__icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="white" stroke="none">
+                            <path d="M20 6L9 17l-5-5" stroke="white" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <span>Custom booking calendar</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Billing Info Cards -->
+        <div class="billing-grid">
+            <div class="billing-card">
+                <div class="billing-card__header">
+                    <h3 class="billing-card__title">Next Payment</h3>
+                    <div class="billing-card__icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </div>
+                </div>
+                <p class="billing-card__content">Your next billing date</p>
+                <div class="billing-card__value" id="nextPaymentDate">March 1, 2024</div>
+            </div>
+
+            <div class="billing-card">
+                <div class="billing-card__header">
+                    <h3 class="billing-card__title">Total Spent</h3>
+                    <div class="billing-card__icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="1" x2="12" y2="23"></line>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                    </div>
+                </div>
+                <p class="billing-card__content">Since account creation</p>
+                <div class="billing-card__value" id="totalSpent">$0</div>
+            </div>
+
+            <div class="billing-card">
+                <div class="billing-card__header">
+                    <h3 class="billing-card__title">Member Since</h3>
+                    <div class="billing-card__icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                </div>
+                <p class="billing-card__content">Account created</p>
+                <div class="billing-card__value" id="memberSince">January 2024</div>
+            </div>
+        </div>
+
+        <!-- Payment Methods -->
+        <div class="payment-methods">
+            <div class="payment-methods__header">
+                <h2 class="payment-methods__title">Payment Methods</h2>
+                <button class="btn btn--secondary" onclick="addPaymentMethod()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add New
+                </button>
+            </div>
+            
+            <div id="paymentMethodsList">
+                <!-- TODO: Load payment methods from Stripe -->
+                <div class="payment-method">
+                    <div class="payment-method__info">
+                        <div class="payment-method__icon">VISA</div>
+                        <div class="payment-method__details">
+                            <span class="payment-method__type">Visa ending in 4242</span>
+                            <span class="payment-method__number">Expires 12/2024</span>
+                        </div>
+                    </div>
+                    <span class="payment-method__badge">Default</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Billing History -->
+        <div class="billing-history">
+            <div class="billing-history__header">
+                <h2 class="billing-history__title">Billing History</h2>
+                <button class="btn btn--ghost" onclick="downloadInvoices()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Download All
+                </button>
+            </div>
+            
+            <div class="billing-table">
+                <div class="billing-table__row billing-table__header">
+                    <div class="billing-table__cell">Date</div>
+                    <div class="billing-table__cell">Description</div>
+                    <div class="billing-table__cell">Amount</div>
+                    <div class="billing-table__cell">Status</div>
+                    <div class="billing-table__cell">Invoice</div>
+                </div>
+                
+                <div id="billingHistoryList">
+                    <!-- TODO: Load billing history from Stripe -->
+                    <div class="billing-table__row">
+                        <div class="billing-table__cell billing-table__date">Feb 1, 2024</div>
+                        <div class="billing-table__cell">Professional Plan</div>
+                        <div class="billing-table__cell billing-table__amount">$49.00</div>
+                        <div class="billing-table__cell">
+                            <span class="billing-table__status">
+                                <span class="status-dot"></span>
+                                Paid
+                            </span>
+                        </div>
+                        <div class="billing-table__cell">
+                            <button class="btn--ghost" onclick="downloadInvoice('inv_123')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="billing-table__row">
+                        <div class="billing-table__cell billing-table__date">Jan 1, 2024</div>
+                        <div class="billing-table__cell">Professional Plan</div>
+                        <div class="billing-table__cell billing-table__amount">$49.00</div>
+                        <div class="billing-table__cell">
+                            <span class="billing-table__status">
+                                <span class="status-dot"></span>
+                                Paid
+                            </span>
+                        </div>
+                        <div class="billing-table__cell">
+                            <button class="btn--ghost" onclick="downloadInvoice('inv_122')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+            <button class="btn btn--stripe" onclick="openStripeBillingPortal()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                    <line x1="2" y1="10" x2="22" y2="10"></line>
+                </svg>
+                Manage Billing in Stripe
+            </button>
+            <button class="btn btn--secondary" onclick="changePlan()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="16 3 21 3 21 8"></polyline>
+                    <line x1="4" y1="20" x2="21" y2="3"></line>
+                    <polyline points="21 16 21 21 16 21"></polyline>
+                    <line x1="3" y1="21" x2="20" y2="4"></line>
+                </svg>
+                Change Plan
+            </button>
+            <button class="btn btn--secondary" onclick="cancelSubscription()">
+                Cancel Subscription
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.nav__mobile-toggle').addEventListener('click', function() {
+            document.querySelector('.nav__menu').classList.toggle('nav__menu--open');
+        });
+
+        // Initialize billing data
+        async function loadBillingData() {
+            // TODO: Fetch subscription data from Stripe API
+            // This will be implemented with actual Stripe integration
+            
+            // Update UI with fetched data
+            updateBillingInfo();
+        }
+
+        function updateBillingInfo() {
+            // TODO: Update with real data from Stripe
+            const billingData = {
+                planName: 'Professional',
+                planPrice: '$49/month',
+                nextPaymentDate: 'March 1, 2024',
+                totalSpent: '$147.00',
+                memberSince: 'January 2024'
+            };
+
+            document.getElementById('planName').textContent = billingData.planName;
+            document.getElementById('planPrice').textContent = billingData.planPrice;
+            document.getElementById('nextPaymentDate').textContent = billingData.nextPaymentDate;
+            document.getElementById('totalSpent').textContent = billingData.totalSpent;
+            document.getElementById('memberSince').textContent = billingData.memberSince;
+        }
+
+        function openStripeBillingPortal() {
+            api.openBillingPortal();
+          }
+          
+          function changePlan() {
+            // Example: Subscribe to Premium Monthly
+            const priceId = 'price_premium_monthly'; // Replace with actual Stripe price ID
+            api.createCheckoutSession(priceId, 'Premium', 'Monthly');
+          }
+
+        function changePlan() {
+            // TODO: Navigate to pricing page or show plan selection modal
+            console.log('Navigating to plan selection...');
+            window.location.href = '/pricing.html';
+        }
+
+        function cancelSubscription() {
+            // TODO: Implement subscription cancellation flow
+            if (confirm('Are you sure you want to cancel your subscription? You will lose access to premium features.')) {
+                console.log('Processing subscription cancellation...');
+                // Call Stripe API to cancel subscription
+            }
+        }
+
+        function addPaymentMethod() {
+            // TODO: Open Stripe payment method modal or redirect
+            console.log('Adding new payment method...');
+            // This would typically open a Stripe Elements modal or redirect to Stripe
+        }
+
+        function downloadInvoice(invoiceId) {
+            // TODO: Download invoice from Stripe
+            console.log(`Downloading invoice ${invoiceId}...`);
+            // This would call Stripe API to get invoice PDF URL
+        }
+
+        function downloadInvoices() {
+            // TODO: Download all invoices
+            console.log('Downloading all invoices...');
+            // This would batch download or create a zip file
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = '/login.html';
+            }
+        }
+
+        // Check for URL parameters (e.g., returning from Stripe)
+        function checkUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const success = urlParams.get('success');
+            const canceled = urlParams.get('canceled');
+
+            if (success === 'true') {
+                // Show success message
+                const alert = document.getElementById('billingAlert');
+                alert.style.display = 'flex';
+                alert.className = 'alert alert--success';
+                alert.querySelector('.alert__title').textContent = 'Payment method updated successfully';
+                alert.querySelector('.alert__text').textContent = 'Your billing information has been updated.';
+            } else if (canceled === 'true') {
+                // Show cancellation message
+                const alert = document.getElementById('billingAlert');
+                alert.style.display = 'flex';
+                alert.querySelector('.alert__title').textContent = 'Update canceled';
+                alert.querySelector('.alert__text').textContent = 'No changes were made to your billing information.';
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBillingData();
+            checkUrlParams();
+        });
+    </script>
+</body>
+</html>

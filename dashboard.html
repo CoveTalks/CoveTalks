@@ -1435,5 +1435,59 @@
         });
     });
     </script>
+    <script src="/js/app.js"></script>
+  <script>
+  // Check authentication
+  if (!api.isAuthenticated()) {
+    window.location.href = '/login.html';
+  }
+  
+  // Load user data
+  async function loadDashboard() {
+    try {
+      const profile = await api.getProfile();
+      
+      // Update UI with profile data
+      document.getElementById('userName').textContent = profile.name;
+      document.getElementById('userEmail').textContent = profile.email;
+      
+      // Load bookings
+      const bookingsData = await api.getBookings({ status: 'all' });
+      displayBookings(bookingsData.bookings);
+      
+      // Load opportunities if organization
+      const user = api.getCurrentUser();
+      if (user.memberType === 'Organization') {
+        const opportunitiesData = await api.getOpportunities();
+        displayOpportunities(opportunitiesData.opportunities);
+      }
+    } catch (error) {
+      console.error('Failed to load dashboard:', error);
+    }
+  }
+  
+  function displayBookings(bookings) {
+    const container = document.getElementById('bookingsContainer');
+    
+    if (bookings.length === 0) {
+      container.innerHTML = '<p>No bookings yet</p>';
+      return;
+    }
+    
+    container.innerHTML = bookings.map(booking => `
+      <div class="booking-card">
+        <h3>${booking.title}</h3>
+        <p>Date: ${new Date(booking.eventDate).toLocaleDateString()}</p>
+        <p>Location: ${booking.location}</p>
+        <span class="status-badge status-badge--${booking.status.toLowerCase()}">
+          ${booking.status}
+        </span>
+      </div>
+    `).join('');
+  }
+  
+  // Initialize dashboard
+  document.addEventListener('DOMContentLoaded', loadDashboard);
+  </script>
 </body>
 </html>
