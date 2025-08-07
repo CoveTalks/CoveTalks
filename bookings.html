@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - CoveTalks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header styles - reuse from other pages */
+        header {
+            background: white;
+            color: #333;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #2c5aa0;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e3d6f;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #2c5aa0;
+            border: 2px solid #2c5aa0;
+        }
+
+        .btn-secondary:hover {
+            background: #2c5aa0;
+            color: white;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8rem 0 4rem;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 3rem 0;
+            margin-top: -4rem;
+        }
+
+        /* Stats Cards */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.blue {
+            background: #e8f4fd;
+            color: #2c5aa0;
+        }
+
+        .stat-icon.green {
+            background: #d4edda;
+            color: #27ae60;
+        }
+
+        .stat-icon.purple {
+            background: #f3e5f5;
+            color: #764ba2;
+        }
+
+        .stat-icon.orange {
+            background: #fff3e0;
+            color: #f39c12;
+        }
+
+        .stat-content h3 {
+            font-size: 2rem;
+            color: #2c5aa0;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-content p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 2px solid #e1e8ed;
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: #666;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .tab:hover {
+            color: #2c5aa0;
+        }
+
+        .tab.active {
+            color: #2c5aa0;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #2c5aa0;
+        }
+
+        .tab-badge {
+            background: #2c5aa0;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        /* Bookings Grid */
+        .bookings-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .booking-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 4px solid #2c5aa0;
+            transition: all 0.3s;
+        }
+
+        .booking-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .booking-card.upcoming {
+            border-left-color: #27ae60;
+        }
+
+        .booking-card.past {
+            border-left-color: #95a5a6;
+            opacity: 0.8;
+        }
+
+        .booking-card.cancelled {
+            border-left-color: #e74c3c;
+            opacity: 0.7;
+        }
+
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .booking-title {
+            font-size: 1.2rem;
+            color: #2c5aa0;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .booking-org {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .booking-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .status-confirmed {
+            background: #d4edda;
+            color: #27ae60;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #f39c12;
+        }
+
+        .status-completed {
+            background: #e8f4fd;
+            color: #2c5aa0;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #e74c3c;
+        }
+
+        .booking-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .detail-icon {
+            color: #2c5aa0;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .detail-value {
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .booking-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e1e8ed;
+        }
+
+        /* Calendar View */
+        .calendar-container {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .calendar-title {
+            font-size: 1.5rem;
+            color: #2c5aa0;
+            font-weight: bold;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e1e8ed;
+            border: 1px solid #e1e8ed;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .calendar-day-header {
+            background: #f8f9fa;
+            padding: 0.75rem;
+            text-align: center;
+            font-weight: 600;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .calendar-day {
+            background: white;
+            min-height: 100px;
+            padding: 0.5rem;
+            position: relative;
+        }
+
+        .calendar-day-number {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+
+        .calendar-day.other-month {
+            background: #f8f9fa;
+        }
+
+        .calendar-day.other-month .calendar-day-number {
+            color: #999;
+        }
+
+        .calendar-day.today {
+            background: #e8f4fd;
+        }
+
+        .calendar-event {
+            background: #2c5aa0;
+            color: white;
+            padding: 0.25rem;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            margin-bottom: 0.25rem;
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .calendar-event:hover {
+            background: #1e3d6f;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: #999;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: white;
+            border-radius: 15px;
+            padding: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-weight: 500;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .filter-group select {
+            padding: 0.5rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 5px;
+            font-family: inherit;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .booking-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .booking-actions {
+                flex-direction: column;
+            }
+
+            .booking-actions .btn {
+                width: 100%;
+            }
+
+            .calendar-grid {
+                display: block;
+            }
+
+            .calendar-day {
+                min-height: auto;
+                padding: 1rem;
+                border-bottom: 1px solid #e1e8ed;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        /* Mobile Navigation Styles */
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Hamburger Menu */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    z-index: 1002;
+    background: none;
+    border: none;
+    padding: 5px;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: #333;
+    margin: 3px 0;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-menu-overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+/* Mobile Menu Panel */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 300px;
+    height: 100vh;
+    background: white;
+    z-index: 1001;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+}
+
+.mobile-menu.show {
+    right: 0;
+}
+
+.mobile-menu-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e1e8ed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mobile-menu-close {
+    width: 30px;
+    height: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #666;
+}
+
+.mobile-nav-links {
+    list-style: none;
+    padding: 1rem 0;
+}
+
+.mobile-nav-links li {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.mobile-nav-links a {
+    display: block;
+    padding: 1rem 1.5rem;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.mobile-nav-links a:hover {
+    background: #f8f9fa;
+    color: #2c5aa0;
+    padding-left: 2rem;
+}
+
+.mobile-nav-links a.active {
+    color: #2c5aa0;
+    background: #e8f4fd;
+}
+
+.mobile-user-section {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e1e8ed;
+    background: #f8f9fa;
+}
+
+.mobile-user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.mobile-user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.mobile-user-details h3 {
+    margin: 0;
+    color: #333;
+}
+
+.mobile-user-details p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.mobile-auth-buttons {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.mobile-auth-buttons .btn {
+    width: 100%;
+    text-align: center;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none !important;
+    }
+    
+    .auth-buttons.desktop-only {
+        display: none !important;
+    }
+    
+    .hamburger {
+        display: flex;
+    }
+    
+    header {
+        padding: 0.75rem 0;
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+    }
+
+    body {
+        padding-top: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mobile-menu {
+        width: 85vw;
+        right: -85vw;
+    }
+}
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logo-img {
+    height: 70px;
+    width: auto;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .logo-img {
+        height: 50px;
+    }
+}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <nav>
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <!-- Logged Out Navigation -->
+                <ul class="nav-links nav-logged-out" id="navLoggedOut">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                
+                <!-- Logged In Navigation (Speakers) -->
+                <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="opportunities.html">Opportunities</a></li>
+                    <li><a href="bookings.html">My Bookings</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                </ul>
+                
+                <!-- Logged In Navigation (Organizations) -->
+                <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
+                    <li><a href="organization-dashboard.html">Dashboard</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
+                    <li><a href="my-opportunities.html">My Opportunities</a></li>
+                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
+                </ul>
+    
+                <!-- Right Side Navigation -->
+                <div class="nav-right">
+                    <!-- For Logged In Users -->
+                    <div class="user-menu" id="userMenuDesktop" style="display: none;">
+                        <div class="user-dropdown">
+                            <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
+                            <div class="dropdown-menu" id="dropdownMenu">
+                                <a href="profile-edit.html">Edit Profile</a>
+                                <a href="settings.html">Settings</a>
+                                <a href="billing.html">Billing</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" onclick="logout()">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- For Logged Out Users -->
+                    <div class="auth-buttons desktop-only" id="authButtonsDesktop">
+                        <a href="register.html" class="btn btn-secondary">Join</a>
+                        <a href="login.html" class="btn btn-primary">Login</a>
+                    </div>
+    
+                    <!-- Hamburger Menu Button -->
+                    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+<!-- Mobile Menu Panel -->
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+        <a href="index.html" class="logo">
+            <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+        </a>
+        <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+    </div>
+
+    <!-- Mobile User Section (for logged in users) -->
+    <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
+        <div class="mobile-user-info">
+            <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
+            <div class="mobile-user-details">
+                <h3 id="mobileUserName">John Doe</h3>
+                <p id="mobileUserType">Speaker - Plus Plan</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation Links -->
+    <!-- Logged Out Mobile Navigation -->
+    <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="members.html">Find Speakers</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="register.html">Register</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="help.html">Help Center</a></li>
+    </ul>
+    
+    <!-- Logged In Mobile Navigation (Speakers) -->
+    <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="members.html">Find Speakers</a></li>
+        <li><a href="opportunities.html">Opportunities</a></li>
+        <li><a href="bookings.html">My Bookings</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li><a href="billing.html">Billing</a></li>
+        <li><a href="help.html">Help & Support</a></li>
+    </ul>
+    
+    <!-- Logged In Mobile Navigation (Organizations) -->
+    <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
+        <li><a href="organization-dashboard.html">Dashboard</a></li>
+        <li><a href="members.html">Find Speakers</a></li>
+        <li><a href="post-opportunity.html">Post Opportunity</a></li>
+        <li><a href="my-opportunities.html">My Opportunities</a></li>
+        <li><a href="saved-speakers.html">Saved Speakers</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li><a href="team.html">Team Members</a></li>
+        <li><a href="help.html">Help & Support</a></li>
+    </ul>
+
+    <!-- Mobile Auth Buttons (for logged out users) -->
+    <div class="mobile-auth-buttons" id="mobileAuthButtons">
+        <a href="register.html" class="btn btn-secondary">Join Community</a>
+        <a href="login.html" class="btn btn-primary">Login</a>
+    </div>
+
+    <!-- Mobile Logout Button (for logged in users) -->
+    <div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
+        <button class="btn btn-primary" onclick="logout()">Logout</button>
+    </div>
+</div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1>My Bookings</h1>
+            <p>Manage your speaking engagements and calendar</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Stats Row -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon blue">📅</div>
+                    <div class="stat-content">
+                        <h3>8</h3>
+                        <p>Upcoming Bookings</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">✅</div>
+                    <div class="stat-content">
+                        <h3>24</h3>
+                        <p>Completed This Year</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple">⏰</div>
+                    <div class="stat-content">
+                        <h3>47</h3>
+                        <p>Total Hours Spoken</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">⭐</div>
+                    <div class="stat-content">
+                        <h3>4.9</h3>
+                        <p>Average Rating</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label for="statusFilter">Status:</label>
+                    <select id="statusFilter">
+                        <option value="">All Bookings</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="dateFilter">Date Range:</label>
+                    <select id="dateFilter">
+                        <option value="">All Time</option>
+                        <option value="upcoming">Upcoming</option>
+                        <option value="this-month">This Month</option>
+                        <option value="next-month">Next Month</option>
+                        <option value="past">Past Events</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="typeFilter">Type:</label>
+                    <select id="typeFilter">
+                        <option value="">All Types</option>
+                        <option value="keynote">Keynote</option>
+                        <option value="workshop">Workshop</option>
+                        <option value="panel">Panel</option>
+                        <option value="virtual">Virtual</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Tabs Container -->
+            <div class="tabs-container">
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('list')">
+                        List View
+                        <span class="tab-badge">8</span>
+                    </button>
+                    <button class="tab" onclick="showTab('calendar')">
+                        Calendar View
+                    </button>
+                    <button class="tab" onclick="showTab('past')">
+                        Past Bookings
+                        <span class="tab-badge">24</span>
+                    </button>
+                </div>
+
+                <!-- List View Tab -->
+                <div id="listTab" class="tab-content">
+                    <div class="bookings-grid">
+                        <!-- Upcoming Booking -->
+                        <div class="booking-card upcoming">
+                            <div class="booking-header">
+                                <div>
+                                    <div class="booking-title">Keynote: Digital Transformation Summit</div>
+                                    <div class="booking-org">Phoenix Chamber of Commerce</div>
+                                </div>
+                                <div class="booking-status status-confirmed">Confirmed</div>
+                            </div>
+                            
+                            <div class="booking-details">
+                                <div class="detail-item">
+                                    <span class="detail-icon">📅</span>
+                                    <div>
+                                        <div class="detail-label">Date</div>
+                                        <div class="detail-value">March 15, 2024</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-icon">⏰</span>
+                                    <div>
+                                        <div class="detail-label">Time</div>
+                                        <div class="detail-value">2:00 PM - 3:00 PM</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-icon">📍</span>
+                                    <div>
+                                        <div class="detail-label">Location</div>
+                                        <div class="detail-value">Phoenix Convention Center</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-icon">👥</span>
+                                    <div>
+                                        <div class="detail-label">Audience</div>
+                                        <div class="detail-value">500+ attendees</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="booking-actions">
+                                <button class="btn btn-secondary btn-small">View Details</button>
+                                <button class="btn btn-secondary btn-small">Contact Organizer</button>
+                                <button class="btn btn-secondary btn-small">Add to Calendar</button>
+                            </div>
+                        </div>
+
+                        <!-- Pending Booking -->
+                        <div class="booking-card">
+                            <div class="booking-header">
+                                <div>
+                                    <div class="booking-title">Workshop: Leadership Excellence</div>
+                                    <div class="booking-org">Arizona State University</div>
+                                </div>
+                                <div class="booking-status status-pending">Pending Confirmation</div>
+                            </div>
+                            
+                            <div class="booking-details">
+                                <div class="detail-item">
+                                    <span class="detail-icon">📅</span>
+                                    <div>
+                                        <div class="detail-label">Date</div>
+                                        <div class="detail-value">April 10, 2024</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-icon">⏰</span>
+                                    <div>
+                                        <div class="detail-label">Time</div>
+                                        <div class="detail-value">10:00 AM - 12:00 PM</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-icon">📍</span>
+                                    <div>
+                                        <div class="detail-label">Location</div>
+                                        <div class="detail-value">Virtual (Zoom)</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-icon">👥</span>
+                                    <div>
+                                        <div class="detail-label">Audience</div>
+                                        <div class="detail-value">75 students</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="booking-actions">
+                                <button class="btn btn-primary btn-small">Confirm Booking</button>
+                                <button class="btn btn-secondary btn-small">Request Changes</button>
+                                <button class="btn btn-danger btn-small">Decline</button>
+                            </div>
+                        </div>
+
+                        <!-- Another Upcoming -->
+                        <div class="booking-card upcoming">
+                            <div class="booking-header">
+                                <div>
+                                    <div class="booking-title">Panel: Future of Healthcare Technology</div>
+                                    <div class="booking-org">Arizona Medical Association</div>
+                                </div>
+                                <div class="booking-status status-confirmed">Confirmed</div>
+                            </div>
+                            
+                            <div class="booking-details">
+                                <div class="detail-item">
+                                    <span class="detail-icon">📅</span>
+                                    <div>
+                                        <div class="detail-label">Date</div>
+                                        <div class="detail-value">March 28, 2024</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-icon">⏰</span>
+                                    <div>
+                                        <div class="detail-label">Time</div>
+                                        <div class="detail-value">3:00 PM - 4:30 PM</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-icon">📍</span>
+                                    <div>
+                                        <div class="detail-label">Location</div>
+                                        <div class="detail-value">Scottsdale Healthcare Center</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-icon">👥</span>
+                                    <div>
+                                        <div class="detail-label">Audience</div>
+                                        <div class="detail-value">200 healthcare professionals</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="booking-actions">
+                                <button class="btn btn-secondary btn-small">View Details</button>
+                                <button class="btn btn-secondary btn-small">Contact Organizer</button>
+                                <button class="btn btn-secondary btn-small">Add to Calendar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendar View Tab -->
+                <div id="calendarTab" class="tab-content" style="display: none;">
+                    <div class="calendar-container">
+                        <div class="calendar-header">
+                            <div class="calendar-title">March 2024</div>
+                            <div class="calendar-nav">
+                                <button class="btn btn-secondary btn-small" onclick="previousMonth()">← Previous</button>
+                                <button class="btn btn-secondary btn-small" onclick="nextMonth()">Next →</button>
+                            </div>
+                        </div>
+                        
+                        <div class="calendar-grid">
+                            <div class="calendar-day-header">Sun</div>
+                            <div class="calendar-day-header">Mon</div>
+                            <div class="calendar-day-header">Tue</div>
+                            <div class="calendar-day-header">Wed</div>
+                            <div class="calendar-day-header">Thu</div>
+                            <div class="calendar-day-header">Fri</div>
+                            <div class="calendar-day-header">Sat</div>
+                            
+                            <!-- Calendar days will be generated by JavaScript -->
+                            <div class="calendar-day other-month">
+                                <div class="calendar-day-number">25</div>
+                            </div>
+                            <div class="calendar-day other-month">
+                                <div class="calendar-day-number">26</div>
+                            </div>
+                            <div class="calendar-day other-month">
+                                <div class="calendar-day-number">27</div>
+                            </div>
+                            <div class="calendar-day other-month">
+                                <div class="calendar-day-number">28</div>
+                            </div>
+                            <div class="calendar-day other-month">
+                                <div class="calendar-day-number">29</div>
+                            </div>
+                            <div class="calendar-day">
+                                <div class="calendar-day-number">1</div>
+                            </div>
+                            <div class="calendar-day">
+                                <div class="calendar-day-number">2</div>
+                            </div>
+                            <!-- Add more days... -->
+                            <div class="calendar-day">
+                                <div class="calendar-day-number">15</div>
+                                <div class="calendar-event">2PM: Digital Summit</div>
+                            </div>
+                            <div class="calendar-day">
+                                <div class="calendar-day-number">28</div>
+                                <div class="calendar-event">3PM: Healthcare Panel</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Past Bookings Tab -->
+                <div id="pastTab" class="tab-content" style="display: none;">
+                    <div class="bookings-grid">
+                        <!-- Past Booking -->
+                        <div class="booking-card past">
+                            <div class="booking-header">
+                                <div>
+                                    <div class="booking-title">Keynote: Annual Tech Conference 2024</div>
+                                    <div class="booking-org">Tech Innovators Arizona</div>
+                                </div>
+                                <div class="booking-status status-completed">Completed</div>
+                            </div>
+                            
+                            <div class="booking-details">
+                                <div class="detail-item">
+                                    <span class="detail-icon">📅</span>
+                                    <div>
+                                        <div class="detail-label">Date</div>
+                                        <div class="detail-value">January 15, 2024</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-icon">⭐</span>
+                                    <div>
+                                        <div class="detail-label">Rating</div>
+                                        <div class="detail-value">4.9/5.0</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-icon">💬</span>
+                                    <div>
+                                        <div class="detail-label">Feedback</div>
+                                        <div class="detail-value">"Excellent presentation!"</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="booking-actions">
+                                <button class="btn btn-secondary btn-small">View Feedback</button>
+                                <button class="btn btn-secondary btn-small">Download Certificate</button>
+                                <button class="btn btn-secondary btn-small">Request Testimonial</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            API_BASE: window.location.hostname === 'localhost' ? 
+                'http://localhost:3001' : '/.netlify/functions/api'
+        };
+
+        // Check authentication
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadBookings();
+            setupFilters();
+        });
+
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            
+            if (!token || user.type === 'Organization') {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Tab switching
+        function showTab(tab) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tabBtn => {
+                tabBtn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tab + 'Tab').style.display = 'block';
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Load tab-specific data if needed
+            if (tab === 'calendar') {
+                loadCalendar();
+            } else if (tab === 'past') {
+                loadPastBookings();
+            }
+        }
+
+        // Load bookings
+        async function loadBookings() {
+            const token = localStorage.getItem('token');
+            
+            try {
+                const response = await fetch(`${CONFIG.API_BASE}/bookings`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const bookings = await response.json();
+                    displayBookings(bookings);
+                }
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+            }
+        }
+
+        // Load past bookings
+        async function loadPastBookings() {
+            const token = localStorage.getItem('token');
+            
+            try {
+                const response = await fetch(`${CONFIG.API_BASE}/bookings/past`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const bookings = await response.json();
+                    // Display past bookings
+                }
+            } catch (error) {
+                console.error('Error loading past bookings:', error);
+            }
+        }
+
+        // Calendar functions
+        function loadCalendar() {
+            // Load calendar data
+            // This would fetch events and render them on the calendar
+        }
+
+        function previousMonth() {
+            // Navigate to previous month
+        }
+
+        function nextMonth() {
+            // Navigate to next month
+        }
+
+        // Filter setup
+        function setupFilters() {
+            document.getElementById('statusFilter').addEventListener('change', applyFilters);
+            document.getElementById('dateFilter').addEventListener('change', applyFilters);
+            document.getElementById('typeFilter').addEventListener('change', applyFilters);
+        }
+
+        function applyFilters() {
+            const status = document.getElementById('statusFilter').value;
+            const date = document.getElementById('dateFilter').value;
+            const type = document.getElementById('typeFilter').value;
+            
+            // Apply filters and reload bookings
+            loadBookings({ status, date, type });
+        }
+
+        // Display bookings
+        function displayBookings(bookings) {
+            // Update the UI with bookings data
+        }
+
+        // Booking actions
+        function confirmBooking(id) {
+            if (confirm('Are you sure you want to confirm this booking?')) {
+                // API call to confirm booking
+            }
+        }
+
+        function declineBooking(id) {
+            if (confirm('Are you sure you want to decline this booking?')) {
+                // API call to decline booking
+            }
+        }
+
+        function addToCalendar(booking) {
+            // Generate calendar event file or integrate with calendar API
+        }
+    </script>
+</body>
+</html>
