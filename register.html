@@ -346,7 +346,7 @@
             display: none;
         }
 
-        /* Mobile Navigation Additions */
+/* Mobile Navigation Styles */
 .nav-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -534,11 +534,11 @@
 /* Responsive Breakpoints */
 @media (max-width: 768px) {
     .nav-links {
-        display: none;
+        display: none !important;
     }
     
     .auth-buttons.desktop-only {
-        display: none;
+        display: none !important;
     }
     
     .hamburger {
@@ -574,13 +574,32 @@
                 <!-- Logo -->
                 <a href="index.html" class="logo">CoveTalks</a>
                 
-                <!-- Desktop Navigation - UPDATE ACTIVE CLASS FOR CURRENT PAGE -->
-                <ul class="nav-links">
+                <!-- Desktop Navigation -->
+                <!-- Logged Out Navigation -->
+                <ul class="nav-links nav-logged-out" id="navLoggedOut">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                
+                <!-- Logged In Navigation (Speakers) -->
+                <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
                     <li><a href="dashboard.html">Dashboard</a></li>
                     <li><a href="members.html">Find Speakers</a></li>
                     <li><a href="opportunities.html">Opportunities</a></li>
                     <li><a href="bookings.html">My Bookings</a></li>
                     <li><a href="profile.html">Profile</a></li>
+                </ul>
+                
+                <!-- Logged In Navigation (Organizations) -->
+                <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
+                    <li><a href="organization-dashboard.html">Dashboard</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
+                    <li><a href="my-opportunities.html">My Opportunities</a></li>
+                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
                 </ul>
     
                 <!-- Right Side Navigation -->
@@ -637,8 +656,19 @@
         </div>
     </div>
 
-    <!-- Mobile Navigation Links - UPDATE ACTIVE CLASS FOR CURRENT PAGE -->
-    <ul class="mobile-nav-links">
+    <!-- Mobile Navigation Links -->
+    <!-- Logged Out Mobile Navigation -->
+    <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="members.html">Find Speakers</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="register.html">Register</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="help.html">Help Center</a></li>
+    </ul>
+    
+    <!-- Logged In Mobile Navigation (Speakers) -->
+    <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
         <li><a href="dashboard.html">Dashboard</a></li>
         <li><a href="members.html">Find Speakers</a></li>
         <li><a href="opportunities.html">Opportunities</a></li>
@@ -646,6 +676,18 @@
         <li><a href="profile.html">Profile</a></li>
         <li><a href="settings.html">Settings</a></li>
         <li><a href="billing.html">Billing</a></li>
+        <li><a href="help.html">Help & Support</a></li>
+    </ul>
+    
+    <!-- Logged In Mobile Navigation (Organizations) -->
+    <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
+        <li><a href="organization-dashboard.html">Dashboard</a></li>
+        <li><a href="members.html">Find Speakers</a></li>
+        <li><a href="post-opportunity.html">Post Opportunity</a></li>
+        <li><a href="my-opportunities.html">My Opportunities</a></li>
+        <li><a href="saved-speakers.html">Saved Speakers</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li><a href="team.html">Team Members</a></li>
         <li><a href="help.html">Help & Support</a></li>
     </ul>
 
@@ -921,7 +963,82 @@
         }
     </script>
     <script>
-        // Mobile Navigation Functions
+        // ============================================
+        // NAVIGATION JAVASCRIPT
+        // ============================================
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNavAuth();
+            setActiveNavItem();
+        });
+        
+        // Update navigation based on auth status
+        function updateNavAuth() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            
+            if (token && user) {
+                // User is logged in - hide logged out nav
+                document.getElementById('navLoggedOut').style.display = 'none';
+                document.getElementById('mobileNavLoggedOut').style.display = 'none';
+                
+                // Show appropriate logged in navigation based on user type
+                if (user.type === 'Organization' || user.Member_Type === 'Organization') {
+                    // Organization navigation
+                    document.getElementById('navOrganization').style.display = 'flex';
+                    document.getElementById('navSpeaker').style.display = 'none';
+                    document.getElementById('mobileNavOrganization').style.display = 'block';
+                    document.getElementById('mobileNavSpeaker').style.display = 'none';
+                } else {
+                    // Speaker navigation (default)
+                    document.getElementById('navSpeaker').style.display = 'flex';
+                    document.getElementById('navOrganization').style.display = 'none';
+                    document.getElementById('mobileNavSpeaker').style.display = 'block';
+                    document.getElementById('mobileNavOrganization').style.display = 'none';
+                }
+                
+                // Show user menu
+                document.getElementById('userMenuDesktop').style.display = 'flex';
+                document.getElementById('authButtonsDesktop').style.display = 'none';
+                document.getElementById('mobileUserSection').style.display = 'block';
+                document.getElementById('mobileAuthButtons').style.display = 'none';
+                document.getElementById('mobileLogoutSection').style.display = 'block';
+                
+                // Update user info
+                const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
+                document.getElementById('userAvatar').textContent = initials;
+                document.getElementById('mobileUserAvatar').textContent = initials;
+                document.getElementById('mobileUserName').textContent = user.name || 'User';
+                document.getElementById('mobileUserType').textContent = user.type || user.Member_Type || 'Member';
+            } else {
+                // User is logged out - show logged out nav
+                document.getElementById('navLoggedOut').style.display = 'flex';
+                document.getElementById('mobileNavLoggedOut').style.display = 'block';
+                
+                // Hide all logged in navigation
+                document.getElementById('navSpeaker').style.display = 'none';
+                document.getElementById('navOrganization').style.display = 'none';
+                document.getElementById('mobileNavSpeaker').style.display = 'none';
+                document.getElementById('mobileNavOrganization').style.display = 'none';
+                
+                // Show auth buttons
+                if (document.getElementById('userMenuDesktop')) {
+                    document.getElementById('userMenuDesktop').style.display = 'none';
+                }
+                document.getElementById('authButtonsDesktop').style.display = 'flex';
+                
+                if (document.getElementById('mobileUserSection')) {
+                    document.getElementById('mobileUserSection').style.display = 'none';
+                }
+                document.getElementById('mobileAuthButtons').style.display = 'flex';
+                if (document.getElementById('mobileLogoutSection')) {
+                    document.getElementById('mobileLogoutSection').style.display = 'none';
+                }
+            }
+        }
+        
+        // Toggle mobile menu
         function toggleMobileMenu() {
             const hamburger = document.getElementById('hamburger');
             const mobileMenu = document.getElementById('mobileMenu');
@@ -938,6 +1055,7 @@
             }
         }
         
+        // Close mobile menu
         function closeMobileMenu() {
             const hamburger = document.getElementById('hamburger');
             const mobileMenu = document.getElementById('mobileMenu');
@@ -949,43 +1067,7 @@
             document.body.style.overflow = '';
         }
         
-        // Update user menu based on auth status
-        function updateNavAuth() {
-            const token = localStorage.getItem('token');
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-            
-            if (token && user) {
-                // Show logged in state
-                document.getElementById('userMenuDesktop').style.display = 'flex';
-                document.getElementById('authButtonsDesktop').style.display = 'none';
-                document.getElementById('mobileUserSection').style.display = 'block';
-                document.getElementById('mobileAuthButtons').style.display = 'none';
-                document.getElementById('mobileLogoutSection').style.display = 'block';
-                
-                // Update user info
-                const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
-                document.getElementById('userAvatar').textContent = initials;
-                document.getElementById('mobileUserAvatar').textContent = initials;
-                document.getElementById('mobileUserName').textContent = user.name || 'User';
-                document.getElementById('mobileUserType').textContent = user.type || 'Member';
-            } else {
-                // Show logged out state
-                if (document.getElementById('userMenuDesktop')) {
-                    document.getElementById('userMenuDesktop').style.display = 'none';
-                }
-                document.getElementById('authButtonsDesktop').style.display = 'flex';
-                
-                if (document.getElementById('mobileUserSection')) {
-                    document.getElementById('mobileUserSection').style.display = 'none';
-                }
-                document.getElementById('mobileAuthButtons').style.display = 'flex';
-                if (document.getElementById('mobileLogoutSection')) {
-                    document.getElementById('mobileLogoutSection').style.display = 'none';
-                }
-            }
-        }
-        
-        // Toggle dropdown
+        // Toggle dropdown menu (desktop)
         function toggleDropdown() {
             const dropdown = document.getElementById('dropdownMenu');
             dropdown.classList.toggle('show');
@@ -1001,7 +1083,24 @@
             }
         });
         
-        // Logout function - UPDATE IF YOU HAVE DIFFERENT LOGOUT LOGIC
+        // Set active navigation item based on current page
+        function setActiveNavItem() {
+            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+            
+            // Clear all active classes first
+            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Set active class on matching links
+            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        // Logout function
         function logout() {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
@@ -1010,23 +1109,17 @@
             window.location.href = 'login.html';
         }
         
-        // Close mobile menu on resize
+        // Close mobile menu on window resize
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 closeMobileMenu();
             }
         });
         
-        // Initialize on load
-        document.addEventListener('DOMContentLoaded', function() {
-            updateNavAuth();
-            
-            // Set active page - UPDATE FOR EACH PAGE
-            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
-                if (link.getAttribute('href') === currentPage) {
-                    link.classList.add('active');
-                }
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.mobile-nav-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                closeMobileMenu();
             });
         });
         </script>

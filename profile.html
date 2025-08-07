@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pricing - CoveTalks</title>
-    <script src="https://js.stripe.com/v3/"></script>
+    <title>Speaker Profile - CoveTalks</title>
     <style>
-        /* Base styles */
         * {
             margin: 0;
             padding: 0;
@@ -17,6 +15,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
+            background: #f8f9fa;
         }
 
         .container {
@@ -104,262 +103,262 @@
             color: white;
         }
 
-        /* Main Content */
-        .main-content {
-            padding-top: 6rem;
-            min-height: 100vh;
-            background: #f8f9fa;
-        }
-
-        .page-header {
+        /* Profile Header */
+        .profile-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 4rem 0;
-            text-align: center;
-        }
-
-        .page-header h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .page-header p {
-            font-size: 1.3rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Pricing Toggle */
-        .pricing-toggle {
-            text-align: center;
-            margin: 3rem 0;
-        }
-
-        .toggle-container {
-            display: inline-flex;
-            background: white;
-            border-radius: 50px;
-            padding: 0.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .toggle-option {
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-
-        .toggle-option.active {
-            background: #2c5aa0;
+            padding: 8rem 0 4rem;
             color: white;
         }
 
-        .toggle-option:not(.active) {
-            color: #666;
-        }
-
-        /* Pricing Section */
-        .pricing-section {
-            padding: 2rem 0 4rem;
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .pricing-card {
-            background: white;
-            border: 2px solid #e1e8ed;
-            border-radius: 20px;
-            padding: 3rem 2rem;
-            text-align: center;
-            position: relative;
-            transition: all 0.3s;
+        .profile-header-content {
             display: flex;
-            flex-direction: column;
-            height: 100%;
+            align-items: center;
+            gap: 3rem;
         }
 
-        .pricing-card:hover {
-            border-color: #2c5aa0;
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        .profile-image-container {
+            flex-shrink: 0;
         }
 
-        .pricing-card.popular {
-            border-color: #f39c12;
-            background: linear-gradient(135deg, #fff, #fff8e1);
-            transform: scale(1.05);
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            object-fit: cover;
+            background: white;
         }
 
-        .pricing-card.popular:hover {
-            transform: scale(1.05) translateY(-10px);
-        }
-
-        .popular-badge {
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #f39c12;
-            color: white;
-            padding: 0.75rem 2rem;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            font-weight: bold;
-        }
-
-        .plan-name {
-            font-size: 2rem;
-            color: #2c5aa0;
-            margin-bottom: 1rem;
-            font-weight: bold;
-        }
-
-        .price-container {
-            margin-bottom: 2rem;
-        }
-
-        .price {
+        .profile-image-placeholder {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 4rem;
             font-weight: bold;
-            color: #2c5aa0;
+            color: white;
+        }
+
+        .profile-info h1 {
+            font-size: 3rem;
             margin-bottom: 0.5rem;
         }
 
-        .price-period {
-            font-size: 1.1rem;
-            color: #666;
-        }
-
-        .price-note {
-            font-size: 0.9rem;
-            color: #888;
-            margin-top: 0.5rem;
-        }
-
-        .features {
-            list-style: none;
-            margin: 2rem 0;
-            text-align: left;
-            flex-grow: 1;
-        }
-
-        .features li {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #f0f0f0;
-            position: relative;
-            padding-left: 2rem;
-        }
-
-        .features li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #27ae60;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .features li:last-child {
-            border-bottom: none;
-        }
-
-        .cta-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .btn-large {
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-        }
-
-        /* Organization Section */
-        .organization-section {
-            background: linear-gradient(135deg, #2c5aa0, #1e3d6f);
-            color: white;
-            padding: 4rem 0;
-            text-align: center;
-        }
-
-        .organization-card {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 3rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .organization-card h2 {
-            font-size: 2.5rem;
+        .profile-type {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
             margin-bottom: 1rem;
         }
 
-        .organization-card p {
+        .profile-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             font-size: 1.2rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 1rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 3rem 0;
+            min-height: 50vh;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-top: -4rem;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .content-card h2 {
+            color: #2c5aa0;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e1e8ed;
+        }
+
+        .bio-section p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .expertise-list {
+            list-style: none;
+        }
+
+        .expertise-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+        }
+
+        .expertise-list li:before {
+            content: "✓";
+            color: #27ae60;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .contact-card {
+            position: sticky;
+            top: 6rem;
+        }
+
+        .contact-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: #e8f4fd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2c5aa0;
+        }
+
+        .booking-cta {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            color: white;
+        }
+
+        .booking-cta h3 {
+            margin-bottom: 1rem;
+        }
+
+        .booking-cta p {
+            margin-bottom: 1.5rem;
         }
 
         .btn-white {
             background: white;
             color: #2c5aa0;
-            border: none;
+            font-weight: bold;
         }
 
         .btn-white:hover {
             background: #f8f9fa;
-            transform: translateY(-2px);
         }
 
-        /* FAQ Section */
-        .faq-section {
-            padding: 4rem 0;
-            background: white;
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
         }
 
-        .faq-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .faq-item {
-            margin-bottom: 1.5rem;
-            border: 1px solid #e1e8ed;
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
             border-radius: 10px;
-            overflow: hidden;
         }
 
-        .faq-question {
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c5aa0;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            margin-top: 2rem;
+        }
+
+        .review-card {
             background: #f8f9fa;
             padding: 1.5rem;
-            cursor: pointer;
-            font-weight: 500;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .review-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 1rem;
         }
 
-        .faq-question:hover {
-            background: #e9ecef;
+        .reviewer-name {
+            font-weight: bold;
+            color: #2c5aa0;
         }
 
-        .faq-answer {
-            padding: 1.5rem;
-            display: none;
+        .review-rating {
+            color: #f39c12;
         }
 
-        .faq-answer.active {
-            display: block;
+        .review-text {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Premium Blur */
+        .premium-blur {
+            filter: blur(5px);
+            pointer-events: none;
+        }
+
+        .upgrade-overlay {
+            background: rgba(44, 90, 160, 0.95);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: -3rem;
         }
 
         /* Footer */
@@ -367,6 +366,7 @@
             background: #2c3e50;
             color: white;
             padding: 3rem 0 1rem;
+            margin-top: 4rem;
         }
 
         .footer-content {
@@ -406,47 +406,23 @@
                 display: none;
             }
 
-            .pricing-grid {
+            .profile-header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .content-grid {
                 grid-template-columns: 1fr;
-                gap: 1rem;
             }
 
-            .pricing-card.popular {
-                transform: none;
+            .stats-section {
+                grid-template-columns: 1fr;
             }
 
-            .pricing-card.popular:hover {
-                transform: translateY(-5px);
-            }
-
-            .page-header h1 {
-                font-size: 2.5rem;
-            }
-
-            .price {
-                font-size: 3rem;
+            .contact-card {
+                position: static;
             }
         }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #2c5aa0;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .hidden {
-            display: none;
-        }
-
 /* Mobile Navigation Styles */
 .nav-container {
     max-width: 1200px;
@@ -804,176 +780,109 @@
     </div>
 </div>
 
-    <!-- Page Header -->
-    <div class="page-header">
+    <!-- Profile Header -->
+    <div class="profile-header">
         <div class="container">
-            <h1>Choose Your Plan</h1>
-            <p>Get full access to our speaker and organization database with flexible pricing options</p>
+            <div class="profile-header-content">
+                <div class="profile-image-container">
+                    <div id="profileImageContainer">
+                        <!-- Profile image or placeholder will be inserted here -->
+                    </div>
+                </div>
+                <div class="profile-info">
+                    <h1 id="speakerName">Loading...</h1>
+                    <div class="profile-type" id="speakerType">Speaker</div>
+                    <div class="profile-location" id="speakerLocation">
+                        <span>📍</span>
+                        <span>Loading...</span>
+                    </div>
+                    <div class="profile-tags" id="speakerTags">
+                        <!-- Tags will be inserted here -->
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Pricing Toggle -->
-            <div class="pricing-toggle">
-                <div class="toggle-container">
-                    <div class="toggle-option active" data-period="monthly">Monthly</div>
-                    <div class="toggle-option" data-period="yearly">Yearly (Save 25%)</div>
-                </div>
-            </div>
+            <div class="content-grid">
+                <!-- Left Column -->
+                <div>
+                    <!-- Bio Section -->
+                    <div class="content-card bio-section">
+                        <h2>About</h2>
+                        <p id="speakerBio">Loading...</p>
+                    </div>
 
-            <!-- Pricing Section -->
-            <div class="pricing-section">
-                <div class="pricing-grid">
-                    <!-- Standard Plan -->
-                    <div class="pricing-card">
-                        <h3 class="plan-name">Standard</h3>
-                        <div class="price-container">
-                            <div class="price" data-monthly="97" data-yearly="997">$97</div>
-                            <div class="price-period">per month</div>
-                            <div class="price-note yearly-note hidden">Billed annually ($997/year)</div>
-                        </div>
-                        <ul class="features">
-                            <li>Full database access</li>
-                            <li>Contact information</li>
-                            <li>Basic search filters</li>
-                            <li>Profile in directory</li>
-                            <li>Email support</li>
-                            <li>Speaking opportunity alerts</li>
+                    <!-- Expertise Section -->
+                    <div class="content-card" style="margin-top: 2rem;">
+                        <h2>Areas of Expertise</h2>
+                        <ul class="expertise-list" id="expertiseList">
+                            <!-- Expertise items will be inserted here -->
                         </ul>
-                        <div class="cta-buttons">
-                            <button class="btn btn-primary btn-large" onclick="checkout('standard', 'monthly')">
-                                Start Monthly Plan
-                            </button>
-                            <button class="btn btn-secondary btn-large yearly-btn hidden" onclick="checkout('standard', 'yearly')">
-                                Start Yearly Plan
-                            </button>
+                    </div>
+
+                    <!-- Stats Section -->
+                    <div class="content-card" style="margin-top: 2rem;">
+                        <h2>Speaker Statistics</h2>
+                        <div class="stats-section">
+                            <div class="stat-item">
+                                <div class="stat-number">50+</div>
+                                <div class="stat-label">Speaking Events</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">4.8</div>
+                                <div class="stat-label">Average Rating</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">15</div>
+                                <div class="stat-label">Years Experience</div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Plus Plan (Popular) -->
-                    <div class="pricing-card popular">
-                        <div class="popular-badge">Most Popular</div>
-                        <h3 class="plan-name">Plus</h3>
-                        <div class="price-container">
-                            <div class="price" data-monthly="147" data-yearly="1497">$147</div>
-                            <div class="price-period">per month</div>
-                            <div class="price-note yearly-note hidden">Billed annually ($1,497/year)</div>
-                        </div>
-                        <ul class="features">
-                            <li>Everything in Standard</li>
-                            <li>Advanced search filters</li>
-                            <li>Priority support</li>
-                            <li>Booking management tools</li>
-                            <li>Analytics dashboard</li>
-                            <li>Featured profile placement</li>
-                            <li>Custom speaker tags</li>
-                        </ul>
-                        <div class="cta-buttons">
-                            <button class="btn btn-primary btn-large" onclick="checkout('plus', 'monthly')">
-                                Start Monthly Plan
-                            </button>
-                            <button class="btn btn-secondary btn-large yearly-btn hidden" onclick="checkout('plus', 'yearly')">
-                                Start Yearly Plan
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Premium Plan -->
-                    <div class="pricing-card">
-                        <h3 class="plan-name">Premium</h3>
-                        <div class="price-container">
-                            <div class="price" data-monthly="197" data-yearly="1997">$197</div>
-                            <div class="price-period">per month</div>
-                            <div class="price-note yearly-note hidden">Billed annually ($1,997/year)</div>
-                        </div>
-                        <ul class="features">
-                            <li>Everything in Plus</li>
-                            <li>Unlimited bookings</li>
-                            <li>Custom integrations</li>
-                            <li>Dedicated account manager</li>
-                            <li>White-label options</li>
-                            <li>API access</li>
-                            <li>Priority listing</li>
-                            <li>Phone support</li>
-                        </ul>
-                        <div class="cta-buttons">
-                            <button class="btn btn-primary btn-large" onclick="checkout('premium', 'monthly')">
-                                Start Monthly Plan
-                            </button>
-                            <button class="btn btn-secondary btn-large yearly-btn hidden" onclick="checkout('premium', 'yearly')">
-                                Start Yearly Plan
-                            </button>
+                    <!-- Reviews Section -->
+                    <div class="content-card" style="margin-top: 2rem;">
+                        <h2>Recent Reviews</h2>
+                        <div class="reviews-section">
+                            <div class="review-card">
+                                <div class="review-header">
+                                    <span class="reviewer-name">Phoenix Chamber of Commerce</span>
+                                    <span class="review-rating">⭐⭐⭐⭐⭐</span>
+                                </div>
+                                <p class="review-text">
+                                    "An exceptional speaker who truly engaged our audience. The presentation was both informative and inspiring. Highly recommended!"
+                                </p>
+                            </div>
+                            <div class="review-card">
+                                <div class="review-header">
+                                    <span class="reviewer-name">Community College District</span>
+                                    <span class="review-rating">⭐⭐⭐⭐⭐</span>
+                                </div>
+                                <p class="review-text">
+                                    "Brought valuable insights and practical knowledge to our students. The interactive approach made complex topics easy to understand."
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Organization Section -->
-        <div class="organization-section">
-            <div class="container">
-                <div class="organization-card">
-                    <h2>Organizations Get Free Access!</h2>
-                    <p>Non-profits, schools, churches, and other organizations can access our speaker database completely free. No subscription required.</p>
-                    <a href="register.html" class="btn btn-white btn-large">Register Your Organization Free</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- FAQ Section -->
-        <div class="faq-section">
-            <div class="container">
-                <h2 style="text-align: center; margin-bottom: 3rem; color: #2c5aa0;">Frequently Asked Questions</h2>
-                <div class="faq-container">
-                    <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFAQ(this)">
-                            <span>What's the difference between the plans?</span>
-                            <span>+</span>
+                <!-- Right Column -->
+                <div>
+                    <div class="content-card contact-card">
+                        <h2>Contact Information</h2>
+                        <div id="contactInfo">
+                            <!-- Contact info will be inserted here based on auth status -->
                         </div>
-                        <div class="faq-answer">
-                            <p>All plans include access to our speaker database and contact information. Plus adds advanced search filters and booking tools, while Premium includes unlimited bookings, API access, and dedicated support.</p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFAQ(this)">
-                            <span>Is there really no cost for organizations?</span>
-                            <span>+</span>
-                        </div>
-                        <div class="faq-answer">
-                            <p>Correct! Non-profits, schools, churches, and similar organizations get completely free access to our platform. This is part of our mission to connect speakers with meaningful causes.</p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFAQ(this)">
-                            <span>Can I cancel my subscription anytime?</span>
-                            <span>+</span>
-                        </div>
-                        <div class="faq-answer">
-                            <p>Yes, you can cancel your subscription at any time. Your access will continue until the end of your current billing period.</p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFAQ(this)">
-                            <span>Do speakers really speak for free?</span>
-                            <span>+</span>
-                        </div>
-                        <div class="faq-answer">
-                            <p>Yes! Our speakers volunteer their time to share their expertise. They benefit from networking opportunities, building their reputation, and giving back to their communities.</p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFAQ(this)">
-                            <span>How quickly can I find a speaker?</span>
-                            <span>+</span>
-                        </div>
-                        <div class="faq-answer">
-                            <p>Most organizations find suitable speakers within 24-48 hours. Our database is searchable by location, expertise, and availability to help you find the perfect match quickly.</p>
+                        
+                        <div class="booking-cta" style="margin-top: 2rem;">
+                            <h3>Book This Speaker</h3>
+                            <p>Ready to bring expertise to your event?</p>
+                            <button id="bookingBtn" class="btn btn-white" style="width: 100%;">
+                                Request Booking
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -998,10 +907,9 @@
                 </div>
                 <div class="footer-section">
                     <h3>Support</h3>
-                    <a href="#">Help Center</a>
-                    <a href="#">Contact Us</a>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
                 </div>
                 <div class="footer-section">
                     <h3>Connect</h3>
@@ -1020,136 +928,187 @@
     <script>
         // Configuration
         const CONFIG = {
-            STRIPE: {
-                PUBLISHABLE_KEY: 'pk_live_51RrABe1Fvl67fP5VrtH3hkNvl4chaiFtlskEMSHJIw6M1tAHdcgZ21pgup7DCEajjyQFUDM1jnIE7W1KrGBDjieV002ztaIRXk'
-            },
             API_BASE: window.location.hostname === 'localhost' ? 'http://localhost:3001' : '/.netlify/functions/api'
         };
 
-        // Initialize Stripe
-        const stripe = Stripe(CONFIG.STRIPE.PUBLISHABLE_KEY);
+        // Get speaker ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const speakerId = urlParams.get('id');
 
-        // Current billing period
-        let currentPeriod = 'monthly';
+        // Global state
+        let currentUser = null;
+        let speakerData = null;
 
         // DOM Elements
         const loginBtn = document.getElementById('loginBtn');
 
-        // Event Listeners
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             checkAuthStatus();
-            setupPricingToggle();
-        });
-
-        loginBtn.addEventListener('click', () => window.location.href = 'index.html#login');
-
-        // Setup pricing toggle
-        function setupPricingToggle() {
-            const toggleOptions = document.querySelectorAll('.toggle-option');
-            
-            toggleOptions.forEach(option => {
-                option.addEventListener('click', () => {
-                    // Remove active class from all options
-                    toggleOptions.forEach(opt => opt.classList.remove('active'));
-                    
-                    // Add active class to clicked option
-                    option.classList.add('active');
-                    
-                    // Update current period
-                    currentPeriod = option.dataset.period;
-                    
-                    // Update pricing display
-                    updatePricingDisplay();
-                });
-            });
-        }
-
-        // Update pricing display based on selected period
-        function updatePricingDisplay() {
-            const prices = document.querySelectorAll('.price');
-            const yearlyNotes = document.querySelectorAll('.yearly-note');
-            const yearlyBtns = document.querySelectorAll('.yearly-btn');
-            const periodElements = document.querySelectorAll('.price-period');
-
-            prices.forEach(price => {
-                const monthlyPrice = price.dataset.monthly;
-                const yearlyPrice = price.dataset.yearly;
-                
-                if (currentPeriod === 'yearly') {
-                    price.textContent = `$${yearlyPrice}`;
-                } else {
-                    price.textContent = `$${monthlyPrice}`;
-                }
-            });
-
-            periodElements.forEach(period => {
-                period.textContent = currentPeriod === 'yearly' ? 'per year' : 'per month';
-            });
-
-            yearlyNotes.forEach(note => {
-                if (currentPeriod === 'yearly') {
-                    note.classList.remove('hidden');
-                } else {
-                    note.classList.add('hidden');
-                }
-            });
-
-            yearlyBtns.forEach(btn => {
-                if (currentPeriod === 'yearly') {
-                    btn.classList.remove('hidden');
-                } else {
-                    btn.classList.add('hidden');
-                }
-            });
-        }
-
-        // Stripe checkout function
-        async function checkout(plan, period) {
-            try {
-                const response = await fetch(`${CONFIG.API_BASE}/stripe/create-session`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        plan: plan,
-                        period: period || currentPeriod,
-                        userType: plan === 'organization' ? 'organization' : 'speaker'
-                    })
-                });
-
-                const session = await response.json();
-                
-                if (session.url) {
-                    window.location.href = session.url;
-                } else {
-                    alert('Payment setup failed. Please try again.');
-                }
-            } catch (error) {
-                console.error('Checkout error:', error);
-                alert('Payment failed. Please try again.');
+            if (speakerId) {
+                loadSpeakerProfile(speakerId);
+            } else {
+                // Load sample data if no ID provided
+                loadSampleProfile();
             }
-        }
+        });
 
         // Check authentication status
         function checkAuthStatus() {
             const token = localStorage.getItem('token');
             if (token) {
-                loginBtn.textContent = 'Dashboard';
-                loginBtn.onclick = () => window.location.href = 'members.html';
+                fetch(`${CONFIG.API_BASE}/auth/verify`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.valid) {
+                        currentUser = result.user;
+                        updateAuthUI();
+                    }
+                })
+                .catch(error => {
+                    console.error('Auth verification failed:', error);
+                });
             }
         }
 
-        // FAQ toggle function
-        function toggleFAQ(element) {
-            const answer = element.nextElementSibling;
-            const icon = element.querySelector('span:last-child');
+        function updateAuthUI() {
+            if (currentUser) {
+                loginBtn.textContent = 'Dashboard';
+                loginBtn.onclick = () => window.location.href = 'members.html';
+            } else {
+                loginBtn.onclick = () => window.location.href = 'index.html#login';
+            }
+        }
+
+        // Load speaker profile
+        async function loadSpeakerProfile(id) {
+            try {
+                const response = await fetch(`${CONFIG.API_BASE}/speaker/${id}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    speakerData = data.speaker;
+                    displayProfile(speakerData);
+                } else {
+                    loadSampleProfile();
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                loadSampleProfile();
+            }
+        }
+
+        // Load sample profile
+        function loadSampleProfile() {
+            speakerData = {
+                Name: 'John Smith',
+                Type: 'Speaker',
+                Location: 'Phoenix, AZ',
+                Specialty: 'Business Leadership, Digital Transformation, Innovation Strategy',
+                Bio: 'John Smith is a seasoned business leader with over 20 years of experience in digital transformation and innovation strategy. As a former Fortune 500 CEO, he has led multiple organizations through successful digital transformations, resulting in significant revenue growth and operational efficiency improvements. John is passionate about sharing his knowledge and insights with organizations looking to navigate the complexities of modern business. His engaging speaking style combines real-world experience with actionable strategies that audiences can implement immediately. He specializes in helping organizations build innovation cultures, implement digital strategies, and develop future-ready leadership teams.',
+                Email: 'john.smith@example.com',
+                Phone: '(555) 123-4567',
+                Website: 'https://johnsmithspeaker.com',
+                Booking_Link: 'https://calendly.com/johnsmith',
+                Profile_Image: null
+            };
+            displayProfile(speakerData);
+        }
+
+        // Display profile data
+        function displayProfile(speaker) {
+            // Profile Image
+            const imageContainer = document.getElementById('profileImageContainer');
+            if (speaker.Profile_Image) {
+                imageContainer.innerHTML = `<img src="${speaker.Profile_Image}" alt="${speaker.Name}" class="profile-image">`;
+            } else {
+                const initials = speaker.Name.split(' ').map(n => n[0]).join('').toUpperCase();
+                imageContainer.innerHTML = `<div class="profile-image-placeholder">${initials}</div>`;
+            }
+
+            // Basic Info
+            document.getElementById('speakerName').textContent = speaker.Name;
+            document.getElementById('speakerType').textContent = speaker.Type;
+            document.getElementById('speakerLocation').innerHTML = `<span>📍</span><span>${speaker.Location}</span>`;
             
-            // Toggle answer visibility
-            answer.classList.toggle('active');
-            
-            // Toggle icon
-            icon.textContent = answer.classList.contains('active') ? '−' : '+';
+            // Tags
+            const tags = speaker.Specialty ? speaker.Specialty.split(',').map(tag => tag.trim()) : [];
+            const tagsContainer = document.getElementById('speakerTags');
+            tagsContainer.innerHTML = tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+
+            // Bio
+            document.getElementById('speakerBio').textContent = speaker.Bio;
+
+            // Expertise List
+            const expertiseList = document.getElementById('expertiseList');
+            expertiseList.innerHTML = tags.map(tag => `<li>${tag}</li>`).join('');
+
+            // Contact Information
+            const contactInfo = document.getElementById('contactInfo');
+            if (currentUser) {
+                contactInfo.innerHTML = `
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <div class="contact-icon">✉️</div>
+                            <div>
+                                <div style="color: #666; font-size: 0.9rem;">Email</div>
+                                <div><a href="mailto:${speaker.Email}">${speaker.Email}</a></div>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">📞</div>
+                            <div>
+                                <div style="color: #666; font-size: 0.9rem;">Phone</div>
+                                <div><a href="tel:${speaker.Phone}">${speaker.Phone}</a></div>
+                            </div>
+                        </div>
+                        ${speaker.Website ? `
+                        <div class="contact-item">
+                            <div class="contact-icon">🌐</div>
+                            <div>
+                                <div style="color: #666; font-size: 0.9rem;">Website</div>
+                                <div><a href="${speaker.Website}" target="_blank">Visit Website</a></div>
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            } else {
+                contactInfo.innerHTML = `
+                    <div class="contact-info premium-blur">
+                        <div class="contact-item">
+                            <div class="contact-icon">✉️</div>
+                            <div>Email: ••••••@email.com</div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">📞</div>
+                            <div>Phone: •••-•••-••••</div>
+                        </div>
+                    </div>
+                    <div class="upgrade-overlay">
+                        <h3>Premium Feature</h3>
+                        <p>Contact information is available to registered members only</p>
+                        <a href="pricing.html" class="btn btn-secondary" style="margin-top: 1rem;">View Pricing</a>
+                    </div>
+                `;
+            }
+
+            // Booking Button
+            const bookingBtn = document.getElementById('bookingBtn');
+            bookingBtn.onclick = () => {
+                if (currentUser && speaker.Booking_Link) {
+                    window.open(speaker.Booking_Link, '_blank');
+                } else if (currentUser) {
+                    window.location.href = `mailto:${speaker.Email}?subject=Speaking Request`;
+                } else {
+                    alert('Please log in to request a booking');
+                    window.location.href = 'index.html#login';
+                }
+            };
         }
     </script>
     <script>
