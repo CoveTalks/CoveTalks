@@ -1,8 +1,23 @@
 // File: netlify/functions/auth-signup.js
+// ENHANCED DEBUG VERSION with schema corrections
+
+// Check for required environment variables at startup
+const requiredEnvVars = ['AIRTABLE_API_KEY', 'AIRTABLE_BASE_ID', 'JWT_SECRET'];
+const missingEnvVars = requiredEnvVars.filter(varName => !process.env[varName]);
+
+if (missingEnvVars.length > 0) {
+  console.error('🔴 Missing required environment variables:', missingEnvVars);
+}
+
 const { tables, findByField, createRecord } = require('./utils/airtable');
 const { hashPassword, generateToken } = require('./utils/auth');
 
 exports.handler = async (event) => {
+  console.log('=====================================');
+  console.log('🚀 Auth-signup function called');
+  console.log('Method:', event.httpMethod);
+  console.log('=====================================\n');
+  
   // Only allow POST
   if (event.httpMethod !== 'POST') {
     return { 
@@ -20,6 +35,25 @@ exports.handler = async (event) => {
   };
 
   try {
+    // Check environment variables
+    if (missingEnvVars.length > 0) {
+      console.error('❌ Environment variables missing:', missingEnvVars);
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ 
+          success: false,
+          error: 'Server configuration error',
+          details: `Missing environment variables: ${missingEnvVars.join(', ')}`,
+          debug: true
+        })
+      };
+    }
+
+    console.log('📝 Parsing request body...');
+    const requestData = JSON.parse(event.body);
+    console.log('Request data keys received:', Object.keys(requestData));
+    
     const { 
       email, 
       password, 
@@ -32,36 +66,81 @@ exports.handler = async (event) => {
       specialty,
       // Organization-specific fields
       organizationData
-    } = JSON.parse(event.body);
+    } = requestData;
+
+    // Log what we received (without password)
+    console.log('📋 Signup attempt details:');
+    console.log('   Email:', email);
+    console.log('   Name:', name);
+    console.log('   Member Type:', memberType);
+    console.log('   Has Password:', !!password);
+    console.log('   Has Phone:', !!phone);
+    console.log('   Has Location:', !!location);
+    console.log('   Has Bio:', !!bio);
+    console.log('   Has Organization Data:', !!organizationData);
 
     // Validate required fields
     if (!email || !password || !name || !memberType) {
+      console.error('❌ Missing required fields:', { 
+        hasEmail: !!email, 
+        hasPassword: !!password, 
+        hasName: !!name, 
+        hasMemberType: !!memberType 
+      });
       return {
         statusCode: 400,
         headers,
         body: JSON.stringify({ 
           success: false,
-          error: 'Missing required fields' 
+          error: 'Missing required fields',
+          details: {
+            email: !email ? 'Email is required' : null,
+            password: !password ? 'Password is required' : null,
+            name: !name ? 'Name is required' : null,
+            memberType: !memberType ? 'Member type is required' : null
+          }
         })
       };
     }
 
     // Validate member type
     if (!['Speaker', 'Organization'].includes(memberType)) {
+      console.error('❌ Invalid member type:', memberType);
       return {
         statusCode: 400,
         headers,
         body: JSON.stringify({ 
           success: false,
-          error: 'Invalid member type' 
+          error: `Invalid member type: ${memberType}. Must be 'Speaker' or 'Organization'` 
         })
       };
     }
 
     // Check if user exists
-    const existingUser = await findByField(tables.members, 'Email', email);
+    console.log('\n🔍 STEP 1: Checking if email already exists...');
+    console.log('   Looking up:', email);
+    
+    let existingUser;
+    try {
+      existingUser = await findByField(tables.members, 'Email', email);
+      console.log('   Lookup complete:', existingUser ? '⚠️ User exists' : '✅ Email available');
+    } catch (lookupError) {
+      console.error('❌ Database lookup failed:', lookupError.message);
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ 
+          success: false,
+          error: 'Database lookup failed',
+          details: lookupError.message,
+          debug: true,
+          tip: 'Check that the Email field exists in your Members table'
+        })
+      };
+    }
     
     if (existingUser) {
+      console.log('❌ Email already registered, returning 409');
       return {
         statusCode: 409,
         headers,
@@ -73,9 +152,28 @@ exports.handler = async (event) => {
     }
 
     // Hash password
-    const passwordHash = await hashPassword(password);
+    console.log('\n🔐 STEP 2: Hashing password...');
+    let passwordHash;
+    try {
+      passwordHash = await hashPassword(password);
+      console.log('   ✅ Password hashed successfully');
+      console.log('   Hash length:', passwordHash.length);
+    } catch (hashError) {
+      console.error('❌ Password hashing failed:', hashError);
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ 
+          success: false,
+          error: 'Password processing failed',
+          details: hashError.message,
+          debug: true
+        })
+      };
+    }
 
-    // Create member record
+    // Create member record - matching YOUR schema exactly
+    console.log('\n📝 STEP 3: Creating member record...');
     const memberFields = {
       Name: name,
       Email: email,
@@ -85,45 +183,134 @@ exports.handler = async (event) => {
       Bio: bio || '',
       Website: website || '',
       Status: 'Active',
-      Created_Date: new Date().toISOString(),
       Password_Hash: passwordHash
+      // NOTE: Created_Date is automatically set by Airtable (Created time field)
+      // NOTE: Member_ID is automatically set by Airtable (Autonumber field)
     };
 
-    // Add specialty for speakers
+    // Add specialty for speakers (matching Multiple select field)
     if (memberType === 'Speaker' && specialty) {
+      // Ensure specialty is an array for Multiple select field
       memberFields.Specialty = Array.isArray(specialty) ? specialty : [specialty];
+      console.log('   Adding Specialty:', memberFields.Specialty);
     }
 
-    const newUser = await createRecord(tables.members, memberFields);
+    console.log('   Fields to create:', Object.keys(memberFields));
+    console.log('   Field values:');
+    Object.entries(memberFields).forEach(([key, value]) => {
+      if (key === 'Password_Hash') {
+        console.log(`      ${key}: [HIDDEN - ${value.length} chars]`);
+      } else {
+        console.log(`      ${key}:`, value);
+      }
+    });
+    
+    let newUser;
+    try {
+      newUser = await createRecord(tables.members, memberFields);
+      console.log('   ✅ Member created successfully!');
+      console.log('   Record ID:', newUser.id);
+      console.log('   Member_ID (auto):', newUser.fields.Member_ID);
+      console.log('   Created_Date (auto):', newUser.fields.Created_Date);
+    } catch (createError) {
+      console.error('❌ Failed to create member record:', createError);
+      console.error('   Error type:', createError.constructor.name);
+      console.error('   Error message:', createError.message);
+      if (createError.error) {
+        console.error('   Airtable error:', createError.error);
+      }
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ 
+          success: false,
+          error: 'Failed to create member record',
+          details: createError.message,
+          airtableError: createError.error,
+          debug: true,
+          tip: 'Check that all field names match your Airtable schema exactly (case-sensitive)'
+        })
+      };
+    }
 
     // If organization, create organization record
     if (memberType === 'Organization' && organizationData) {
+      console.log('\n🏢 STEP 4: Creating organization record...');
       try {
-        await createRecord(tables.organizations, {
-          Member_ID: [newUser.id],
+        // Organization fields matching YOUR schema
+        const orgFields = {
+          Member_ID: [newUser.id], // Link to Members table - must be array
           Organization_Name: organizationData.Organization_Name || name,
           Organization_Type: organizationData.Organization_Type || 'Other',
-          Contact_Name: organizationData.Contact_Name || name,
-          Speaking_Topics: organizationData.Speaking_Topics || [],
-          Event_Frequency: organizationData.Event_Frequency || 'Monthly'
-        });
+          Contact_Name: organizationData.Contact_Name || name
+        };
+        
+        // Add Speaking_Topics if provided (Multiple select field)
+        if (organizationData.Speaking_Topics) {
+          orgFields.Speaking_Topics = Array.isArray(organizationData.Speaking_Topics) 
+            ? organizationData.Speaking_Topics 
+            : [organizationData.Speaking_Topics];
+        }
+        
+        // Add Event_Frequency if provided
+        if (organizationData.Event_Frequency) {
+          orgFields.Event_Frequency = organizationData.Event_Frequency;
+        }
+        
+        console.log('   Organization fields:', Object.keys(orgFields));
+        console.log('   Field values:', orgFields);
+        
+        const orgRecord = await createRecord(tables.organizations, orgFields);
+        console.log('   ✅ Organization record created successfully');
+        console.log('   Org Record ID:', orgRecord.id);
       } catch (orgError) {
-        console.error('Failed to create organization record:', orgError);
+        console.error('   ⚠️ Failed to create organization record:', orgError);
+        console.error('   Will continue anyway - member was created');
         // Continue anyway - member is created
       }
     }
 
     // Generate JWT token
-    const token = generateToken(newUser.id, email);
+    console.log('\n🔑 STEP 5: Generating JWT token...');
+    let token;
+    try {
+      token = generateToken(newUser.id, email);
+      console.log('   ✅ Token generated successfully');
+      console.log('   Token length:', token.length);
+    } catch (tokenError) {
+      console.error('❌ Token generation failed:', tokenError);
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ 
+          success: false,
+          error: 'Failed to generate authentication token',
+          details: tokenError.message,
+          debug: true
+        })
+      };
+    }
 
-    // Prepare user data for response
+    // Prepare user data for response - matching YOUR schema field names
     const userData = {
-      id: newUser.id,
+      id: newUser.id,  // Airtable record ID
+      memberId: newUser.fields.Member_ID,  // Your autonumber field
       name: newUser.fields.Name,
       email: newUser.fields.Email,
       memberType: newUser.fields.Member_Type,
-      status: newUser.fields.Status
+      status: newUser.fields.Status,
+      location: newUser.fields.Location || null,
+      bio: newUser.fields.Bio || null,
+      website: newUser.fields.Website || null,
+      specialty: newUser.fields.Specialty || []
     };
+
+    console.log('\n✅ SIGNUP SUCCESSFUL!');
+    console.log('   User:', userData.email);
+    console.log('   Type:', userData.memberType);
+    console.log('   Record ID:', userData.id);
+    console.log('   Member ID:', userData.memberId);
+    console.log('=====================================\n');
 
     return {
       statusCode: 200,
@@ -136,14 +323,21 @@ exports.handler = async (event) => {
       })
     };
   } catch (error) {
-    console.error('Signup error:', error);
+    console.error('\n❌ UNEXPECTED ERROR IN SIGNUP:');
+    console.error('   Error type:', error.constructor.name);
+    console.error('   Error message:', error.message);
+    console.error('   Stack trace:', error.stack);
+    console.error('=====================================\n');
+    
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({ 
         success: false,
         error: 'Failed to create account',
-        message: error.message 
+        message: error.message,
+        type: error.constructor.name,
+        debug: true
       })
     };
   }
