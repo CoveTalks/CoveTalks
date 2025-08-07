@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - CoveTalks</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #22c55e;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+        }
+
+        /* Navigation */
+        .nav {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav__container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav__logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .nav__logo:hover {
+            opacity: 0.8;
+        }
+
+        .nav__menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav__link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav__link:hover,
+        .nav__link--active {
+            color: var(--primary-color);
+        }
+
+        .nav__mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Settings Layout */
+        .settings-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+
+        /* Settings Sidebar */
+        .settings-sidebar {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            height: fit-content;
+            position: sticky;
+            top: 5rem;
+        }
+
+        .settings-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .settings-nav__item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+        }
+
+        .settings-nav__item:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .settings-nav__item--active {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+        }
+
+        .settings-nav__icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        /* Settings Content */
+        .settings-content {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .settings-panel {
+            display: none;
+        }
+
+        .settings-panel--active {
+            display: block;
+        }
+
+        .settings-panel__header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .settings-panel__title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .settings-panel__description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .settings-panel__body {
+            padding: 2rem;
+        }
+
+        /* Form Sections */
+        .form-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .form-section__title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.625rem 0.875rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-helper {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Toggle Switch */
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .toggle-group:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-info {
+            flex: 1;
+            margin-right: 1rem;
+        }
+
+        .toggle-label {
+            font-weight: 500;
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .toggle-description {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--border-color);
+            transition: 0.3s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .btn--primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn--primary:hover {
+            background: var(--primary-hover);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn--secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn--secondary:hover {
+            background: var(--bg-primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn--danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn--danger:hover {
+            background: #dc2626;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn--ghost {
+            background: transparent;
+            color: var(--primary-color);
+            padding: 0.5rem;
+        }
+
+        .btn--ghost:hover {
+            background: var(--bg-secondary);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Avatar Upload */
+        .avatar-upload {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 3px solid var(--border-color);
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .alert--success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            color: var(--success-color);
+        }
+
+        .alert--warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            color: var(--warning-color);
+        }
+
+        .alert--danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: var(--danger-color);
+        }
+
+        /* Security Section */
+        .security-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+        }
+
+        .security-item__info {
+            flex: 1;
+        }
+
+        .security-item__title {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .security-item__status {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge--enabled {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-badge--disabled {
+            background: rgba(100, 116, 139, 0.1);
+            color: var(--secondary-color);
+        }
+
+        /* Data Section */
+        .data-card {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .data-card__title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .data-card__description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav__menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--bg-primary);
+                border-bottom: 1px solid var(--border-color);
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav__menu--open {
+                display: flex;
+            }
+
+            .nav__mobile-toggle {
+                display: block;
+            }
+
+            .settings-container {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-sidebar {
+                position: static;
+                margin-bottom: 1rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .avatar-upload {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* Loading States */
+        .btn--loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Focus styles */
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav__container">
+            <a href="/" class="nav__logo">CoveTalks</a>
+            <button class="nav__mobile-toggle" aria-label="Toggle menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12h18M3 6h18M3 18h18"/>
+                </svg>
+            </button>
+            <div class="nav__menu">
+                <a href="/dashboard.html" class="nav__link">Dashboard</a>
+                <a href="/bookings.html" class="nav__link">Bookings</a>
+                <a href="/opportunities.html" class="nav__link">Opportunities</a>
+                <a href="/profile.html" class="nav__link">Profile</a>
+                <a href="/settings.html" class="nav__link nav__link--active">Settings</a>
+                <button class="btn btn--secondary" onclick="handleLogout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Settings Layout -->
+    <div class="settings-container">
+        <!-- Sidebar Navigation -->
+        <aside class="settings-sidebar">
+            <nav class="settings-nav">
+                <button class="settings-nav__item settings-nav__item--active" data-panel="profile">
+                    <svg class="settings-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span>Profile</span>
+                </button>
+                
+                <button class="settings-nav__item" data-panel="account">
+                    <svg class="settings-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6m0 6v6m4.22-13.22l4.24 4.24M1.54 9.96l4.24 4.24M18.46 14.04l4.24 4.24M1.54 14.04l4.24-4.24"></path>
+                    </svg>
+                    <span>Account</span>
+                </button>
+                
+                <button class="settings-nav__item" data-panel="security">
+                    <svg class="settings-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <span>Security</span>
+                </button>
+                
+                <button class="settings-nav__item" data-panel="notifications">
+                    <svg class="settings-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span>Notifications</span>
+                </button>
+                
+                <button class="settings-nav__item" data-panel="privacy">
+                    <svg class="settings-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>Privacy</span>
+                </button>
+                
+                <button class="settings-nav__item" data-panel="integrations">
+                    <svg class="settings-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path>
+                        <polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon>
+                    </svg>
+                    <span>Integrations</span>
+                </button>
+                
+                <button class="settings-nav__item" data-panel="data">
+                    <svg class="settings-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                    <span>Data & Export</span>
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Settings Content -->
+        <main class="settings-content">
+            <!-- Profile Panel -->
+            <div class="settings-panel settings-panel--active" id="profile-panel">
+                <div class="settings-panel__header">
+                    <h1 class="settings-panel__title">Profile Settings</h1>
+                    <p class="settings-panel__description">Manage your public profile information and speaker details</p>
+                </div>
+                
+                <div class="settings-panel__body">
+                    <form id="profileForm">
+                        <!-- Avatar Upload -->
+                        <div class="avatar-upload">
+                            <div class="avatar-preview">
+                                <img src="" alt="" id="avatarPreview" style="display: none;">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                            <div class="avatar-actions">
+                                <button type="button" class="btn btn--secondary" onclick="uploadAvatar()">
+                                    Upload Photo
+                                </button>
+                                <span class="form-helper">JPG, PNG or GIF. Max 2MB.</span>
+                            </div>
+                        </div>
+
+                        <!-- Personal Information -->
+                        <div class="form-section">
+                            <h2 class="form-section__title">Personal Information</h2>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="firstName">First Name</label>
+                                    <input type="text" class="form-input" id="firstName" placeholder="John">
+                                    <!-- TODO: Load from Airtable -->
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="lastName">Last Name</label>
+                                    <input type="text" class="form-input" id="lastName" placeholder="Doe">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="email">Email Address</label>
+                                <input type="email" class="form-input" id="email" placeholder="john@example.com">
+                                <span class="form-helper">This email will be used for account notifications</span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="phone">Phone Number</label>
+                                <input type="tel" class="form-input" id="phone" placeholder="+1 (555) 123-4567">
+                            </div>
+                        </div>
+
+                        <!-- Speaker Profile -->
+                        <div class="form-section">
+                            <h2 class="form-section__title">Speaker Profile</h2>
+                            <div class="form-group">
+                                <label class="form-label" for="bio">Professional Bio</label>
+                                <textarea class="form-textarea" id="bio" placeholder="Tell us about your expertise and experience..."></textarea>
+                                <span class="form-helper">Max 500 characters</span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="expertise">Areas of Expertise</label>
+                                <input type="text" class="form-input" id="expertise" placeholder="e.g., Digital Marketing, Leadership, Innovation">
+                                <span class="form-helper">Separate multiple topics with commas</span>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="experience">Years of Experience</label>
+                                    <select class="form-select" id="experience">
+                                        <option value="">Select...</option>
+                                        <option value="0-2">0-2 years</option>
+                                        <option value="3-5">3-5 years</option>
+                                        <option value="6-10">6-10 years</option>
+                                        <option value="10+">10+ years</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="rate">Speaking Rate</label>
+                                    <select class="form-select" id="rate">
+                                        <option value="free">Free</option>
+                                        <option value="0-500">$0-500</option>
+                                        <option value="500-1000">$500-1000</option>
+                                        <option value="1000+">$1000+</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn--primary">
+                                Save Changes
+                            </button>
+                            <button type="button" class="btn btn--secondary" onclick="cancelChanges()">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Account Panel -->
+            <div class="settings-panel" id="account-panel">
+                <div class="settings-panel__header">
+                    <h1 class="settings-panel__title">Account Settings</h1>
+                    <p class="settings-panel__description">Manage your account preferences and settings</p>
+                </div>
+                
+                <div class="settings-panel__body">
+                    <div class="form-section">
+                        <h2 class="form-section__title">Account Preferences</h2>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="language">Language</label>
+                            <select class="form-select" id="language">
+                                <option value="en">English</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                                <option value="de">German</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="timezone">Timezone</label>
+                            <select class="form-select" id="timezone">
+                                <option value="PST">Pacific Time (PST)</option>
+                                <option value="MST">Mountain Time (MST)</option>
+                                <option value="CST">Central Time (CST)</option>
+                                <option value="EST">Eastern Time (EST)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="dateFormat">Date Format</label>
+                            <select class="form-select" id="dateFormat">
+                                <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2 class="form-section__title">Account Type</h2>
+                        <div class="alert alert--warning">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                            <div>
+                                <strong>Professional Account</strong><br>
+                                <span style="font-size: 0.875rem;">You have access to all premium features</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn--primary" onclick="saveAccountSettings()">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Panel -->
+            <div class="settings-panel" id="security-panel">
+                <div class="settings-panel__header">
+                    <h1 class="settings-panel__title">Security Settings</h1>
+                    <p class="settings-panel__description">Keep your account secure with these settings</p>
+                </div>
+                
+                <div class="settings-panel__body">
+                    <div class="form-section">
+                        <h2 class="form-section__title">Password</h2>
+                        
+                        <div class="security-item">
+                            <div class="security-item__info">
+                                <div class="security-item__title">Password</div>
+                                <div class="security-item__status">Last changed 30 days ago</div>
+                            </div>
+                            <button class="btn btn--secondary" onclick="changePassword()">
+                                Change Password
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2 class="form-section__title">Two-Factor Authentication</h2>
+                        
+                        <div class="security-item">
+                            <div class="security-item__info">
+                                <div class="security-item__title">Two-Factor Authentication (2FA)</div>
+                                <div class="security-item__status">Add an extra layer of security to your account</div>
+                            </div>
+                            <span class="status-badge status-badge--disabled">Disabled</span>
+                        </div>
+                        
+                        <button class="btn btn--primary" onclick="enable2FA()" style="margin-top: 1rem;">
+                            Enable 2FA
+                        </button>
+                    </div>
+
+                    <div class="form-section">
+                        <h2 class="form-section__title">Active Sessions</h2>
+                        
+                        <div class="security-item">
+                            <div class="security-item__info">
+                                <div class="security-item__title">Current Session</div>
+                                <div class="security-item__status">Chrome on Windows • Phoenix, AZ • Active now</div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn--secondary" onclick="viewAllSessions()" style="margin-top: 1rem;">
+                            View All Sessions
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Panel -->
+            <div class="settings-panel" id="notifications-panel">
+                <div class="settings-panel__header">
+                    <h1 class="settings-panel__title">Notification Preferences</h1>
+                    <p class="settings-panel__description">Choose how you want to be notified</p>
+                </div>
+                
+                <div class="settings-panel__body">
+                    <div class="form-section">
+                        <h2 class="form-section__title">Email Notifications</h2>
+                        
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <label class="toggle-label">New Speaking Opportunities</label>
+                                <p class="toggle-description">Get notified when new opportunities match your expertise</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <label class="toggle-label">Booking Confirmations</label>
+                                <p class="toggle-description">Receive confirmation when a booking is accepted</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <label class="toggle-label">Booking Reminders</label>
+                                <p class="toggle-description">Get reminded 24 hours before your speaking engagement</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <label class="toggle-label">Weekly Summary</label>
+                                <p class="toggle-description">Receive a weekly summary of your activities</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <label class="toggle-label">Marketing Emails</label>
+                                <p class="toggle-description">Updates about new features and tips</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2 class="form-section__title">Push Notifications</h2>
+                        
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <label class="toggle-label">Browser Notifications</label>
+                                <p class="toggle-description">Show notifications in your browser</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn--primary" onclick="saveNotificationSettings()">
+                            Save Preferences
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy Panel -->
+            <div class="settings-panel" id="privacy-panel">
+                <div class="settings-panel__header">
+                    <h1 class="settings-panel__title">Privacy Settings</h1>
+                    <p class="settings-panel__description">Control your privacy and data sharing preferences</p>
+                </div>
+                
+                <div class="settings-panel__body">
+                    <div class="form-section">
+                        <h2 class="form-section__title">Profile Visibility</h2>
+                        
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <label class="toggle-label">Public Profile</label>
+                                <p class="toggle-description">Make your profile visible to organizations searching for speakers</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <label class="toggle-label">Show Email</label>
+                                <p class="toggle-description">Display your email address on your public profile</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <label class="toggle-label">Show Phone Number</label>
+                                <p class="toggle-description">Display your phone number on your public profile</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2 class="form-section__title">Data Sharing</h2>
+                        
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <label class="toggle-label">Analytics & Performance</label>
+                                <p class="toggle-description">Help us improve by sharing usage data</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <label class="toggle-label">Personalized Recommendations</label>
+                                <p class="toggle-description">Get personalized opportunity recommendations</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn--primary" onclick="savePrivacySettings()">
+                            Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Integrations Panel -->
+            <div class="settings-panel" id="integrations-panel">
+                <div class="settings-panel__header">
+                    <h1 class="settings-panel__title">Integrations</h1>
+                    <p class="settings-panel__description">Connect your account with external services</p>
+                </div>
+                
+                <div class="settings-panel__body">
+                    <div class="form-section">
+                        <h2 class="form-section__title">Calendar Integration</h2>
+                        
+                        <div class="security-item">
+                            <div class="security-item__info">
+                                <div class="security-item__title">Google Calendar</div>
+                                <div class="security-item__status">Sync your bookings with Google Calendar</div>
+                            </div>
+                            <button class="btn btn--secondary" onclick="connectGoogleCalendar()">
+                                Connect
+                            </button>
+                        </div>
+                        
+                        <div class="security-item">
+                            <div class="security-item__info">
+                                <div class="security-item__title">Outlook Calendar</div>
+                                <div class="security-item__status">Sync your bookings with Outlook</div>
+                            </div>
+                            <button class="btn btn--secondary" onclick="connectOutlook()">
+                                Connect
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2 class="form-section__title">Communication Tools</h2>
+                        
+                        <div class="security-item">
+                            <div class="security-item__info">
+                                <div class="security-item__title">Zoom</div>
+                                <div class="security-item__status">Automatically create meeting links</div>
+                            </div>
+                            <span class="status-badge status-badge--enabled">Connected</span>
+                        </div>
+                        
+                        <div class="security-item">
+                            <div class="security-item__info">
+                                <div class="security-item__title">Slack</div>
+                                <div class="security-item__status">Get notifications in Slack</div>
+                            </div>
+                            <button class="btn btn--secondary" onclick="connectSlack()">
+                                Connect
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Panel -->
+            <div class="settings-panel" id="data-panel">
+                <div class="settings-panel__header">
+                    <h1 class="settings-panel__title">Data & Export</h1>
+                    <p class="settings-panel__description">Download your data or delete your account</p>
+                </div>
+                
+                <div class="settings-panel__body">
+                    <div class="form-section">
+                        <h2 class="form-section__title">Export Your Data</h2>
+                        
+                        <div class="data-card">
+                            <h3 class="data-card__title">Download All Data</h3>
+                            <p class="data-card__description">
+                                Get a copy of all your CoveTalks data including profile information, bookings, and activity history.
+                            </p>
+                            <button class="btn btn--primary" onclick="exportData()">
+                                Request Data Export
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2 class="form-section__title">Delete Account</h2>
+                        
+                        <div class="alert alert--danger">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                            <div>
+                                <strong>Warning:</strong> Deleting your account is permanent and cannot be undone. All your data will be permanently removed.
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn--danger" onclick="deleteAccount()">
+                            Delete Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.nav__mobile-toggle').addEventListener('click', function() {
+            document.querySelector('.nav__menu').classList.toggle('nav__menu--open');
+        });
+
+        // Settings panel navigation
+        document.querySelectorAll('.settings-nav__item').forEach(item => {
+            item.addEventListener('click', function() {
+                const panelId = this.dataset.panel;
+                
+                // Update nav items
+                document.querySelectorAll('.settings-nav__item').forEach(navItem => {
+                    navItem.classList.remove('settings-nav__item--active');
+                });
+                this.classList.add('settings-nav__item--active');
+                
+                // Update panels
+                document.querySelectorAll('.settings-panel').forEach(panel => {
+                    panel.classList.remove('settings-panel--active');
+                });
+                document.getElementById(`${panelId}-panel`).classList.add('settings-panel--active');
+            });
+        });
+
+        // Profile form submission
+        document.getElementById('profileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // TODO: Update profile data in Airtable
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                bio: document.getElementById('bio').value,
+                expertise: document.getElementById('expertise').value,
+                experience: document.getElementById('experience').value,
+                rate: document.getElementById('rate').value
+            };
+            
+            console.log('Saving profile:', formData);
+            
+            // Show loading state
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.classList.add('btn--loading');
+            submitBtn.innerHTML = '<span class="spinner"></span> Saving...';
+            
+            // Simulate API call
+            setTimeout(() => {
+                submitBtn.classList.remove('btn--loading');
+                submitBtn.textContent = 'Save Changes';
+                alert('Profile updated successfully!');
+            }, 1500);
+        });
+
+        // Avatar upload
+        function uploadAvatar() {
+            // TODO: Implement avatar upload to cloud storage
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = e => {
+                const file = e.target.files[0];
+                if (file && file.size <= 2097152) { // 2MB limit
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById('avatarPreview');
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    alert('Please select an image under 2MB');
+                }
+            };
+            input.click();
+        }
+
+        // Security functions
+        function changePassword() {
+            // TODO: Implement password change flow
+            console.log('Opening password change dialog...');
+        }
+
+        function enable2FA() {
+            // TODO: Implement 2FA setup
+            console.log('Starting 2FA setup...');
+        }
+
+        function viewAllSessions() {
+            // TODO: Show all active sessions
+            console.log('Loading active sessions...');
+        }
+
+        // Account functions
+        function saveAccountSettings() {
+            // TODO: Save account preferences to Airtable
+            console.log('Saving account settings...');
+        }
+
+        // Notification functions
+        function saveNotificationSettings() {
+            // TODO: Save notification preferences to Airtable
+            console.log('Saving notification preferences...');
+        }
+
+        // Privacy functions
+        function savePrivacySettings() {
+            // TODO: Save privacy settings to Airtable
+            console.log('Saving privacy settings...');
+        }
+
+        // Integration functions
+        function connectGoogleCalendar() {
+            // TODO: OAuth flow for Google Calendar
+            console.log('Connecting Google Calendar...');
+        }
+
+        function connectOutlook() {
+            // TODO: OAuth flow for Outlook
+            console.log('Connecting Outlook...');
+        }
+
+        function connectSlack() {
+            // TODO: OAuth flow for Slack
+            console.log('Connecting Slack...');
+        }
+
+        // Data functions
+        function exportData() {
+            // TODO: Trigger data export from Airtable
+            console.log('Requesting data export...');
+            alert('Your data export has been requested. You will receive an email when it\'s ready.');
+        }
+
+        function deleteAccount() {
+            if (confirm('Are you absolutely sure you want to delete your account? This action cannot be undone.')) {
+                if (confirm('This is your final warning. All your data will be permanently deleted. Continue?')) {
+                    // TODO: Call API to delete account
+                    console.log('Deleting account...');
+                }
+            }
+        }
+
+        function cancelChanges() {
+            if (confirm('Are you sure you want to discard your changes?')) {
+                window.location.reload();
+            }
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = '/login.html';
+            }
+        }
+
+        // Load user data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // TODO: Load user settings from Airtable
+            console.log('Loading user settings...');
+        });
+    </script>
+</body>
+</html>
