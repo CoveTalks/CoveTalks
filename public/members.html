@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Members - CoveTalks</title>
-    <script src="https://js.stripe.com/v3/"></script>
     <style>
         /* Include the same base styles from index.html */
         * {
@@ -126,7 +125,7 @@
         .page-header {
             background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
             color: white;
-            padding: 10rem 0;
+            padding: 3rem 0;
             text-align: center;
         }
 
@@ -184,6 +183,12 @@
             margin-top: 2rem;
         }
 
+        .results-info {
+            margin-bottom: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
         .results-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -196,6 +201,7 @@
             padding: 2rem;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
         }
 
         .member-card:hover {
@@ -221,6 +227,13 @@
             font-size: 1.8rem;
             font-weight: bold;
             margin-right: 1rem;
+            overflow: hidden;
+        }
+
+        .member-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .member-info h3 {
@@ -235,6 +248,10 @@
             border-radius: 15px;
             font-size: 0.8rem;
             display: inline-block;
+        }
+
+        .member-type.organization {
+            background: #27ae60;
         }
 
         .member-details {
@@ -263,6 +280,20 @@
             margin-top: 1rem;
         }
 
+        .contact-info p {
+            margin: 0.25rem 0;
+            font-size: 0.9rem;
+        }
+
+        .contact-info a {
+            color: #155588;
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
         .premium-blur {
             filter: blur(3px);
             pointer-events: none;
@@ -283,6 +314,16 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
+        .auth-required h3 {
+            color: #155588;
+            margin-bottom: 1rem;
+        }
+
+        .auth-required p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
         .loading {
             display: inline-block;
             width: 20px;
@@ -291,6 +332,7 @@
             border-top: 3px solid #155588;
             border-radius: 50%;
             animation: spin 1s linear infinite;
+            margin-left: 0.5rem;
         }
 
         @keyframes spin {
@@ -300,6 +342,19 @@
 
         .hidden {
             display: none;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-state img {
+            width: 200px;
+            opacity: 0.5;
+            margin-bottom: 1rem;
         }
 
         /* Responsive Design */
@@ -315,267 +370,291 @@
             .results-grid {
                 grid-template-columns: 1fr;
             }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
         }
 
- /* Mobile Navigation Styles */
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
+        /* Mobile Navigation Styles */
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
 
-/* Hamburger Menu */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-    z-index: 1002;
-    background: none;
-    border: none;
-    padding: 5px;
-}
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            z-index: 1002;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
 
-.hamburger span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background: #333;
-    margin: 3px 0;
-    transition: all 0.3s ease;
-    border-radius: 2px;
-}
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
 
-.hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
 
-.hamburger.active span:nth-child(2) {
-    opacity: 0;
-}
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
 
-.hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -6px);
-}
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
 
-/* Mobile Menu Overlay */
-.mobile-menu-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-.mobile-menu-overlay.show {
-    display: block;
-    opacity: 1;
-}
+        .mobile-menu-overlay.show {
+            display: block;
+            opacity: 1;
+        }
 
-/* Mobile Menu Panel */
-.mobile-menu {
-    position: fixed;
-    top: 0;
-    right: -320px;
-    width: 300px;
-    height: 100vh;
-    background: white;
-    z-index: 1001;
-    transition: right 0.3s ease;
-    overflow-y: auto;
-    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-}
+        /* Mobile Menu Panel */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            z-index: 1001;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+        }
 
-.mobile-menu.show {
-    right: 0;
-}
+        .mobile-menu.show {
+            right: 0;
+        }
 
-.mobile-menu-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        .mobile-menu-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e1e8ed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.mobile-menu-close {
-    width: 30px;
-    height: 30px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #666;
-}
+        .mobile-menu-close {
+            width: 30px;
+            height: 30px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #666;
+        }
 
-.mobile-nav-links {
-    list-style: none;
-    padding: 1rem 0;
-}
+        .mobile-nav-links {
+            list-style: none;
+            padding: 1rem 0;
+        }
 
-.mobile-nav-links li {
-    border-bottom: 1px solid #f0f0f0;
-}
+        .mobile-nav-links li {
+            border-bottom: 1px solid #f0f0f0;
+        }
 
-.mobile-nav-links a {
-    display: block;
-    padding: 1rem 1.5rem;
-    color: #333;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s;
-}
+        .mobile-nav-links a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
 
-.mobile-nav-links a:hover {
-    background: #f8f9fa;
-    color: #155588;
-    padding-left: 2rem;
-}
+        .mobile-nav-links a:hover {
+            background: #f8f9fa;
+            color: #155588;
+            padding-left: 2rem;
+        }
 
-.mobile-nav-links a.active {
-    color: #155588;
-    background: #e8f4fd;
-}
+        .mobile-nav-links a.active {
+            color: #155588;
+            background: #e8f4fd;
+        }
 
-.mobile-user-section {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    background: #f8f9fa;
-}
+        .mobile-user-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e1e8ed;
+            background: #f8f9fa;
+        }
 
-.mobile-user-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
+        .mobile-user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
 
-.mobile-user-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #1e93b7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-}
+        .mobile-user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
 
-.mobile-user-details h3 {
-    margin: 0;
-    color: #333;
-}
+        .mobile-user-details h3 {
+            margin: 0;
+            color: #333;
+        }
 
-.mobile-user-details p {
-    margin: 0;
-    color: #666;
-    font-size: 0.9rem;
-}
+        .mobile-user-details p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
 
-.mobile-auth-buttons {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
+        .mobile-auth-buttons {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
 
-.mobile-auth-buttons .btn {
-    width: 100%;
-    text-align: center;
-}
+        .mobile-auth-buttons .btn {
+            width: 100%;
+            text-align: center;
+        }
 
-/* Responsive Breakpoints */
-@media (max-width: 768px) {
-    .nav-links {
-        display: none !important;
-    }
-    
-    .auth-buttons.desktop-only {
-        display: none !important;
-    }
-    
-    .hamburger {
-        display: flex;
-    }
-    
-    header {
-        padding: 0.75rem 0;
-    }
-    
-    .logo {
-        font-size: 1.5rem;
-    }
+        /* User menu styles */
+        .user-menu {
+            position: relative;
+        }
 
-    body {
-        padding-top: 60px;
-    }
-}
+        .user-dropdown {
+            position: relative;
+        }
 
-@media (max-width: 480px) {
-    .mobile-menu {
-        width: 85vw;
-        right: -85vw;
-    }
-}
-/* Footer */
-footer {
-    background: #2c3e50;
-    color: white;
-    padding: 3rem 0 1rem;
-}
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
 
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+        }
 
-.footer-section h3 {
-    margin-bottom: 1rem;
-    color: #f2b236;
-}
+        .dropdown-menu.show {
+            display: block;
+        }
 
-.footer-section a {
-    color: #bdc3c7;
-    text-decoration: none;
-    display: block;
-    margin-bottom: 0.5rem;
-    transition: color 0.3s;
-}
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
 
-.footer-section a:hover {
-    color: #f2b236;
-}
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
 
-.footer-bottom {
-    border-top: 1px solid #34495e;
-    padding-top: 1rem;
-    text-align: center;
-    color: #bdc3c7;
-}
+        .dropdown-divider {
+            height: 1px;
+            background: #e1e8ed;
+            margin: 0.5rem 0;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none !important;
+            }
+            
+            .auth-buttons.desktop-only {
+                display: none !important;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            header {
+                padding: 0.75rem 0;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            body {
+                padding-top: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-menu {
+                width: 85vw;
+                right: -85vw;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Header -->
+    <!-- Header - Same as your existing header -->
     <header>
         <div class="nav-container">
             <nav>
@@ -644,72 +723,72 @@ footer {
     </header>
 
     <!-- Mobile Menu Overlay -->
-<div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
 
-<!-- Mobile Menu Panel -->
-<div class="mobile-menu" id="mobileMenu">
-    <div class="mobile-menu-header">
-        <a href="index.html" class="logo"><img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img"></a>
-        <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
-    </div>
+    <!-- Mobile Menu Panel -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <a href="index.html" class="logo"><img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img"></a>
+            <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+        </div>
 
-    <!-- Mobile User Section (for logged in users) -->
-    <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
-        <div class="mobile-user-info">
-            <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
-            <div class="mobile-user-details">
-                <h3 id="mobileUserName">John Doe</h3>
-                <p id="mobileUserType">Speaker - Plus Plan</p>
+        <!-- Mobile User Section (for logged in users) -->
+        <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
+            <div class="mobile-user-info">
+                <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
+                <div class="mobile-user-details">
+                    <h3 id="mobileUserName">John Doe</h3>
+                    <p id="mobileUserType">Speaker - Plus Plan</p>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Mobile Navigation Links -->
-    <!-- Logged Out Mobile Navigation -->
-    <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="pricing.html">Pricing</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="help.html">Help Center</a></li>
-    </ul>
-    
-    <!-- Logged In Mobile Navigation (Speakers) -->
-    <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="opportunities.html">Opportunities</a></li>
-        <li><a href="bookings.html">My Bookings</a></li>
-        <li><a href="profile.html">Profile</a></li>
-        <li><a href="settings.html">Settings</a></li>
-        <li><a href="billing.html">Billing</a></li>
-        <li><a href="help.html">Help & Support</a></li>
-    </ul>
-    
-    <!-- Logged In Mobile Navigation (Organizations) -->
-    <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
-        <li><a href="organization-dashboard.html">Dashboard</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="post-opportunity.html">Post Opportunity</a></li>
-        <li><a href="my-opportunities.html">My Opportunities</a></li>
-        <li><a href="saved-speakers.html">Saved Speakers</a></li>
-        <li><a href="settings.html">Settings</a></li>
-        <li><a href="team.html">Team Members</a></li>
-        <li><a href="help.html">Help & Support</a></li>
-    </ul>
+        <!-- Mobile Navigation Links -->
+        <!-- Logged Out Mobile Navigation -->
+        <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="members.html">Find Speakers</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="help.html">Help Center</a></li>
+        </ul>
+        
+        <!-- Logged In Mobile Navigation (Speakers) -->
+        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="members.html">Find Speakers</a></li>
+            <li><a href="opportunities.html">Opportunities</a></li>
+            <li><a href="bookings.html">My Bookings</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="billing.html">Billing</a></li>
+            <li><a href="help.html">Help & Support</a></li>
+        </ul>
+        
+        <!-- Logged In Mobile Navigation (Organizations) -->
+        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
+            <li><a href="organization-dashboard.html">Dashboard</a></li>
+            <li><a href="members.html">Find Speakers</a></li>
+            <li><a href="post-opportunity.html">Post Opportunity</a></li>
+            <li><a href="my-opportunities.html">My Opportunities</a></li>
+            <li><a href="saved-speakers.html">Saved Speakers</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="team.html">Team Members</a></li>
+            <li><a href="help.html">Help & Support</a></li>
+        </ul>
 
-    <!-- Mobile Auth Buttons (for logged out users) -->
-    <div class="mobile-auth-buttons" id="mobileAuthButtons">
-        <a href="register.html" class="btn btn-secondary">Join Community</a>
-        <a href="login.html" class="btn btn-primary">Login</a>
-    </div>
+        <!-- Mobile Auth Buttons (for logged out users) -->
+        <div class="mobile-auth-buttons" id="mobileAuthButtons">
+            <a href="register.html" class="btn btn-secondary">Join Community</a>
+            <a href="login.html" class="btn btn-primary">Login</a>
+        </div>
 
-    <!-- Mobile Logout Button (for logged in users) -->
-    <div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
-        <button class="btn btn-primary" onclick="logout()">Logout</button>
+        <!-- Mobile Logout Button (for logged in users) -->
+        <div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
+            <button class="btn btn-primary" onclick="logout()">Logout</button>
+        </div>
     </div>
-</div>
 
     <!-- Page Header -->
     <div class="page-header">
@@ -759,228 +838,135 @@ footer {
                 <div class="results-section">
                     <div id="authRequired" class="auth-required hidden">
                         <h3>Member Access Required</h3>
-                        <p>Please log in or register to view our member directory and access contact information.</p>
-                        <div style="margin-top: 1rem;">
-                            <a href="pricing.html" class="btn btn-primary">View Pricing</a>
+                        <p>Please log in or register to view full contact information.</p>
+                        <div style="margin-top: 1.5rem;">
+                            <a href="login.html" class="btn btn-primary">Login</a>
                             <a href="register.html" class="btn btn-secondary">Register Free</a>
                         </div>
+                    </div>
+
+                    <div id="resultsInfo" class="results-info hidden">
+                        Showing <span id="resultsCount">0</span> members
                     </div>
 
                     <div id="searchResults" class="results-grid">
                         <!-- Results will be loaded here -->
                     </div>
+
+                    <div id="emptyState" class="empty-state hidden">
+                        <h3>No members found</h3>
+                        <p>Try adjusting your search criteria or browse all members.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>CoveTalks</h3>
-                    <p>Connecting speakers with organizations worldwide to create meaningful opportunities and lasting relationships.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <a href="index.html">Home</a>
-                    <a href="members.html">Members</a>
-                    <a href="register.html">Register</a>
-                    <a href="pricing.html">Pricing</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Support</h3>
-                    <a href="#">Help Center</a>
-                    <a href="#">Contact Us</a>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Connect</h3>
-                    <a href="#">LinkedIn</a>
-                    <a href="#">Twitter</a>
-                    <a href="#">Facebook</a>
-                    <a href="#">Email</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; <script>document.write(new Date().getFullYear());</script> CoveTalks. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
 
+    <!-- Include the API client -->
+    <script src="/js/app.js"></script>
+    
     <script>
+        // ============================================
+        // BACKEND INTEGRATION FOR MEMBERS PAGE
+        // ============================================
+        
         // Configuration
         const CONFIG = {
-            AIRTABLE: {
-                API_KEY: 'patI3b0QZgesfoKWh.3160fe85c7238ed5cc4a0d6153bec4cef493d3c086233d3304e1211c41fbfd69',
-                BASE_ID: 'appa7KVa8HcVheTOo',
-                TABLE_ID: 'tblHWh5J8t4oPDeI5'
-            },
-            API_BASE: window.location.hostname === 'localhost' ? 'http://localhost:3001' : '/.netlify/functions/api'
+            API_BASE: window.location.hostname === 'localhost' 
+                ? 'http://localhost:8888/.netlify/functions'
+                : '/.netlify/functions'
         };
 
         // Global state
         let currentUser = null;
+        let isAuthenticated = false;
+        let allMembers = [];
 
         // DOM Elements
         const searchBtn = document.getElementById('searchBtn');
         const searchResults = document.getElementById('searchResults');
         const authRequired = document.getElementById('authRequired');
-        const loginBtn = document.getElementById('loginBtn');
+        const resultsInfo = document.getElementById('resultsInfo');
+        const resultsCount = document.getElementById('resultsCount');
+        const emptyState = document.getElementById('emptyState');
 
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', function() {
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', async function() {
             checkAuthStatus();
-            loadInitialData();
+            updateNavAuth();
+            setActiveNavItem();
+            await loadMembers();
         });
 
+        // Event Listeners
         searchBtn.addEventListener('click', performSearch);
-        loginBtn.addEventListener('click', () => window.location.href = 'index.html#login');
+        
+        // Allow enter key to trigger search
+        document.querySelectorAll('.filter-group input').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        });
 
         // Check authentication status
         function checkAuthStatus() {
-            const token = localStorage.getItem('token');
-            if (token) {
-                fetch(`${CONFIG.API_BASE}/auth/verify`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.valid) {
-                        currentUser = result.user;
-                        updateAuthUI();
-                        authRequired.classList.add('hidden');
-                    } else {
-                        localStorage.removeItem('token');
-                        showAuthRequired();
-                    }
-                })
-                .catch(error => {
-                    console.error('Auth verification failed:', error);
-                    localStorage.removeItem('token');
-                    showAuthRequired();
+            const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+            const userStr = localStorage.getItem('user') || sessionStorage.getItem('user');
+            
+            if (token && userStr) {
+                currentUser = JSON.parse(userStr);
+                isAuthenticated = true;
+                authRequired.classList.add('hidden');
+            } else {
+                isAuthenticated = false;
+                // Show limited access message for non-authenticated users
+                authRequired.classList.remove('hidden');
+            }
+        }
+
+        // Load members from backend
+        async function loadMembers() {
+            // Show loading state
+            searchResults.innerHTML = '<div style="text-align: center; padding: 2rem;"><span class="loading"></span> Loading members...</div>';
+            
+            try {
+                // Build query parameters
+                const params = new URLSearchParams();
+                
+                // Add authentication header if logged in
+                const headers = {};
+                if (isAuthenticated) {
+                    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+                
+                // Fetch members from backend
+                const response = await fetch(`${CONFIG.API_BASE}/members-list?${params}`, {
+                    headers: headers
                 });
-            } else {
-                showAuthRequired();
-            }
-        }
-
-        function showAuthRequired() {
-            authRequired.classList.remove('hidden');
-            searchResults.style.display = 'none';
-        }
-
-        function updateAuthUI() {
-            if (currentUser) {
-                loginBtn.textContent = 'Dashboard';
-                loginBtn.onclick = () => window.location.href = 'dashboard.html';
-            }
-        }
-
-        // Load initial data
-        function loadInitialData() {
-            if (currentUser) {
-                loadSampleData();
-            } else {
-                // Show sample data with limited access
-                loadLimitedSampleData();
-            }
-        }
-
-        // Sample data for authenticated users
-        function loadSampleData() {
-            const sampleData = [
-                {
-                    id: 'sample1',
-                    Name: 'John Smith',
-                    Type: 'Speaker',
-                    Location: 'New York, NY',
-                    Specialty: 'Business Leadership, Entrepreneurship, Digital Transformation',
-                    Bio: 'Former Fortune 500 CEO with 20+ years of experience in business transformation and leadership development.',
-                    Email: 'john.smith@example.com',
-                    Phone: '(555) 123-4567',
-                    Website: 'https://johnsmithspeaker.com'
-                },
-                {
-                    id: 'sample2',
-                    Name: 'Sarah Johnson',
-                    Type: 'Speaker',
-                    Location: 'San Francisco, CA',
-                    Specialty: 'Technology, Innovation, Women in Tech, Artificial Intelligence',
-                    Bio: 'Tech executive and advocate for diversity in technology. Expert in AI implementation and digital innovation.',
-                    Email: 'sarah.johnson@techspeaker.com',
-                    Phone: '(555) 987-6543',
-                    Website: 'https://sarahjohnsontech.com'
-                },
-                {
-                    id: 'sample3',
-                    Name: 'Phoenix Chamber of Commerce',
-                    Type: 'Organization',
-                    Location: 'Phoenix, AZ',
-                    Specialty: 'Business Networking, Economic Development, Community Growth',
-                    Bio: 'Leading business organization hosting monthly speaker events and networking opportunities for local entrepreneurs.',
-                    Email: 'events@phoenixchamber.org',
-                    Phone: '(602) 555-0123',
-                    Website: 'https://phoenixchamber.org'
-                },
-                {
-                    id: 'sample4',
-                    Name: 'Dr. Mike Davis',
-                    Type: 'Speaker',
-                    Location: 'Chicago, IL',
-                    Specialty: 'Healthcare, Wellness, Mental Health, Medical Innovation',
-                    Bio: 'Board-certified physician and wellness expert specializing in preventive medicine and mental health awareness.',
-                    Email: 'dr.davis@healthspeaker.com',
-                    Phone: '(312) 555-7890',
-                    Website: 'https://drmikewellness.com'
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    allMembers = data.members;
+                    displayResults(data.members, data.isAuthenticated);
+                } else {
+                    throw new Error(data.message || 'Failed to load members');
                 }
-            ];
-
-            displayResults(sampleData);
+            } catch (error) {
+                console.error('Error loading members:', error);
+                searchResults.innerHTML = '<div style="text-align: center; padding: 2rem; color: #e74c3c;">Failed to load members. Please try again later.</div>';
+            }
         }
 
-        // Limited sample data for non-authenticated users
-        function loadLimitedSampleData() {
-            const limitedData = [
-                {
-                    id: 'sample1',
-                    Name: 'John Smith',
-                    Type: 'Speaker',
-                    Location: 'New York, NY',
-                    Specialty: 'Business Leadership, Entrepreneurship',
-                    Bio: 'Former Fortune 500 CEO with 20+ years of experience...',
-                    Email: '••••••@email.com',
-                    Phone: '•••-•••-••••'
-                },
-                {
-                    id: 'sample2',
-                    Name: 'Sarah Johnson',
-                    Type: 'Speaker',
-                    Location: 'San Francisco, CA',
-                    Specialty: 'Technology, Innovation',
-                    Bio: 'Tech executive and advocate for diversity...',
-                    Email: '••••••@email.com',
-                    Phone: '•••-•••-••••'
-                }
-            ];
-
-            displayResults(limitedData, false);
-        }
-
-        // Search functionality
+        // Perform search with filters
         async function performSearch() {
-            if (!currentUser) {
-                alert('Please log in to access search functionality');
-                return;
-            }
-
-            const searchTerm = document.getElementById('searchTerm').value;
+            const searchTerm = document.getElementById('searchTerm').value.trim();
             const typeFilter = document.getElementById('typeFilter').value;
-            const locationFilter = document.getElementById('locationFilter').value;
-            const specialtyFilter = document.getElementById('specialtyFilter').value;
+            const locationFilter = document.getElementById('locationFilter').value.trim();
+            const specialtyFilter = document.getElementById('specialtyFilter').value.trim();
 
             // Show loading state
             document.getElementById('searchBtnText').textContent = 'Searching...';
@@ -988,32 +974,37 @@ footer {
             searchBtn.disabled = true;
 
             try {
-                const response = await fetch(`${CONFIG.API_BASE}/search`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
-                    body: JSON.stringify({
-                        searchTerm,
-                        typeFilter,
-                        locationFilter,
-                        specialtyFilter
-                    })
-                });
-
-                const results = await response.json();
+                // Build query parameters
+                const params = new URLSearchParams();
+                if (searchTerm) params.append('search', searchTerm);
+                if (typeFilter) params.append('type', typeFilter);
+                if (locationFilter) params.append('location', locationFilter);
+                if (specialtyFilter) params.append('specialty', specialtyFilter);
                 
-                if (results.success) {
-                    displayResults(results.data);
+                // Add authentication header if logged in
+                const headers = {};
+                if (isAuthenticated) {
+                    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+                
+                // Fetch filtered results from backend
+                const response = await fetch(`${CONFIG.API_BASE}/members-list?${params}`, {
+                    headers: headers
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayResults(data.members, data.isAuthenticated);
                 } else {
-                    alert('Search failed: ' + results.message);
+                    throw new Error(data.message || 'Search failed');
                 }
             } catch (error) {
                 console.error('Search error:', error);
                 alert('Search failed. Please try again.');
             } finally {
-                // Reset loading state
+                // Reset button state
                 document.getElementById('searchBtnText').textContent = 'Search';
                 document.getElementById('searchLoader').classList.add('hidden');
                 searchBtn.disabled = false;
@@ -1021,57 +1012,82 @@ footer {
         }
 
         // Display results
-        function displayResults(results, showContactInfo = true) {
-            if (results.length === 0) {
-                searchResults.innerHTML = '<p style="text-align: center; color: #7f8c8d; grid-column: 1/-1;">No results found. Try adjusting your search criteria.</p>';
+        function displayResults(members, showFullInfo = false) {
+            // Update results count
+            resultsCount.textContent = members.length;
+            resultsInfo.classList.remove('hidden');
+            
+            if (members.length === 0) {
+                searchResults.innerHTML = '';
+                emptyState.classList.remove('hidden');
                 return;
             }
-
-            searchResults.innerHTML = results.map(member => {
-                const initials = member.Name.split(' ').map(n => n[0]).join('').toUpperCase();
-                const tags = member.Specialty ? member.Specialty.split(',').map(tag => tag.trim()) : [];
+            
+            emptyState.classList.add('hidden');
+            
+            searchResults.innerHTML = members.map(member => {
+                // Get initials for avatar
+                const initials = member.name ? 
+                    member.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                    '??';
+                
+                // Format specialty tags
+                const tags = Array.isArray(member.specialty) ? 
+                    member.specialty : 
+                    (member.specialty ? member.specialty.split(',').map(t => t.trim()) : []);
                 
                 // Profile image or initials
-                const profileImage = member.Profile_Image ? 
-                    `<img src="${member.Profile_Image}" alt="${member.Name}" class="member-avatar" style="object-fit: cover;">` :
-                    `<div class="member-avatar">${initials}</div>`;
+                const avatarContent = member.profileImage ? 
+                    `<img src="${member.profileImage}" alt="${member.name}">` :
+                    initials;
                 
-                const contactInfo = showContactInfo && currentUser ? 
+                // Member type class
+                const typeClass = member.memberType === 'Organization' ? 'organization' : '';
+                
+                // Contact information based on authentication
+                const contactInfo = showFullInfo && isAuthenticated ? 
                     `<div class="contact-info">
-                        <p><strong>Email:</strong> ${member.Email}</p>
-                        <p><strong>Phone:</strong> ${member.Phone}</p>
-                        ${member.Website ? `<p><strong>Website:</strong> <a href="${member.Website}" target="_blank">Visit Site</a></p>` : ''}
-                        ${member.Booking_Link ? `<p><strong>Booking:</strong> <a href="${member.Booking_Link}" target="_blank">Schedule</a></p>` : ''}
+                        ${member.email ? `<p><strong>Email:</strong> <a href="mailto:${member.email}">${member.email}</a></p>` : ''}
+                        ${member.phone ? `<p><strong>Phone:</strong> <a href="tel:${member.phone}">${member.phone}</a></p>` : ''}
+                        ${member.website && member.website !== 'Login to view' ? 
+                            `<p><strong>Website:</strong> <a href="${member.website}" target="_blank">Visit Site</a></p>` : ''}
+                        ${member.bookingLink && member.bookingLink !== 'Login to view' ? 
+                            `<p><strong>Booking:</strong> <a href="${member.bookingLink}" target="_blank">Schedule</a></p>` : ''}
                     </div>` :
                     `<div class="contact-info premium-blur">
-                        <p><strong>Email:</strong> ${member.Email}</p>
-                        <p><strong>Phone:</strong> ${member.Phone}</p>
+                        <p><strong>Email:</strong> ${member.email || '••••••@email.com'}</p>
+                        <p><strong>Phone:</strong> ${member.phone || '•••-•••-••••'}</p>
                     </div>
+                    ${!isAuthenticated ? `
                     <div class="upgrade-overlay">
-                        <button class="btn btn-primary" onclick="window.location.href='pricing.html'">
-                            Upgrade to View Contact Info
-                        </button>
-                    </div>`;
+                        <a href="login.html" class="btn btn-primary">
+                            Login to View Contact Info
+                        </a>
+                    </div>` : ''}`;
 
                 return `
-                    <div class="member-card" onclick="viewProfile('${member.id || member.Name}', '${member.Type}')">
+                    <div class="member-card" onclick="viewProfile('${member.id}', '${member.memberType}')">
                         <div class="member-header">
-                            ${profileImage}
+                            <div class="member-avatar">
+                                ${avatarContent}
+                            </div>
                             <div class="member-info">
-                                <h3>${member.Name}</h3>
-                                <span class="member-type">${member.Type}</span>
+                                <h3>${member.name || 'Unknown'}</h3>
+                                <span class="member-type ${typeClass}">${member.memberType || 'Member'}</span>
                             </div>
                         </div>
                         <div class="member-details">
-                            <p><strong>Location:</strong> ${member.Location}</p>
-                            <p>${member.Bio}</p>
+                            ${member.location ? `<p><strong>Location:</strong> ${member.location}</p>` : ''}
+                            ${member.bio ? `<p>${member.bio.substring(0, 150)}${member.bio.length > 150 ? '...' : ''}</p>` : ''}
                         </div>
+                        ${tags.length > 0 ? `
                         <div class="member-tags">
-                            ${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                        </div>
+                            ${tags.slice(0, 5).map(tag => `<span class="tag">${tag}</span>`).join('')}
+                            ${tags.length > 5 ? `<span class="tag">+${tags.length - 5} more</span>` : ''}
+                        </div>` : ''}
                         ${contactInfo}
                         <div style="text-align: center; margin-top: 1rem;">
-                            <button class="btn btn-secondary" onclick="event.stopPropagation(); viewProfile('${member.id || member.Name}', '${member.Type}')">
+                            <button class="btn btn-secondary" onclick="event.stopPropagation(); viewProfile('${member.id}', '${member.memberType}')">
                                 View Full Profile
                             </button>
                         </div>
@@ -1081,42 +1097,38 @@ footer {
         }
 
         // View profile function
-        function viewProfile(id, type) {
-            if (type === 'Speaker') {
-                window.location.href = `profile.html?id=${encodeURIComponent(id)}`;
-            } else {
-                // For organizations, you might want a different page or just show contact info
-                alert('Organization profiles coming soon!');
+        async function viewProfile(memberId, memberType) {
+            if (!memberId || memberId === 'undefined') {
+                alert('Profile not available');
+                return;
             }
+            
+            // Navigate to profile page with member ID
+            window.location.href = `profile.html?id=${encodeURIComponent(memberId)}&type=${encodeURIComponent(memberType)}`;
         }
-    </script>
-    <script>
-        
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            updateNavAuth();
-            setActiveNavItem();
-        });
+
+        // ============================================
+        // NAVIGATION JAVASCRIPT (Your existing code)
+        // ============================================
         
         // Update navigation based on auth status
         function updateNavAuth() {
-            const token = localStorage.getItem('token');
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+            const userStr = localStorage.getItem('user') || sessionStorage.getItem('user');
+            const user = userStr ? JSON.parse(userStr) : null;
             
             if (token && user) {
-                // User is logged in - hide logged out nav
+                // User is logged in
                 document.getElementById('navLoggedOut').style.display = 'none';
                 document.getElementById('mobileNavLoggedOut').style.display = 'none';
                 
-                // Show appropriate logged in navigation based on user type
-                if (user.type === 'Organization' || user.Member_Type === 'Organization') {
-                    // Organization navigation
+                // Show appropriate logged in navigation
+                if (user.memberType === 'Organization') {
                     document.getElementById('navOrganization').style.display = 'flex';
                     document.getElementById('navSpeaker').style.display = 'none';
                     document.getElementById('mobileNavOrganization').style.display = 'block';
                     document.getElementById('mobileNavSpeaker').style.display = 'none';
                 } else {
-                    // Speaker navigation (default)
                     document.getElementById('navSpeaker').style.display = 'flex';
                     document.getElementById('navOrganization').style.display = 'none';
                     document.getElementById('mobileNavSpeaker').style.display = 'block';
@@ -1131,13 +1143,13 @@ footer {
                 document.getElementById('mobileLogoutSection').style.display = 'block';
                 
                 // Update user info
-                const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
+                const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 'U';
                 document.getElementById('userAvatar').textContent = initials;
                 document.getElementById('mobileUserAvatar').textContent = initials;
                 document.getElementById('mobileUserName').textContent = user.name || 'User';
-                document.getElementById('mobileUserType').textContent = user.type || user.Member_Type || 'Member';
+                document.getElementById('mobileUserType').textContent = user.memberType || 'Member';
             } else {
-                // User is logged out - show logged out nav
+                // User is logged out
                 document.getElementById('navLoggedOut').style.display = 'flex';
                 document.getElementById('mobileNavLoggedOut').style.display = 'block';
                 
@@ -1192,7 +1204,7 @@ footer {
             document.body.style.overflow = '';
         }
         
-        // Toggle dropdown menu (desktop)
+        // Toggle dropdown menu
         function toggleDropdown() {
             const dropdown = document.getElementById('dropdownMenu');
             dropdown.classList.toggle('show');
@@ -1208,17 +1220,12 @@ footer {
             }
         });
         
-        // Set active navigation item based on current page
+        // Set active navigation item
         function setActiveNavItem() {
             const currentPath = window.location.pathname.split('/').pop() || 'index.html';
             
-            // Clear all active classes first
             document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
                 link.classList.remove('active');
-            });
-            
-            // Set active class on matching links
-            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
                 if (link.getAttribute('href') === currentPath) {
                     link.classList.add('active');
                 }
@@ -1227,11 +1234,17 @@ footer {
         
         // Logout function
         function logout() {
-            localStorage.removeItem('token');
+            localStorage.removeItem('authToken');
             localStorage.removeItem('user');
-            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('authToken');
             sessionStorage.removeItem('user');
-            window.location.href = 'login.html';
+            
+            // If using the API client, call its logout method
+            if (typeof api !== 'undefined' && api.logout) {
+                api.logout();
+            } else {
+                window.location.href = 'login.html';
+            }
         }
         
         // Close mobile menu on window resize
@@ -1247,6 +1260,6 @@ footer {
                 closeMobileMenu();
             });
         });
-        </script>
+    </script>
 </body>
 </html>
