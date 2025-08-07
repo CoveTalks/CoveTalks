@@ -47,10 +47,21 @@
         }
 
         .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #2c5aa0;
+            display: inline-flex;
+            align-items: center;
             text-decoration: none;
+        }
+        
+        .logo-img {
+            height: 70px;
+            width: auto;
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .logo-img {
+                height: 50px;
+            }
         }
 
         .nav-links {
@@ -615,7 +626,7 @@
         <div class="nav-container">
             <nav>
                 <!-- Logo -->
-                <a href="index.html" class="logo">CoveTalks</a>
+                <a href="index.html" class="logo"><img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img"></a>
                 
                 <!-- Desktop Navigation -->
                 <!-- Logged Out Navigation -->
@@ -684,7 +695,7 @@
 <!-- Mobile Menu Panel -->
 <div class="mobile-menu" id="mobileMenu">
     <div class="mobile-menu-header">
-        <div class="logo">CoveTalks</div>
+        <a href="index.html" class="logo"><img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img"></a>
         <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
     </div>
 
