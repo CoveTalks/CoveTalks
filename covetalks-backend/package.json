@@ -1,0 +1,22 @@
+{
+  "name": "covetalks-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "airtable": "^0.12.2",
+    "bcryptjs": "^3.0.2",
+    "jsonwebtoken": "^9.0.2",
+    "node-fetch": "^3.3.2",
+    "stripe": "^18.4.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^23.1.1"
+  }
+}
