@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speaker Profile - CoveTalks</title>
+    <title>Profile - CoveTalks</title>
     <style>
         * {
             margin: 0;
@@ -75,6 +75,81 @@
 
         .nav-links a:hover {
             color: #155588;
+        }
+
+        .nav-links a.active {
+            color: #155588;
+            border-bottom: 2px solid #155588;
+            padding-bottom: 2px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .user-dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            padding: 1rem 0;
+            min-width: 200px;
+            display: none;
+            margin-top: 0.5rem;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.5rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-divider {
+            border-top: 1px solid #e1e8ed;
+            margin: 0.5rem 0;
         }
 
         .auth-buttons {
@@ -157,6 +232,16 @@
             color: white;
         }
 
+        /* Organization specific image styling */
+        .organization-image {
+            border-radius: 20px; /* Square with rounded corners for organizations */
+        }
+
+        .organization-image-placeholder {
+            border-radius: 20px;
+            background: linear-gradient(135deg, #f2b236, #f2b236);
+        }
+
         .profile-info h1 {
             font-size: 3rem;
             margin-bottom: 0.5rem;
@@ -168,6 +253,7 @@
             padding: 0.5rem 1.5rem;
             border-radius: 25px;
             margin-bottom: 1rem;
+            font-size: 1.1rem;
         }
 
         .profile-location {
@@ -221,6 +307,7 @@
         .bio-section p {
             margin-bottom: 1rem;
             line-height: 1.8;
+            color: #555;
         }
 
         .expertise-list {
@@ -236,7 +323,7 @@
 
         .expertise-list li:before {
             content: "✓";
-            color: #27ae60;
+            color: #f2b236;
             font-weight: bold;
             margin-right: 1rem;
         }
@@ -252,7 +339,7 @@
 
         .contact-item {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 1rem;
             padding: 0.75rem 0;
             border-bottom: 1px solid #f0f0f0;
@@ -271,6 +358,16 @@
             align-items: center;
             justify-content: center;
             color: #155588;
+            flex-shrink: 0;
+        }
+
+        .contact-item a {
+            color: #155588;
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            text-decoration: underline;
         }
 
         .booking-cta {
@@ -299,6 +396,11 @@
             background: #f8f9fa;
         }
 
+        /* Organization-specific CTA */
+        .contact-cta {
+            background: linear-gradient(135deg, #f2b236 0%, #f2b236 100%);
+        }
+
         /* Stats Section */
         .stats-section {
             display: grid;
@@ -325,9 +427,75 @@
             font-size: 0.9rem;
         }
 
+        /* Organization Members Section */
+        .members-section {
+            margin-top: 1rem;
+        }
+
+        .member-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .member-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .member-info {
+            flex-grow: 1;
+        }
+
+        .member-name {
+            font-weight: bold;
+            color: #155588;
+            margin-bottom: 0.25rem;
+        }
+
+        .member-role {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .member-contact {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .member-contact a {
+            color: #155588;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .member-contact a:hover {
+            text-decoration: underline;
+        }
+
+        .no-members {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+            font-style: italic;
+        }
+
         /* Reviews Section */
         .reviews-section {
-            margin-top: 2rem;
+            margin-top: 1rem;
         }
 
         .review-card {
@@ -358,6 +526,13 @@
             line-height: 1.6;
         }
 
+        .no-reviews {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+            font-style: italic;
+        }
+
         /* Premium Blur */
         .premium-blur {
             filter: blur(5px);
@@ -373,54 +548,126 @@
             margin-top: -3rem;
         }
 
-        /* Footer */
-        footer {
-            background: #2c3e50;
-            color: white;
-            padding: 3rem 0 1rem;
-            margin-top: 4rem;
-        }
-
-        .footer-content {
+        /* Organization Information Section */
+        .org-info-section {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+            gap: 1rem;
+            margin-top: 1rem;
         }
 
-        .footer-section h3 {
-            margin-bottom: 1rem;
-            color: #f2b236;
+        .org-info-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
         }
 
-        .footer-section a {
-            color: #bdc3c7;
-            text-decoration: none;
-            display: block;
+        .org-info-title {
+            font-weight: bold;
+            color: #155588;
             margin-bottom: 0.5rem;
-            transition: color 0.3s;
         }
 
-        .footer-section a:hover {
-            color: #f2b236;
+        .org-info-value {
+            color: #666;
         }
 
-        .footer-bottom {
-            border-top: 1px solid #34495e;
-            padding-top: 1rem;
-            text-align: center;
-            color: #bdc3c7;
+        /* Mobile Navigation */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            z-index: 1002;
+            background: none;
+            border: none;
+            padding: 5px;
         }
 
-        /* Responsive Design */
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            z-index: 1001;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .mobile-nav-links a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
-                display: none;
+                display: none !important;
+            }
+            
+            .auth-buttons.desktop-only {
+                display: none !important;
+            }
+            
+            .hamburger {
+                display: flex;
             }
 
             .profile-header-content {
                 flex-direction: column;
                 text-align: center;
+            }
+
+            .profile-image, .profile-image-placeholder {
+                width: 150px;
+                height: 150px;
+            }
+
+            .organization-image, .organization-image-placeholder {
+                width: 150px;
+                height: 150px;
+            }
+
+            .profile-info h1 {
+                font-size: 2rem;
             }
 
             .content-grid {
@@ -431,228 +678,34 @@
                 grid-template-columns: 1fr;
             }
 
+            .org-info-section {
+                grid-template-columns: 1fr;
+            }
+
+            .member-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
             .contact-card {
                 position: static;
             }
         }
-/* Mobile Navigation Styles */
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
 
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #155588;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
 
-/* Hamburger Menu */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-    z-index: 1002;
-    background: none;
-    border: none;
-    padding: 5px;
-}
-
-.hamburger span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background: #333;
-    margin: 3px 0;
-    transition: all 0.3s ease;
-    border-radius: 2px;
-}
-
-.hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
-
-.hamburger.active span:nth-child(2) {
-    opacity: 0;
-}
-
-.hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -6px);
-}
-
-/* Mobile Menu Overlay */
-.mobile-menu-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.mobile-menu-overlay.show {
-    display: block;
-    opacity: 1;
-}
-
-/* Mobile Menu Panel */
-.mobile-menu {
-    position: fixed;
-    top: 0;
-    right: -320px;
-    width: 300px;
-    height: 100vh;
-    background: white;
-    z-index: 1001;
-    transition: right 0.3s ease;
-    overflow-y: auto;
-    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-}
-
-.mobile-menu.show {
-    right: 0;
-}
-
-.mobile-menu-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.mobile-menu-close {
-    width: 30px;
-    height: 30px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #666;
-}
-
-.mobile-nav-links {
-    list-style: none;
-    padding: 1rem 0;
-}
-
-.mobile-nav-links li {
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.mobile-nav-links a {
-    display: block;
-    padding: 1rem 1.5rem;
-    color: #333;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s;
-}
-
-.mobile-nav-links a:hover {
-    background: #f8f9fa;
-    color: #155588;
-    padding-left: 2rem;
-}
-
-.mobile-nav-links a.active {
-    color: #155588;
-    background: #e8f4fd;
-}
-
-.mobile-user-section {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    background: #f8f9fa;
-}
-
-.mobile-user-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.mobile-user-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #1e93b7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-}
-
-.mobile-user-details h3 {
-    margin: 0;
-    color: #333;
-}
-
-.mobile-user-details p {
-    margin: 0;
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.mobile-auth-buttons {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.mobile-auth-buttons .btn {
-    width: 100%;
-    text-align: center;
-}
-
-/* Responsive Breakpoints */
-@media (max-width: 768px) {
-    .nav-links {
-        display: none !important;
-    }
-    
-    .auth-buttons.desktop-only {
-        display: none !important;
-    }
-    
-    .hamburger {
-        display: flex;
-    }
-    
-    header {
-        padding: 0.75rem 0;
-    }
-    
-    .logo {
-        font-size: 1.5rem;
-    }
-
-    body {
-        padding-top: 60px;
-    }
-}
-
-@media (max-width: 480px) {
-    .mobile-menu {
-        width: 85vw;
-        right: -85vw;
-    }
-}
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -661,10 +714,11 @@
         <div class="nav-container">
             <nav>
                 <!-- Logo -->
-                <a href="index.html" class="logo"><img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img"></a>
+                <a href="index.html" class="logo">
+                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                </a>
                 
                 <!-- Desktop Navigation -->
-                <!-- Logged Out Navigation -->
                 <ul class="nav-links nav-logged-out" id="navLoggedOut">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="members.html">Find Speakers</a></li>
@@ -673,16 +727,14 @@
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
                 
-                <!-- Logged In Navigation (Speakers) -->
                 <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
                     <li><a href="dashboard.html">Dashboard</a></li>
                     <li><a href="members.html">Find Speakers</a></li>
                     <li><a href="opportunities.html">Opportunities</a></li>
                     <li><a href="bookings.html">My Bookings</a></li>
-                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="profile.html" class="active">Profile</a></li>
                 </ul>
                 
-                <!-- Logged In Navigation (Organizations) -->
                 <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
                     <li><a href="organization-dashboard.html">Dashboard</a></li>
                     <li><a href="members.html">Find Speakers</a></li>
@@ -690,10 +742,9 @@
                     <li><a href="my-opportunities.html">My Opportunities</a></li>
                     <li><a href="saved-speakers.html">Saved Speakers</a></li>
                 </ul>
-    
+
                 <!-- Right Side Navigation -->
                 <div class="nav-right">
-                    <!-- For Logged In Users -->
                     <div class="user-menu" id="userMenuDesktop" style="display: none;">
                         <div class="user-dropdown">
                             <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
@@ -706,14 +757,12 @@
                             </div>
                         </div>
                     </div>
-    
-                    <!-- For Logged Out Users -->
+
                     <div class="auth-buttons desktop-only" id="authButtonsDesktop">
                         <a href="register.html" class="btn btn-secondary">Join</a>
                         <a href="login.html" class="btn btn-primary">Login</a>
                     </div>
-    
-                    <!-- Hamburger Menu Button -->
+
                     <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
                         <span></span>
                         <span></span>
@@ -724,91 +773,25 @@
         </div>
     </header>
 
-    <!-- Mobile Menu Overlay -->
-<div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
-
-<!-- Mobile Menu Panel -->
-<div class="mobile-menu" id="mobileMenu">
-    <div class="mobile-menu-header">
-        <a href="index.html" class="logo"><img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img"></a>
-        <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
-    </div>
-
-    <!-- Mobile User Section (for logged in users) -->
-    <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
-        <div class="mobile-user-info">
-            <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
-            <div class="mobile-user-details">
-                <h3 id="mobileUserName">John Doe</h3>
-                <p id="mobileUserType">Speaker - Plus Plan</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mobile Navigation Links -->
-    <!-- Logged Out Mobile Navigation -->
-    <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="pricing.html">Pricing</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="help.html">Help Center</a></li>
-    </ul>
-    
-    <!-- Logged In Mobile Navigation (Speakers) -->
-    <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="opportunities.html">Opportunities</a></li>
-        <li><a href="bookings.html">My Bookings</a></li>
-        <li><a href="profile.html">Profile</a></li>
-        <li><a href="settings.html">Settings</a></li>
-        <li><a href="billing.html">Billing</a></li>
-        <li><a href="help.html">Help & Support</a></li>
-    </ul>
-    
-    <!-- Logged In Mobile Navigation (Organizations) -->
-    <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
-        <li><a href="organization-dashboard.html">Dashboard</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="post-opportunity.html">Post Opportunity</a></li>
-        <li><a href="my-opportunities.html">My Opportunities</a></li>
-        <li><a href="saved-speakers.html">Saved Speakers</a></li>
-        <li><a href="settings.html">Settings</a></li>
-        <li><a href="team.html">Team Members</a></li>
-        <li><a href="help.html">Help & Support</a></li>
-    </ul>
-
-    <!-- Mobile Auth Buttons (for logged out users) -->
-    <div class="mobile-auth-buttons" id="mobileAuthButtons">
-        <a href="register.html" class="btn btn-secondary">Join Community</a>
-        <a href="login.html" class="btn btn-primary">Login</a>
-    </div>
-
-    <!-- Mobile Logout Button (for logged in users) -->
-    <div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
-        <button class="btn btn-primary" onclick="logout()">Logout</button>
-    </div>
-</div>
-
     <!-- Profile Header -->
     <div class="profile-header">
         <div class="container">
             <div class="profile-header-content">
                 <div class="profile-image-container">
                     <div id="profileImageContainer">
-                        <!-- Profile image or placeholder will be inserted here -->
+                        <div class="profile-image-placeholder">
+                            <span class="loading"></span>
+                        </div>
                     </div>
                 </div>
                 <div class="profile-info">
-                    <h1 id="speakerName">Loading...</h1>
-                    <div class="profile-type" id="speakerType">Speaker</div>
-                    <div class="profile-location" id="speakerLocation">
+                    <h1 id="profileName">Loading...</h1>
+                    <div class="profile-type" id="profileType">Loading...</div>
+                    <div class="profile-location" id="profileLocation">
                         <span>📍</span>
                         <span>Loading...</span>
                     </div>
-                    <div class="profile-tags" id="speakerTags">
+                    <div class="profile-tags" id="profileTags">
                         <!-- Tags will be inserted here -->
                     </div>
                 </div>
@@ -822,61 +805,38 @@
             <div class="content-grid">
                 <!-- Left Column -->
                 <div>
-                    <!-- Bio Section -->
+                    <!-- Bio/About Section -->
                     <div class="content-card bio-section">
-                        <h2>About</h2>
-                        <p id="speakerBio">Loading...</p>
+                        <h2 id="aboutTitle">About</h2>
+                        <p id="profileBio">Loading profile information...</p>
                     </div>
 
-                    <!-- Expertise Section -->
-                    <div class="content-card" style="margin-top: 2rem;">
-                        <h2>Areas of Expertise</h2>
+                    <!-- Dynamic Section - Areas of Expertise OR Speaking Topics -->
+                    <div class="content-card" style="margin-top: 2rem;" id="expertiseSection">
+                        <h2 id="expertiseTitle">Areas of Expertise</h2>
                         <ul class="expertise-list" id="expertiseList">
-                            <!-- Expertise items will be inserted here -->
+                            <!-- Expertise/Topics will be inserted here -->
                         </ul>
                     </div>
 
-                    <!-- Stats Section -->
-                    <div class="content-card" style="margin-top: 2rem;">
-                        <h2>Speaker Statistics</h2>
-                        <div class="stats-section">
-                            <div class="stat-item">
-                                <div class="stat-number">50+</div>
-                                <div class="stat-label">Speaking Events</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-number">4.8</div>
-                                <div class="stat-label">Average Rating</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-number">15</div>
-                                <div class="stat-label">Years Experience</div>
-                            </div>
+                    <!-- Organization Information (Organizations only) -->
+                    <div class="content-card" style="margin-top: 2rem; display: none;" id="orgInfoSection">
+                        <h2>Organization Information</h2>
+                        <div class="org-info-section" id="orgInfoGrid">
+                            <!-- Organization details will be inserted here -->
                         </div>
                     </div>
 
-                    <!-- Reviews Section -->
-                    <div class="content-card" style="margin-top: 2rem;">
+                    <!-- Stats Section (Speakers) OR Members Section (Organizations) -->
+                    <div class="content-card" style="margin-top: 2rem;" id="statsOrMembersSection">
+                        <!-- Content will be dynamically generated -->
+                    </div>
+
+                    <!-- Reviews Section (Speakers only) -->
+                    <div class="content-card" style="margin-top: 2rem;" id="reviewsCard">
                         <h2>Recent Reviews</h2>
-                        <div class="reviews-section">
-                            <div class="review-card">
-                                <div class="review-header">
-                                    <span class="reviewer-name">Phoenix Chamber of Commerce</span>
-                                    <span class="review-rating">⭐⭐⭐⭐⭐</span>
-                                </div>
-                                <p class="review-text">
-                                    "An exceptional speaker who truly engaged our audience. The presentation was both informative and inspiring. Highly recommended!"
-                                </p>
-                            </div>
-                            <div class="review-card">
-                                <div class="review-header">
-                                    <span class="reviewer-name">Community College District</span>
-                                    <span class="review-rating">⭐⭐⭐⭐⭐</span>
-                                </div>
-                                <p class="review-text">
-                                    "Brought valuable insights and practical knowledge to our students. The interactive approach made complex topics easy to understand."
-                                </p>
-                            </div>
+                        <div class="reviews-section" id="reviewsSection">
+                            <!-- Reviews will be inserted here -->
                         </div>
                     </div>
                 </div>
@@ -889,12 +849,8 @@
                             <!-- Contact info will be inserted here based on auth status -->
                         </div>
                         
-                        <div class="booking-cta" style="margin-top: 2rem;">
-                            <h3>Book This Speaker</h3>
-                            <p>Ready to bring expertise to your event?</p>
-                            <button id="bookingBtn" class="btn btn-white" style="width: 100%;">
-                                Request Booking
-                            </button>
+                        <div id="ctaSection">
+                            <!-- CTA will be dynamically generated based on profile type -->
                         </div>
                     </div>
                 </div>
@@ -902,194 +858,415 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>CoveTalks</h3>
-                    <p>Connecting speakers with organizations worldwide</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <a href="index.html">Home</a>
-                    <a href="members.html">Members</a>
-                    <a href="register.html">Register</a>
-                    <a href="pricing.html">Pricing</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Support</h3>
-                    <a href="contact.html">Contact Us</a>
-                    <a href="privacy.html">Privacy Policy</a>
-                    <a href="terms.html">Terms of Service</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Connect</h3>
-                    <a href="#">LinkedIn</a>
-                    <a href="#">Twitter</a>
-                    <a href="#">Facebook</a>
-                    <a href="#">Email</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 CoveTalks. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    <!-- Include the API client and navigation -->
+    <script src="/js/app.js"></script>
+    <script src="/js/navigation.js"></script>
 
     <script>
-        // Configuration
-        const CONFIG = {
-            API_BASE: window.location.hostname === 'localhost' ? 'http://localhost:3001' : '/.netlify/functions/api'
-        };
+        // Global variables
+        let profileData = null;
+        let isOwnProfile = false;
+        let profileType = null; // 'Speaker' or 'Organization'
 
-        // Get speaker ID from URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const speakerId = urlParams.get('id');
-
-        // Global state
-        let currentUser = null;
-        let speakerData = null;
-
-        // DOM Elements
-        const loginBtn = document.getElementById('loginBtn');
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuthStatus();
-            if (speakerId) {
-                loadSpeakerProfile(speakerId);
+        // Wait for API to be fully loaded
+        function waitForAPI(callback) {
+            if (typeof api !== 'undefined' && typeof updateNavigation !== 'undefined') {
+                callback();
             } else {
-                // Load sample data if no ID provided
-                loadSampleProfile();
-            }
-        });
-
-        // Check authentication status
-        function checkAuthStatus() {
-            const token = localStorage.getItem('token');
-            if (token) {
-                fetch(`${CONFIG.API_BASE}/auth/verify`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.valid) {
-                        currentUser = result.user;
-                        updateAuthUI();
-                    }
-                })
-                .catch(error => {
-                    console.error('Auth verification failed:', error);
-                });
+                setTimeout(() => waitForAPI(callback), 50);
             }
         }
 
-        function updateAuthUI() {
-            if (currentUser) {
-                loginBtn.textContent = 'Dashboard';
-                loginBtn.onclick = () => window.location.href = 'members.html';
+        // Initialize page
+        function initializePage() {
+            // Get profile ID from URL or use current user's ID
+            const urlParams = new URLSearchParams(window.location.search);
+            const profileId = urlParams.get('id');
+            
+            // Check if viewing own profile
+            const currentUser = api.getCurrentUser();
+            if (!profileId && currentUser) {
+                // No ID provided, show current user's profile
+                isOwnProfile = true;
+                loadProfile();
+            } else if (profileId) {
+                // Specific profile ID provided
+                isOwnProfile = currentUser && currentUser.id === profileId;
+                loadProfile(profileId);
             } else {
-                loginBtn.onclick = () => window.location.href = 'index.html#login';
+                // No ID and not logged in
+                showError('No profile specified');
             }
         }
 
-        // Load speaker profile
-        async function loadSpeakerProfile(id) {
+        // Load profile
+        async function loadProfile(profileId = null) {
             try {
-                const response = await fetch(`${CONFIG.API_BASE}/speaker/${id}`);
-                const data = await response.json();
+                console.log('[Profile] Loading profile...');
                 
-                if (data.success) {
-                    speakerData = data.speaker;
-                    displayProfile(speakerData);
+                // Use the API client to get profile
+                const response = await api.getProfile(profileId);
+                
+                console.log('[Profile] Response:', response);
+                
+                if (response && response.profile) {
+                    profileData = response.profile;
+                    profileType = response.profile.memberType;
+                    displayProfile(profileData);
                 } else {
-                    loadSampleProfile();
+                    showError('Profile not found');
                 }
             } catch (error) {
-                console.error('Error loading profile:', error);
-                loadSampleProfile();
+                console.error('[Profile] Error loading profile:', error);
+                showError('Failed to load profile');
             }
-        }
-
-        // Load sample profile
-        function loadSampleProfile() {
-            speakerData = {
-                Name: 'John Smith',
-                Type: 'Speaker',
-                Location: 'Phoenix, AZ',
-                Specialty: 'Business Leadership, Digital Transformation, Innovation Strategy',
-                Bio: 'John Smith is a seasoned business leader with over 20 years of experience in digital transformation and innovation strategy. As a former Fortune 500 CEO, he has led multiple organizations through successful digital transformations, resulting in significant revenue growth and operational efficiency improvements. John is passionate about sharing his knowledge and insights with organizations looking to navigate the complexities of modern business. His engaging speaking style combines real-world experience with actionable strategies that audiences can implement immediately. He specializes in helping organizations build innovation cultures, implement digital strategies, and develop future-ready leadership teams.',
-                Email: 'john.smith@example.com',
-                Phone: '(555) 123-4567',
-                Website: 'https://johnsmithspeaker.com',
-                Booking_Link: 'https://calendly.com/johnsmith',
-                Profile_Image: null
-            };
-            displayProfile(speakerData);
         }
 
         // Display profile data
-        function displayProfile(speaker) {
+        function displayProfile(profile) {
+            console.log('[Profile] Displaying profile:', profile);
+            
+            // Update page title
+            document.title = `${profile.name || 'Profile'} - CoveTalks`;
+            
             // Profile Image
-            const imageContainer = document.getElementById('profileImageContainer');
-            if (speaker.Profile_Image) {
-                imageContainer.innerHTML = `<img src="${speaker.Profile_Image}" alt="${speaker.Name}" class="profile-image">`;
+            displayProfileImage(profile);
+            
+            // Basic Info
+            document.getElementById('profileName').textContent = profile.name || 'Unknown';
+            document.getElementById('profileLocation').innerHTML = `<span>📍</span><span>${profile.location || 'Location not specified'}</span>`;
+            
+            // Bio
+            displayBio(profile);
+            
+            // Display content based on profile type
+            if (profile.memberType === 'Organization') {
+                displayOrganizationProfile(profile);
             } else {
-                const initials = speaker.Name.split(' ').map(n => n[0]).join('').toUpperCase();
-                imageContainer.innerHTML = `<div class="profile-image-placeholder">${initials}</div>`;
+                displaySpeakerProfile(profile);
+            }
+            
+            // Contact Information
+            displayContactInfo(profile);
+            
+            // CTA Section
+            displayCTA(profile);
+        }
+
+        // Display profile image
+        function displayProfileImage(profile) {
+            const imageContainer = document.getElementById('profileImageContainer');
+            const isOrganization = profile.memberType === 'Organization';
+            const initials = getInitials(profile.name);
+            
+            if (profile.profileImage) {
+                const imgClass = isOrganization ? 'profile-image organization-image' : 'profile-image';
+                const placeholderClass = isOrganization ? 'profile-image-placeholder organization-image-placeholder' : 'profile-image-placeholder';
+                
+                imageContainer.innerHTML = `
+                    <img src="${profile.profileImage}" alt="${profile.name}" class="${imgClass}" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                    <div class="${placeholderClass}" style="display:none;">${initials}</div>
+                `;
+            } else {
+                const placeholderClass = isOrganization ? 'profile-image-placeholder organization-image-placeholder' : 'profile-image-placeholder';
+                imageContainer.innerHTML = `<div class="${placeholderClass}">${initials}</div>`;
+            }
+        }
+
+        // Display bio section
+        function displayBio(profile) {
+            const bioElement = document.getElementById('profileBio');
+            
+            // For organizations, use org bio; for speakers, use member bio
+            const bio = profile.memberType === 'Organization' ? profile.orgBio : profile.bio;
+            
+            if (bio) {
+                bioElement.textContent = bio;
+            } else {
+                bioElement.innerHTML = '<em>No description available</em>';
+            }
+        }
+
+        // Display Speaker Profile
+        function displaySpeakerProfile(profile) {
+            // Profile type badge
+            document.getElementById('profileType').textContent = 'Speaker';
+            
+            // Speaker tags (specialty)
+            const tags = profile.specialty || [];
+            const tagsContainer = document.getElementById('profileTags');
+            if (tags.length > 0) {
+                tagsContainer.innerHTML = tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+            } else {
+                tagsContainer.innerHTML = '<span class="tag">No specialties listed</span>';
             }
 
-            // Basic Info
-            document.getElementById('speakerName').textContent = speaker.Name;
-            document.getElementById('speakerType').textContent = speaker.Type;
-            document.getElementById('speakerLocation').innerHTML = `<span>📍</span><span>${speaker.Location}</span>`;
-            
-            // Tags
-            const tags = speaker.Specialty ? speaker.Specialty.split(',').map(tag => tag.trim()) : [];
-            const tagsContainer = document.getElementById('speakerTags');
-            tagsContainer.innerHTML = tags.map(tag => `<span class="tag">${tag}</span>`).join('');
-
-            // Bio
-            document.getElementById('speakerBio').textContent = speaker.Bio;
-
-            // Expertise List
+            // Areas of Expertise
+            document.getElementById('expertiseTitle').textContent = 'Areas of Expertise';
             const expertiseList = document.getElementById('expertiseList');
-            expertiseList.innerHTML = tags.map(tag => `<li>${tag}</li>`).join('');
+            if (tags.length > 0) {
+                expertiseList.innerHTML = tags.map(tag => `<li>${tag}</li>`).join('');
+            } else {
+                expertiseList.innerHTML = '<li style="color: #999; font-style: italic;">No areas of expertise specified</li>';
+            }
 
-            // Contact Information
+            // Hide organization sections
+            document.getElementById('orgInfoSection').style.display = 'none';
+
+            // Speaker Statistics
+            displaySpeakerStats(profile);
+
+            // Reviews (show for speakers)
+            document.getElementById('reviewsCard').style.display = 'block';
+            displayReviews(profile.reviews || []);
+        }
+
+        // Display Organization Profile
+        function displayOrganizationProfile(profile) {
+            // Profile type badge - show organization type (will come from org data)
+            document.getElementById('profileType').textContent = profile.organizationType || 'Organization';
+            
+            // No tags for organizations - remove speaking topics section
+            const tagsContainer = document.getElementById('profileTags');
+            tagsContainer.style.display = 'none';
+
+            // Hide expertise section for organizations - they don't have speaking topics
+            document.getElementById('expertiseSection').style.display = 'none';
+
+            // Hide organization info section - we don't need it
+            document.getElementById('orgInfoSection').style.display = 'none';
+
+            // Organization Members (ONLY Speakers associated with this org)
+            displayOrganizationMembers(profile);
+
+            // Hide reviews for organizations
+            document.getElementById('reviewsCard').style.display = 'none';
+        }
+
+        // Display speaker statistics
+        function displaySpeakerStats(profile) {
+            const statsSection = document.getElementById('statsOrMembersSection');
+            
+            statsSection.innerHTML = `
+                <h2>Speaker Statistics</h2>
+                <div class="stats-section">
+                    <div class="stat-item">
+                        <div class="stat-number" id="statBookings">${profile.totalBookings || 0}</div>
+                        <div class="stat-label">Speaking Events</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="statRating">${profile.averageRating || '0.0'}</div>
+                        <div class="stat-label">Average Rating</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="statReviews">${profile.totalReviews || 0}</div>
+                        <div class="stat-label">Reviews</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Display organization members (speakers only)
+        function displayOrganizationMembers(profile) {
+            const statsSection = document.getElementById('statsOrMembersSection');
+            
+            statsSection.innerHTML = `
+                <h2>Associated Speakers</h2>
+                <div class="members-section" id="membersSection">
+                    <!-- Speakers will be loaded here -->
+                </div>
+            `;
+            
+            loadOrganizationMembers(profile);
+        }
+
+        // Load organization members - ONLY Speakers associated with this organization
+        async function loadOrganizationMembers(profile) {
+            const membersSection = document.getElementById('membersSection');
+            
+            // Show loading state
+            membersSection.innerHTML = '<div style="text-align: center; padding: 2rem;"><span class="loading"></span> Loading speakers...</div>';
+            
+            try {
+                console.log('[Profile] Loading speakers for organization ID:', profile.organizationId);
+                
+                // Make sure we have an organization ID
+                if (!profile.organizationId) {
+                    console.log('[Profile] No organization ID available');
+                    displayNoSpeakers();
+                    return;
+                }
+                
+                // Get speakers associated with this organization
+                const speakersResponse = await fetch(`/.netlify/functions/organization-speakers?orgId=${profile.organizationId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${api.getToken()}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (speakersResponse.ok) {
+                    const speakersData = await speakersResponse.json();
+                    console.log('[Profile] Speakers data:', speakersData);
+                    
+                    if (speakersData.success && speakersData.speakers && speakersData.speakers.length > 0) {
+                        displaySpeakersData(speakersData.speakers);
+                    } else {
+                        console.log('[Profile] No speakers found');
+                        displayNoSpeakers();
+                    }
+                } else {
+                    console.log('[Profile] Speakers API call failed, status:', speakersResponse.status);
+                    displayNoSpeakers();
+                }
+            } catch (error) {
+                console.error('[Profile] Error loading organization speakers:', error);
+                displayNoSpeakers();
+            }
+        }
+        
+        // Display speakers data from API
+        function displaySpeakersData(speakers) {
+            const membersSection = document.getElementById('membersSection');
+            
+            const speakersHtml = speakers.map(speaker => `
+                <div class="member-card">
+                    <div class="member-avatar">${getInitials(speaker.name)}</div>
+                    <div class="member-info">
+                        <div class="member-name">
+                            <a href="profile.html?id=${speaker.id}" style="color: #155588; text-decoration: none;">
+                                ${speaker.name}
+                            </a>
+                        </div>
+                        <div class="member-role">Speaker</div>
+                        <div class="member-contact">
+                            ${speaker.email ? `<a href="mailto:${speaker.email}">Email</a>` : ''}
+                            ${speaker.phone ? `<a href="tel:${speaker.phone}">Call</a>` : ''}
+                            <a href="profile.html?id=${speaker.id}">View Profile</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            membersSection.innerHTML = speakersHtml;
+        }
+        
+        // Display no speakers message
+        function displayNoSpeakers() {
+            const membersSection = document.getElementById('membersSection');
+            membersSection.innerHTML = '<div class="no-members">No speakers associated with this organization</div>';
+        }
+
+        // Display reviews (speakers only)
+        function displayReviews(reviews) {
+            const reviewsSection = document.getElementById('reviewsSection');
+            
+            if (!reviews || reviews.length === 0) {
+                reviewsSection.innerHTML = '<div class="no-reviews">No reviews yet!</div>';
+                return;
+            }
+            
+            const reviewsHtml = reviews.map(review => `
+                <div class="review-card">
+                    <div class="review-header">
+                        <span class="reviewer-name">${review.organizationName || 'Anonymous'}</span>
+                        <span class="review-rating">${'⭐'.repeat(review.rating || 5)}</span>
+                    </div>
+                    <p class="review-text">${review.reviewText || 'No review text provided'}</p>
+                </div>
+            `).join('');
+            
+            reviewsSection.innerHTML = reviewsHtml;
+        }
+
+        // Display contact information based on auth status
+        function displayContactInfo(profile) {
             const contactInfo = document.getElementById('contactInfo');
-            if (currentUser) {
-                contactInfo.innerHTML = `
-                    <div class="contact-info">
+            const isAuthenticated = api.isAuthenticated();
+            
+            if (isAuthenticated) {
+                // User is logged in - show contact information
+                let contactHtml = '<div class="contact-info">';
+                
+                // For organizations, use organization data; for speakers, use member data
+                const email = profile.memberType === 'Organization' ? profile.orgEmail : profile.email;
+                const phone = profile.memberType === 'Organization' ? profile.orgPhone : profile.phone;
+                const organizationType = profile.organizationType;
+                const address = profile.address;
+                
+                if (email) {
+                    contactHtml += `
                         <div class="contact-item">
                             <div class="contact-icon">✉️</div>
                             <div>
                                 <div style="color: #666; font-size: 0.9rem;">Email</div>
-                                <div><a href="mailto:${speaker.Email}">${speaker.Email}</a></div>
+                                <div><a href="mailto:${email}">${email}</a></div>
                             </div>
                         </div>
+                    `;
+                }
+                
+                if (phone) {
+                    contactHtml += `
                         <div class="contact-item">
                             <div class="contact-icon">📞</div>
                             <div>
                                 <div style="color: #666; font-size: 0.9rem;">Phone</div>
-                                <div><a href="tel:${speaker.Phone}">${speaker.Phone}</a></div>
+                                <div><a href="tel:${phone}">${phone}</a></div>
                             </div>
                         </div>
-                        ${speaker.Website ? `
+                    `;
+                }
+                
+                // Add organization type for organizations
+                if (profile.memberType === 'Organization' && organizationType) {
+                    contactHtml += `
+                        <div class="contact-item">
+                            <div class="contact-icon">🏢</div>
+                            <div>
+                                <div style="color: #666; font-size: 0.9rem;">Organization Type</div>
+                                <div>${organizationType}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Add address for organizations
+                if (profile.memberType === 'Organization' && address) {
+                    contactHtml += `
+                        <div class="contact-item">
+                            <div class="contact-icon">📍</div>
+                            <div>
+                                <div style="color: #666; font-size: 0.9rem;">Address</div>
+                                <div>${address}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                if (profile.website) {
+                    contactHtml += `
                         <div class="contact-item">
                             <div class="contact-icon">🌐</div>
                             <div>
                                 <div style="color: #666; font-size: 0.9rem;">Website</div>
-                                <div><a href="${speaker.Website}" target="_blank">Visit Website</a></div>
+                                <div><a href="${profile.website}" target="_blank">Visit Website</a></div>
                             </div>
                         </div>
-                        ` : ''}
-                    </div>
-                `;
+                    `;
+                }
+                
+                contactHtml += '</div>';
+                contactInfo.innerHTML = contactHtml;
             } else {
+                // User is not logged in - show blur and upgrade prompt
+                const orgTypeField = profile.memberType === 'Organization' ? 
+                    '<div class="contact-item"><div class="contact-icon">🏢</div><div>Type: •••••••••••••</div></div>' : '';
+                const addressField = profile.memberType === 'Organization' ? 
+                    '<div class="contact-item"><div class="contact-icon">📍</div><div>Address: •••••••••••••</div></div>' : '';
+                
                 contactInfo.innerHTML = `
                     <div class="contact-info premium-blur">
                         <div class="contact-item">
@@ -1100,230 +1277,109 @@
                             <div class="contact-icon">📞</div>
                             <div>Phone: •••-•••-••••</div>
                         </div>
+                        ${orgTypeField}
+                        ${addressField}
                     </div>
                     <div class="upgrade-overlay">
                         <h3>Premium Feature</h3>
                         <p>Contact information is available to registered members only</p>
-                        <a href="pricing.html" class="btn btn-secondary" style="margin-top: 1rem;">View Pricing</a>
+                        <a href="login.html" class="btn btn-secondary" style="margin-top: 1rem;">Login to View</a>
                     </div>
                 `;
             }
+        }
 
-            // Booking Button
-            const bookingBtn = document.getElementById('bookingBtn');
-            bookingBtn.onclick = () => {
-                if (currentUser && speaker.Booking_Link) {
-                    window.open(speaker.Booking_Link, '_blank');
-                } else if (currentUser) {
-                    window.location.href = `mailto:${speaker.Email}?subject=Speaking Request`;
-                } else {
-                    alert('Please log in to request a booking');
-                    window.location.href = 'index.html#login';
-                }
-            };
-        }
-    </script>
-    <script>
-        // ============================================
-        // NAVIGATION JAVASCRIPT
-        // ============================================
-        
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            updateNavAuth();
-            setActiveNavItem();
-        });
-        
-        // Update navigation based on auth status
-        function updateNavAuth() {
-            const token = localStorage.getItem('token');
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
+        // Display CTA section
+        function displayCTA(profile) {
+            const ctaSection = document.getElementById('ctaSection');
+            const isAuthenticated = api.isAuthenticated();
             
-            if (token && user) {
-                // User is logged in - hide logged out nav
-                document.getElementById('navLoggedOut').style.display = 'none';
-                document.getElementById('mobileNavLoggedOut').style.display = 'none';
+            if (profile.memberType === 'Organization') {
+                // Organizations get a contact CTA
+                ctaSection.innerHTML = `
+                    <div class="booking-cta contact-cta" style="margin-top: 2rem;">
+                        <h3>Contact Organization</h3>
+                        <p>Get in touch to discuss speaking opportunities</p>
+                        <button id="contactBtn" class="btn btn-white" style="width: 100%;">
+                            Send Message
+                        </button>
+                    </div>
+                `;
                 
-                // Show appropriate logged in navigation based on user type
-                if (user.type === 'Organization' || user.Member_Type === 'Organization') {
-                    // Organization navigation
-                    document.getElementById('navOrganization').style.display = 'flex';
-                    document.getElementById('navSpeaker').style.display = 'none';
-                    document.getElementById('mobileNavOrganization').style.display = 'block';
-                    document.getElementById('mobileNavSpeaker').style.display = 'none';
-                } else {
-                    // Speaker navigation (default)
-                    document.getElementById('navSpeaker').style.display = 'flex';
-                    document.getElementById('navOrganization').style.display = 'none';
-                    document.getElementById('mobileNavSpeaker').style.display = 'block';
-                    document.getElementById('mobileNavOrganization').style.display = 'none';
-                }
-                
-                // Show user menu
-                document.getElementById('userMenuDesktop').style.display = 'flex';
-                document.getElementById('authButtonsDesktop').style.display = 'none';
-                document.getElementById('mobileUserSection').style.display = 'block';
-                document.getElementById('mobileAuthButtons').style.display = 'none';
-                document.getElementById('mobileLogoutSection').style.display = 'block';
-                
-                // Update user info
-                const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
-                document.getElementById('userAvatar').textContent = initials;
-                document.getElementById('mobileUserAvatar').textContent = initials;
-                document.getElementById('mobileUserName').textContent = user.name || 'User';
-                document.getElementById('mobileUserType').textContent = user.type || user.Member_Type || 'Member';
+                // Setup contact button
+                document.getElementById('contactBtn').onclick = () => {
+                    if (isAuthenticated && profile.email) {
+                        window.location.href = `mailto:${profile.email}?subject=Speaking Opportunity Inquiry`;
+                    } else if (!isAuthenticated) {
+                        alert('Please log in to contact this organization');
+                        window.location.href = 'login.html';
+                    } else {
+                        alert('No contact method available for this organization');
+                    }
+                };
             } else {
-                // User is logged out - show logged out nav
-                document.getElementById('navLoggedOut').style.display = 'flex';
-                document.getElementById('mobileNavLoggedOut').style.display = 'block';
+                // Speakers get a booking CTA
+                ctaSection.innerHTML = `
+                    <div class="booking-cta" style="margin-top: 2rem;">
+                        <h3>Book This Speaker</h3>
+                        <p>Ready to bring expertise to your event?</p>
+                        <button id="bookingBtn" class="btn btn-white" style="width: 100%;">
+                            Request Booking
+                        </button>
+                    </div>
+                `;
                 
-                // Hide all logged in navigation
-                document.getElementById('navSpeaker').style.display = 'none';
-                document.getElementById('navOrganization').style.display = 'none';
-                document.getElementById('mobileNavSpeaker').style.display = 'none';
-                document.getElementById('mobileNavOrganization').style.display = 'none';
-                
-                // Show auth buttons
-                if (document.getElementById('userMenuDesktop')) {
-                    document.getElementById('userMenuDesktop').style.display = 'none';
-                }
-                document.getElementById('authButtonsDesktop').style.display = 'flex';
-                
-                if (document.getElementById('mobileUserSection')) {
-                    document.getElementById('mobileUserSection').style.display = 'none';
-                }
-                document.getElementById('mobileAuthButtons').style.display = 'flex';
-                if (document.getElementById('mobileLogoutSection')) {
-                    document.getElementById('mobileLogoutSection').style.display = 'none';
-                }
+                // Setup booking button
+                document.getElementById('bookingBtn').onclick = () => {
+                    if (isAuthenticated && profile.bookingLink) {
+                        window.open(profile.bookingLink, '_blank');
+                    } else if (isAuthenticated && profile.email) {
+                        window.location.href = `mailto:${profile.email}?subject=Speaking Request for ${profile.name}`;
+                    } else if (!isAuthenticated) {
+                        alert('Please log in to request a booking');
+                        window.location.href = 'login.html';
+                    } else {
+                        alert('No booking method available for this speaker');
+                    }
+                };
             }
         }
-        
-        // Toggle mobile menu
+
+        // Get initials from name
+        function getInitials(name) {
+            if (!name) return 'U';
+            return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+        }
+
+        // Show error message
+        function showError(message) {
+            document.getElementById('profileBio').innerHTML = `<em style="color: #dc3545;">${message}</em>`;
+            document.getElementById('profileName').textContent = 'Error';
+            document.getElementById('profileLocation').innerHTML = '<span>📍</span><span>N/A</span>';
+        }
+
+        // Mobile menu functions
         function toggleMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            
-            hamburger.classList.toggle('active');
-            mobileMenu.classList.toggle('show');
-            overlay.classList.toggle('show');
-            
-            if (mobileMenu.classList.contains('show')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
-            }
+            // Implementation for mobile menu
         }
-        
-        // Close mobile menu
-        function closeMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            
-            hamburger.classList.remove('active');
-            mobileMenu.classList.remove('show');
-            overlay.classList.remove('show');
-            document.body.style.overflow = '';
-        }
-        
-        // Toggle dropdown menu (desktop)
+
         function toggleDropdown() {
             const dropdown = document.getElementById('dropdownMenu');
             dropdown.classList.toggle('show');
         }
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (dropdown && avatar && !avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-        
-        // Set active navigation item based on current page
-        function setActiveNavItem() {
-            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-            
-            // Clear all active classes first
-            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            // Set active class on matching links
-            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
-                if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('active');
-                }
-            });
-        }
-        
-        // Logout function
-        function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            sessionStorage.removeItem('token');
-            sessionStorage.removeItem('user');
-            window.location.href = 'login.html';
-        }
-        
-        // Close mobile menu on window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                closeMobileMenu();
-            }
-        });
-        
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.mobile-nav-links a').forEach(link => {
-            link.addEventListener('click', function() {
-                closeMobileMenu();
-            });
-        });
-        </script>
-        <!-- Add before closing </body> tag on ALL pages -->
-<script src="/js/app.js"></script>
-<script src="/js/navigation.js"></script>
-<script>
-  // Initialize page-specific functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check auth and update navigation
-    updateNavigation();
-    
-    // Page-specific initialization
-    if (typeof initializePage === 'function') {
-      initializePage();
-    }
-  });
-</script>
-// Add to dashboard.html, bookings.html, settings.html, etc.
-<script>
-function initializePage() {
-  // Check authentication first
-  if (!requireAuth()) return;
-  
-  // Load page-specific data
-  loadDashboardData();
-}
 
-async function loadDashboardData() {
-  try {
-    // TODO: Connect to Airtable via API
-    // const profile = await api.getProfile();
-    // const bookings = await api.getBookings();
-    
-    // Placeholder for now
-    console.log('Loading dashboard data...');
-    
-    // Update UI with data
-    // updateDashboardUI(profile, bookings);
-  } catch (error) {
-    console.error('Failed to load dashboard:', error);
-  }
-}
-</script>
+        function logout() {
+            api.logout();
+        }
+
+        // Main initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            waitForAPI(function() {
+                console.log('[Profile] API and navigation ready');
+                updateNavigation();
+                initializePage();
+            });
+        });
+    </script>
 </body>
 </html>

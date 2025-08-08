@@ -1035,57 +1035,119 @@
     <script>
         // Configuration
         const CONFIG = {
-            STRIPE: {
-                PUBLISHABLE_KEY: 'pk_live_51RrABe1Fvl67fP5VrtH3hkNvl4chaiFtlskEMSHJIw6M1tAHdcgZ21pgup7DCEajjyQFUDM1jnIE7W1KrGBDjieV002ztaIRXk'
-            },
-            API_BASE: window.location.hostname === 'localhost' ? 'http://localhost:3001' : '/.netlify/functions/api'
+            API_BASE: window.location.hostname === 'localhost' 
+                ? 'http://localhost:8888/.netlify/functions'
+                : '/.netlify/functions'
         };
-
-        // Initialize Stripe
-        const stripe = Stripe(CONFIG.STRIPE.PUBLISHABLE_KEY);
-
+    
+        // Your live Stripe key
+        const stripe = Stripe('pk_live_51RrABe1Fvl67fP5VrtH3hkNvl4chaiFtlskEMSHJIw6M1tAHdcgZ21pgup7DCEajjyQFUDM1jnIE7W1KrGBDjieV002ztaIRXk');
+    
         // Current billing period
         let currentPeriod = 'monthly';
-
-        // DOM Elements
-        const loginBtn = document.getElementById('loginBtn');
-
-        // Event Listeners
+    
+        // Make checkout function globally accessible for onclick handlers
+        window.checkout = async function(plan, period) {
+            console.log('Starting checkout:', { plan, period });
+            
+            // Check if user is logged in
+            const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+            if (!token) {
+                alert('Please login to continue with subscription');
+                window.location.href = 'login.html';
+                return;
+            }
+    
+            // Get the button that was clicked
+            const button = event.target;
+            const originalText = button.textContent;
+            
+            try {
+                // Show loading state
+                button.disabled = true;
+                button.textContent = 'Processing...';
+                
+                // Format data for backend
+                const planType = plan.charAt(0).toUpperCase() + plan.slice(1);
+                const billingPeriod = (period || currentPeriod);
+                const priceKey = `${plan}_${billingPeriod}`;
+                
+                console.log('Calling stripe-create-checkout with:', {
+                    priceId: priceKey,
+                    planType: planType,
+                    billingPeriod: billingPeriod
+                });
+                
+                // Call the endpoint
+                const response = await fetch(`${CONFIG.API_BASE}/stripe-create-checkout`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        priceId: priceKey,
+                        planType: planType,
+                        billingPeriod: billingPeriod.charAt(0).toUpperCase() + billingPeriod.slice(1),
+                        successUrl: `${window.location.origin}/dashboard.html?subscription=success`,
+                        cancelUrl: `${window.location.origin}/pricing.html`
+                    })
+                });
+    
+                const result = await response.json();
+                console.log('Checkout response:', result);
+                
+                if (result.success && result.url) {
+                    // Redirect to Stripe Checkout
+                    window.location.href = result.url;
+                } else {
+                    throw new Error(result.error || result.message || 'Failed to create checkout session');
+                }
+            } catch (error) {
+                console.error('Checkout error:', error);
+                alert(error.message || 'Payment setup failed. Please try again.');
+                // Reset button
+                button.disabled = false;
+                button.textContent = originalText;
+            }
+        }
+    
+        // Make toggleFAQ globally accessible
+        window.toggleFAQ = function(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('span:last-child');
+            answer.classList.toggle('active');
+            icon.textContent = answer.classList.contains('active') ? '−' : '+';
+        }
+    
+        // DOM Ready
         document.addEventListener('DOMContentLoaded', function() {
             checkAuthStatus();
             setupPricingToggle();
         });
-
-        loginBtn.addEventListener('click', () => window.location.href = 'index.html#login');
-
+    
         // Setup pricing toggle
         function setupPricingToggle() {
             const toggleOptions = document.querySelectorAll('.toggle-option');
             
             toggleOptions.forEach(option => {
                 option.addEventListener('click', () => {
-                    // Remove active class from all options
                     toggleOptions.forEach(opt => opt.classList.remove('active'));
-                    
-                    // Add active class to clicked option
                     option.classList.add('active');
-                    
-                    // Update current period
                     currentPeriod = option.dataset.period;
-                    
-                    // Update pricing display
                     updatePricingDisplay();
                 });
             });
         }
-
-        // Update pricing display based on selected period
+    
+        // Update pricing display
         function updatePricingDisplay() {
             const prices = document.querySelectorAll('.price');
             const yearlyNotes = document.querySelectorAll('.yearly-note');
             const yearlyBtns = document.querySelectorAll('.yearly-btn');
+            const monthlyBtns = document.querySelectorAll('.btn-large:not(.yearly-btn)');
             const periodElements = document.querySelectorAll('.price-period');
-
+    
             prices.forEach(price => {
                 const monthlyPrice = price.dataset.monthly;
                 const yearlyPrice = price.dataset.yearly;
@@ -1096,11 +1158,11 @@
                     price.textContent = `$${monthlyPrice}`;
                 }
             });
-
+    
             periodElements.forEach(period => {
                 period.textContent = currentPeriod === 'yearly' ? 'per year' : 'per month';
             });
-
+    
             yearlyNotes.forEach(note => {
                 if (currentPeriod === 'yearly') {
                     note.classList.remove('hidden');
@@ -1108,66 +1170,54 @@
                     note.classList.add('hidden');
                 }
             });
-
-            yearlyBtns.forEach(btn => {
-                if (currentPeriod === 'yearly') {
-                    btn.classList.remove('hidden');
-                } else {
-                    btn.classList.add('hidden');
-                }
-            });
-        }
-
-        // Stripe checkout function
-        async function checkout(plan, period) {
-            try {
-                const response = await fetch(`${CONFIG.API_BASE}/stripe/create-session`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        plan: plan,
-                        period: period || currentPeriod,
-                        userType: plan === 'organization' ? 'organization' : 'speaker'
-                    })
+    
+            // Show/hide the appropriate buttons
+            if (currentPeriod === 'yearly') {
+                yearlyBtns.forEach(btn => btn.classList.remove('hidden'));
+                monthlyBtns.forEach(btn => {
+                    if (!btn.classList.contains('yearly-btn')) {
+                        btn.classList.add('hidden');
+                    }
                 });
-
-                const session = await response.json();
-                
-                if (session.url) {
-                    window.location.href = session.url;
-                } else {
-                    alert('Payment setup failed. Please try again.');
-                }
-            } catch (error) {
-                console.error('Checkout error:', error);
-                alert('Payment failed. Please try again.');
+            } else {
+                yearlyBtns.forEach(btn => btn.classList.add('hidden'));
+                monthlyBtns.forEach(btn => {
+                    if (!btn.classList.contains('yearly-btn')) {
+                        btn.classList.remove('hidden');
+                    }
+                });
             }
         }
-
+    
         // Check authentication status
         function checkAuthStatus() {
-            const token = localStorage.getItem('token');
-            if (token) {
-                loginBtn.textContent = 'Dashboard';
-                loginBtn.onclick = () => window.location.href = 'members.html';
+            const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+            const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user') || '{}');
+            
+            if (token && user) {
+                console.log('User logged in:', user.name);
+                
+                // If it's an organization, show a message
+                if (user.memberType === 'Organization') {
+                    const pricingSection = document.querySelector('.pricing-section');
+                    if (pricingSection) {
+                        pricingSection.innerHTML = `
+                            <div style="text-align: center; padding: 3rem;">
+                                <h2>Welcome ${user.name}!</h2>
+                                <p style="font-size: 1.2rem; margin: 2rem 0;">As an organization, you have free access to CoveTalks.</p>
+                                <a href="organization-dashboard.html" class="btn btn-primary btn-large">Go to Dashboard</a>
+                            </div>
+                        `;
+                    }
+                }
             }
         }
-
-        // FAQ toggle function
-        function toggleFAQ(element) {
-            const answer = element.nextElementSibling;
-            const icon = element.querySelector('span:last-child');
-            
-            // Toggle answer visibility
-            answer.classList.toggle('active');
-            
-            // Toggle icon
-            icon.textContent = answer.classList.contains('active') ? '−' : '+';
-        }
+    
+        // Debug info on load
+        console.log('Pricing page loaded');
+        console.log('API_BASE:', CONFIG.API_BASE);
+        console.log('Auth token exists:', !!localStorage.getItem('authToken'));
     </script>
-    <script>
         // ============================================
         // NAVIGATION JAVASCRIPT
         // ============================================

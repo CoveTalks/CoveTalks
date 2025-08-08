@@ -1,1571 +1,1671 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - CoveTalks</title>
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CoveTalks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        line-height: 1.6;
-        color: #333;
-        background: #f8f9fa;
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
 
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-    }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-    /* Header */
-    header {
-        background: white;
-        color: #333;
-        padding: 1rem 0;
-        position: fixed;
-        width: 100%;
-        top: 0;
-        z-index: 1000;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
+        /* Header */
+        header {
+            background: white;
+            color: #333;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
 
-    nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .logo {
-        display: inline-flex;
-        align-items: center;
-        text-decoration: none;
-    }
-    
-    .logo-img {
-        height: 70px;
-        width: auto;
-        display: block;
-    }
-    
-    @media (max-width: 768px) {
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
         .logo-img {
-            height: 50px;
+            height: 70px;
+            width: auto;
+            display: block;
         }
-    }
-
-    .nav-links {
-        display: flex;
-        list-style: none;
-        gap: 2rem;
-    }
-
-    .nav-links a {
-        color: #333;
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.3s;
-    }
-
-    .nav-links a:hover {
-        color: #155588;
-    }
-
-    .nav-links a.active {
-        color: #155588;
-        border-bottom: 2px solid #155588;
-        padding-bottom: 2px;
-    }
-
-    .user-menu {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .user-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #667eea, #1e93b7);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .user-dropdown {
-        position: relative;
-    }
-
-    .dropdown-menu {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-        padding: 1rem 0;
-        min-width: 200px;
-        display: none;
-        margin-top: 0.5rem;
-    }
-
-    .dropdown-menu.show {
-        display: block;
-    }
-
-    .dropdown-menu a {
-        display: block;
-        padding: 0.5rem 1.5rem;
-        color: #333;
-        text-decoration: none;
-        transition: background 0.3s;
-    }
-
-    .dropdown-menu a:hover {
-        background: #f8f9fa;
-    }
-
-    .dropdown-divider {
-        border-top: 1px solid #e1e8ed;
-        margin: 0.5rem 0;
-    }
-
-    /* Dashboard Layout */
-    .dashboard-container {
-        padding-top: 6rem;
-        min-height: 100vh;
-    }
-
-    .dashboard-header {
-        background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
-        color: white;
-        padding: 2rem 0;
-        margin-bottom: 2rem;
-    }
-
-    .dashboard-header-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .welcome-section h1 {
-        font-size: 2rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .welcome-section p {
-        opacity: 0.9;
-    }
-
-    .header-actions {
-        display: flex;
-        gap: 1rem;
-    }
-
-    .btn {
-        padding: 0.75rem 1.5rem;
-        border: none;
-        border-radius: 25px;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-block;
-        transition: all 0.3s;
-        font-weight: 500;
-        text-align: center;
-    }
-
-    .btn-white {
-        background: white;
-        color: #155588;
-    }
-
-    .btn-white:hover {
-        background: #f8f9fa;
-        transform: translateY(-2px);
-    }
-
-    .btn-primary {
-        background: #155588;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background: #1e3d6f;
-        transform: translateY(-2px);
-    }
-
-    /* Stats Cards */
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .stat-card {
-        background: white;
-        padding: 1.5rem;
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .stat-icon {
-        width: 60px;
-        height: 60px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-    }
-
-    .stat-icon.blue {
-        background: #e8f4fd;
-        color: #155588;
-    }
-
-    .stat-icon.green {
-        background: #d4edda;
-        color: #27ae60;
-    }
-
-    .stat-icon.purple {
-        background: #f3e5f5;
-        color: #1e93b7;
-    }
-
-    .stat-icon.orange {
-        background: #fff3e0;
-        color: #f2b236;
-    }
-
-    .stat-content h3 {
-        font-size: 2rem;
-        color: #155588;
-        margin-bottom: 0.25rem;
-    }
-
-    .stat-content p {
-        color: #666;
-        font-size: 0.9rem;
-    }
-
-    /* Main Dashboard Content */
-    .dashboard-main {
-        display: grid;
-        grid-template-columns: 1fr 350px;
-        gap: 2rem;
-    }
-
-    .dashboard-content {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-
-    .dashboard-sidebar {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-
-    /* Dashboard Cards */
-    .dashboard-card {
-        background: white;
-        border-radius: 15px;
-        padding: 1.5rem;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    }
-
-    .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.5rem;
-        padding-bottom: 1rem;
-        border-bottom: 2px solid #f0f0f0;
-    }
-
-    .card-header h2 {
-        color: #155588;
-        font-size: 1.3rem;
-    }
-
-    .card-header a {
-        color: #155588;
-        text-decoration: none;
-        font-size: 0.9rem;
-    }
-
-    /* Recent Activity */
-    .activity-list {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .activity-item {
-        display: flex;
-        gap: 1rem;
-        padding: 1rem;
-        background: #f8f9fa;
-        border-radius: 10px;
-        transition: background 0.3s;
-    }
-
-    .activity-item:hover {
-        background: #e9ecef;
-    }
-
-    .activity-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-
-    .activity-icon.view {
-        background: #e8f4fd;
-        color: #155588;
-    }
-
-    .activity-icon.booking {
-        background: #d4edda;
-        color: #27ae60;
-    }
-
-    .activity-icon.message {
-        background: #fff3e0;
-        color: #f2b236;
-    }
-
-    .activity-content {
-        flex: 1;
-    }
-
-    .activity-content h4 {
-        color: #333;
-        margin-bottom: 0.25rem;
-    }
-
-    .activity-content p {
-        color: #666;
-        font-size: 0.9rem;
-    }
-
-    .activity-time {
-        color: #999;
-        font-size: 0.8rem;
-    }
-
-    /* Profile Completion */
-    .profile-completion {
-        margin-bottom: 1rem;
-    }
-
-    .completion-header {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 0.5rem;
-    }
-
-    .completion-bar {
-        background: #e1e8ed;
-        height: 10px;
-        border-radius: 5px;
-        overflow: hidden;
-    }
-
-    .completion-progress {
-        background: linear-gradient(90deg, #667eea, #1e93b7);
-        height: 100%;
-        transition: width 0.5s;
-    }
-
-    .completion-tips {
-        margin-top: 1rem;
-        padding: 1rem;
-        background: #f8f9fa;
-        border-radius: 10px;
-    }
-
-    .completion-tips h4 {
-        color: #155588;
-        margin-bottom: 0.5rem;
-    }
-
-    .completion-tips ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    .completion-tips li {
-        padding: 0.5rem 0;
-        color: #666;
-        font-size: 0.9rem;
-    }
-
-    .completion-tips li:before {
-        content: "→";
-        color: #155588;
-        margin-right: 0.5rem;
-    }
-
-    /* Subscription Status */
-    .subscription-card {
-        background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
-        color: white;
-        padding: 1.5rem;
-    }
-
-    .subscription-card h3 {
-        margin-bottom: 1rem;
-    }
-
-    .plan-name {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-    }
-
-    .plan-details {
-        opacity: 0.9;
-        margin-bottom: 1rem;
-    }
-
-    .btn-outline-white {
-        background: transparent;
-        color: white;
-        border: 2px solid white;
-    }
-
-    .btn-outline-white:hover {
-        background: white;
-        color: #155588;
-    }
-
-    /* Quick Actions */
-    .quick-actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-    }
-
-    .action-btn {
-        padding: 1rem;
-        background: #f8f9fa;
-        border: 2px solid #e1e8ed;
-        border-radius: 10px;
-        text-align: center;
-        color: #333;
-        text-decoration: none;
-        transition: all 0.3s;
-    }
-
-    .action-btn:hover {
-        background: white;
-        border-color: #155588;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-
-    .action-btn i {
-        display: block;
-        font-size: 1.5rem;
-        color: #155588;
-        margin-bottom: 0.5rem;
-    }
-
-    /* Responsive */
-    @media (max-width: 992px) {
-        .dashboard-main {
-            grid-template-columns: 1fr;
+        
+        @media (max-width: 768px) {
+            .logo-img {
+                height: 50px;
+            }
         }
-    }
 
-    @media (max-width: 768px) {
         .nav-links {
-            display: none;
+            display: flex;
+            list-style: none;
+            gap: 2rem;
         }
 
-        .stats-grid {
-            grid-template-columns: 1fr;
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #155588;
+        }
+
+        .nav-links a.active {
+            color: #155588;
+            border-bottom: 2px solid #155588;
+            padding-bottom: 2px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .user-dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            padding: 1rem 0;
+            min-width: 200px;
+            display: none;
+            margin-top: 0.5rem;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.5rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-divider {
+            border-top: 1px solid #e1e8ed;
+            margin: 0.5rem 0;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            padding-top: 6rem;
+            min-height: 100vh;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
         }
 
         .dashboard-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-section h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-section p {
+            opacity: 0.9;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn-white {
+            background: white;
+            color: #155588;
+        }
+
+        .btn-white:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: #155588;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e3d6f;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #155588;
+            border: 2px solid #155588;
+        }
+
+        .btn-secondary:hover {
+            background: #155588;
+            color: white;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.blue {
+            background: #e8f4fd;
+            color: #155588;
+        }
+
+        .stat-icon.green {
+            background: #d4edda;
+            color: #27ae60;
+        }
+
+        .stat-icon.purple {
+            background: #f3e5f5;
+            color: #1e93b7;
+        }
+
+        .stat-icon.orange {
+            background: #fff3e0;
+            color: #f2b236;
+        }
+
+        .stat-content h3 {
+            font-size: 2rem;
+            color: #155588;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-content p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Main Dashboard Content */
+        .dashboard-main {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        .dashboard-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .dashboard-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .card-header h2 {
+            color: #155588;
+            font-size: 1.3rem;
+        }
+
+        .card-header a {
+            color: #155588;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        /* Recent Activity */
+        .activity-list {
+            display: flex;
             flex-direction: column;
             gap: 1rem;
         }
 
-        .header-actions {
-            width: 100%;
+        .activity-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: background 0.3s;
         }
 
-        .header-actions .btn {
+        .activity-item:hover {
+            background: #e9ecef;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.view {
+            background: #e8f4fd;
+            color: #155588;
+        }
+
+        .activity-icon.booking {
+            background: #d4edda;
+            color: #27ae60;
+        }
+
+        .activity-icon.message {
+            background: #fff3e0;
+            color: #f2b236;
+        }
+
+        .activity-icon.application {
+            background: #f3e5f5;
+            color: #1e93b7;
+        }
+
+        .activity-content {
             flex: 1;
         }
 
-        .quick-actions {
-            grid-template-columns: 1fr;
+        .activity-content h4 {
+            color: #333;
+            margin-bottom: 0.25rem;
         }
-    }
 
-    .empty-state {
-        text-align: center;
-        padding: 3rem;
-        color: #666;
-    }
+        .activity-content p {
+            color: #666;
+            font-size: 0.9rem;
+        }
 
-    .empty-state img {
-        width: 100px;
-        opacity: 0.5;
-        margin-bottom: 1rem;
-    }
+        .activity-time {
+            color: #999;
+            font-size: 0.8rem;
+        }
 
-/* Mobile Navigation Styles */
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
+        /* Profile Completion */
+        .profile-completion {
+            margin-bottom: 1rem;
+        }
 
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
+        .completion-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
 
-/* Hamburger Menu */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-    z-index: 1002;
-    background: none;
-    border: none;
-    padding: 5px;
-}
+        .completion-bar {
+            background: #e1e8ed;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
 
-.hamburger span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background: #333;
-    margin: 3px 0;
-    transition: all 0.3s ease;
-    border-radius: 2px;
-}
+        .completion-progress {
+            background: linear-gradient(90deg, #667eea, #1e93b7);
+            height: 100%;
+            transition: width 0.5s;
+        }
 
-.hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
+        .completion-tips {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
 
-.hamburger.active span:nth-child(2) {
-    opacity: 0;
-}
+        .completion-tips h4 {
+            color: #155588;
+            margin-bottom: 0.5rem;
+        }
 
-.hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -6px);
-}
+        .completion-tips ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
 
-/* Mobile Menu Overlay */
-.mobile-menu-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
+        .completion-tips li {
+            padding: 0.5rem 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
 
-.mobile-menu-overlay.show {
-    display: block;
-    opacity: 1;
-}
+        .completion-tips li:before {
+            content: "→";
+            color: #155588;
+            margin-right: 0.5rem;
+        }
 
-/* Mobile Menu Panel */
-.mobile-menu {
-    position: fixed;
-    top: 0;
-    right: -320px;
-    width: 300px;
-    height: 100vh;
-    background: white;
-    z-index: 1001;
-    transition: right 0.3s ease;
-    overflow-y: auto;
-    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-}
+        .completion-complete {
+            color: #27ae60;
+            font-weight: 500;
+            padding: 1rem;
+            text-align: center;
+        }
 
-.mobile-menu.show {
-    right: 0;
-}
+        /* Subscription Status */
+        .subscription-card {
+            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            color: white;
+            padding: 1.5rem;
+        }
 
-.mobile-menu-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        .subscription-card h3 {
+            margin-bottom: 1rem;
+        }
 
-.mobile-menu-close {
-    width: 30px;
-    height: 30px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #666;
-}
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
 
-.mobile-nav-links {
-    list-style: none;
-    padding: 1rem 0;
-}
+        .plan-details {
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
 
-.mobile-nav-links li {
-    border-bottom: 1px solid #f0f0f0;
-}
+        .btn-outline-white {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
 
-.mobile-nav-links a {
-    display: block;
-    padding: 1rem 1.5rem;
-    color: #333;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s;
-}
+        .btn-outline-white:hover {
+            background: white;
+            color: #155588;
+        }
 
-.mobile-nav-links a:hover {
-    background: #f8f9fa;
-    color: #155588;
-    padding-left: 2rem;
-}
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
 
-.mobile-nav-links a.active {
-    color: #155588;
-    background: #e8f4fd;
-}
+        .action-btn {
+            padding: 1rem;
+            background: #f8f9fa;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            text-align: center;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
 
-.mobile-user-section {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    background: #f8f9fa;
-}
+        .action-btn:hover {
+            background: white;
+            border-color: #155588;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
 
-.mobile-user-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
+        .action-btn i {
+            display: block;
+            font-size: 1.5rem;
+            color: #155588;
+            margin-bottom: 0.5rem;
+        }
 
-.mobile-user-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #1e93b7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-}
+        /* Mobile Navigation */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            z-index: 1002;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
 
-.mobile-user-details h3 {
-    margin: 0;
-    color: #333;
-}
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
 
-.mobile-user-details p {
-    margin: 0;
-    color: #666;
-    font-size: 0.9rem;
-}
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
 
-.mobile-auth-buttons {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
 
-.mobile-auth-buttons .btn {
-    width: 100%;
-    text-align: center;
-}
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
 
-/* Responsive Breakpoints */
-@media (max-width: 768px) {
-    .nav-links {
-        display: none !important;
-    }
-    
-    .auth-buttons.desktop-only {
-        display: none !important;
-    }
-    
-    .hamburger {
-        display: flex;
-    }
-    
-    header {
-        padding: 0.75rem 0;
-    }
-    
-    .logo {
-        font-size: 1.5rem;
-    }
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-    body {
-        padding-top: 60px;
-    }
-}
+        .mobile-menu-overlay.show {
+            display: block;
+            opacity: 1;
+        }
 
-@media (max-width: 480px) {
-    .mobile-menu {
-        width: 85vw;
-        right: -85vw;
-    }
-}
-</style>
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            z-index: 1001;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+        }
+
+        .mobile-menu.show {
+            right: 0;
+        }
+
+        .mobile-menu-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e1e8ed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mobile-menu-close {
+            width: 30px;
+            height: 30px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #666;
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .mobile-nav-links li {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .mobile-nav-links a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .mobile-nav-links a:hover {
+            background: #f8f9fa;
+            color: #155588;
+            padding-left: 2rem;
+        }
+
+        .mobile-nav-links a.active {
+            color: #155588;
+            background: #e8f4fd;
+        }
+
+        .mobile-user-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e1e8ed;
+            background: #f8f9fa;
+        }
+
+        .mobile-user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .mobile-user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .mobile-user-details h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .mobile-user-details p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .mobile-auth-buttons {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-auth-buttons .btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .dashboard-main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none !important;
+            }
+            
+            .auth-buttons.desktop-only {
+                display: none !important;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-actions {
+                width: 100%;
+            }
+
+            .header-actions .btn {
+                flex: 1;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-menu {
+                width: 85vw;
+                right: -85vw;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-state img {
+            width: 100px;
+            opacity: 0.5;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 <body>
-<!-- Header -->
-<header>
-    <div class="nav-container">
-        <nav>
-            <!-- Logo -->
-            <a href="index.html" class="logo"><img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img"></a>
-            
-            <!-- Desktop Navigation -->
-            <!-- Logged Out Navigation -->
-            <ul class="nav-links nav-logged-out" id="navLoggedOut">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="members.html">Find Speakers</a></li>
-                <li><a href="pricing.html">Pricing</a></li>
-                <li><a href="register.html">Register</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            
-            <!-- Logged In Navigation (Speakers) -->
-            <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
-                <li><a href="dashboard.html">Dashboard</a></li>
-                <li><a href="members.html">Find Speakers</a></li>
-                <li><a href="opportunities.html">Opportunities</a></li>
-                <li><a href="bookings.html">My Bookings</a></li>
-                <li><a href="profile.html">Profile</a></li>
-            </ul>
-            
-            <!-- Logged In Navigation (Organizations) -->
-            <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
-                <li><a href="organization-dashboard.html">Dashboard</a></li>
-                <li><a href="members.html">Find Speakers</a></li>
-                <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                <li><a href="my-opportunities.html">My Opportunities</a></li>
-                <li><a href="saved-speakers.html">Saved Speakers</a></li>
-            </ul>
+    <!-- Header -->
+    <header>
+        <div class="nav-container">
+            <nav>
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <!-- Logged Out Navigation -->
+                <ul class="nav-links nav-logged-out" id="navLoggedOut">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                
+                <!-- Logged In Navigation (Speakers) -->
+                <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
+                    <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="opportunities.html">Opportunities</a></li>
+                    <li><a href="bookings.html">My Bookings</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                </ul>
+                
+                <!-- Logged In Navigation (Organizations) -->
+                <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
+                    <li><a href="organization-dashboard.html">Dashboard</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
+                    <li><a href="my-opportunities.html">My Opportunities</a></li>
+                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
+                </ul>
 
-            <!-- Right Side Navigation -->
-            <div class="nav-right">
-                <!-- For Logged In Users -->
-                <div class="user-menu" id="userMenuDesktop" style="display: none;">
-                    <div class="user-dropdown">
-                        <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
-                        <div class="dropdown-menu" id="dropdownMenu">
-                            <a href="profile-edit.html">Edit Profile</a>
-                            <a href="settings.html">Settings</a>
-                            <a href="billing.html">Billing</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" onclick="logout()">Logout</a>
+                <!-- Right Side Navigation -->
+                <div class="nav-right">
+                    <!-- For Logged In Users -->
+                    <div class="user-menu" id="userMenuDesktop" style="display: none;">
+                        <div class="user-dropdown">
+                            <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
+                            <div class="dropdown-menu" id="dropdownMenu">
+                                <a href="settings.html">Settings</a>
+                                <a href="billing.html">Billing</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" onclick="logout()">Logout</a>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- For Logged Out Users -->
-                <div class="auth-buttons desktop-only" id="authButtonsDesktop">
-                    <a href="register.html" class="btn btn-secondary">Join</a>
-                    <a href="login.html" class="btn btn-primary">Login</a>
-                </div>
+                    <!-- For Logged Out Users -->
+                    <div class="auth-buttons desktop-only" id="authButtonsDesktop">
+                        <a href="register.html" class="btn btn-secondary">Join</a>
+                        <a href="login.html" class="btn btn-primary">Login</a>
+                    </div>
 
-                <!-- Hamburger Menu Button -->
-                <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
+                    <!-- Hamburger Menu Button -->
+                    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+    <!-- Mobile Menu Panel -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <a href="index.html" class="logo">
+                <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+            </a>
+            <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+        </div>
+
+        <!-- Mobile User Section (for logged in users) -->
+        <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
+            <div class="mobile-user-info">
+                <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
+                <div class="mobile-user-details">
+                    <h3 id="mobileUserName">John Doe</h3>
+                    <p id="mobileUserType">Speaker - Plus Plan</p>
+                </div>
             </div>
-        </nav>
-    </div>
-</header>
+        </div>
 
-<!-- Mobile Menu Overlay -->
-<div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+        <!-- Mobile Navigation Links -->
+        <!-- Logged Out Mobile Navigation -->
+        <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="members.html">Find Speakers</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="help.html">Help Center</a></li>
+        </ul>
 
-<!-- Mobile Menu Panel -->
-<div class="mobile-menu" id="mobileMenu">
-<div class="mobile-menu-header">
-    <a href="index.html" class="logo"><img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img"></a>
-    <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
-</div>
+        <!-- Logged In Mobile Navigation (Speakers) -->
+        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
+            <li><a href="dashboard.html" class="active">Dashboard</a></li>
+            <li><a href="members.html">Find Speakers</a></li>
+            <li><a href="opportunities.html">Opportunities</a></li>
+            <li><a href="bookings.html">My Bookings</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="billing.html">Billing</a></li>
+            <li><a href="help.html">Help & Support</a></li>
+        </ul>
 
-<!-- Mobile User Section (for logged in users) -->
-<div class="mobile-user-section" id="mobileUserSection" style="display: none;">
-    <div class="mobile-user-info">
-        <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
-        <div class="mobile-user-details">
-            <h3 id="mobileUserName">John Doe</h3>
-            <p id="mobileUserType">Speaker - Plus Plan</p>
+        <!-- Logged In Mobile Navigation (Organizations) -->
+        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
+            <li><a href="organization-dashboard.html">Dashboard</a></li>
+            <li><a href="members.html">Find Speakers</a></li>
+            <li><a href="post-opportunity.html">Post Opportunity</a></li>
+            <li><a href="my-opportunities.html">My Opportunities</a></li>
+            <li><a href="saved-speakers.html">Saved Speakers</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="team.html">Team Members</a></li>
+            <li><a href="help.html">Help & Support</a></li>
+        </ul>
+
+        <!-- Mobile Auth Buttons (for logged out users) -->
+        <div class="mobile-auth-buttons" id="mobileAuthButtons">
+            <a href="register.html" class="btn btn-secondary">Join Community</a>
+            <a href="login.html" class="btn btn-primary">Login</a>
+        </div>
+
+        <!-- Mobile Logout Button (for logged in users) -->
+        <div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
+            <button class="btn btn-primary" onclick="logout()">Logout</button>
         </div>
     </div>
-</div>
 
-<!-- Mobile Navigation Links -->
-<!-- Logged Out Mobile Navigation -->
-<ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="members.html">Find Speakers</a></li>
-    <li><a href="pricing.html">Pricing</a></li>
-    <li><a href="register.html">Register</a></li>
-    <li><a href="contact.html">Contact</a></li>
-    <li><a href="help.html">Help Center</a></li>
-</ul>
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <div class="container">
+                <div class="dashboard-header-content">
+                    <div class="welcome-section">
+                        <h1>Welcome back, <span id="userName">Speaker</span>!</h1>
+                        <p>Here's what's happening with your speaker profile today.</p>
+                    </div>
+                    <div class="header-actions">
+                        <a href="settings.html" class="btn btn-white">Edit Profile</a>
+                        <a href="opportunities.html" class="btn btn-white">Browse Opportunities</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<!-- Logged In Mobile Navigation (Speakers) -->
-<ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
-    <li><a href="dashboard.html">Dashboard</a></li>
-    <li><a href="members.html">Find Speakers</a></li>
-    <li><a href="opportunities.html">Opportunities</a></li>
-    <li><a href="bookings.html">My Bookings</a></li>
-    <li><a href="profile.html">Profile</a></li>
-    <li><a href="settings.html">Settings</a></li>
-    <li><a href="billing.html">Billing</a></li>
-    <li><a href="help.html">Help & Support</a></li>
-</ul>
-
-<!-- Logged In Mobile Navigation (Organizations) -->
-<ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
-    <li><a href="organization-dashboard.html">Dashboard</a></li>
-    <li><a href="members.html">Find Speakers</a></li>
-    <li><a href="post-opportunity.html">Post Opportunity</a></li>
-    <li><a href="my-opportunities.html">My Opportunities</a></li>
-    <li><a href="saved-speakers.html">Saved Speakers</a></li>
-    <li><a href="settings.html">Settings</a></li>
-    <li><a href="team.html">Team Members</a></li>
-    <li><a href="help.html">Help & Support</a></li>
-</ul>
-
-<!-- Mobile Auth Buttons (for logged out users) -->
-<div class="mobile-auth-buttons" id="mobileAuthButtons">
-    <a href="register.html" class="btn btn-secondary">Join Community</a>
-    <a href="login.html" class="btn btn-primary">Login</a>
-</div>
-
-<!-- Mobile Logout Button (for logged in users) -->
-<div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
-    <button class="btn btn-primary" onclick="logout()">Logout</button>
-</div>
-</div>
-
-<!-- Dashboard Container -->
-<div class="dashboard-container">
-    <!-- Dashboard Header -->
-    <div class="dashboard-header">
+        <!-- Main Content -->
         <div class="container">
-            <div class="dashboard-header-content">
-                <div class="welcome-section">
-                    <h1>Welcome back, <span id="userName">John</span>!</h1>
-                    <p>Here's what's happening with your speaker profile today.</p>
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">👁️</div>
+                    <div class="stat-content">
+                        <h3 id="profileViews">0</h3>
+                        <p>Profile Views This Month</p>
+                    </div>
                 </div>
-                <div class="header-actions">
-                    <a href="profile-edit.html" class="btn btn-white">Edit Profile</a>
-                    <a href="opportunities.html" class="btn btn-white">Browse Opportunities</a>
+                <div class="stat-card">
+                    <div class="stat-icon green">📅</div>
+                    <div class="stat-content">
+                        <h3 id="bookingsCount">0</h3>
+                        <p>Confirmed Bookings</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple">🎯</div>
+                    <div class="stat-content">
+                        <h3 id="applicationsCount">0</h3>
+                        <p>Active Applications</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">⭐</div>
+                    <div class="stat-content">
+                        <h3 id="rating">0.0</h3>
+                        <p>Average Rating</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Main Grid -->
+            <div class="dashboard-main">
+                <!-- Left Column -->
+                <div class="dashboard-content">
+                    <!-- Recent Activity -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2>Recent Activity</h2>
+                            <a href="activity.html">View All</a>
+                        </div>
+                        <div class="activity-list" id="activityList">
+                            <p style="padding: 1rem; color: #666;">No recent activity</p>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Bookings -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2>Upcoming Bookings</h2>
+                            <a href="bookings.html">Manage All</a>
+                        </div>
+                        <div id="upcomingBookings">
+                            <p style="padding: 1rem; color: #666;">No upcoming bookings</p>
+                        </div>
+                    </div>
+
+                    <!-- Recent Opportunities -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2>New Speaking Opportunities</h2>
+                            <a href="opportunities.html">Browse All</a>
+                        </div>
+                        <div id="opportunities">
+                            <p style="padding: 1rem; color: #666;">No new opportunities</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar -->
+                <div class="dashboard-sidebar">
+                    <!-- Profile Completion -->
+                    <div class="dashboard-card">
+                        <h3 style="color: #155588; margin-bottom: 1rem;">Profile Completion</h3>
+                        <div class="profile-completion">
+                            <div class="completion-header">
+                                <span>Profile Strength</span>
+                                <span id="completionPercent">0%</span>
+                            </div>
+                            <div class="completion-bar">
+                                <div class="completion-progress" id="completionBar" style="width: 0%"></div>
+                            </div>
+                            <div id="completionContent">
+                                <!-- This will be populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subscription Status -->
+                    <div class="dashboard-card subscription-card">
+                        <h3>Your Subscription</h3>
+                        <div class="plan-name" id="planName">Loading...</div>
+                        <div class="plan-details">
+                            <p id="planStatus">Loading...</p>
+                            <p id="planBilling">Loading...</p>
+                        </div>
+                        <a href="billing.html" class="btn btn-outline-white">Manage Billing</a>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="dashboard-card">
+                        <h3 style="color: #155588; margin-bottom: 1rem;">Quick Actions</h3>
+                        <div class="quick-actions">
+                            <a href="settings.html" class="action-btn">
+                                <i>✏️</i>
+                                Edit Profile
+                            </a>
+                            <a href="reviews.html" class="action-btn">
+                                <i>⭐</i>
+                                Reviews
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Resources -->
+                    <div class="dashboard-card">
+                        <h3 style="color: #155588; margin-bottom: 1rem;">Resources</h3>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <a href="speaking-tips.html" style="color: #155588; text-decoration: none;">📚 Speaking Tips & Best Practices</a>
+                            <a href="templates.html" style="color: #155588; text-decoration: none;">📝 Proposal Templates</a>
+                            <a href="help.html" style="color: #155588; text-decoration: none;">❓ Help Center</a>
+                            <a href="contact.html" style="color: #155588; text-decoration: none;">📧 Contact Support</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Stats Grid -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon blue">👁️</div>
-                <div class="stat-content">
-                    <h3 id="profileViews">247</h3>
-                    <p>Profile Views This Month</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon green">📅</div>
-                <div class="stat-content">
-                    <h3 id="bookingsCount">12</h3>
-                    <p>Confirmed Bookings</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon purple">🎯</div>
-                <div class="stat-content">
-                    <h3 id="applicationsCount">5</h3>
-                    <p>Active Applications</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon orange">⭐</div>
-                <div class="stat-content">
-                    <h3 id="rating">4.8</h3>
-                    <p>Average Rating</p>
-                </div>
-            </div>
-        </div>
+<script src="/js/app.js"></script>
+<script src="/js/navigation.js"></script>
 
-        <!-- Dashboard Main Grid -->
-        <div class="dashboard-main">
-            <!-- Left Column -->
-            <div class="dashboard-content">
-                <!-- Recent Activity -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h2>Recent Activity</h2>
-                        <a href="activity.html">View All</a>
-                    </div>
-                    <div class="activity-list" id="activityList">
-                        <div class="activity-item">
-                            <div class="activity-icon view">👁️</div>
-                            <div class="activity-content">
-                                <h4>Phoenix Chamber viewed your profile</h4>
-                                <p>They're looking for a business leadership speaker</p>
-                                <span class="activity-time">2 hours ago</span>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-icon booking">✅</div>
-                            <div class="activity-content">
-                                <h4>Booking confirmed for Tech Summit 2024</h4>
-                                <p>March 15, 2024 at Phoenix Convention Center</p>
-                                <span class="activity-time">1 day ago</span>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-icon message">💬</div>
-                            <div class="activity-content">
-                                <h4>New message from StartUp Arizona</h4>
-                                <p>"We'd love to discuss your availability for..."</p>
-                                <span class="activity-time">2 days ago</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Upcoming Bookings -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h2>Upcoming Bookings</h2>
-                        <a href="bookings.html">Manage All</a>
-                    </div>
-                    <div id="upcomingBookings">
-                        <div class="activity-list">
-                            <div class="activity-item">
-                                <div class="activity-icon booking">📅</div>
-                                <div class="activity-content">
-                                    <h4>Leadership Workshop - Desert Ridge High School</h4>
-                                    <p>February 10, 2024 • 2:00 PM - 4:00 PM</p>
-                                    <span class="activity-time">In 5 days</span>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon booking">📅</div>
-                                <div class="activity-content">
-                                    <h4>Entrepreneur Panel - ASU</h4>
-                                    <p>February 18, 2024 • 6:00 PM - 8:00 PM</p>
-                                    <span class="activity-time">In 13 days</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Opportunities -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h2>New Speaking Opportunities</h2>
-                        <a href="opportunities.html">Browse All</a>
-                    </div>
-                    <div id="opportunities">
-                        <div class="activity-list">
-                            <div class="activity-item">
-                                <div class="activity-icon view">🎤</div>
-                                <div class="activity-content">
-                                    <h4>Keynote Speaker Needed - Women in Tech</h4>
-                                    <p>Phoenix • March 25, 2024 • $500 honorarium</p>
-                                    <span class="activity-time">Posted today</span>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon view">🎤</div>
-                                <div class="activity-content">
-                                    <h4>Business Innovation Workshop</h4>
-                                    <p>Scottsdale • April 10, 2024 • Volunteer</p>
-                                    <span class="activity-time">Posted yesterday</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Sidebar -->
-            <div class="dashboard-sidebar">
-                <!-- Profile Completion -->
-                <div class="dashboard-card">
-                    <h3 style="color: #155588; margin-bottom: 1rem;">Profile Completion</h3>
-                    <div class="profile-completion">
-                        <div class="completion-header">
-                            <span>Profile Strength</span>
-                            <span id="completionPercent">75%</span>
-                        </div>
-                        <div class="completion-bar">
-                            <div class="completion-progress" style="width: 75%"></div>
-                        </div>
-                        <div class="completion-tips">
-                            <h4>Complete Your Profile:</h4>
-                            <ul>
-                                <li>Add a professional photo</li>
-                                <li>Write a compelling bio</li>
-                                <li>List your speaking topics</li>
-                                <li>Add testimonials</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Subscription Status -->
-                <div class="dashboard-card subscription-card">
-                    <h3>Your Subscription</h3>
-                    <div class="plan-name" id="planName">Plus Plan</div>
-                    <div class="plan-details">
-                        <p>Active until March 1, 2024</p>
-                        <p>$147/month</p>
-                    </div>
-                    <a href="billing.html" class="btn btn-outline-white">Manage Billing</a>
-                </div>
-
-                <!-- Quick Actions -->
-                <div class="dashboard-card">
-                    <h3 style="color: #155588; margin-bottom: 1rem;">Quick Actions</h3>
-                    <div class="quick-actions">
-                        <a href="profile-edit.html" class="action-btn">
-                            <i>✏️</i>
-                            Edit Profile
-                        </a>
-                        <a href="calendar.html" class="action-btn">
-                            <i>📅</i>
-                            Calendar
-                        </a>
-                        <a href="messages.html" class="action-btn">
-                            <i>💬</i>
-                            Messages
-                        </a>
-                        <a href="reviews.html" class="action-btn">
-                            <i>⭐</i>
-                            Reviews
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Resources -->
-                <div class="dashboard-card">
-                    <h3 style="color: #155588; margin-bottom: 1rem;">Resources</h3>
-                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                        <a href="speaking-tips.html" style="color: #155588; text-decoration: none;">📚 Speaking Tips & Best Practices</a>
-                        <a href="templates.html" style="color: #155588; text-decoration: none;">📝 Proposal Templates</a>
-                        <a href="help.html" style="color: #155588; text-decoration: none;">❓ Help Center</a>
-                        <a href="contact.html" style="color: #155588; text-decoration: none;">📧 Contact Support</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    // Configuration
-    const CONFIG = {
-        API_BASE: window.location.hostname === 'localhost' ? 
-            'http://localhost:3001' : '/.netlify/functions/api'
-    };
-
-    // Load user data on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        checkAuth();
-        loadDashboardData();
-    });
-
-    // Check authentication
-    function checkAuth() {
-        const token = localStorage.getItem('token');
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
+    <script>
+        // State to track if we've already checked auth
+        let authCheckCompleted = false;
         
-        if (!token) {
-            window.location.href = 'login.html';
-            return;
+        // Wait for API to be fully loaded
+        function waitForAPI(callback, maxAttempts = 20) {
+            let attempts = 0;
+            
+            function checkAPI() {
+                attempts++;
+                
+                if (typeof api !== 'undefined' && typeof updateNavigation !== 'undefined') {
+                    callback();
+                } else if (attempts < maxAttempts) {
+                    setTimeout(checkAPI, 100);
+                } else {
+                    console.error('[Dashboard] Failed to load API after', maxAttempts, 'attempts');
+                    showError('Failed to load application. Please refresh the page.');
+                }
+            }
+            
+            checkAPI();
+        }
+    
+        // Show error message to user
+        function showError(message) {
+            // You can implement a better error display here
+            console.error('[Dashboard Error]', message);
+            alert(message);
         }
         
-        // Verify token
-        fetch(`${CONFIG.API_BASE}/auth/verify`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
+        // Show notification message
+        function showNotification(type, message) {
+            // Create notification element if it doesn't exist
+            let notification = document.getElementById('notification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'notification';
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 100px;
+                    right: 20px;
+                    padding: 1rem 1.5rem;
+                    border-radius: 10px;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                    z-index: 9999;
+                    transition: all 0.3s ease;
+                    max-width: 400px;
+                `;
+                document.body.appendChild(notification);
             }
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (!result.valid) {
-                logout();
+            
+            // Set styles based on type
+            if (type === 'success') {
+                notification.style.background = '#d4edda';
+                notification.style.color = '#155724';
+                notification.style.border = '1px solid #c3e6cb';
+            } else if (type === 'error') {
+                notification.style.background = '#f8d7da';
+                notification.style.color = '#721c24';
+                notification.style.border = '1px solid #f5c6cb';
+            }
+            
+            notification.textContent = message;
+            notification.style.display = 'block';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+    
+        // Initialize page - This runs AFTER authentication is verified
+        function initializePage() {
+            console.log('[Dashboard] Initializing page content');
+            loadDashboardData();
+        }
+    
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                // Check if returning from successful Stripe checkout
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('subscription') === 'success') {
+                    console.log('[Dashboard] User returned from successful checkout, syncing subscription...');
+                    
+                    // Show success message
+                    showNotification('success', 'Payment successful! Syncing your subscription data...');
+                    
+                    // Sync subscription data with Stripe
+                    try {
+                        const syncResponse = await fetch('/.netlify/functions/stripe-sync-subscription', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${api.getToken()}`,
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                        
+                        const syncResult = await syncResponse.json();
+                        console.log('[Dashboard] Subscription sync result:', syncResult);
+                        
+                        if (syncResult.success) {
+                            showNotification('success', 'Subscription activated successfully!');
+                        }
+                    } catch (syncError) {
+                        console.error('[Dashboard] Failed to sync subscription:', syncError);
+                        // Continue loading dashboard even if sync fails
+                    }
+                    
+                    // Remove the query parameter from URL
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+                
+                // Get user info
+                const user = api.getCurrentUser();
+                if (user) {
+                    document.getElementById('userName').textContent = user.name?.split(' ')[0] || 'Speaker';
+                    
+                    // Update avatars with initials
+                    const initials = user.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U';
+                    document.getElementById('userAvatar').textContent = initials;
+                    document.getElementById('mobileUserAvatar').textContent = initials;
+                    document.getElementById('mobileUserName').textContent = user.name || 'User';
+                    document.getElementById('mobileUserType').textContent = user.memberType || 'Member';
+                }
+                
+                // Load profile data
+                try {
+                    const profileData = await api.getProfile();
+                    if (profileData && profileData.profile) {
+                        updateProfileCompletion(profileData.profile);
+                    }
+                } catch (error) {
+                    console.error('Error loading profile:', error);
+                }
+                
+                // Load subscription status
+                try {
+                    const subscriptionData = await api.getSubscriptionStatus();
+                    if (subscriptionData) {
+                        updateSubscriptionInfo(subscriptionData);
+                    }
+                } catch (error) {
+                    console.error('Error loading subscription:', error);
+                    // Set default values on error
+                    document.getElementById('planName').textContent = 'Free Plan';
+                    document.getElementById('planStatus').textContent = 'Status: Active';
+                    document.getElementById('planBilling').textContent = 'No active subscription';
+                }
+                
+                // Load bookings
+                try {
+                    const bookingsData = await api.getBookings({ limit: 3 });
+                    if (bookingsData && bookingsData.bookings) {
+                        updateUpcomingBookings(bookingsData.bookings);
+                        document.getElementById('bookingsCount').textContent = bookingsData.stats?.accepted || '0';
+                    }
+                } catch (error) {
+                    console.error('Error loading bookings:', error);
+                }
+                
+                // Load opportunities
+                try {
+                    const opportunitiesData = await api.getOpportunities({ limit: 3, status: 'Open' });
+                    if (opportunitiesData && opportunitiesData.opportunities) {
+                        updateOpportunities(opportunitiesData.opportunities);
+                    }
+                } catch (error) {
+                    console.error('Error loading opportunities:', error);
+                }
+                
+                // Load stats
+                try {
+                    const statsData = await api.getDashboardStats();
+                    if (statsData && statsData.stats) {
+                        document.getElementById('profileViews').textContent = statsData.stats.profileViews || '0';
+                        document.getElementById('applicationsCount').textContent = statsData.stats.applications || '0';
+                        document.getElementById('rating').textContent = statsData.stats.rating || '0.0';
+                    }
+                } catch (error) {
+                    console.error('Error loading stats:', error);
+                }
+                
+                // Load recent activity
+                try {
+                    const activityData = await api.getDashboardActivity();
+                    if (activityData && activityData.activities) {
+                        updateRecentActivity(activityData.activities);
+                    }
+                } catch (error) {
+                    console.error('Error loading activity:', error);
+                }
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+    
+        // Update profile completion - FIXED VERSION
+        function updateProfileCompletion(profile) {
+            let completedFields = 0;
+            const totalFields = 9; // Including testimonials
+            const missingFields = [];
+            
+            // Check each field
+            if (!profile.name) missingFields.push('Add your full name');
+            else completedFields++;
+            
+            if (!profile.bio || profile.bio.length < 50) missingFields.push('Write a compelling bio');
+            else completedFields++;
+            
+            if (!profile.location) missingFields.push('Add your location');
+            else completedFields++;
+            
+            if (!profile.profileImage) missingFields.push('Add a professional photo');
+            else completedFields++;
+            
+            if (!profile.specialty || profile.specialty.length === 0) missingFields.push('List your speaking topics');
+            else completedFields++;
+            
+            if (!profile.website) missingFields.push('Add your website');
+            else completedFields++;
+            
+            if (!profile.bookingLink) missingFields.push('Add booking calendar link');
+            else completedFields++;
+            
+            if (!profile.phone) missingFields.push('Add phone number');
+            else completedFields++;
+            
+            // Check for testimonials/reviews
+            if (!profile.hasTestimonials) missingFields.push('Add testimonials');
+            else completedFields++;
+            
+            const percentage = Math.round((completedFields / totalFields) * 100);
+            
+            document.getElementById('completionPercent').textContent = percentage + '%';
+            document.getElementById('completionBar').style.width = percentage + '%';
+            
+            // Update the completion content
+            const completionContent = document.getElementById('completionContent');
+            
+            if (percentage === 100) {
+                // Profile is complete
+                completionContent.innerHTML = `
+                    <div class="completion-complete">
+                        ✅ Your profile is complete! Great job!
+                    </div>
+                `;
+            } else if (missingFields.length > 0) {
+                // Show missing fields
+                completionContent.innerHTML = `
+                    <div class="completion-tips">
+                        <h4>Complete Your Profile:</h4>
+                        <ul>
+                            ${missingFields.slice(0, 4).map(field => `<li>${field}</li>`).join('')}
+                            ${missingFields.length > 4 ? `<li>...and ${missingFields.length - 4} more</li>` : ''}
+                        </ul>
+                    </div>
+                `;
+            }
+        }
+    
+        // Update subscription info - FIXED VERSION
+        function updateSubscriptionInfo(subscriptionData) {
+            console.log('[Dashboard] Updating subscription info:', subscriptionData);
+            
+            // Get the subscription object
+            const subscription = subscriptionData.subscription;
+            
+            if (!subscription) {
+                console.log('[Dashboard] No subscription data found');
+                document.getElementById('planName').textContent = 'Free Plan';
+                document.getElementById('planStatus').textContent = 'Status: Active';
+                document.getElementById('planBilling').textContent = 'No active subscription';
+                return;
+            }
+            
+            // Get the plan type - check both field name formats
+            const planType = subscription.Plan_Type || subscription.planType || 'Free';
+            const billingPeriod = subscription.Billing_Period || subscription.billingPeriod || '';
+            const status = subscription.Status || subscription.status || 'Active';
+            const amount = subscription.Amount || subscription.amount || 0;
+            
+            console.log('[Dashboard] Subscription details:', { planType, billingPeriod, status, amount });
+            
+            // Format plan name
+            let displayPlanName = 'Free Plan';
+            if (planType && planType !== 'Free') {
+                displayPlanName = `${planType} Plan`;
+            }
+            
+            // Format billing info
+            let billingDisplay = 'No active subscription';
+            if (amount > 0) {
+                if (billingPeriod === 'Yearly') {
+                    billingDisplay = `${amount}/year`;
+                } else if (billingPeriod === 'Monthly') {
+                    billingDisplay = `${amount}/month`;
+                } else {
+                    // If no period specified, assume monthly
+                    billingDisplay = `${amount}/month`;
+                }
+            }
+            
+            // Format status
+            let statusDisplay = 'Active';
+            if (status === 'Past_Due') {
+                statusDisplay = 'Past Due';
+            } else if (status === 'Cancelled') {
+                statusDisplay = 'Cancelled';
+            } else if (status === 'Active') {
+                statusDisplay = 'Active';
             } else {
-                updateUserInfo(result.user);
-            }
-        })
-        .catch(error => {
-            console.error('Auth verification failed:', error);
-            logout();
-        });
-    }
-
-    // Update user info in UI
-    function updateUserInfo(user) {
-        document.getElementById('userName').textContent = user.name?.split(' ')[0] || 'Speaker';
-        
-        // Update avatar with initials
-        const initials = user.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
-        document.getElementById('userAvatar').textContent = initials;
-    }
-
-    // Load dashboard data
-    async function loadDashboardData() {
-        const token = localStorage.getItem('token');
-        
-        try {
-            // Load stats
-            const statsResponse = await fetch(`${CONFIG.API_BASE}/dashboard/stats`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-            if (statsResponse.ok) {
-                const stats = await statsResponse.json();
-                updateStats(stats);
+                statusDisplay = status;
             }
             
-            // Load recent activity
-            const activityResponse = await fetch(`${CONFIG.API_BASE}/dashboard/activity`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            // Update UI
+            document.getElementById('planName').textContent = displayPlanName;
+            document.getElementById('planStatus').textContent = `Status: ${statusDisplay}`;
+            document.getElementById('planBilling').textContent = billingDisplay;
             
-            if (activityResponse.ok) {
-                const activity = await activityResponse.json();
-                updateActivity(activity);
+            // Update mobile user type display
+            const mobileUserType = document.getElementById('mobileUserType');
+            if (mobileUserType && planType !== 'Free') {
+                mobileUserType.textContent = `Speaker - ${planType} Plan`;
             }
-            
-            // Load subscription status
-            const subResponse = await fetch(`${CONFIG.API_BASE}/subscription/status`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-            if (subResponse.ok) {
-                const subscription = await subResponse.json();
-                updateSubscription(subscription);
-            }
-            
-        } catch (error) {
-            console.error('Error loading dashboard data:', error);
         }
-    }
-
-    // Update stats
-    function updateStats(stats) {
-        if (stats.profileViews) document.getElementById('profileViews').textContent = stats.profileViews;
-        if (stats.bookings) document.getElementById('bookingsCount').textContent = stats.bookings;
-        if (stats.applications) document.getElementById('applicationsCount').textContent = stats.applications;
-        if (stats.rating) document.getElementById('rating').textContent = stats.rating;
-    }
-
-    // Update activity
-    function updateActivity(activity) {
-        if (activity.items && activity.items.length > 0) {
-            const activityHtml = activity.items.map(item => `
+    
+        // Update recent activity - NEW FUNCTION
+        function updateRecentActivity(activities) {
+            const container = document.getElementById('activityList');
+            
+            if (!activities || activities.length === 0) {
+                container.innerHTML = '<p style="padding: 1rem; color: #666;">No recent activity</p>';
+                return;
+            }
+            
+            const activityHtml = activities.slice(0, 5).map(activity => {
+                let icon = '📋';
+                let iconClass = 'view';
+                
+                if (activity.type === 'profile_view') {
+                    icon = '👁️';
+                    iconClass = 'view';
+                } else if (activity.type === 'application') {
+                    icon = '🎯';
+                    iconClass = 'application';
+                } else if (activity.type === 'booking') {
+                    icon = '📅';
+                    iconClass = 'booking';
+                } else if (activity.type === 'review') {
+                    icon = '⭐';
+                    iconClass = 'message';
+                }
+                
+                return `
+                    <div class="activity-item">
+                        <div class="activity-icon ${iconClass}">${icon}</div>
+                        <div class="activity-content">
+                            <h4>${activity.title}</h4>
+                            <p>${activity.description}</p>
+                            <span class="activity-time">${formatTimeAgo(activity.date)}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = activityHtml;
+        }
+    
+        // Update upcoming bookings
+        function updateUpcomingBookings(bookings) {
+            const container = document.getElementById('upcomingBookings');
+            
+            // Filter for accepted bookings with future dates
+            const upcomingBookings = bookings.filter(booking => {
+                const eventDate = booking.opportunity?.eventDate;
+                return booking.status === 'Accepted' && eventDate && new Date(eventDate) > new Date();
+            });
+            
+            if (upcomingBookings.length === 0) {
+                container.innerHTML = '<p style="padding: 1rem; color: #666;">No upcoming bookings</p>';
+                return;
+            }
+            
+            const bookingsHtml = upcomingBookings.slice(0, 3).map(booking => `
                 <div class="activity-item">
-                    <div class="activity-icon ${item.type}">${item.icon}</div>
+                    <div class="activity-icon booking">📅</div>
                     <div class="activity-content">
-                        <h4>${item.title}</h4>
-                        <p>${item.description}</p>
-                        <span class="activity-time">${item.time}</span>
+                        <h4>${booking.opportunity?.title || 'Untitled Event'}</h4>
+                        <p>${formatDate(booking.opportunity?.eventDate)} • ${booking.opportunity?.location || 'Location TBD'}</p>
+                        <span class="activity-time">Duration: ${booking.opportunity?.totalHours || 1} hour${booking.opportunity?.totalHours > 1 ? 's' : ''}</span>
                     </div>
                 </div>
             `).join('');
             
-            document.getElementById('activityList').innerHTML = activityHtml;
+            container.innerHTML = `<div class="activity-list">${bookingsHtml}</div>`;
         }
-    }
-
-    // Update subscription
-    function updateSubscription(subscription) {
-        if (subscription.plan) {
-            document.getElementById('planName').textContent = subscription.plan + ' Plan';
-        }
-    }
-
-    // Toggle dropdown menu
-    function toggleDropdown() {
-        const dropdown = document.getElementById('dropdownMenu');
-        dropdown.classList.toggle('show');
-    }
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(event) {
-        const dropdown = document.getElementById('dropdownMenu');
-        const avatar = document.getElementById('userAvatar');
-        
-        if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-            dropdown.classList.remove('show');
-        }
-    });
-
-    // Logout function
-    function logout() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('user');
-        window.location.href = 'login.html';
-    }
-</script>
-<script>
-    // ============================================
-    // NAVIGATION JAVASCRIPT
-    // ============================================
     
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        updateNavAuth();
-        setActiveNavItem();
-    });
-    
-    // Update navigation based on auth status
-    function updateNavAuth() {
-        const token = localStorage.getItem('token');
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        
-        if (token && user) {
-            // User is logged in - hide logged out nav
-            document.getElementById('navLoggedOut').style.display = 'none';
-            document.getElementById('mobileNavLoggedOut').style.display = 'none';
+        // Update opportunities
+        function updateOpportunities(opportunities) {
+            const container = document.getElementById('opportunities');
             
-            // Show appropriate logged in navigation based on user type
-            if (user.type === 'Organization' || user.Member_Type === 'Organization') {
-                // Organization navigation
-                document.getElementById('navOrganization').style.display = 'flex';
-                document.getElementById('navSpeaker').style.display = 'none';
-                document.getElementById('mobileNavOrganization').style.display = 'block';
-                document.getElementById('mobileNavSpeaker').style.display = 'none';
+            if (!opportunities || opportunities.length === 0) {
+                container.innerHTML = '<p style="padding: 1rem; color: #666;">No new opportunities</p>';
+                return;
+            }
+            
+            const opportunitiesHtml = opportunities.slice(0, 3).map(opp => `
+                <div class="activity-item">
+                    <div class="activity-icon view">🎤</div>
+                    <div class="activity-content">
+                        <h4>${opp.title}</h4>
+                        <p>${opp.location} • ${formatDate(opp.eventDate)}</p>
+                        <span class="activity-time">Posted ${formatTimeAgo(opp.postedDate)}</span>
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = `<div class="activity-list">${opportunitiesHtml}</div>`;
+        }
+    
+        // Format date helper
+        function formatDate(dateString) {
+            if (!dateString) return 'Date TBD';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+        }
+    
+        // Format time ago helper
+        function formatTimeAgo(dateString) {
+            if (!dateString) return 'recently';
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return 'today';
+            if (diffDays === 1) return 'yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+            return `${Math.floor(diffDays / 30)} months ago`;
+        }
+    
+        // Toggle dropdown menu
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.classList.toggle('show');
+        }
+    
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdownMenu');
+            const avatar = document.getElementById('userAvatar');
+            
+            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+    
+        // Mobile menu functions
+        function toggleMobileMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('show');
+            overlay.classList.toggle('show');
+            
+            if (mobileMenu.classList.contains('show')) {
+                document.body.style.overflow = 'hidden';
             } else {
-                // Speaker navigation (default)
-                document.getElementById('navSpeaker').style.display = 'flex';
-                document.getElementById('navOrganization').style.display = 'none';
-                document.getElementById('mobileNavSpeaker').style.display = 'block';
-                document.getElementById('mobileNavOrganization').style.display = 'none';
-            }
-            
-            // Show user menu
-            document.getElementById('userMenuDesktop').style.display = 'flex';
-            document.getElementById('authButtonsDesktop').style.display = 'none';
-            document.getElementById('mobileUserSection').style.display = 'block';
-            document.getElementById('mobileAuthButtons').style.display = 'none';
-            document.getElementById('mobileLogoutSection').style.display = 'block';
-            
-            // Update user info
-            const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
-            document.getElementById('userAvatar').textContent = initials;
-            document.getElementById('mobileUserAvatar').textContent = initials;
-            document.getElementById('mobileUserName').textContent = user.name || 'User';
-            document.getElementById('mobileUserType').textContent = user.type || user.Member_Type || 'Member';
-        } else {
-            // User is logged out - show logged out nav
-            document.getElementById('navLoggedOut').style.display = 'flex';
-            document.getElementById('mobileNavLoggedOut').style.display = 'block';
-            
-            // Hide all logged in navigation
-            document.getElementById('navSpeaker').style.display = 'none';
-            document.getElementById('navOrganization').style.display = 'none';
-            document.getElementById('mobileNavSpeaker').style.display = 'none';
-            document.getElementById('mobileNavOrganization').style.display = 'none';
-            
-            // Show auth buttons
-            if (document.getElementById('userMenuDesktop')) {
-                document.getElementById('userMenuDesktop').style.display = 'none';
-            }
-            document.getElementById('authButtonsDesktop').style.display = 'flex';
-            
-            if (document.getElementById('mobileUserSection')) {
-                document.getElementById('mobileUserSection').style.display = 'none';
-            }
-            document.getElementById('mobileAuthButtons').style.display = 'flex';
-            if (document.getElementById('mobileLogoutSection')) {
-                document.getElementById('mobileLogoutSection').style.display = 'none';
+                document.body.style.overflow = '';
             }
         }
-    }
     
-    // Toggle mobile menu
-    function toggleMobileMenu() {
-        const hamburger = document.getElementById('hamburger');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const overlay = document.getElementById('mobileMenuOverlay');
-        
-        hamburger.classList.toggle('active');
-        mobileMenu.classList.toggle('show');
-        overlay.classList.toggle('show');
-        
-        if (mobileMenu.classList.contains('show')) {
-            document.body.style.overflow = 'hidden';
-        } else {
+        function closeMobileMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            
+            hamburger.classList.remove('active');
+            mobileMenu.classList.remove('show');
+            overlay.classList.remove('show');
             document.body.style.overflow = '';
         }
-    }
     
-    // Close mobile menu
-    function closeMobileMenu() {
-        const hamburger = document.getElementById('hamburger');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const overlay = document.getElementById('mobileMenuOverlay');
-        
-        hamburger.classList.remove('active');
-        mobileMenu.classList.remove('show');
-        overlay.classList.remove('show');
-        document.body.style.overflow = '';
-    }
-    
-    // Toggle dropdown menu (desktop)
-    function toggleDropdown() {
-        const dropdown = document.getElementById('dropdownMenu');
-        dropdown.classList.toggle('show');
-    }
-    
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(event) {
-        const dropdown = document.getElementById('dropdownMenu');
-        const avatar = document.getElementById('userAvatar');
-        
-        if (dropdown && avatar && !avatar.contains(event.target) && !dropdown.contains(event.target)) {
-            dropdown.classList.remove('show');
+        // Logout function
+        function logout() {
+            api.logout();
         }
-    });
     
-    // Set active navigation item based on current page
-    function setActiveNavItem() {
-        const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-        
-        // Clear all active classes first
-        document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
-            link.classList.remove('active');
-        });
-        
-        // Set active class on matching links
-        document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
-            if (link.getAttribute('href') === currentPath) {
-                link.classList.add('active');
+        // Close mobile menu on window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                closeMobileMenu();
             }
         });
-    }
     
-    // Logout function
-    function logout() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('user');
-        window.location.href = 'login.html';
-    }
-    
-    // Close mobile menu on window resize
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
-            closeMobileMenu();
+        // Check authentication and initialize page
+        function checkAuthAndInitialize() {
+            // Prevent multiple auth checks
+            if (authCheckCompleted) {
+                console.log('[Dashboard] Auth check already completed, skipping');
+                return;
+            }
+            
+            authCheckCompleted = true;
+            console.log('[Dashboard] Starting authentication check');
+            
+            // First update navigation UI
+            if (typeof updateNavigation === 'function') {
+                updateNavigation();
+            }
+            
+            // Check authentication with retry logic
+            let authenticated = false;
+            let user = null;
+            
+            try {
+                authenticated = api.isAuthenticated();
+                user = api.getCurrentUser();
+                
+                console.log('[Dashboard] Auth check result:', { authenticated, hasUser: !!user });
+            } catch (e) {
+                console.error('[Dashboard] Error during auth check:', e);
+            }
+            
+            if (!authenticated) {
+                // Give it one more chance with a small delay
+                setTimeout(() => {
+                    try {
+                        authenticated = api.isAuthenticated();
+                        user = api.getCurrentUser();
+                        
+                        if (!authenticated) {
+                            console.log('[Dashboard] Not authenticated after retry, redirecting to login');
+                            sessionStorage.setItem('redirectUrl', window.location.href);
+                            window.location.href = '/login.html';
+                            return;
+                        }
+                        
+                        // Check user type access
+                        if (user && (user.memberType === 'Organization' || user.Member_Type === 'Organization')) {
+                            console.log('[Dashboard] Organization user, redirecting to org dashboard');
+                            window.location.href = '/organization-dashboard.html';
+                            return;
+                        }
+                        
+                        console.log('[Dashboard] Authentication verified on retry, initializing page');
+                        initializePage();
+                    } catch (e) {
+                        console.error('[Dashboard] Error during auth retry:', e);
+                        window.location.href = '/login.html';
+                    }
+                }, 200);
+                return;
+            }
+            
+            // Check user type access
+            if (user && (user.memberType === 'Organization' || user.Member_Type === 'Organization')) {
+                console.log('[Dashboard] Organization user, redirecting to org dashboard');
+                window.location.href = '/organization-dashboard.html';
+                return;
+            }
+            
+            console.log('[Dashboard] Authentication verified, initializing page');
+            // Initialize page
+            initializePage();
         }
-    });
     
-    // Close mobile menu when clicking on a link
-    document.querySelectorAll('.mobile-nav-links a').forEach(link => {
-        link.addEventListener('click', function() {
-            closeMobileMenu();
+        // Main initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('[Dashboard] DOM loaded, waiting for API');
+            
+            // Wait for API and navigation to be ready
+            waitForAPI(function() {
+                console.log('[Dashboard] API and navigation ready');
+                
+                // Add a small delay to ensure everything is properly initialized
+                setTimeout(() => {
+                    checkAuthAndInitialize();
+                }, 100);
+            });
         });
-    });
+    
+        // Prevent auth check on page visibility change (this can cause issues)
+        document.addEventListener('visibilitychange', function(e) {
+            e.stopPropagation();
+        });
+    
+        // Add debug helper for development
+        if (window.location.hostname === 'localhost') {
+            window.addEventListener('load', function() {
+                setTimeout(() => {
+                    if (typeof debugAuth === 'function') {
+                        console.log('[Dashboard] Debug auth available - run debugAuth() to check state');
+                    }
+                }, 1000);
+            });
+        }
     </script>
-    <script src="/js/app.js"></script>
-  <script>
-  // Check authentication
-  if (!api.isAuthenticated()) {
-    window.location.href = '/login.html';
-  }
-  
-  // Load user data
-  async function loadDashboard() {
-    try {
-      const profile = await api.getProfile();
-      
-      // Update UI with profile data
-      document.getElementById('userName').textContent = profile.name;
-      document.getElementById('userEmail').textContent = profile.email;
-      
-      // Load bookings
-      const bookingsData = await api.getBookings({ status: 'all' });
-      displayBookings(bookingsData.bookings);
-      
-      // Load opportunities if organization
-      const user = api.getCurrentUser();
-      if (user.memberType === 'Organization') {
-        const opportunitiesData = await api.getOpportunities();
-        displayOpportunities(opportunitiesData.opportunities);
-      }
-    } catch (error) {
-      console.error('Failed to load dashboard:', error);
-    }
-  }
-  
-  function displayBookings(bookings) {
-    const container = document.getElementById('bookingsContainer');
-    
-    if (bookings.length === 0) {
-      container.innerHTML = '<p>No bookings yet</p>';
-      return;
-    }
-    
-    container.innerHTML = bookings.map(booking => `
-      <div class="booking-card">
-        <h3>${booking.title}</h3>
-        <p>Date: ${new Date(booking.eventDate).toLocaleDateString()}</p>
-        <p>Location: ${booking.location}</p>
-        <span class="status-badge status-badge--${booking.status.toLowerCase()}">
-          ${booking.status}
-        </span>
-      </div>
-    `).join('');
-  }
-  
-  // Initialize dashboard
-  document.addEventListener('DOMContentLoaded', loadDashboard);
-  </script>
-  <!-- Add before closing </body> tag on ALL pages -->
-<script src="/js/app.js"></script>
-<script src="/js/navigation.js"></script>
-<script>
-  // Initialize page-specific functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check auth and update navigation
-    updateNavigation();
-    
-    // Page-specific initialization
-    if (typeof initializePage === 'function') {
-      initializePage();
-    }
-  });
-</script>
-// Add to dashboard.html, bookings.html, settings.html, etc.
-<script>
-function initializePage() {
-  // Check authentication first
-  if (!requireAuth()) return;
-  
-  // Load page-specific data
-  loadDashboardData();
-}
-
-async function loadDashboardData() {
-  try {
-    // TODO: Connect to Airtable via API
-    // const profile = await api.getProfile();
-    // const bookings = await api.getBookings();
-    
-    // Placeholder for now
-    console.log('Loading dashboard data...');
-    
-    // Update UI with data
-    // updateDashboardUI(profile, bookings);
-  } catch (error) {
-    console.error('Failed to load dashboard:', error);
-  }
-}
-</script>
-// dashboard.html (Speaker Dashboard)
-<script>
-async function initializePage() {
-  if (!requireAuth()) return;
-  
-  const user = api.getCurrentUser();
-  
-  // TODO: Airtable Integration Points
-  // 1. Fetch user's bookings from Applications table
-  // 2. Get upcoming opportunities from Speaking_Opportunities
-  // 3. Fetch recent reviews from Reviews table
-  // 4. Get subscription status from Subscriptions table
-  
-  // Placeholder implementation
-  document.getElementById('welcomeMessage').textContent = `Welcome back, ${user.name}!`;
-  
-  // Load statistics
-  loadDashboardStats();
-}
-
-async function loadDashboardStats() {
-  try {
-    // TODO: Connect to Airtable
-    const stats = {
-      totalBookings: 0,
-      upcomingEvents: 0,
-      profileViews: 0,
-      averageRating: 0
-    };
-    
-    // Update UI
-    updateStatsDisplay(stats);
-  } catch (error) {
-    console.error('Error loading stats:', error);
-  }
-}
-</script>
 </body>
 </html>

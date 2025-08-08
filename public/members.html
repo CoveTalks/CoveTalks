@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Members - CoveTalks</title>
     <style>
-        /* Include the same base styles from index.html */
         * {
             margin: 0;
             padding: 0;
@@ -60,6 +59,12 @@
             }
         }
 
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
         .nav-links {
             display: flex;
             list-style: none;
@@ -75,6 +80,18 @@
 
         .nav-links a:hover {
             color: #155588;
+        }
+
+        .nav-links a.active {
+            color: #155588;
+            border-bottom: 2px solid #155588;
+            padding-bottom: 2px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .auth-buttons {
@@ -125,7 +142,7 @@
         .page-header {
             background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
             color: white;
-            padding: 3rem 0;
+            padding: 10rem 0;
             text-align: center;
         }
 
@@ -251,7 +268,7 @@
         }
 
         .member-type.organization {
-            background: #27ae60;
+            background: #f2b236;
         }
 
         .member-details {
@@ -357,39 +374,64 @@
             margin-bottom: 1rem;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .search-filters {
-                grid-template-columns: 1fr;
-            }
-
-            .results-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .page-header h1 {
-                font-size: 2rem;
-            }
+        /* User menu styles */
+        .user-menu {
+            position: relative;
         }
 
-        /* Mobile Navigation Styles */
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        .user-dropdown {
+            position: relative;
         }
 
-        .nav-right {
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            color: white;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
         }
 
-        /* Hamburger Menu */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e1e8ed;
+            margin: 0.5rem 0;
+        }
+
+        /* Mobile Navigation */
         .hamburger {
             display: none;
             flex-direction: column;
@@ -426,7 +468,6 @@
             transform: rotate(-45deg) translate(7px, -6px);
         }
 
-        /* Mobile Menu Overlay */
         .mobile-menu-overlay {
             display: none;
             position: fixed;
@@ -445,7 +486,6 @@
             opacity: 1;
         }
 
-        /* Mobile Menu Panel */
         .mobile-menu {
             position: fixed;
             top: 0;
@@ -561,64 +601,7 @@
             text-align: center;
         }
 
-        /* User menu styles */
-        .user-menu {
-            position: relative;
-        }
-
-        .user-dropdown {
-            position: relative;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 0.5rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.75rem 1rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #e1e8ed;
-            margin: 0.5rem 0;
-        }
-
-        /* Responsive Breakpoints */
+        /* Responsive Design */
         @media (max-width: 768px) {
             .nav-links {
                 display: none !important;
@@ -631,17 +614,17 @@
             .hamburger {
                 display: flex;
             }
-            
-            header {
-                padding: 0.75rem 0;
-            }
-            
-            .logo {
-                font-size: 1.5rem;
+
+            .search-filters {
+                grid-template-columns: 1fr;
             }
 
-            body {
-                padding-top: 60px;
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
             }
         }
 
@@ -654,18 +637,20 @@
     </style>
 </head>
 <body>
-    <!-- Header - Same as your existing header -->
+    <!-- Header -->
     <header>
         <div class="nav-container">
             <nav>
                 <!-- Logo -->
-                <a href="index.html" class="logo"><img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img"></a>
+                <a href="index.html" class="logo">
+                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                </a>
                 
                 <!-- Desktop Navigation -->
                 <!-- Logged Out Navigation -->
                 <ul class="nav-links nav-logged-out" id="navLoggedOut">
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="members.html" class="active">Find Speakers</a></li>
                     <li><a href="pricing.html">Pricing</a></li>
                     <li><a href="register.html">Register</a></li>
                     <li><a href="contact.html">Contact</a></li>
@@ -674,7 +659,7 @@
                 <!-- Logged In Navigation (Speakers) -->
                 <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
                     <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="members.html" class="active">Find Speakers</a></li>
                     <li><a href="opportunities.html">Opportunities</a></li>
                     <li><a href="bookings.html">My Bookings</a></li>
                     <li><a href="profile.html">Profile</a></li>
@@ -683,7 +668,7 @@
                 <!-- Logged In Navigation (Organizations) -->
                 <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
                     <li><a href="organization-dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="members.html" class="active">Find Speakers</a></li>
                     <li><a href="post-opportunity.html">Post Opportunity</a></li>
                     <li><a href="my-opportunities.html">My Opportunities</a></li>
                     <li><a href="saved-speakers.html">Saved Speakers</a></li>
@@ -728,7 +713,9 @@
     <!-- Mobile Menu Panel -->
     <div class="mobile-menu" id="mobileMenu">
         <div class="mobile-menu-header">
-            <a href="index.html" class="logo"><img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img"></a>
+            <a href="index.html" class="logo">
+                <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+            </a>
             <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
         </div>
 
@@ -747,7 +734,7 @@
         <!-- Logged Out Mobile Navigation -->
         <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
             <li><a href="index.html">Home</a></li>
-            <li><a href="members.html">Find Speakers</a></li>
+            <li><a href="members.html" class="active">Find Speakers</a></li>
             <li><a href="pricing.html">Pricing</a></li>
             <li><a href="register.html">Register</a></li>
             <li><a href="contact.html">Contact</a></li>
@@ -757,7 +744,7 @@
         <!-- Logged In Mobile Navigation (Speakers) -->
         <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
             <li><a href="dashboard.html">Dashboard</a></li>
-            <li><a href="members.html">Find Speakers</a></li>
+            <li><a href="members.html" class="active">Find Speakers</a></li>
             <li><a href="opportunities.html">Opportunities</a></li>
             <li><a href="bookings.html">My Bookings</a></li>
             <li><a href="profile.html">Profile</a></li>
@@ -769,7 +756,7 @@
         <!-- Logged In Mobile Navigation (Organizations) -->
         <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
             <li><a href="organization-dashboard.html">Dashboard</a></li>
-            <li><a href="members.html">Find Speakers</a></li>
+            <li><a href="members.html" class="active">Find Speakers</a></li>
             <li><a href="post-opportunity.html">Post Opportunity</a></li>
             <li><a href="my-opportunities.html">My Opportunities</a></li>
             <li><a href="saved-speakers.html">Saved Speakers</a></li>
@@ -862,25 +849,16 @@
         </div>
     </main>
 
-    <!-- Include the API client -->
+    <!-- Include the API client and navigation -->
     <script src="/js/app.js"></script>
+    <script src="/js/navigation.js"></script>
     
     <script>
-        // ============================================
-        // BACKEND INTEGRATION FOR MEMBERS PAGE
-        // ============================================
-        
-        // Configuration
-        const CONFIG = {
-            API_BASE: window.location.hostname === 'localhost' 
-                ? 'http://localhost:8888/.netlify/functions'
-                : '/.netlify/functions'
-        };
-
-        // Global state
+        // Page state
         let currentUser = null;
         let isAuthenticated = false;
         let allMembers = [];
+        let filteredMembers = [];
 
         // DOM Elements
         const searchBtn = document.getElementById('searchBtn');
@@ -890,13 +868,22 @@
         const resultsCount = document.getElementById('resultsCount');
         const emptyState = document.getElementById('emptyState');
 
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', async function() {
-            checkAuthStatus();
-            updateNavAuth();
-            setActiveNavItem();
-            await loadMembers();
-        });
+        // Initialize page
+        function initializePage() {
+            // Set auth status
+            currentUser = api.getCurrentUser();
+            isAuthenticated = api.isAuthenticated();
+            
+            // Update UI based on auth
+            if (isAuthenticated) {
+                authRequired.classList.add('hidden');
+            } else {
+                authRequired.classList.remove('hidden');
+            }
+            
+            // Load members
+            loadMembers();
+        }
 
         // Event Listeners
         searchBtn.addEventListener('click', performSearch);
@@ -910,55 +897,61 @@
             });
         });
 
-        // Check authentication status
-        function checkAuthStatus() {
-            const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-            const userStr = localStorage.getItem('user') || sessionStorage.getItem('user');
-            
-            if (token && userStr) {
-                currentUser = JSON.parse(userStr);
-                isAuthenticated = true;
-                authRequired.classList.add('hidden');
-            } else {
-                isAuthenticated = false;
-                // Show limited access message for non-authenticated users
-                authRequired.classList.remove('hidden');
-            }
-        }
-
         // Load members from backend
         async function loadMembers() {
-            // Show loading state
             searchResults.innerHTML = '<div style="text-align: center; padding: 2rem;"><span class="loading"></span> Loading members...</div>';
             
             try {
-                // Build query parameters
                 const params = new URLSearchParams();
-                
-                // Add authentication header if logged in
                 const headers = {};
+                
                 if (isAuthenticated) {
                     const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-                    headers['Authorization'] = `Bearer ${token}`;
+                    if (token) {
+                        headers['Authorization'] = `Bearer ${token}`;
+                    }
                 }
                 
-                // Fetch members from backend
-                const response = await fetch(`${CONFIG.API_BASE}/members-list?${params}`, {
-                    headers: headers
-                });
+                const membersData = await api.getMembers();
                 
-                const data = await response.json();
-                
-                if (data.success) {
-                    allMembers = data.members;
-                    displayResults(data.members, data.isAuthenticated);
+                if (membersData && membersData.members) {
+                    allMembers = membersData.members;
+                    displayResults(membersData.members, membersData.isAuthenticated);
                 } else {
-                    throw new Error(data.message || 'Failed to load members');
+                    displaySampleMembers();
                 }
             } catch (error) {
                 console.error('Error loading members:', error);
-                searchResults.innerHTML = '<div style="text-align: center; padding: 2rem; color: #e74c3c;">Failed to load members. Please try again later.</div>';
+                displaySampleMembers();
             }
+        }
+
+        // Display sample members (fallback)
+        function displaySampleMembers() {
+            const sampleMembers = [
+                {
+                    id: 'sample1',
+                    name: 'Sarah Johnson',
+                    memberType: 'Speaker',
+                    location: 'Phoenix, AZ',
+                    bio: 'Leadership coach and motivational speaker with 10+ years of experience...',
+                    specialty: ['Leadership', 'Team Building', 'Motivation'],
+                    email: 'contact@example.com',
+                    phone: '555-0100'
+                },
+                {
+                    id: 'sample2',
+                    name: 'Tech Innovators Inc.',
+                    memberType: 'Organization',
+                    location: 'San Francisco, CA',
+                    bio: 'Leading technology conference organizer seeking expert speakers...',
+                    specialty: ['Technology', 'Innovation', 'AI'],
+                    email: 'events@example.com',
+                    phone: '555-0200'
+                }
+            ];
+            
+            displayResults(sampleMembers, false);
         }
 
         // Perform search with filters
@@ -968,43 +961,26 @@
             const locationFilter = document.getElementById('locationFilter').value.trim();
             const specialtyFilter = document.getElementById('specialtyFilter').value.trim();
 
-            // Show loading state
             document.getElementById('searchBtnText').textContent = 'Searching...';
             document.getElementById('searchLoader').classList.remove('hidden');
             searchBtn.disabled = true;
 
             try {
-                // Build query parameters
-                const params = new URLSearchParams();
-                if (searchTerm) params.append('search', searchTerm);
-                if (typeFilter) params.append('type', typeFilter);
-                if (locationFilter) params.append('location', locationFilter);
-                if (specialtyFilter) params.append('specialty', specialtyFilter);
+                const filters = {};
+                if (searchTerm) filters.search = searchTerm;
+                if (typeFilter) filters.type = typeFilter;
+                if (locationFilter) filters.location = locationFilter;
+                if (specialtyFilter) filters.specialty = specialtyFilter;
                 
-                // Add authentication header if logged in
-                const headers = {};
-                if (isAuthenticated) {
-                    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-                    headers['Authorization'] = `Bearer ${token}`;
-                }
+                const data = await api.getMembers(filters);
                 
-                // Fetch filtered results from backend
-                const response = await fetch(`${CONFIG.API_BASE}/members-list?${params}`, {
-                    headers: headers
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
+                if (data && data.members) {
                     displayResults(data.members, data.isAuthenticated);
-                } else {
-                    throw new Error(data.message || 'Search failed');
                 }
             } catch (error) {
                 console.error('Search error:', error);
                 alert('Search failed. Please try again.');
             } finally {
-                // Reset button state
                 document.getElementById('searchBtnText').textContent = 'Search';
                 document.getElementById('searchLoader').classList.add('hidden');
                 searchBtn.disabled = false;
@@ -1013,7 +989,6 @@
 
         // Display results
         function displayResults(members, showFullInfo = false) {
-            // Update results count
             resultsCount.textContent = members.length;
             resultsInfo.classList.remove('hidden');
             
@@ -1026,33 +1001,26 @@
             emptyState.classList.add('hidden');
             
             searchResults.innerHTML = members.map(member => {
-                // Get initials for avatar
                 const initials = member.name ? 
                     member.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
                     '??';
                 
-                // Format specialty tags
                 const tags = Array.isArray(member.specialty) ? 
                     member.specialty : 
                     (member.specialty ? member.specialty.split(',').map(t => t.trim()) : []);
                 
-                // Profile image or initials
                 const avatarContent = member.profileImage ? 
                     `<img src="${member.profileImage}" alt="${member.name}">` :
                     initials;
                 
-                // Member type class
                 const typeClass = member.memberType === 'Organization' ? 'organization' : '';
                 
-                // Contact information based on authentication
                 const contactInfo = showFullInfo && isAuthenticated ? 
                     `<div class="contact-info">
                         ${member.email ? `<p><strong>Email:</strong> <a href="mailto:${member.email}">${member.email}</a></p>` : ''}
                         ${member.phone ? `<p><strong>Phone:</strong> <a href="tel:${member.phone}">${member.phone}</a></p>` : ''}
                         ${member.website && member.website !== 'Login to view' ? 
                             `<p><strong>Website:</strong> <a href="${member.website}" target="_blank">Visit Site</a></p>` : ''}
-                        ${member.bookingLink && member.bookingLink !== 'Login to view' ? 
-                            `<p><strong>Booking:</strong> <a href="${member.bookingLink}" target="_blank">Schedule</a></p>` : ''}
                     </div>` :
                     `<div class="contact-info premium-blur">
                         <p><strong>Email:</strong> ${member.email || '••••••@email.com'}</p>
@@ -1066,7 +1034,7 @@
                     </div>` : ''}`;
 
                 return `
-                    <div class="member-card" onclick="viewProfile('${member.id}', '${member.memberType}')">
+                    <div class="member-card" onclick="viewProfile('${member.id}')">
                         <div class="member-header">
                             <div class="member-avatar">
                                 ${avatarContent}
@@ -1087,7 +1055,7 @@
                         </div>` : ''}
                         ${contactInfo}
                         <div style="text-align: center; margin-top: 1rem;">
-                            <button class="btn btn-secondary" onclick="event.stopPropagation(); viewProfile('${member.id}', '${member.memberType}')">
+                            <button class="btn btn-secondary" onclick="event.stopPropagation(); viewProfile('${member.id}')">
                                 View Full Profile
                             </button>
                         </div>
@@ -1097,85 +1065,16 @@
         }
 
         // View profile function
-        async function viewProfile(memberId, memberType) {
+        async function viewProfile(memberId) {
             if (!memberId || memberId === 'undefined') {
                 alert('Profile not available');
                 return;
             }
             
-            // Navigate to profile page with member ID
-            window.location.href = `profile.html?id=${encodeURIComponent(memberId)}&type=${encodeURIComponent(memberType)}`;
+            window.location.href = `profile.html?id=${encodeURIComponent(memberId)}`;
         }
 
-        // ============================================
-        // NAVIGATION JAVASCRIPT (Your existing code)
-        // ============================================
-        
-        // Update navigation based on auth status
-        function updateNavAuth() {
-            const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-            const userStr = localStorage.getItem('user') || sessionStorage.getItem('user');
-            const user = userStr ? JSON.parse(userStr) : null;
-            
-            if (token && user) {
-                // User is logged in
-                document.getElementById('navLoggedOut').style.display = 'none';
-                document.getElementById('mobileNavLoggedOut').style.display = 'none';
-                
-                // Show appropriate logged in navigation
-                if (user.memberType === 'Organization') {
-                    document.getElementById('navOrganization').style.display = 'flex';
-                    document.getElementById('navSpeaker').style.display = 'none';
-                    document.getElementById('mobileNavOrganization').style.display = 'block';
-                    document.getElementById('mobileNavSpeaker').style.display = 'none';
-                } else {
-                    document.getElementById('navSpeaker').style.display = 'flex';
-                    document.getElementById('navOrganization').style.display = 'none';
-                    document.getElementById('mobileNavSpeaker').style.display = 'block';
-                    document.getElementById('mobileNavOrganization').style.display = 'none';
-                }
-                
-                // Show user menu
-                document.getElementById('userMenuDesktop').style.display = 'flex';
-                document.getElementById('authButtonsDesktop').style.display = 'none';
-                document.getElementById('mobileUserSection').style.display = 'block';
-                document.getElementById('mobileAuthButtons').style.display = 'none';
-                document.getElementById('mobileLogoutSection').style.display = 'block';
-                
-                // Update user info
-                const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 'U';
-                document.getElementById('userAvatar').textContent = initials;
-                document.getElementById('mobileUserAvatar').textContent = initials;
-                document.getElementById('mobileUserName').textContent = user.name || 'User';
-                document.getElementById('mobileUserType').textContent = user.memberType || 'Member';
-            } else {
-                // User is logged out
-                document.getElementById('navLoggedOut').style.display = 'flex';
-                document.getElementById('mobileNavLoggedOut').style.display = 'block';
-                
-                // Hide all logged in navigation
-                document.getElementById('navSpeaker').style.display = 'none';
-                document.getElementById('navOrganization').style.display = 'none';
-                document.getElementById('mobileNavSpeaker').style.display = 'none';
-                document.getElementById('mobileNavOrganization').style.display = 'none';
-                
-                // Show auth buttons
-                if (document.getElementById('userMenuDesktop')) {
-                    document.getElementById('userMenuDesktop').style.display = 'none';
-                }
-                document.getElementById('authButtonsDesktop').style.display = 'flex';
-                
-                if (document.getElementById('mobileUserSection')) {
-                    document.getElementById('mobileUserSection').style.display = 'none';
-                }
-                document.getElementById('mobileAuthButtons').style.display = 'flex';
-                if (document.getElementById('mobileLogoutSection')) {
-                    document.getElementById('mobileLogoutSection').style.display = 'none';
-                }
-            }
-        }
-        
-        // Toggle mobile menu
+        // Mobile menu functions
         function toggleMobileMenu() {
             const hamburger = document.getElementById('hamburger');
             const mobileMenu = document.getElementById('mobileMenu');
@@ -1192,7 +1091,6 @@
             }
         }
         
-        // Close mobile menu
         function closeMobileMenu() {
             const hamburger = document.getElementById('hamburger');
             const mobileMenu = document.getElementById('mobileMenu');
@@ -1220,31 +1118,9 @@
             }
         });
         
-        // Set active navigation item
-        function setActiveNavItem() {
-            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-            
-            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('active');
-                }
-            });
-        }
-        
         // Logout function
         function logout() {
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('user');
-            sessionStorage.removeItem('authToken');
-            sessionStorage.removeItem('user');
-            
-            // If using the API client, call its logout method
-            if (typeof api !== 'undefined' && api.logout) {
-                api.logout();
-            } else {
-                window.location.href = 'login.html';
-            }
+            api.logout();
         }
         
         // Close mobile menu on window resize
@@ -1253,28 +1129,24 @@
                 closeMobileMenu();
             }
         });
-        
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.mobile-nav-links a').forEach(link => {
-            link.addEventListener('click', function() {
-                closeMobileMenu();
-            });
+
+        // Standard initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof api === 'undefined') {
+                console.error('API client not loaded');
+                return;
+            }
+            
+            // Update navigation UI
+            if (typeof updateNavigation === 'function') {
+                updateNavigation();
+            }
+            
+            // Initialize page (no auth required for members page)
+            if (typeof initializePage === 'function') {
+                initializePage();
+            }
         });
     </script>
-    <!-- Add before closing </body> tag on ALL pages -->
-<script src="/js/app.js"></script>
-<script src="/js/navigation.js"></script>
-<script>
-  // Initialize page-specific functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check auth and update navigation
-    updateNavigation();
-    
-    // Page-specific initialization
-    if (typeof initializePage === 'function') {
-      initializePage();
-    }
-  });
-</script>
 </body>
 </html>

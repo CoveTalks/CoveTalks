@@ -1,448 +1,577 @@
 // ============================================
-// FRONTEND INTEGRATION
+// FRONTEND INTEGRATION - FIXED VERSION
 // ============================================
 
 // File: public/js/app.js
 class CoveTalksAPI {
-    constructor() {
-      this.baseURL = '/.netlify/functions';
-      this.token = localStorage.getItem('authToken');
-    }
-  
-    // Set authorization header
-    getHeaders() {
-      const headers = {
-        'Content-Type': 'application/json'
+  constructor() {
+      // Use consistent base URL configuration
+      this.baseURL = window.location.hostname === 'localhost' 
+          ? 'http://localhost:8888/.netlify/functions'
+          : '/.netlify/functions';
+      
+      // Consistent storage keys
+      this.STORAGE_KEYS = {
+          TOKEN: 'authToken',
+          USER: 'user'
       };
       
-      if (this.token) {
-        headers['Authorization'] = `Bearer ${this.token}`;
+      // Initialize token from storage
+      this.token = this.getToken();
+      
+      // Debug logging
+      this.debug = true; // Set to false in production
+      this.log('API initialized', { token: !!this.token, user: !!this.getCurrentUser() });
+  }
+  
+  // Debug logging helper
+  log(message, data = null) {
+      if (this.debug) {
+          console.log(`[CoveTalks API] ${message}`, data || '');
+      }
+  }
+  
+  // Get stored authentication token
+  getToken() {
+      try {
+          const localToken = localStorage.getItem(this.STORAGE_KEYS.TOKEN);
+          const sessionToken = sessionStorage.getItem(this.STORAGE_KEYS.TOKEN);
+          const token = localToken || sessionToken;
+          
+          this.log('Getting token', { local: !!localToken, session: !!sessionToken, final: !!token });
+          return token;
+      } catch (e) {
+          this.log('Error getting token', e);
+          return null;
+      }
+  }
+  
+  // Set authorization header
+  getHeaders() {
+      const headers = {
+          'Content-Type': 'application/json'
+      };
+      
+      // Always get fresh token
+      const currentToken = this.getToken();
+      if (currentToken) {
+          headers['Authorization'] = `Bearer ${currentToken}`;
+          this.token = currentToken; // Update instance token
       }
       
       return headers;
-    }
+  }
   
-    // Handle API responses
-    async handleResponse(response) {
-      const data = await response.json();
+  // Handle API responses
+  async handleResponse(response) {
+      let data;
+      try {
+          data = await response.json();
+      } catch (e) {
+          this.log('Failed to parse response JSON', e);
+          throw new Error('Invalid response from server');
+      }
+      
+      this.log('API Response', { status: response.status, data });
       
       if (!response.ok) {
-        throw new Error(data.error || 'Request failed');
+          // If unauthorized, clear auth data
+          if (response.status === 401) {
+              this.log('Unauthorized response, clearing auth');
+              this.clearAuth();
+          }
+          throw new Error(data.error || `Request failed with status ${response.status}`);
       }
       
       return data;
-    }
+  }
   
-    // Authentication methods
-    async signup(userData) {
+  // Save authentication data
+  saveAuth(token, user, remember = true) {
+      this.log('Saving auth', { remember, userType: user?.memberType || user?.Member_Type });
+      
+      // Clear any existing auth data first
+      this.clearAuth();
+      
+      const storage = remember ? localStorage : sessionStorage;
+      storage.setItem(this.STORAGE_KEYS.TOKEN, token);
+      storage.setItem(this.STORAGE_KEYS.USER, JSON.stringify(user));
+      this.token = token; // Update instance token
+      
+      // Verify the data was saved correctly
+      const savedToken = this.getToken();
+      const savedUser = this.getCurrentUser();
+      this.log('Auth saved and verified', { 
+          tokenSaved: !!savedToken, 
+          userSaved: !!savedUser,
+          userType: savedUser?.memberType || savedUser?.Member_Type 
+      });
+  }
+  
+  // Clear authentication data
+  clearAuth() {
+      this.log('Clearing auth data');
+      try {
+          localStorage.removeItem(this.STORAGE_KEYS.TOKEN);
+          localStorage.removeItem(this.STORAGE_KEYS.USER);
+          sessionStorage.removeItem(this.STORAGE_KEYS.TOKEN);
+          sessionStorage.removeItem(this.STORAGE_KEYS.USER);
+          this.token = null;
+      } catch (e) {
+          this.log('Error clearing auth', e);
+      }
+  }
+  
+  // Authentication methods
+  async signup(userData) {
+      this.log('Attempting signup', { email: userData.email, type: userData.memberType });
+      
       const response = await fetch(`${this.baseURL}/auth-signup`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData)
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(userData)
       });
       
       const data = await this.handleResponse(response);
       
-      if (data.token) {
-        this.token = data.token;
-        localStorage.setItem('authToken', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
+      if (data.token && data.user) {
+          this.saveAuth(data.token, data.user, true);
       }
       
       return data;
-    }
+  }
   
-    async login(email, password) {
-      const response = await fetch(`${this.baseURL}/auth-login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
+  async login(email, password, remember = true) {
+      this.log('Attempting login', { email, remember });
       
-      const data = await this.handleResponse(response);
-      
-      if (data.token) {
-        this.token = data.token;
-        localStorage.setItem('authToken', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
+      try {
+          const response = await fetch(`${this.baseURL}/auth-login`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email, password })
+          });
+          
+          const data = await this.handleResponse(response);
+          this.log('Login response received', { success: data.success, hasToken: !!data.token, hasUser: !!data.user });
+          
+          if (data.success && data.token && data.user) {
+              this.saveAuth(data.token, data.user, remember);
+              
+              // Verify authentication worked
+              const isNowAuth = this.isAuthenticated();
+              this.log('Post-login auth check', { isAuthenticated: isNowAuth });
+              
+              if (!isNowAuth) {
+                  throw new Error('Authentication failed to persist');
+              }
+          }
+          
+          return data;
+      } catch (error) {
+          this.log('Login error', error);
+          throw error;
       }
-      
-      return data;
-    }
+  }
   
-    logout() {
-      this.token = null;
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('user');
+  logout() {
+      this.log('Logging out');
+      this.clearAuth();
+      // Prevent redirect loops - just go to login
       window.location.href = '/login.html';
-    }
+  }
   
-    // Check if user is authenticated
-    isAuthenticated() {
-      return !!this.token;
-    }
+  // Check if user is authenticated
+  isAuthenticated() {
+      try {
+          const token = this.getToken();
+          const user = this.getCurrentUser();
+          const authenticated = !!(token && user);
+          
+          this.log('Auth check', { hasToken: !!token, hasUser: !!user, authenticated });
+          return authenticated;
+      } catch (e) {
+          this.log('Error checking authentication', e);
+          return false;
+      }
+  }
   
-    // Get current user
-    getCurrentUser() {
-      const userStr = localStorage.getItem('user');
-      return userStr ? JSON.parse(userStr) : null;
-    }
+  // Get current user - FIXED to not clear auth on parse error
+  getCurrentUser() {
+      try {
+          const localUserStr = localStorage.getItem(this.STORAGE_KEYS.USER);
+          const sessionUserStr = sessionStorage.getItem(this.STORAGE_KEYS.USER);
+          const userStr = localUserStr || sessionUserStr;
+          
+          if (!userStr) {
+              this.log('No user data found in storage');
+              return null;
+          }
+          
+          try {
+              const user = JSON.parse(userStr);
+              this.log('User retrieved', { name: user?.name, type: user?.memberType || user?.Member_Type });
+              return user;
+          } catch (parseError) {
+              this.log('Failed to parse user data', parseError);
+              // DON'T clear auth here - just return null
+              // This prevents losing auth on temporary parse errors
+              return null;
+          }
+      } catch (e) {
+          this.log('Error getting current user', e);
+          return null;
+      }
+  }
   
-    // Profile methods
-    async getProfile() {
-      const response = await fetch(`${this.baseURL}/profile-get`, {
-        headers: this.getHeaders()
+  // Verify token validity
+  async verifyToken() {
+      if (!this.getToken()) {
+          this.log('No token to verify');
+          return false;
+      }
+      
+      try {
+          this.log('Verifying token with server');
+          const response = await fetch(`${this.baseURL}/auth-verify`, {
+              headers: this.getHeaders()
+          });
+          
+          const data = await this.handleResponse(response);
+          
+          if (!data.valid) {
+              this.log('Token invalid according to server');
+              this.clearAuth();
+              return false;
+          }
+          
+          this.log('Token verified successfully');
+          return true;
+      } catch (error) {
+          this.log('Token verification failed', error);
+          // Don't clear auth on network errors - let user retry
+          return false;
+      }
+  }
+  
+  // Profile methods
+  async getProfile(userId = null) {
+      const params = userId ? `?id=${userId}` : '';
+      const response = await fetch(`${this.baseURL}/profile-get${params}`, {
+          headers: this.getHeaders()
       });
       
       return this.handleResponse(response);
-    }
+  }
   
-    async updateProfile(profileData) {
+  async updateProfile(profileData) {
       const response = await fetch(`${this.baseURL}/profile-update`, {
-        method: 'PUT',
-        headers: this.getHeaders(),
-        body: JSON.stringify(profileData)
+          method: 'PUT',
+          headers: this.getHeaders(),
+          body: JSON.stringify(profileData)
       });
       
       return this.handleResponse(response);
-    }
+  }
   
-    // Bookings methods
-    async getBookings(filters = {}) {
+  // Bookings methods
+  async getBookings(filters = {}) {
       const params = new URLSearchParams(filters);
       const response = await fetch(`${this.baseURL}/bookings-list?${params}`, {
-        headers: this.getHeaders()
+          headers: this.getHeaders()
       });
       
       return this.handleResponse(response);
-    }
+  }
   
-    // Opportunities methods
-    async getOpportunities(filters = {}) {
+  async createBooking(bookingData) {
+      const response = await fetch(`${this.baseURL}/bookings-create`, {
+          method: 'POST',
+          headers: this.getHeaders(),
+          body: JSON.stringify(bookingData)
+      });
+      
+      return this.handleResponse(response);
+  }
+  
+  async updateBookingStatus(bookingId, status) {
+      const response = await fetch(`${this.baseURL}/bookings-update`, {
+          method: 'PUT',
+          headers: this.getHeaders(),
+          body: JSON.stringify({ bookingId, status })
+      });
+      
+      return this.handleResponse(response);
+  }
+  
+  // Opportunities methods
+  async getOpportunities(filters = {}) {
       const params = new URLSearchParams(filters);
       const response = await fetch(`${this.baseURL}/opportunities-list?${params}`, {
-        headers: this.getHeaders()
+          headers: this.getHeaders()
       });
       
       return this.handleResponse(response);
-    }
+  }
   
-    async createOpportunity(opportunityData) {
+  async createOpportunity(opportunityData) {
       const response = await fetch(`${this.baseURL}/opportunities-create`, {
-        method: 'POST',
-        headers: this.getHeaders(),
-        body: JSON.stringify(opportunityData)
+          method: 'POST',
+          headers: this.getHeaders(),
+          body: JSON.stringify(opportunityData)
       });
       
       return this.handleResponse(response);
-    }
+  }
   
-    // Stripe methods
-    async createCheckoutSession(priceId, planType, billingPeriod) {
+  async applyToOpportunity(opportunityId, applicationData) {
+      const response = await fetch(`${this.baseURL}/opportunities-apply`, {
+          method: 'POST',
+          headers: this.getHeaders(),
+          body: JSON.stringify({ opportunityId, ...applicationData })
+      });
+      
+      return this.handleResponse(response);
+  }
+  
+  // Members/Speakers methods
+  async getMembers(filters = {}) {
+      const params = new URLSearchParams(filters);
+      const response = await fetch(`${this.baseURL}/members-list?${params}`, {
+          headers: this.getHeaders()
+      });
+      
+      return this.handleResponse(response);
+  }
+  
+  async getMemberDetails(memberId) {
+      const response = await fetch(`${this.baseURL}/members-get?id=${memberId}`, {
+          headers: this.getHeaders()
+      });
+      
+      return this.handleResponse(response);
+  }
+  
+  // Contact/Support methods
+  async submitContact(contactData) {
+      const response = await fetch(`${this.baseURL}/contact-submit`, {
+          method: 'POST',
+          headers: this.getHeaders(),
+          body: JSON.stringify(contactData)
+      });
+      
+      return this.handleResponse(response);
+  }
+  
+  // Reviews methods
+  async getReviews(speakerId = null) {
+      const params = speakerId ? `?speakerId=${speakerId}` : '';
+      const response = await fetch(`${this.baseURL}/reviews-list${params}`, {
+          headers: this.getHeaders()
+      });
+      
+      return this.handleResponse(response);
+  }
+  
+  async submitReview(reviewData) {
+      const response = await fetch(`${this.baseURL}/reviews-create`, {
+          method: 'POST',
+          headers: this.getHeaders(),
+          body: JSON.stringify(reviewData)
+      });
+      
+      return this.handleResponse(response);
+  }
+  
+  // Subscription methods
+  async getSubscriptionStatus() {
+      const response = await fetch(`${this.baseURL}/subscription-status`, {
+          headers: this.getHeaders()
+      });
+      
+      return this.handleResponse(response);
+  }
+  
+  async updateSubscription(planData) {
+      const response = await fetch(`${this.baseURL}/subscription-update`, {
+          method: 'PUT',
+          headers: this.getHeaders(),
+          body: JSON.stringify(planData)
+      });
+      
+      return this.handleResponse(response);
+  }
+  
+  // Dashboard methods
+  async getDashboardStats() {
+      const response = await fetch(`${this.baseURL}/dashboard-stats`, {
+          headers: this.getHeaders()
+      });
+      
+      return this.handleResponse(response);
+  }
+  
+  async getDashboardActivity() {
+      const response = await fetch(`${this.baseURL}/dashboard-activity`, {
+          headers: this.getHeaders()
+      });
+      
+      return this.handleResponse(response);
+  }
+  
+  // Stripe methods
+  async createCheckoutSession(priceId, planType, billingPeriod) {
       const response = await fetch(`${this.baseURL}/stripe-create-checkout`, {
-        method: 'POST',
-        headers: this.getHeaders(),
-        body: JSON.stringify({ priceId, planType, billingPeriod })
+          method: 'POST',
+          headers: this.getHeaders(),
+          body: JSON.stringify({ priceId, planType, billingPeriod })
       });
       
       const data = await this.handleResponse(response);
       
       // Redirect to Stripe Checkout
       if (data.url) {
-        window.location.href = data.url;
+          window.location.href = data.url;
       }
       
       return data;
-    }
+  }
   
-    async openBillingPortal() {
+  async openBillingPortal() {
       const response = await fetch(`${this.baseURL}/stripe-portal`, {
-        method: 'POST',
-        headers: this.getHeaders()
+          method: 'POST',
+          headers: this.getHeaders()
       });
       
       const data = await this.handleResponse(response);
       
       // Redirect to Stripe Portal
       if (data.url) {
-        window.location.href = data.url;
+          window.location.href = data.url;
       }
       
       return data;
-    }
+  }
+}
+
+// Initialize API client
+const api = new CoveTalksAPI();
+
+// Make it globally available
+window.api = api;
+
+// ============================================
+// AUTHENTICATION GUARD (for protected pages)
+// ============================================
+
+// Helper function to check auth without redirect loops
+function requireAuth(redirectTo = '/login.html') {
+  // Prevent running on login/register pages
+  const currentPath = window.location.pathname;
+  if (currentPath.includes('login.html') || currentPath.includes('register.html')) {
+      return false;
   }
   
-  // Initialize API client
-  const api = new CoveTalksAPI();
+  console.log('[Auth Guard] Checking authentication for:', currentPath);
   
-  // ============================================
-  // LOGIN PAGE INTEGRATION
-  // ============================================
-  
-  // File: public/login.html (add to existing page)
-  // Add this script before closing </body> tag:
-  /*
-  <script src="/js/app.js"></script>
-  <script>
-  // Handle login form submission
-  document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    
-    try {
-      // Show loading state
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Signing in...';
-      
-      // Attempt login
-      const result = await api.login(email, password);
-      
-      // Redirect to dashboard
-      window.location.href = '/dashboard.html';
-    } catch (error) {
-      // Show error message
-      alert('Login failed: ' + error.message);
-      
-      // Reset button
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Sign In';
-    }
-  });
-  
-  // Handle signup form submission
-  document.getElementById('signupForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const formData = {
-      name: document.getElementById('name').value,
-      email: document.getElementById('email').value,
-      password: document.getElementById('password').value,
-      memberType: document.getElementById('memberType').value,
-      phone: document.getElementById('phone').value
-    };
-    
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    
-    try {
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Creating account...';
-      
-      const result = await api.signup(formData);
-      
-      // Redirect to dashboard
-      window.location.href = '/dashboard.html';
-    } catch (error) {
-      alert('Signup failed: ' + error.message);
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Sign Up';
-    }
-  });
-  </script>
-  */
-  
-  
-  // ============================================
-  // AUTHENTICATION GUARD
-  // ============================================
-  
-  // Add to all protected pages (dashboard, bookings, settings, etc.):
-  /*
-  <script src="/js/app.js"></script>
-  <script>
-  // Redirect to login if not authenticated
+  // Check authentication state
   if (!api.isAuthenticated()) {
-    window.location.href = '/login.html';
+      console.log('[Auth Guard] Not authenticated, redirecting to login');
+      // Store the current URL for redirect after login
+      sessionStorage.setItem('redirectUrl', window.location.href);
+      window.location.href = redirectTo;
+      return false;
   }
-  </script>
-  */
   
-  // ============================================
-  // SETUP INSTRUCTIONS
-  // ============================================
+  // Get user data
+  const user = api.getCurrentUser();
+  if (!user) {
+      console.log('[Auth Guard] No user data found');
+      // Try to re-check after a small delay (in case of timing issues)
+      setTimeout(() => {
+          const retryUser = api.getCurrentUser();
+          if (!retryUser) {
+              console.log('[Auth Guard] Still no user data, clearing auth and redirecting');
+              api.clearAuth();
+              window.location.href = redirectTo;
+          }
+      }, 100);
+      return false;
+  }
   
-  /*
-  COMPLETE SETUP GUIDE FOR COVETALKS MVP
+  // Organization-only pages
+  const orgOnlyPages = ['organization-dashboard.html', 'post-opportunity.html', 'my-opportunities.html'];
+  // Speaker-only pages  
+  const speakerOnlyPages = ['dashboard.html'];
   
-  1. INITIAL SETUP
-  ----------------
-  # Clone or create your project
-  mkdir covetalks
-  cd covetalks
+  const currentFile = currentPath.split('/').pop();
+  const userType = user.memberType || user.Member_Type;
   
-  # Initialize npm
-  npm init -y
+  console.log('[Auth Guard] User type check:', { userType, currentFile });
   
-  # Install dependencies
-  npm install airtable stripe jsonwebtoken bcryptjs node-fetch
-  npm install -D netlify-cli
+  // Check user type access
+  if (userType === 'Organization' && speakerOnlyPages.includes(currentFile)) {
+      console.log('[Auth Guard] Organization user on speaker page, redirecting');
+      window.location.href = '/organization-dashboard.html';
+      return false;
+  }
   
-  2. CREATE PROJECT STRUCTURE
-  ---------------------------
-  Create all the folders and files as shown in the project structure above.
-  Copy all the function code from the backend-setup artifact.
-  Copy the app.js file to public/js/
+  if (userType !== 'Organization' && orgOnlyPages.includes(currentFile)) {
+      console.log('[Auth Guard] Speaker user on organization page, redirecting');
+      window.location.href = '/dashboard.html';
+      return false;
+  }
   
-  3. ENVIRONMENT VARIABLES
-  ------------------------
-  Create a .env file in root directory:
+  console.log('[Auth Guard] Authentication check passed');
+  return true;
+}
+
+// Make requireAuth globally available
+window.requireAuth = requireAuth;
+
+// ============================================
+// REDIRECT AFTER LOGIN
+// ============================================
+
+// Helper function to handle post-login redirect
+function handlePostLoginRedirect(user) {
+  console.log('[Redirect] Handling post-login redirect for user:', user?.name);
   
-  AIRTABLE_API_KEY=YOUR_NEW_KEY_HERE
-  AIRTABLE_BASE_ID=appa7KVa8HcVheTOo
-  STRIPE_SECRET_KEY=YOUR_NEW_SECRET_KEY
-  STRIPE_PUBLISHABLE_KEY=YOUR_PUBLISHABLE_KEY
-  STRIPE_WEBHOOK_SECRET=whsec_YOUR_WEBHOOK_SECRET
-  JWT_SECRET=generate_a_random_64_character_string_here
-  SITE_URL=https://covetalks.netlify.app
+  // Check for saved redirect URL
+  const redirectUrl = sessionStorage.getItem('redirectUrl');
   
-  To generate JWT_SECRET:
-  node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-  
-  4. AIRTABLE SETUP
-  -----------------
-  ⚠️ FIRST: Regenerate your API key at https://airtable.com/account
-  - Ensure all tables match the schema exactly
-  - Table names must be: Members, Organizations, Subscriptions, etc.
-  - Field names must match exactly (case-sensitive)
-  
-  5. STRIPE SETUP
-  ---------------
-  ⚠️ FIRST: Rotate your secret key at https://dashboard.stripe.com/apikeys
-  
-  a. Create Products and Prices:
-     - Go to Stripe Dashboard > Products
-     - Create 6 products (Standard/Plus/Premium × Monthly/Annual)
-     - Note the price IDs (starting with price_)
-     
-  b. Update price IDs in stripe.js:
-     const PRICE_IDS = {
-       standard_monthly: 'price_xxx',  // Replace with actual
-       standard_annual: 'price_xxx',
-       // etc.
-     };
-  
-  c. Setup Webhook:
-     - Go to Stripe Dashboard > Webhooks
-     - Add endpoint: https://covetalks.netlify.app/.netlify/functions/stripe-webhook
-     - Select events:
-       * checkout.session.completed
-       * invoice.payment_succeeded
-       * customer.subscription.deleted
-     - Copy the webhook secret to .env
-  
-  6. NETLIFY DEPLOYMENT
-  ---------------------
-  a. Install Netlify CLI:
-     npm install -g netlify-cli
-  
-  b. Login to Netlify:
-     netlify login
-  
-  c. Initialize site:
-     netlify init
-  
-  d. Set environment variables in Netlify:
-     - Go to Site settings > Environment variables
-     - Add all variables from .env file
-     - DO NOT commit .env to git!
-  
-  e. Deploy:
-     netlify deploy --prod
-  
-  7. LOCAL DEVELOPMENT
-  --------------------
-  # Start local dev server with functions
-  netlify dev
-  
-  # This will run on http://localhost:8888
-  # Functions available at http://localhost:8888/.netlify/functions/
-  
-  8. TESTING THE SETUP
-  --------------------
-  a. Test signup:
-     curl -X POST http://localhost:8888/.netlify/functions/auth-signup \
-       -H "Content-Type: application/json" \
-       -d '{"email":"test@example.com","password":"Test123!","name":"Test User","memberType":"Speaker"}'
-  
-  b. Test login:
-     curl -X POST http://localhost:8888/.netlify/functions/auth-login \
-       -H "Content-Type: application/json" \
-       -d '{"email":"test@example.com","password":"Test123!"}'
-  
-  c. Test Stripe (use test mode first):
-     - Switch to test mode in Stripe Dashboard
-     - Use test card: 4242 4242 4242 4242
-     - Any future date, any CVC
-  
-  9. SECURITY CHECKLIST
-  ---------------------
-  ✅ Rotate all API keys immediately
-  ✅ Add .env to .gitignore
-  ✅ Never commit sensitive data
-  ✅ Use environment variables in Netlify
-  ✅ Enable 2FA on Airtable and Stripe accounts
-  ✅ Use HTTPS only (Netlify provides this)
-  ✅ Implement rate limiting (Netlify has built-in protection)
-  
-  10. ADD HTML PAGES
-  ------------------
-  Copy your existing HTML pages to the public/ folder:
-  - index.html
-  - login.html
-  - dashboard.html
-  - bookings.html
-  - billing.html
-  - settings.html
-  - etc.
-  
-  Add the JavaScript integration code to each page as shown above.
-  
-  11. MONITORING & LOGS
-  --------------------
-  - Netlify Functions logs: https://app.netlify.com/sites/YOUR_SITE/functions
-  - Stripe logs: https://dashboard.stripe.com/logs
-  - Airtable API usage: https://airtable.com/account
-  
-  12. GOING LIVE CHECKLIST
-  ------------------------
-  □ All API keys rotated and secured
-  □ Stripe in live mode (not test)
-  □ Email notifications working
-  □ SSL certificate active (automatic with Netlify)
-  □ Error handling tested
-  □ Mobile responsive tested
-  □ Cross-browser tested
-  □ Backup of Airtable data
-  □ Terms of Service and Privacy Policy pages added
-  □ GDPR compliance if serving EU users
-  
-  TROUBLESHOOTING
-  ---------------
-  1. "Invalid token" errors:
-     - Check JWT_SECRET is set in environment
-     - Verify token is being sent in Authorization header
-  
-  2. Airtable "NOT_FOUND" errors:
-     - Verify table and field names match exactly
-     - Check API key has full access
-  
-  3. Stripe webhook failures:
-     - Verify webhook secret is correct
-     - Check endpoint URL is accessible
-     - Review Stripe webhook logs
-  
-  4. Function timeouts:
-     - Netlify Functions have 10-second timeout
-     - Optimize database queries
-     - Consider pagination for large datasets
-  
-  SUPPORT
-  -------
-  - Netlify: https://docs.netlify.com
-  - Airtable API: https://airtable.com/api
-  - Stripe: https://stripe.com/docs
-  - Community: https://community.netlify.com
-  
-  */
+  if (redirectUrl && !redirectUrl.includes('login.html') && !redirectUrl.includes('register.html')) {
+      console.log('[Redirect] Using saved redirect URL:', redirectUrl);
+      sessionStorage.removeItem('redirectUrl');
+      window.location.href = redirectUrl;
+  } else {
+      // Default redirect based on user type
+      const userType = user?.memberType || user?.Member_Type;
+      if (userType === 'Organization') {
+          console.log('[Redirect] Redirecting organization to org dashboard');
+          window.location.href = '/organization-dashboard.html';
+      } else {
+          console.log('[Redirect] Redirecting speaker to dashboard');
+          window.location.href = '/dashboard.html';
+      }
+  }
+}
+
+// Make it globally available
+window.handlePostLoginRedirect = handlePostLoginRedirect;
+
+// ============================================
+// AUTO-REFRESH TOKEN (optional)
+// ============================================
+
+// Only verify token on protected pages, not login/register pages
+if (!window.location.pathname.includes('login.html') && !window.location.pathname.includes('register.html')) {
+  // Delay token verification to avoid race conditions
+  setTimeout(() => {
+      if (api.isAuthenticated()) {
+          // Verify token validity in background (don't await)
+          api.verifyToken().catch(() => {
+              console.log('[Token] Token verification failed, user may need to re-login');
+          });
+      }
+  }, 2000);
+}

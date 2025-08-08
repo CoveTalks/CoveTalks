@@ -82,7 +82,8 @@ exports.handler = async (event) => {
               eventDate: opp.fields.Event_Date,
               location: opp.fields.Location,
               topics: opp.fields.Topics || [],
-              audienceSize: opp.fields.Audience_Size
+              audienceSize: opp.fields.Audience_Size,
+              totalHours: opp.fields.Total_Hours || 1 // Include the new Total_Hours field
             };
 
             // Get organization details
@@ -177,6 +178,7 @@ exports.handler = async (event) => {
             location: opp.fields.Location,
             topics: opp.fields.Topics || [],
             audienceSize: opp.fields.Audience_Size,
+            totalHours: opp.fields.Total_Hours || 1, // Include Total_Hours here too
             status: opp.fields.Status,
             postedDate: opp.fields.Posted_Date,
             applications: applications,

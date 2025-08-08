@@ -841,7 +841,25 @@
         </div>
     </main>
 
+    <!-- Include the API client and navigation -->
+    <script src="/js/app.js"></script>
+    <script src="/js/navigation.js"></script>
+    
     <script>
+        // Wait for API to be fully loaded
+        function waitForAPI(callback) {
+            if (typeof api !== 'undefined' && typeof updateNavigation !== 'undefined') {
+                callback();
+            } else {
+                setTimeout(() => waitForAPI(callback), 50);
+            }
+        }
+
+        // Initialize page
+        function initializePage() {
+            loadBillingData();
+        }
+
         // Mobile menu toggle
         document.querySelector('.nav__mobile-toggle').addEventListener('click', function() {
             document.querySelector('.nav__menu').classList.toggle('nav__menu--open');
@@ -849,21 +867,43 @@
 
         // Initialize billing data
         async function loadBillingData() {
-            // TODO: Fetch subscription data from Stripe API
-            // This will be implemented with actual Stripe integration
-            
-            // Update UI with fetched data
-            updateBillingInfo();
+            try {
+                // Check if user is a speaker (billing only for speakers)
+                const user = api.getCurrentUser();
+                if (user && user.memberType === 'Organization') {
+                    // Organizations don't have billing
+                    document.querySelector('.container').innerHTML = `
+                        <div style="text-align: center; padding: 4rem 2rem;">
+                            <h2>No Billing Required</h2>
+                            <p style="color: #64748b; margin-top: 1rem;">
+                                Organizations use CoveTalks for free! Only speakers have subscription plans.
+                            </p>
+                            <a href="/dashboard.html" class="btn btn--primary" style="margin-top: 2rem;">
+                                Return to Dashboard
+                            </a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Load subscription data from API
+                const subscriptionData = await api.getSubscriptionStatus();
+                if (subscriptionData && subscriptionData.subscription) {
+                    updateBillingInfo(subscriptionData.subscription);
+                }
+            } catch (error) {
+                console.error('Error loading billing data:', error);
+            }
         }
 
-        function updateBillingInfo() {
-            // TODO: Update with real data from Stripe
+        function updateBillingInfo(subscription) {
+            // Update with real data from API
             const billingData = {
-                planName: 'Professional',
-                planPrice: '$49/month',
-                nextPaymentDate: 'March 1, 2024',
-                totalSpent: '$147.00',
-                memberSince: 'January 2024'
+                planName: subscription.plan || 'Professional',
+                planPrice: subscription.price ? `$${subscription.price}/month` : '$49/month',
+                nextPaymentDate: subscription.nextBillingDate || 'March 1, 2024',
+                totalSpent: subscription.totalSpent ? `$${subscription.totalSpent}` : '$147.00',
+                memberSince: subscription.memberSince || 'January 2024'
             };
 
             document.getElementById('planName').textContent = billingData.planName;
@@ -875,49 +915,46 @@
 
         function openStripeBillingPortal() {
             api.openBillingPortal();
-          }
-          
-          function changePlan() {
-            // Example: Subscribe to Premium Monthly
-            const priceId = 'price_premium_monthly'; // Replace with actual Stripe price ID
-            api.createCheckoutSession(priceId, 'Premium', 'Monthly');
-          }
-
+        }
+        
         function changePlan() {
-            // TODO: Navigate to pricing page or show plan selection modal
-            console.log('Navigating to plan selection...');
+            // Navigate to pricing page to select new plan
             window.location.href = '/pricing.html';
         }
 
         function cancelSubscription() {
-            // TODO: Implement subscription cancellation flow
             if (confirm('Are you sure you want to cancel your subscription? You will lose access to premium features.')) {
                 console.log('Processing subscription cancellation...');
-                // Call Stripe API to cancel subscription
+                // Call API to cancel subscription
+                api.updateSubscription({ action: 'cancel' }).then(() => {
+                    alert('Your subscription has been cancelled.');
+                    loadBillingData(); // Reload to show updated status
+                }).catch(error => {
+                    alert('Failed to cancel subscription. Please try again.');
+                    console.error('Cancellation error:', error);
+                });
             }
         }
 
         function addPaymentMethod() {
-            // TODO: Open Stripe payment method modal or redirect
             console.log('Adding new payment method...');
-            // This would typically open a Stripe Elements modal or redirect to Stripe
+            // This would typically open a Stripe Elements modal or redirect
+            api.openBillingPortal(); // For now, redirect to Stripe portal
         }
 
         function downloadInvoice(invoiceId) {
-            // TODO: Download invoice from Stripe
             console.log(`Downloading invoice ${invoiceId}...`);
             // This would call Stripe API to get invoice PDF URL
         }
 
         function downloadInvoices() {
-            // TODO: Download all invoices
             console.log('Downloading all invoices...');
             // This would batch download or create a zip file
         }
 
         function handleLogout() {
             if (confirm('Are you sure you want to logout?')) {
-                window.location.href = '/login.html';
+                api.logout();
             }
         }
 
@@ -943,100 +980,29 @@
             }
         }
 
-        // Initialize on page load
+        // Main initialization
         document.addEventListener('DOMContentLoaded', function() {
-            loadBillingData();
-            checkUrlParams();
+            // Wait for API and navigation to be ready
+            waitForAPI(function() {
+                console.log('[Billing] API and navigation ready');
+                
+                // Update navigation UI first
+                updateNavigation();
+                
+                // Check authentication
+                if (!api.isAuthenticated()) {
+                    console.log('[Billing] Not authenticated, redirecting to login');
+                    sessionStorage.setItem('redirectUrl', window.location.href);
+                    window.location.href = '/login.html';
+                    return;
+                }
+                
+                console.log('[Billing] Authentication verified, initializing page');
+                // Initialize page
+                initializePage();
+                checkUrlParams();
+            });
         });
     </script>
-    <!-- Add before closing </body> tag on ALL pages -->
-<script src="/js/app.js"></script>
-<script src="/js/navigation.js"></script>
-<script>
-  // Initialize page-specific functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check auth and update navigation
-    updateNavigation();
-    
-    // Page-specific initialization
-    if (typeof initializePage === 'function') {
-      initializePage();
-    }
-  });
-</script>
-// Add to dashboard.html, bookings.html, settings.html, etc.
-<script>
-function initializePage() {
-  // Check authentication first
-  if (!requireAuth()) return;
-  
-  // Load page-specific data
-  loadDashboardData();
-}
-
-async function loadDashboardData() {
-  try {
-    // TODO: Connect to Airtable via API
-    // const profile = await api.getProfile();
-    // const bookings = await api.getBookings();
-    
-    // Placeholder for now
-    console.log('Loading dashboard data...');
-    
-    // Update UI with data
-    // updateDashboardUI(profile, bookings);
-  } catch (error) {
-    console.error('Failed to load dashboard:', error);
-  }
-}
-</script>
-// billing.html
-<script>
-async function initializePage() {
-  if (!requireAuth()) return;
-  
-  const user = api.getCurrentUser();
-  
-  // Only show billing for speakers
-  if (user.memberType !== 'Speaker') {
-    document.getElementById('billingContent').innerHTML = 
-      '<p>Billing is only for speaker accounts. Organizations use CoveTalks for free!</p>';
-    return;
-  }
-  
-  loadSubscriptionInfo();
-}
-
-async function loadSubscriptionInfo() {
-  try {
-    // TODO: Stripe Integration
-    // const subscription = await api.getSubscription();
-    
-    // Placeholder
-    const subscription = {
-      plan: 'Plus',
-      status: 'Active',
-      nextBilling: '2024-02-01',
-      amount: 19.99
-    };
-    
-    displaySubscription(subscription);
-  } catch (error) {
-    console.error('Error loading subscription:', error);
-  }
-}
-
-function changePlan() {
-  // TODO: Stripe Checkout Integration
-  // api.createCheckoutSession(priceId, planType, billingPeriod);
-  console.log('Opening Stripe checkout...');
-}
-
-function openBillingPortal() {
-  // TODO: Stripe Portal Integration
-  // api.openBillingPortal();
-  console.log('Opening Stripe billing portal...');
-}
-</script>
 </body>
 </html>

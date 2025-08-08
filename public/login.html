@@ -64,6 +64,12 @@
             }
         }
 
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
         .nav-links {
             display: flex;
             list-style: none;
@@ -79,6 +85,18 @@
 
         .nav-links a:hover {
             color: #155588;
+        }
+
+        .nav-links a.active {
+            color: #155588;
+            border-bottom: 2px solid #155588;
+            padding-bottom: 2px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .auth-buttons {
@@ -260,39 +278,15 @@
             transform: translateY(-2px);
         }
 
-        .btn-secondary-nav {
-            background: white;
+        .btn-secondary {
+            background: transparent;
             color: #155588;
             border: 2px solid #155588;
         }
 
-        .btn-secondary-nav:hover {
+        .btn-secondary:hover {
             background: #155588;
             color: white;
-
-        }
-
-        .divider {
-            text-align: center;
-            margin: 1.5rem 0;
-            position: relative;
-        }
-
-        .divider::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: #e1e8ed;
-        }
-
-        .divider span {
-            background: white;
-            padding: 0 1rem;
-            position: relative;
-            color: #666;
         }
 
         .signup-prompt {
@@ -397,281 +391,217 @@
             100% { transform: rotate(360deg); }
         }
 
-         /* Responsive Design */
-         @media (max-width: 768px) {
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            z-index: 1002;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.show {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Mobile Menu Panel */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            z-index: 1001;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+        }
+
+        .mobile-menu.show {
+            right: 0;
+        }
+
+        .mobile-menu-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e1e8ed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mobile-menu-close {
+            width: 30px;
+            height: 30px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #666;
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .mobile-nav-links li {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .mobile-nav-links a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .mobile-nav-links a:hover {
+            background: #f8f9fa;
+            color: #155588;
+            padding-left: 2rem;
+        }
+
+        .mobile-nav-links a.active {
+            color: #155588;
+            background: #e8f4fd;
+        }
+
+        .mobile-auth-buttons {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-auth-buttons .btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
             .nav-links {
+                display: none !important;
+            }
+            
+            .auth-buttons.desktop-only {
+                display: none !important;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            header {
+                padding: 0.75rem 0;
+            }
+            
+            body {
+                padding-top: 60px;
+            }
+
+            .login-box {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+
+            .login-info-section {
                 display: none;
             }
+        }
 
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .ways-grid,
-            .steps-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .org-grid {
-                grid-template-columns: 1fr;
+        @media (max-width: 480px) {
+            .mobile-menu {
+                width: 85vw;
+                right: -85vw;
             }
         }
 
-        /* Mobile Navigation Styles */
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-/* Hamburger Menu */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-    z-index: 1002;
-    background: none;
-    border: none;
-    padding: 5px;
-}
-
-.hamburger span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background: #333;
-    margin: 3px 0;
-    transition: all 0.3s ease;
-    border-radius: 2px;
-}
-
-.hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
-
-.hamburger.active span:nth-child(2) {
-    opacity: 0;
-}
-
-.hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -6px);
-}
-
-/* Mobile Menu Overlay */
-.mobile-menu-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.mobile-menu-overlay.show {
-    display: block;
-    opacity: 1;
-}
-
-/* Mobile Menu Panel */
-.mobile-menu {
-    position: fixed;
-    top: 0;
-    right: -320px;
-    width: 300px;
-    height: 100vh;
-    background: white;
-    z-index: 1001;
-    transition: right 0.3s ease;
-    overflow-y: auto;
-    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-}
-
-.mobile-menu.show {
-    right: 0;
-}
-
-.mobile-menu-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.mobile-menu-close {
-    width: 30px;
-    height: 30px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #666;
-}
-
-.mobile-nav-links {
-    list-style: none;
-    padding: 1rem 0;
-}
-
-.mobile-nav-links li {
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.mobile-nav-links a {
-    display: block;
-    padding: 1rem 1.5rem;
-    color: #333;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s;
-}
-
-.mobile-nav-links a:hover {
-    background: #f8f9fa;
-    color: #155588;
-    padding-left: 2rem;
-}
-
-.mobile-nav-links a.active {
-    color: #155588;
-    background: #e8f4fd;
-}
-
-.mobile-user-section {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    background: #f8f9fa;
-}
-
-.mobile-user-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.mobile-user-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #1e93b7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-}
-
-.mobile-user-details h3 {
-    margin: 0;
-    color: #333;
-}
-
-.mobile-user-details p {
-    margin: 0;
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.mobile-auth-buttons {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.mobile-auth-buttons .btn {
-    width: 100%;
-    text-align: center;
-}
-
-/* Responsive Breakpoints */
-@media (max-width: 768px) {
-    .nav-links {
-        display: none !important;
-    }
-    
-    .auth-buttons.desktop-only {
-        display: none !important;
-    }
-    
-    .hamburger {
-        display: flex;
-    }
-    
-    header {
-        padding: 0.75rem 0;
-    }
-    
-    .logo {
-        font-size: 1.5rem;
-    }
-
-    body {
-        padding-top: 60px;
-    }
-}
-
-@media (max-width: 480px) {
-    .mobile-menu {
-        width: 85vw;
-        right: -85vw;
-    }
-}
-
-        /* Footer */
-        footer {
-            background: #2c3e50;
-            color: white;
-            padding: 3rem 0 1rem;
+        /* Forgot Password Modal */
+        #forgotModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
         }
 
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+        .modal-content {
+            background: white;
+            max-width: 400px;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 15px;
         }
 
-        .footer-section h3 {
+        .modal-content h3 {
+            color: #155588;
             margin-bottom: 1rem;
-            color: #f2b236;
         }
 
-        .footer-section a {
-            color: #bdc3c7;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.5rem;
-            transition: color 0.3s;
+        .modal-content p {
+            color: #666;
+            margin-bottom: 1.5rem;
         }
 
-        .footer-section a:hover {
-            color: #f2b236;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #34495e;
-            padding-top: 1rem;
-            text-align: center;
-            color: #bdc3c7;
+        .modal-close {
+            margin-top: 1rem;
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -686,52 +616,18 @@
                 </a>
                 
                 <!-- Desktop Navigation -->
-                <!-- Logged Out Navigation -->
-                <ul class="nav-links nav-logged-out" id="navLoggedOut">
+                <ul class="nav-links" id="navLinks">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="members.html">Find Speakers</a></li>
                     <li><a href="pricing.html">Pricing</a></li>
                     <li><a href="register.html">Register</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                
-                <!-- Logged In Navigation (Speakers) -->
-                <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="opportunities.html">Opportunities</a></li>
-                    <li><a href="bookings.html">My Bookings</a></li>
-                    <li><a href="profile.html">Profile</a></li>
-                </ul>
-                
-                <!-- Logged In Navigation (Organizations) -->
-                <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
-                    <li><a href="organization-dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                    <li><a href="my-opportunities.html">My Opportunities</a></li>
-                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                </ul>
     
                 <!-- Right Side Navigation -->
                 <div class="nav-right">
-                    <!-- For Logged In Users -->
-                    <div class="user-menu" id="userMenuDesktop" style="display: none;">
-                        <div class="user-dropdown">
-                            <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
-                            <div class="dropdown-menu" id="dropdownMenu">
-                                <a href="profile-edit.html">Edit Profile</a>
-                                <a href="settings.html">Settings</a>
-                                <a href="billing.html">Billing</a>
-                                <div class="dropdown-divider"></div>
-                                <a href="#" onclick="logout()">Logout</a>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <!-- For Logged Out Users -->
-                    <div class="auth-buttons desktop-only" id="authButtonsDesktop">
-                        <a href="register.html" class="btn btn-secondary-nav">Join</a>
+                    <div class="auth-buttons desktop-only">
+                        <a href="register.html" class="btn btn-secondary">Join</a>
                         <a href="login.html" class="btn btn-primary-nav">Login</a>
                     </div>
     
@@ -747,74 +643,33 @@
     </header>
 
     <!-- Mobile Menu Overlay -->
-<div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
 
-<!-- Mobile Menu Panel -->
-<div class="mobile-menu" id="mobileMenu">
-    <div class="mobile-menu-header">
-        <a href="index.html" class="logo">
-            <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
-        </a>
-        <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
-    </div>
+    <!-- Mobile Menu Panel -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <a href="index.html" class="logo">
+                <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+            </a>
+            <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+        </div>
 
-    <!-- Mobile User Section (for logged in users) -->
-    <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
-        <div class="mobile-user-info">
-            <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
-            <div class="mobile-user-details">
-                <h3 id="mobileUserName">John Doe</h3>
-                <p id="mobileUserType">Speaker - Plus Plan</p>
-            </div>
+        <!-- Mobile Navigation Links -->
+        <ul class="mobile-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="members.html">Find Speakers</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="help.html">Help Center</a></li>
+        </ul>
+
+        <!-- Mobile Auth Buttons -->
+        <div class="mobile-auth-buttons">
+            <a href="register.html" class="btn btn-secondary">Join Community</a>
+            <a href="login.html" class="btn btn-primary">Login</a>
         </div>
     </div>
-
-    <!-- Mobile Navigation Links -->
-    <!-- Logged Out Mobile Navigation -->
-    <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="pricing.html">Pricing</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="help.html">Help Center</a></li>
-    </ul>
-    
-    <!-- Logged In Mobile Navigation (Speakers) -->
-    <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="opportunities.html">Opportunities</a></li>
-        <li><a href="bookings.html">My Bookings</a></li>
-        <li><a href="profile.html">Profile</a></li>
-        <li><a href="settings.html">Settings</a></li>
-        <li><a href="billing.html">Billing</a></li>
-        <li><a href="help.html">Help & Support</a></li>
-    </ul>
-    
-    <!-- Logged In Mobile Navigation (Organizations) -->
-    <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
-        <li><a href="organization-dashboard.html">Dashboard</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="post-opportunity.html">Post Opportunity</a></li>
-        <li><a href="my-opportunities.html">My Opportunities</a></li>
-        <li><a href="saved-speakers.html">Saved Speakers</a></li>
-        <li><a href="settings.html">Settings</a></li>
-        <li><a href="team.html">Team Members</a></li>
-        <li><a href="help.html">Help & Support</a></li>
-    </ul>
-
-    <!-- Mobile Auth Buttons (for logged out users) -->
-    <div class="mobile-auth-buttons" id="mobileAuthButtons">
-        <a href="register.html" class="btn btn-secondary">Join Community</a>
-        <a href="login.html" class="btn btn-primary">Login</a>
-    </div>
-
-    <!-- Mobile Logout Button (for logged in users) -->
-    <div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
-        <button class="btn btn-primary" onclick="logout()">Logout</button>
-    </div>
-</div>
 
     <!-- Login Container -->
     <div class="login-container">
@@ -850,7 +705,7 @@
 
                     <div class="remember-forgot">
                         <div class="remember-me">
-                            <input type="checkbox" id="remember" name="remember">
+                            <input type="checkbox" id="remember" name="remember" checked>
                             <label for="remember">Remember me</label>
                         </div>
                         <a href="#" class="forgot-link" onclick="showForgotPassword(); return false;">Forgot password?</a>
@@ -898,107 +753,153 @@
     </div>
 
     <!-- Forgot Password Modal -->
-    <div id="forgotModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000;">
-        <div style="background: white; max-width: 400px; margin: 10% auto; padding: 2rem; border-radius: 15px;">
-            <h3 style="color: #155588; margin-bottom: 1rem;">Reset Password</h3>
-            <p style="color: #666; margin-bottom: 1.5rem;">Enter your email address and we'll send you a link to reset your password.</p>
+    <div id="forgotModal">
+        <div class="modal-content">
+            <h3>Reset Password</h3>
+            <p>Enter your email address and we'll send you a link to reset your password.</p>
             <form id="forgotForm">
                 <div class="form-group">
                     <input type="email" id="resetEmail" placeholder="Enter your email" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Send Reset Link</button>
             </form>
-            <button onclick="closeForgotPassword()" style="margin-top: 1rem; background: none; border: none; color: #666; cursor: pointer;">Cancel</button>
+            <button onclick="closeForgotPassword()" class="modal-close">Cancel</button>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>CoveTalks</h3>
-                    <p>Connecting speakers with organizations worldwide to create meaningful opportunities and lasting relationships.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <a href="#home">Home</a>
-                    <a href="members.html">Members</a>
-                    <a href="register.html">Register</a>
-                    <a href="pricing.html">Pricing</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Support</h3>
-                    <a href="#">Help Center</a>
-                    <a href="#">Contact Us</a>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Connect</h3>
-                    <a href="#">LinkedIn</a>
-                    <a href="#">Twitter</a>
-                    <a href="#">Facebook</a>
-                    <a href="#">Email</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; <script>document.write(new Date().getFullYear());</script> CoveTalks. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
 
     <!-- Include the API client -->
     <script src="/js/app.js"></script>
     
+    <!-- DEBUG HELPER - TEMPORARY -->
     <script>
-        // ============================================
-        // BACKEND INTEGRATION FOR LOGIN
-        // ============================================
-        
-        // Configuration - Updated for Netlify Functions
-        const CONFIG = {
-            API_BASE: window.location.hostname === 'localhost' 
-                ? 'http://localhost:8888/.netlify/functions'  // Netlify Dev local server
-                : '/.netlify/functions'  // Production Netlify Functions
-        };
-
-        let currentTab = 'Speaker';  // Default to Speaker
-
-        // Check if already logged in
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if API client is loaded
+        // Debug function to check authentication state
+        function debugAuth() {
+            console.log('=== AUTHENTICATION DEBUG ===');
+            
+            // Check if API exists
+            console.log('1. API Available:', typeof api !== 'undefined');
+            
             if (typeof api === 'undefined') {
-                console.error('API client not loaded. Make sure /js/app.js exists.');
+                console.log('❌ API not loaded - check if app.js is included');
+                return;
             }
             
-            const token = localStorage.getItem('authToken');
-            const user = localStorage.getItem('user');
+            // Check storage directly
+            const localToken = localStorage.getItem('authToken');
+            const sessionToken = sessionStorage.getItem('authToken');
+            const localUser = localStorage.getItem('user');
+            const sessionUser = sessionStorage.getItem('user');
             
-            if (token && user) {
-                // User is already logged in, redirect to appropriate dashboard
-                const userData = JSON.parse(user);
-                if (userData.memberType === 'Organization') {
-                    window.location.href = 'organization-dashboard.html';
-                } else {
-                    window.location.href = 'dashboard.html';
-                }
+            console.log('2. Storage Check:');
+            console.log('   - Local Token:', localToken ? 'EXISTS' : 'MISSING');
+            console.log('   - Session Token:', sessionToken ? 'EXISTS' : 'MISSING');
+            console.log('   - Local User:', localUser ? 'EXISTS' : 'MISSING');
+            console.log('   - Session User:', sessionUser ? 'EXISTS' : 'MISSING');
+            
+            // Check API methods
+            console.log('3. API Methods:');
+            console.log('   - getToken():', api.getToken() ? 'HAS TOKEN' : 'NO TOKEN');
+            console.log('   - getCurrentUser():', api.getCurrentUser() ? 'HAS USER' : 'NO USER');
+            console.log('   - isAuthenticated():', api.isAuthenticated());
+            
+            // Parse user data if available
+            const user = api.getCurrentUser();
+            if (user) {
+                console.log('4. User Data:');
+                console.log('   - Name:', user.name);
+                console.log('   - Email:', user.email);
+                console.log('   - Type:', user.memberType || user.Member_Type);
+                console.log('   - Full Object:', user);
+            } else {
+                console.log('4. User Data: NO USER DATA');
             }
+            
+            // Check current page
+            console.log('5. Page Info:');
+            console.log('   - Path:', window.location.pathname);
+            console.log('   - File:', window.location.pathname.split('/').pop());
+            console.log('   - Redirect URL in session:', sessionStorage.getItem('redirectUrl'));
+            
+            console.log('=== END DEBUG ===');
+        }
 
+        // Make debugAuth globally available
+        window.debugAuth = debugAuth;
+
+        // Add debug info to console automatically
+        console.log('%c🔍 CoveTalks Auth Debug Helper Loaded', 'color: #4CAF50; font-weight: bold;');
+        console.log('Call debugAuth() in console to check authentication state');
+    </script>
+    
+    <script>
+        // Page state
+        let currentTab = 'Speaker';
+
+        // Initialize page
+        function initializePage() {
+            console.log('[Login] Initializing login page');
+            
             // Check for redirect from registration
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('registered') === 'true') {
                 showMessage('success', 'Registration successful! Please login to continue.');
             }
             
-            // Update navigation
-            updateNavAuth();
+            // Set active nav item
             setActiveNavItem();
+            
+            console.log('[Login] Page initialization complete');
+        }
+
+        // Check if already logged in and redirect
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('[Login] DOM loaded, checking authentication state');
+            
+            // Wait for API to be ready
+            if (typeof api === 'undefined') {
+                console.error('[Login] API client not loaded. Make sure /js/app.js exists.');
+                showMessage('error', 'Application failed to load. Please refresh the page.');
+                return;
+            }
+            
+            // Small delay to ensure everything is ready
+            setTimeout(() => {
+                // Check if user is already logged in
+                if (api.isAuthenticated()) {
+                    console.log('[Login] User already authenticated, redirecting');
+                    const user = api.getCurrentUser();
+                    if (user) {
+                        // Redirect to appropriate dashboard
+                        if (typeof handlePostLoginRedirect === 'function') {
+                            handlePostLoginRedirect(user);
+                        } else {
+                            // Fallback redirect
+                            const userType = user.memberType || user.Member_Type;
+                            if (userType === 'Organization') {
+                                window.location.href = '/organization-dashboard.html';
+                            } else {
+                                window.location.href = '/dashboard.html';
+                            }
+                        }
+                        return;
+                    }
+                }
+                
+                // Initialize page if not logged in
+                initializePage();
+                
+                // Auto-run debug in localhost
+                if (window.location.hostname === 'localhost') {
+                    setTimeout(debugAuth, 1000);
+                }
+            }, 200);
         });
 
-        // Enhanced Form submission with backend integration
+        // Login form submission
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+            
+            console.log('[Login] Form submitted');
             
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
@@ -1011,50 +912,59 @@
                 return;
             }
             
+            console.log('[Login] Attempting login for:', email);
+            
             // Show loading state
             loginButton.disabled = true;
             document.getElementById('loginText').style.display = 'none';
             document.getElementById('loginLoader').style.display = 'inline-block';
             
             try {
-                // Use the API client if available, otherwise fallback to direct fetch
-                if (typeof api !== 'undefined' && api.login) {
-                    // Using the API client from app.js
-                    const result = await api.login(email, password);
-                    handleLoginSuccess(result, remember);
-                } else {
-                    // Fallback to direct API call
-                    const response = await fetch(`${CONFIG.API_BASE}/auth-login`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ 
-                            email, 
-                            password
-                        })
-                    });
+                // Use the API client to login
+                const result = await api.login(email, password, remember);
+                
+                console.log('[Login] Login result:', { success: result.success, hasUser: !!result.user });
+                
+                if (result.success && result.user) {
+                    showMessage('success', 'Login successful! Redirecting...');
                     
-                    const result = await response.json();
+                    console.log('[Login] Login successful, setting up redirect');
                     
-                    if (response.ok && result.success) {
-                        // Store credentials
-                        if (remember) {
-                            localStorage.setItem('authToken', result.token);
-                            localStorage.setItem('user', JSON.stringify(result.user));
-                        } else {
-                            sessionStorage.setItem('authToken', result.token);
-                            sessionStorage.setItem('user', JSON.stringify(result.user));
-                        }
+                    // Short delay to show success message, then redirect
+                    setTimeout(() => {
+                        const redirectUrl = sessionStorage.getItem('redirectUrl');
+                        console.log('[Login] Redirect URL from session:', redirectUrl);
                         
-                        handleLoginSuccess(result, remember);
-                    } else {
-                        throw new Error(result.error || 'Invalid email or password');
-                    }
+                        if (redirectUrl && !redirectUrl.includes('login.html') && !redirectUrl.includes('register.html')) {
+                            console.log('[Login] Using saved redirect URL');
+                            sessionStorage.removeItem('redirectUrl');
+                            window.location.href = redirectUrl;
+                        } else {
+                            // Default redirect based on user type
+                            const userType = result.user.memberType || result.user.Member_Type;
+                            console.log('[Login] Using default redirect for user type:', userType);
+                            
+                            if (userType === 'Organization') {
+                                window.location.href = '/organization-dashboard.html';
+                            } else {
+                                window.location.href = '/dashboard.html';
+                            }
+                        }
+                    }, 1500);
+                } else {
+                    throw new Error(result.error || 'Login failed - no user data received');
                 }
             } catch (error) {
-                console.error('Login error:', error);
-                showMessage('error', error.message || 'Login failed. Please check your credentials and try again.');
+                console.error('[Login] Login error:', error);
+                showMessage('error', error.message || 'Invalid email or password. Please try again.');
+                
+                // Debug: Check what's in storage after failed login
+                setTimeout(() => {
+                    console.log('[Login] Post-error storage check:');
+                    console.log('  - Token:', !!api.getToken());
+                    console.log('  - User:', !!api.getCurrentUser());
+                    console.log('  - Authenticated:', api.isAuthenticated());
+                }, 100);
             } finally {
                 // Reset button state
                 loginButton.disabled = false;
@@ -1063,24 +973,7 @@
             }
         });
 
-        // Handle successful login
-        function handleLoginSuccess(result, remember) {
-            showMessage('success', 'Login successful! Redirecting...');
-            
-            // Update navigation immediately
-            updateNavAuth();
-            
-            // Redirect based on user type
-            setTimeout(() => {
-                if (result.user.memberType === 'Organization') {
-                    window.location.href = 'organization-dashboard.html';
-                } else {
-                    window.location.href = 'dashboard.html';
-                }
-            }, 1000);
-        }
-
-        // Switch tabs - Updated to use proper member types
+        // Switch tabs
         function switchTab(tab) {
             currentTab = tab;
             const tabs = document.querySelectorAll('.tab-btn');
@@ -1108,9 +1001,11 @@
             if (type === 'error') {
                 errorDiv.textContent = message;
                 errorDiv.classList.add('show');
+                console.log('[Login] Error message:', message);
             } else {
                 successDiv.textContent = message;
                 successDiv.classList.add('show');
+                console.log('[Login] Success message:', message);
             }
             
             // Auto-hide after 5 seconds
@@ -1131,86 +1026,29 @@
         }
 
         // Forgot password form submission
-        document.getElementById('forgotForm')?.addEventListener('submit', async function(e) {
+        document.getElementById('forgotForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('resetEmail').value;
             
             // For MVP, just show a success message
-            // In production, this would trigger an email with reset link
             showMessage('success', 'If an account exists with this email, you will receive password reset instructions.');
             closeForgotPassword();
             
             // TODO: Implement actual password reset functionality
-            // This would require:
-            // 1. A backend endpoint to generate reset tokens
-            // 2. Email service to send reset links
-            // 3. A reset password page to handle the token
         });
-        
-        // Update navigation based on auth status
-        function updateNavAuth() {
-            const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-            const userStr = localStorage.getItem('user') || sessionStorage.getItem('user');
-            const user = userStr ? JSON.parse(userStr) : null;
+
+        // Set active navigation item
+        function setActiveNavItem() {
+            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
             
-            if (token && user) {
-                // User is logged in
-                document.getElementById('navLoggedOut').style.display = 'none';
-                document.getElementById('mobileNavLoggedOut').style.display = 'none';
-                
-                // Show appropriate logged in navigation
-                if (user.memberType === 'Organization') {
-                    document.getElementById('navOrganization').style.display = 'flex';
-                    document.getElementById('navSpeaker').style.display = 'none';
-                    document.getElementById('mobileNavOrganization').style.display = 'block';
-                    document.getElementById('mobileNavSpeaker').style.display = 'none';
-                } else {
-                    document.getElementById('navSpeaker').style.display = 'flex';
-                    document.getElementById('navOrganization').style.display = 'none';
-                    document.getElementById('mobileNavSpeaker').style.display = 'block';
-                    document.getElementById('mobileNavOrganization').style.display = 'none';
+            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
                 }
-                
-                // Show user menu
-                document.getElementById('userMenuDesktop').style.display = 'flex';
-                document.getElementById('authButtonsDesktop').style.display = 'none';
-                document.getElementById('mobileUserSection').style.display = 'block';
-                document.getElementById('mobileAuthButtons').style.display = 'none';
-                document.getElementById('mobileLogoutSection').style.display = 'block';
-                
-                // Update user info
-                const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 'U';
-                document.getElementById('userAvatar').textContent = initials;
-                document.getElementById('mobileUserAvatar').textContent = initials;
-                document.getElementById('mobileUserName').textContent = user.name || 'User';
-                document.getElementById('mobileUserType').textContent = user.memberType || 'Member';
-            } else {
-                // User is logged out
-                document.getElementById('navLoggedOut').style.display = 'flex';
-                document.getElementById('mobileNavLoggedOut').style.display = 'block';
-                
-                // Hide all logged in navigation
-                document.getElementById('navSpeaker').style.display = 'none';
-                document.getElementById('navOrganization').style.display = 'none';
-                document.getElementById('mobileNavSpeaker').style.display = 'none';
-                document.getElementById('mobileNavOrganization').style.display = 'none';
-                
-                // Show auth buttons
-                if (document.getElementById('userMenuDesktop')) {
-                    document.getElementById('userMenuDesktop').style.display = 'none';
-                }
-                document.getElementById('authButtonsDesktop').style.display = 'flex';
-                
-                if (document.getElementById('mobileUserSection')) {
-                    document.getElementById('mobileUserSection').style.display = 'none';
-                }
-                document.getElementById('mobileAuthButtons').style.display = 'flex';
-                if (document.getElementById('mobileLogoutSection')) {
-                    document.getElementById('mobileLogoutSection').style.display = 'none';
-                }
-            }
+            });
         }
-        
+
         // Mobile menu functions
         function toggleMobileMenu() {
             const hamburger = document.getElementById('hamburger');
@@ -1227,7 +1065,7 @@
                 document.body.style.overflow = '';
             }
         }
-        
+
         function closeMobileMenu() {
             const hamburger = document.getElementById('hamburger');
             const mobileMenu = document.getElementById('mobileMenu');
@@ -1238,65 +1076,21 @@
             overlay.classList.remove('show');
             document.body.style.overflow = '';
         }
-        
-        // Dropdown menu
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
-        }
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (dropdown && avatar && !avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-        
-        // Set active navigation item
-        function setActiveNavItem() {
-            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-            
-            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('active');
-                }
-            });
-        }
-        
-        // Logout function - Updated to clear all auth data
-        function logout() {
-            // Clear all authentication data
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('user');
-            sessionStorage.removeItem('authToken');
-            sessionStorage.removeItem('user');
-            
-            // If using the API client, call its logout method
-            if (typeof api !== 'undefined' && api.logout) {
-                api.logout();
-            } else {
-                // Redirect to login page
-                window.location.href = 'login.html';
-            }
-        }
-        
-        // Responsive handlers
+
+        // Close mobile menu on window resize
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 closeMobileMenu();
             }
         });
-        
+
+        // Close mobile menu when clicking on a link
         document.querySelectorAll('.mobile-nav-links a').forEach(link => {
             link.addEventListener('click', function() {
                 closeMobileMenu();
             });
         });
-        
+
         // Close forgot password modal on escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && document.getElementById('forgotModal').style.display === 'block') {
@@ -1304,20 +1098,5 @@
             }
         });
     </script>
-    <!-- Add before closing </body> tag on ALL pages -->
-<script src="/js/app.js"></script>
-<script src="/js/navigation.js"></script>
-<script>
-  // Initialize page-specific functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check auth and update navigation
-    updateNavigation();
-    
-    // Page-specific initialization
-    if (typeof initializePage === 'function') {
-      initializePage();
-    }
-  });
-</script>
 </body>
 </html>

@@ -24,7 +24,7 @@
             padding: 0 20px;
         }
 
-        /* Header Styles - Reuse from other pages */
+        /* Header Styles */
         header {
             background: white;
             color: #333;
@@ -89,6 +89,69 @@
             padding-bottom: 2px;
         }
 
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .user-dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            padding: 1rem 0;
+            min-width: 200px;
+            display: none;
+            margin-top: 0.5rem;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.5rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-divider {
+            border-top: 1px solid #e1e8ed;
+            margin: 0.5rem 0;
+        }
+
         .btn {
             padding: 0.75rem 1.5rem;
             border: none;
@@ -123,13 +186,18 @@
         }
 
         .btn-success {
-            background: #27ae60;
+            background: #f2b236;
             color: white;
         }
 
         .btn-success:hover {
             background: #229954;
             transform: translateY(-2px);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
         }
 
         /* Page Header */
@@ -280,7 +348,7 @@
 
         .badge-new {
             background: #d4edda;
-            color: #27ae60;
+            color: #f2b236;
         }
 
         .badge-urgent {
@@ -392,6 +460,27 @@
             color: #999;
         }
 
+        /* Loading State */
+        .loading-container {
+            text-align: center;
+            padding: 4rem;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #155588;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* Pagination */
         .pagination {
             display: flex;
@@ -428,29 +517,198 @@
             cursor: not-allowed;
         }
 
-        /* Loading State */
-        .loading-container {
-            text-align: center;
-            padding: 4rem;
+        /* Mobile Navigation */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            z-index: 1002;
+            background: none;
+            border: none;
+            padding: 5px;
         }
 
-        .loading-spinner {
-            display: inline-block;
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            z-index: 1001;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+        }
+
+        .mobile-menu.show {
+            right: 0;
+        }
+
+        .mobile-menu-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e1e8ed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mobile-menu-close {
+            width: 30px;
+            height: 30px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #666;
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .mobile-nav-links li {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .mobile-nav-links a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .mobile-nav-links a:hover {
+            background: #f8f9fa;
+            color: #155588;
+            padding-left: 2rem;
+        }
+
+        .mobile-nav-links a.active {
+            color: #155588;
+            background: #e8f4fd;
+        }
+
+        .mobile-user-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e1e8ed;
+            background: #f8f9fa;
+        }
+
+        .mobile-user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .mobile-user-avatar {
             width: 50px;
             height: 50px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #155588;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .mobile-user-details h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .mobile-user-details p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .mobile-auth-buttons {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-auth-buttons .btn {
+            width: 100%;
+            text-align: center;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
+            .nav-links {
+                display: none !important;
+            }
+            
+            .auth-buttons.desktop-only {
+                display: none !important;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            header {
+                padding: 0.75rem 0;
+            }
+            
+            body {
+                padding-top: 60px;
+            }
+
             .page-header h1 {
                 font-size: 2rem;
             }
@@ -479,402 +737,191 @@
             }
         }
 
-        /* Mobile Navigation Styles */
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
+        @media (max-width: 480px) {
+            .mobile-menu {
+                width: 85vw;
+                right: -85vw;
+            }
+        }
 
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 0 1rem;
+        }
 
-/* Hamburger Menu */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-    z-index: 1002;
-    background: none;
-    border: none;
-    padding: 5px;
-}
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
 
-.hamburger span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background: #333;
-    margin: 3px 0;
-    transition: all 0.3s ease;
-    border-radius: 2px;
-}
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #f2b236;
+        }
 
-.hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
+        .footer-section a {
+            color: #bdc3c7;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
 
-.hamburger.active span:nth-child(2) {
-    opacity: 0;
-}
+        .footer-section a:hover {
+            color: #f2b236;
+        }
 
-.hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -6px);
-}
-
-/* Mobile Menu Overlay */
-.mobile-menu-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.mobile-menu-overlay.show {
-    display: block;
-    opacity: 1;
-}
-
-/* Mobile Menu Panel */
-.mobile-menu {
-    position: fixed;
-    top: 0;
-    right: -320px;
-    width: 300px;
-    height: 100vh;
-    background: white;
-    z-index: 1001;
-    transition: right 0.3s ease;
-    overflow-y: auto;
-    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-}
-
-.mobile-menu.show {
-    right: 0;
-}
-
-.mobile-menu-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.mobile-menu-close {
-    width: 30px;
-    height: 30px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #666;
-}
-
-.mobile-nav-links {
-    list-style: none;
-    padding: 1rem 0;
-}
-
-.mobile-nav-links li {
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.mobile-nav-links a {
-    display: block;
-    padding: 1rem 1.5rem;
-    color: #333;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s;
-}
-
-.mobile-nav-links a:hover {
-    background: #f8f9fa;
-    color: #155588;
-    padding-left: 2rem;
-}
-
-.mobile-nav-links a.active {
-    color: #155588;
-    background: #e8f4fd;
-}
-
-.mobile-user-section {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    background: #f8f9fa;
-}
-
-.mobile-user-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.mobile-user-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #1e93b7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-}
-
-.mobile-user-details h3 {
-    margin: 0;
-    color: #333;
-}
-
-.mobile-user-details p {
-    margin: 0;
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.mobile-auth-buttons {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.mobile-auth-buttons .btn {
-    width: 100%;
-    text-align: center;
-}
-
-/* Responsive Breakpoints */
-@media (max-width: 768px) {
-    .nav-links {
-        display: none !important;
-    }
-    
-    .auth-buttons.desktop-only {
-        display: none !important;
-    }
-    
-    .hamburger {
-        display: flex;
-    }
-    
-    header {
-        padding: 0.75rem 0;
-    }
-    
-    .logo {
-        font-size: 1.5rem;
-    }
-
-    body {
-        padding-top: 60px;
-    }
-}
-
-@media (max-width: 480px) {
-    .mobile-menu {
-        width: 85vw;
-        right: -85vw;
-    }
-}
-/* Footer */
-footer {
-    background: #2c3e50;
-    color: white;
-    padding: 3rem 0 1rem;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.footer-section h3 {
-    margin-bottom: 1rem;
-    color: #f2b236;
-}
-
-.footer-section a {
-    color: #bdc3c7;
-    text-decoration: none;
-    display: block;
-    margin-bottom: 0.5rem;
-    transition: color 0.3s;
-}
-
-.footer-section a:hover {
-    color: #f2b236;
-}
-
-.footer-bottom {
-    border-top: 1px solid #34495e;
-    padding-top: 1rem;
-    text-align: center;
-    color: #bdc3c7;
-}
+        .footer-bottom {
+            border-top: 1px solid #34495e;
+            padding-top: 1rem;
+            text-align: center;
+            color: #bdc3c7;
+        }
     </style>
 </head>
 <body>
-<header>
-<div class="nav-container">
-    <nav>
-        <!-- Logo -->
-        <a href="index.html" class="logo">
-            <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
-        </a>
-        
-        <!-- Desktop Navigation -->
-        <!-- Logged Out Navigation -->
-        <ul class="nav-links nav-logged-out" id="navLoggedOut">
+    <header>
+        <div class="nav-container">
+            <nav>
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <!-- Logged Out Navigation -->
+                <ul class="nav-links nav-logged-out" id="navLoggedOut">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                
+                <!-- Logged In Navigation (Speakers) -->
+                <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="opportunities.html" class="active">Opportunities</a></li>
+                    <li><a href="bookings.html">My Bookings</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                </ul>
+                
+                <!-- Logged In Navigation (Organizations) -->
+                <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
+                    <li><a href="organization-dashboard.html">Dashboard</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
+                    <li><a href="my-opportunities.html">My Opportunities</a></li>
+                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
+                </ul>
+
+                <!-- Right Side Navigation -->
+                <div class="nav-right">
+                    <!-- For Logged In Users -->
+                    <div class="user-menu" id="userMenuDesktop" style="display: none;">
+                        <div class="user-dropdown">
+                            <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
+                            <div class="dropdown-menu" id="dropdownMenu">
+                                <a href="profile-edit.html">Edit Profile</a>
+                                <a href="settings.html">Settings</a>
+                                <a href="billing.html">Billing</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" onclick="logout()">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- For Logged Out Users -->
+                    <div class="auth-buttons desktop-only" id="authButtonsDesktop">
+                        <a href="register.html" class="btn btn-secondary">Join</a>
+                        <a href="login.html" class="btn btn-primary">Login</a>
+                    </div>
+
+                    <!-- Hamburger Menu Button -->
+                    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+    <!-- Mobile Menu Panel -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <a href="index.html" class="logo">
+                <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+            </a>
+            <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+        </div>
+
+        <!-- Mobile User Section (for logged in users) -->
+        <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
+            <div class="mobile-user-info">
+                <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
+                <div class="mobile-user-details">
+                    <h3 id="mobileUserName">John Doe</h3>
+                    <p id="mobileUserType">Speaker - Plus Plan</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Links -->
+        <!-- Logged Out Mobile Navigation -->
+        <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
             <li><a href="index.html">Home</a></li>
             <li><a href="members.html">Find Speakers</a></li>
             <li><a href="pricing.html">Pricing</a></li>
             <li><a href="register.html">Register</a></li>
             <li><a href="contact.html">Contact</a></li>
+            <li><a href="help.html">Help Center</a></li>
         </ul>
-        
-        <!-- Logged In Navigation (Speakers) -->
-        <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
+
+        <!-- Logged In Mobile Navigation (Speakers) -->
+        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
             <li><a href="dashboard.html">Dashboard</a></li>
             <li><a href="members.html">Find Speakers</a></li>
-            <li><a href="opportunities.html">Opportunities</a></li>
+            <li><a href="opportunities.html" class="active">Opportunities</a></li>
             <li><a href="bookings.html">My Bookings</a></li>
             <li><a href="profile.html">Profile</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="billing.html">Billing</a></li>
+            <li><a href="help.html">Help & Support</a></li>
         </ul>
-        
-        <!-- Logged In Navigation (Organizations) -->
-        <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
+
+        <!-- Logged In Mobile Navigation (Organizations) -->
+        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
             <li><a href="organization-dashboard.html">Dashboard</a></li>
             <li><a href="members.html">Find Speakers</a></li>
             <li><a href="post-opportunity.html">Post Opportunity</a></li>
             <li><a href="my-opportunities.html">My Opportunities</a></li>
             <li><a href="saved-speakers.html">Saved Speakers</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="team.html">Team Members</a></li>
+            <li><a href="help.html">Help & Support</a></li>
         </ul>
 
-        <!-- Right Side Navigation -->
-        <div class="nav-right">
-            <!-- For Logged In Users -->
-            <div class="user-menu" id="userMenuDesktop" style="display: none;">
-                <div class="user-dropdown">
-                    <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
-                    <div class="dropdown-menu" id="dropdownMenu">
-                        <a href="profile-edit.html">Edit Profile</a>
-                        <a href="settings.html">Settings</a>
-                        <a href="billing.html">Billing</a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" onclick="logout()">Logout</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- For Logged Out Users -->
-            <div class="auth-buttons desktop-only" id="authButtonsDesktop">
-                <a href="register.html" class="btn btn-secondary">Join</a>
-                <a href="login.html" class="btn btn-primary">Login</a>
-            </div>
-
-            <!-- Hamburger Menu Button -->
-            <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+        <!-- Mobile Auth Buttons (for logged out users) -->
+        <div class="mobile-auth-buttons" id="mobileAuthButtons">
+            <a href="register.html" class="btn btn-secondary">Join Community</a>
+            <a href="login.html" class="btn btn-primary">Login</a>
         </div>
-    </nav>
-</div>
-</header>
 
-<!-- Mobile Menu Overlay -->
-<div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
-
-<!-- Mobile Menu Panel -->
-<div class="mobile-menu" id="mobileMenu">
-<div class="mobile-menu-header">
-<a href="index.html" class="logo">
-    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
-</a>
-<button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
-</div>
-
-<!-- Mobile User Section (for logged in users) -->
-<div class="mobile-user-section" id="mobileUserSection" style="display: none;">
-<div class="mobile-user-info">
-    <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
-    <div class="mobile-user-details">
-        <h3 id="mobileUserName">John Doe</h3>
-        <p id="mobileUserType">Speaker - Plus Plan</p>
+        <!-- Mobile Logout Button (for logged in users) -->
+        <div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
+            <button class="btn btn-primary" onclick="logout()">Logout</button>
+        </div>
     </div>
-</div>
-</div>
-
-<!-- Mobile Navigation Links -->
-<!-- Logged Out Mobile Navigation -->
-<ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
-<li><a href="index.html">Home</a></li>
-<li><a href="members.html">Find Speakers</a></li>
-<li><a href="pricing.html">Pricing</a></li>
-<li><a href="register.html">Register</a></li>
-<li><a href="contact.html">Contact</a></li>
-<li><a href="help.html">Help Center</a></li>
-</ul>
-
-<!-- Logged In Mobile Navigation (Speakers) -->
-<ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
-<li><a href="dashboard.html">Dashboard</a></li>
-<li><a href="members.html">Find Speakers</a></li>
-<li><a href="opportunities.html">Opportunities</a></li>
-<li><a href="bookings.html">My Bookings</a></li>
-<li><a href="profile.html">Profile</a></li>
-<li><a href="settings.html">Settings</a></li>
-<li><a href="billing.html">Billing</a></li>
-<li><a href="help.html">Help & Support</a></li>
-</ul>
-
-<!-- Logged In Mobile Navigation (Organizations) -->
-<ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
-<li><a href="organization-dashboard.html">Dashboard</a></li>
-<li><a href="members.html">Find Speakers</a></li>
-<li><a href="post-opportunity.html">Post Opportunity</a></li>
-<li><a href="my-opportunities.html">My Opportunities</a></li>
-<li><a href="saved-speakers.html">Saved Speakers</a></li>
-<li><a href="settings.html">Settings</a></li>
-<li><a href="team.html">Team Members</a></li>
-<li><a href="help.html">Help & Support</a></li>
-</ul>
-
-<!-- Mobile Auth Buttons (for logged out users) -->
-<div class="mobile-auth-buttons" id="mobileAuthButtons">
-<a href="register.html" class="btn btn-secondary">Join Community</a>
-<a href="login.html" class="btn btn-primary">Login</a>
-</div>
-
-<!-- Mobile Logout Button (for logged in users) -->
-<div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
-<button class="btn btn-primary" onclick="logout()">Logout</button>
-</div>
-</div>
 
     <!-- Page Header -->
     <div class="page-header">
@@ -891,7 +938,7 @@ footer {
             <div class="filters-section">
                 <div class="filters-header">
                     <h2>Filter Opportunities</h2>
-                    <span id="resultsCount">Showing 12 opportunities</span>
+                    <span id="resultsCount">Loading opportunities...</span>
                 </div>
                 
                 <div class="filters-grid">
@@ -921,7 +968,6 @@ footer {
                             <option value="week">Next 7 Days</option>
                             <option value="month">Next 30 Days</option>
                             <option value="quarter">Next 3 Months</option>
-                            <option value="custom">Custom Range</option>
                         </select>
                     </div>
                     
@@ -946,7 +992,99 @@ footer {
 
             <!-- Opportunities List -->
             <div class="opportunities-container" id="opportunitiesList">
-                <!-- Opportunity Card 1 -->
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                    <p>Loading opportunities...</p>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="paginationContainer" style="display: none;">
+                <button onclick="previousPage()" id="prevBtn" disabled>Previous</button>
+                <button class="active" onclick="goToPage(1)">1</button>
+                <button onclick="goToPage(2)">2</button>
+                <button onclick="goToPage(3)">3</button>
+                <button onclick="goToPage(4)">4</button>
+                <button onclick="nextPage()" id="nextBtn">Next</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CoveTalks</h3>
+                    <p>Connecting speakers with organizations worldwide to create meaningful opportunities and lasting relationships.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="index.html">Home</a>
+                    <a href="members.html">Members</a>
+                    <a href="register.html">Register</a>
+                    <a href="pricing.html">Pricing</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <a href="#">Help Center</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">Facebook</a>
+                    <a href="#">Email</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <script>document.write(new Date().getFullYear());</script> CoveTalks. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Include the API client and navigation -->
+    <script src="/js/app.js"></script>
+    <script src="/js/navigation.js"></script>
+    
+    <script>
+        // Page state
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let allOpportunities = [];
+        let filteredOpportunities = [];
+
+        // Initialize page - This runs AFTER authentication is verified
+        function initializePage() {
+            loadOpportunities();
+        }
+
+        // Load opportunities
+        async function loadOpportunities(filters = {}) {
+            try {
+                const opportunitiesData = await api.getOpportunities(filters);
+                
+                if (opportunitiesData && opportunitiesData.opportunities) {
+                    allOpportunities = opportunitiesData.opportunities;
+                    filteredOpportunities = allOpportunities;
+                    displayOpportunities();
+                    document.getElementById('paginationContainer').style.display = 'flex';
+                } else {
+                    displaySampleOpportunities();
+                }
+            } catch (error) {
+                console.error('Error loading opportunities:', error);
+                displaySampleOpportunities();
+            }
+        }
+
+        // Display sample opportunities (fallback)
+        function displaySampleOpportunities() {
+            const container = document.getElementById('opportunitiesList');
+            container.innerHTML = `
                 <div class="opportunity-card">
                     <div class="opportunity-header">
                         <div class="opportunity-title-section">
@@ -961,7 +1099,7 @@ footer {
                     
                     <div class="opportunity-details">
                         <p class="opportunity-description">
-                            We're seeking an experienced business leader to deliver a 45-minute keynote on digital transformation and innovation in the post-pandemic era. The audience will consist of 500+ business owners and executives from various industries.
+                            We're seeking an experienced business leader to deliver a 45-minute keynote on digital transformation and innovation in the post-pandemic era.
                         </p>
                         
                         <div class="opportunity-info">
@@ -977,16 +1115,11 @@ footer {
                                 <span class="info-label">👥 Audience:</span>
                                 <span class="info-value">500+ executives</span>
                             </div>
-                            <div class="info-item">
-                                <span class="info-label">💰 Honorarium:</span>
-                                <span class="info-value">Volunteer</span>
-                            </div>
                         </div>
                         
                         <div class="opportunity-tags">
                             <span class="tag">Business Leadership</span>
                             <span class="tag">Digital Transformation</span>
-                            <span class="tag">Innovation</span>
                             <span class="tag">Keynote</span>
                         </div>
                     </div>
@@ -996,20 +1129,19 @@ footer {
                             Application deadline: <span class="deadline-urgent">5 days left</span>
                         </div>
                         <div class="opportunity-actions">
-                            <button class="btn btn-secondary" onclick="viewDetails('opp1')">View Details</button>
-                            <button class="btn btn-primary" onclick="applyNow('opp1')">Apply Now</button>
+                            <button class="btn btn-secondary" onclick="viewDetails('sample1')">View Details</button>
+                            <button class="btn btn-primary" onclick="applyNow('sample1')">Apply Now</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Opportunity Card 2 -->
                 <div class="opportunity-card">
                     <div class="opportunity-header">
                         <div class="opportunity-title-section">
-                            <h3 class="opportunity-title">Workshop Facilitator - Women in Tech Conference</h3>
-                            <div class="opportunity-org">Tech Women Arizona</div>
+                            <h3 class="opportunity-title">Workshop Facilitator - Youth Leadership Program</h3>
+                            <div class="opportunity-org">Desert Ridge High School</div>
                             <div class="opportunity-location">
-                                📍 Virtual Event
+                                📍 Scottsdale, AZ
                             </div>
                         </div>
                         <div class="opportunity-badge badge-featured">FEATURED</div>
@@ -1017,13 +1149,13 @@ footer {
                     
                     <div class="opportunity-details">
                         <p class="opportunity-description">
-                            Looking for an engaging workshop facilitator to lead a 2-hour session on "Breaking Barriers in Technology Leadership." This virtual workshop will focus on career advancement strategies, overcoming challenges, and building confidence in tech leadership roles.
+                            Looking for an inspiring speaker to conduct a 2-hour workshop on goal setting and personal development for high school students.
                         </p>
                         
                         <div class="opportunity-info">
                             <div class="info-item">
                                 <span class="info-label">📅 Date:</span>
-                                <span class="info-value">April 5, 2024</span>
+                                <span class="info-value">February 20, 2024</span>
                             </div>
                             <div class="info-item">
                                 <span class="info-label">⏰ Duration:</span>
@@ -1031,186 +1163,116 @@ footer {
                             </div>
                             <div class="info-item">
                                 <span class="info-label">👥 Audience:</span>
-                                <span class="info-value">50-75 professionals</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">💰 Honorarium:</span>
-                                <span class="info-value">$500</span>
+                                <span class="info-value">150 students</span>
                             </div>
                         </div>
                         
                         <div class="opportunity-tags">
-                            <span class="tag">Women in Tech</span>
-                            <span class="tag">Leadership</span>
+                            <span class="tag">Education</span>
+                            <span class="tag">Youth Development</span>
                             <span class="tag">Workshop</span>
-                            <span class="tag">Virtual</span>
                         </div>
                     </div>
                     
                     <div class="opportunity-footer">
                         <div class="deadline-info">
-                            Application deadline: 14 days left
+                            Application deadline: <span>10 days left</span>
                         </div>
                         <div class="opportunity-actions">
-                            <button class="btn btn-secondary" onclick="viewDetails('opp2')">View Details</button>
-                            <button class="btn btn-primary" onclick="applyNow('opp2')">Apply Now</button>
+                            <button class="btn btn-secondary" onclick="viewDetails('sample2')">View Details</button>
+                            <button class="btn btn-primary" onclick="applyNow('sample2')">Apply Now</button>
                         </div>
                     </div>
                 </div>
+            `;
+            
+            document.getElementById('resultsCount').textContent = 'Showing sample opportunities';
+        }
 
-                <!-- Opportunity Card 3 -->
+        // Display opportunities
+        function displayOpportunities() {
+            const container = document.getElementById('opportunitiesList');
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageOpportunities = filteredOpportunities.slice(start, end);
+            
+            document.getElementById('resultsCount').textContent = 
+                `Showing ${filteredOpportunities.length} opportunities`;
+            
+            if (pageOpportunities.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No opportunities found</h3>
+                        <p>Try adjusting your filters or check back later for new opportunities</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = pageOpportunities.map(opp => `
                 <div class="opportunity-card">
                     <div class="opportunity-header">
                         <div class="opportunity-title-section">
-                            <h3 class="opportunity-title">Panel Moderator - Healthcare Innovation Summit</h3>
-                            <div class="opportunity-org">Arizona Medical Association</div>
+                            <h3 class="opportunity-title">${opp.title}</h3>
+                            <div class="opportunity-org">${opp.organization?.name || 'Organization'}</div>
                             <div class="opportunity-location">
-                                📍 Scottsdale, AZ
+                                📍 ${opp.location || 'Location TBD'}
                             </div>
                         </div>
-                        <div class="opportunity-badge badge-urgent">URGENT</div>
+                        ${opp.status === 'Open' ? '<div class="opportunity-badge badge-new">NEW</div>' : ''}
                     </div>
                     
                     <div class="opportunity-details">
                         <p class="opportunity-description">
-                            Seeking an experienced moderator for a panel discussion on "The Future of Telemedicine and Digital Health." You'll guide a conversation with 4 healthcare executives and innovators, ensuring engaging dialogue and audience participation.
+                            ${opp.description || 'No description available'}
                         </p>
                         
                         <div class="opportunity-info">
                             <div class="info-item">
                                 <span class="info-label">📅 Date:</span>
-                                <span class="info-value">February 28, 2024</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">⏰ Duration:</span>
-                                <span class="info-value">1 hour</span>
+                                <span class="info-value">${formatDate(opp.eventDate)}</span>
                             </div>
                             <div class="info-item">
                                 <span class="info-label">👥 Audience:</span>
-                                <span class="info-value">200+ healthcare professionals</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">💰 Honorarium:</span>
-                                <span class="info-value">Volunteer + Travel</span>
+                                <span class="info-value">${opp.audienceSize || 'TBD'} attendees</span>
                             </div>
                         </div>
                         
-                        <div class="opportunity-tags">
-                            <span class="tag">Healthcare</span>
-                            <span class="tag">Innovation</span>
-                            <span class="tag">Panel Moderator</span>
-                            <span class="tag">Telemedicine</span>
-                        </div>
+                        ${opp.topics && opp.topics.length > 0 ? `
+                            <div class="opportunity-tags">
+                                ${opp.topics.map(topic => `<span class="tag">${topic}</span>`).join('')}
+                            </div>
+                        ` : ''}
                     </div>
                     
                     <div class="opportunity-footer">
                         <div class="deadline-info">
-                            Application deadline: <span class="deadline-urgent">2 days left</span>
+                            ${opp.hasApplied ? 'Already applied' : 'Open for applications'}
                         </div>
                         <div class="opportunity-actions">
-                            <button class="btn btn-secondary" onclick="viewDetails('opp3')">View Details</button>
-                            <button class="btn btn-success" onclick="applyNow('opp3')">Apply Now</button>
+                            <button class="btn btn-secondary" onclick="viewDetails('${opp.id}')">View Details</button>
+                            ${!opp.hasApplied ? 
+                                `<button class="btn btn-primary" onclick="applyNow('${opp.id}')">Apply Now</button>` :
+                                `<button class="btn btn-secondary" disabled>Applied</button>`
+                            }
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Pagination -->
-            <div class="pagination">
-                <button onclick="previousPage()" id="prevBtn" disabled>Previous</button>
-                <button class="active" onclick="goToPage(1)">1</button>
-                <button onclick="goToPage(2)">2</button>
-                <button onclick="goToPage(3)">3</button>
-                <button onclick="goToPage(4)">4</button>
-                <button onclick="nextPage()" id="nextBtn">Next</button>
-            </div>
-        </div>
-    </main>
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>CoveTalks</h3>
-                <p>Connecting speakers with organizations worldwide to create meaningful opportunities and lasting relationships.</p>
-            </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <a href="#home">Home</a>
-                <a href="members.html">Members</a>
-                <a href="register.html">Register</a>
-                <a href="pricing.html">Pricing</a>
-            </div>
-            <div class="footer-section">
-                <h3>Support</h3>
-                <a href="#">Help Center</a>
-                <a href="#">Contact Us</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-            </div>
-            <div class="footer-section">
-                <h3>Connect</h3>
-                <a href="#">LinkedIn</a>
-                <a href="#">Twitter</a>
-                <a href="#">Facebook</a>
-                <a href="#">Email</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; <script>document.write(new Date().getFullYear());</script> CoveTalks. All rights reserved.</p>
-        </div>
-    </div>
-</footer>
-    <script>
-        // Configuration
-        const CONFIG = {
-            API_BASE: window.location.hostname === 'localhost' ? 
-                'http://localhost:3001' : '/.netlify/functions/api'
-        };
-
-        // Check authentication
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuth();
-            loadOpportunities();
-        });
-
-        function checkAuth() {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = 'login.html';
-            }
-        }
-
-        // Load opportunities
-        async function loadOpportunities() {
-            const token = localStorage.getItem('token');
+            `).join('');
             
-            try {
-                const response = await fetch(`${CONFIG.API_BASE}/opportunities`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                
-                if (response.ok) {
-                    const opportunities = await response.json();
-                    displayOpportunities(opportunities);
-                }
-            } catch (error) {
-                console.error('Error loading opportunities:', error);
-            }
+            updatePaginationButtons();
         }
 
         // Apply filters
         function applyFilters() {
             const filters = {
                 location: document.getElementById('locationFilter').value,
-                topic: document.getElementById('topicFilter').value,
+                topics: document.getElementById('topicFilter').value,
                 date: document.getElementById('dateFilter').value,
                 type: document.getElementById('typeFilter').value
             };
             
-            // Reload with filters
+            currentPage = 1;
             loadOpportunities(filters);
         }
 
@@ -1220,149 +1282,82 @@ footer {
             document.getElementById('topicFilter').value = '';
             document.getElementById('dateFilter').value = '';
             document.getElementById('typeFilter').value = '';
+            
+            currentPage = 1;
             loadOpportunities();
         }
 
         // View opportunity details
         function viewDetails(id) {
+            sessionStorage.setItem('selectedOpportunity', id);
             window.location.href = `opportunity-details.html?id=${id}`;
         }
 
         // Apply to opportunity
         async function applyNow(id) {
-            const token = localStorage.getItem('token');
-            
             if (confirm('Are you sure you want to apply for this opportunity?')) {
                 try {
-                    const response = await fetch(`${CONFIG.API_BASE}/opportunities/${id}/apply`, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            message: 'I am interested in this opportunity.'
-                        })
+                    await api.applyToOpportunity(id, {
+                        message: 'I am interested in this opportunity.'
                     });
-                    
-                    if (response.ok) {
-                        alert('Application submitted successfully!');
-                        // Update UI to show applied status
-                    } else {
-                        alert('Failed to submit application. Please try again.');
-                    }
+                    alert('Application submitted successfully!');
+                    loadOpportunities();
                 } catch (error) {
                     console.error('Error applying:', error);
-                    alert('An error occurred. Please try again.');
+                    alert('Failed to submit application. Please try again.');
                 }
             }
         }
 
-        // Pagination
-        let currentPage = 1;
-        const itemsPerPage = 10;
+        // Pagination functions
+        function updatePaginationButtons() {
+            const totalPages = Math.ceil(filteredOpportunities.length / itemsPerPage);
+            
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+            
+            document.querySelectorAll('.pagination button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            const currentBtn = document.querySelector(`.pagination button:nth-child(${currentPage + 1})`);
+            if (currentBtn) {
+                currentBtn.classList.add('active');
+            }
+        }
 
         function previousPage() {
             if (currentPage > 1) {
                 currentPage--;
-                loadOpportunities();
+                displayOpportunities();
             }
         }
 
         function nextPage() {
-            currentPage++;
-            loadOpportunities();
+            const totalPages = Math.ceil(filteredOpportunities.length / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayOpportunities();
+            }
         }
 
         function goToPage(page) {
             currentPage = page;
-            loadOpportunities();
+            displayOpportunities();
         }
 
-        // Display opportunities
-        function displayOpportunities(opportunities) {
-            // Update the display with loaded opportunities
-            document.getElementById('resultsCount').textContent = 
-                `Showing ${opportunities.length} opportunities`;
+        // Format date helper
+        function formatDate(dateString) {
+            if (!dateString) return 'Date TBD';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                month: 'long', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
         }
-    </script>
-    <script>
-        // ============================================
-        // NAVIGATION JAVASCRIPT
-        // ============================================
-        
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            updateNavAuth();
-            setActiveNavItem();
-        });
-        
-        // Update navigation based on auth status
-        function updateNavAuth() {
-            const token = localStorage.getItem('token');
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-            
-            if (token && user) {
-                // User is logged in - hide logged out nav
-                document.getElementById('navLoggedOut').style.display = 'none';
-                document.getElementById('mobileNavLoggedOut').style.display = 'none';
-                
-                // Show appropriate logged in navigation based on user type
-                if (user.type === 'Organization' || user.Member_Type === 'Organization') {
-                    // Organization navigation
-                    document.getElementById('navOrganization').style.display = 'flex';
-                    document.getElementById('navSpeaker').style.display = 'none';
-                    document.getElementById('mobileNavOrganization').style.display = 'block';
-                    document.getElementById('mobileNavSpeaker').style.display = 'none';
-                } else {
-                    // Speaker navigation (default)
-                    document.getElementById('navSpeaker').style.display = 'flex';
-                    document.getElementById('navOrganization').style.display = 'none';
-                    document.getElementById('mobileNavSpeaker').style.display = 'block';
-                    document.getElementById('mobileNavOrganization').style.display = 'none';
-                }
-                
-                // Show user menu
-                document.getElementById('userMenuDesktop').style.display = 'flex';
-                document.getElementById('authButtonsDesktop').style.display = 'none';
-                document.getElementById('mobileUserSection').style.display = 'block';
-                document.getElementById('mobileAuthButtons').style.display = 'none';
-                document.getElementById('mobileLogoutSection').style.display = 'block';
-                
-                // Update user info
-                const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
-                document.getElementById('userAvatar').textContent = initials;
-                document.getElementById('mobileUserAvatar').textContent = initials;
-                document.getElementById('mobileUserName').textContent = user.name || 'User';
-                document.getElementById('mobileUserType').textContent = user.type || user.Member_Type || 'Member';
-            } else {
-                // User is logged out - show logged out nav
-                document.getElementById('navLoggedOut').style.display = 'flex';
-                document.getElementById('mobileNavLoggedOut').style.display = 'block';
-                
-                // Hide all logged in navigation
-                document.getElementById('navSpeaker').style.display = 'none';
-                document.getElementById('navOrganization').style.display = 'none';
-                document.getElementById('mobileNavSpeaker').style.display = 'none';
-                document.getElementById('mobileNavOrganization').style.display = 'none';
-                
-                // Show auth buttons
-                if (document.getElementById('userMenuDesktop')) {
-                    document.getElementById('userMenuDesktop').style.display = 'none';
-                }
-                document.getElementById('authButtonsDesktop').style.display = 'flex';
-                
-                if (document.getElementById('mobileUserSection')) {
-                    document.getElementById('mobileUserSection').style.display = 'none';
-                }
-                document.getElementById('mobileAuthButtons').style.display = 'flex';
-                if (document.getElementById('mobileLogoutSection')) {
-                    document.getElementById('mobileLogoutSection').style.display = 'none';
-                }
-            }
-        }
-        
-        // Toggle mobile menu
+
+        // Mobile menu functions
         function toggleMobileMenu() {
             const hamburger = document.getElementById('hamburger');
             const mobileMenu = document.getElementById('mobileMenu');
@@ -1378,8 +1373,7 @@ footer {
                 document.body.style.overflow = '';
             }
         }
-        
-        // Close mobile menu
+
         function closeMobileMenu() {
             const hamburger = document.getElementById('hamburger');
             const mobileMenu = document.getElementById('mobileMenu');
@@ -1390,13 +1384,13 @@ footer {
             overlay.classList.remove('show');
             document.body.style.overflow = '';
         }
-        
-        // Toggle dropdown menu (desktop)
+
+        // Dropdown menu
         function toggleDropdown() {
             const dropdown = document.getElementById('dropdownMenu');
             dropdown.classList.toggle('show');
         }
-        
+
         // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {
             const dropdown = document.getElementById('dropdownMenu');
@@ -1406,87 +1400,43 @@ footer {
                 dropdown.classList.remove('show');
             }
         });
-        
-        // Set active navigation item based on current page
-        function setActiveNavItem() {
-            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-            
-            // Clear all active classes first
-            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            // Set active class on matching links
-            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
-                if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('active');
-                }
-            });
-        }
-        
+
         // Logout function
         function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            sessionStorage.removeItem('token');
-            sessionStorage.removeItem('user');
-            window.location.href = 'login.html';
+            api.logout();
         }
-        
+
         // Close mobile menu on window resize
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 closeMobileMenu();
             }
         });
-        
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.mobile-nav-links a').forEach(link => {
-            link.addEventListener('click', function() {
-                closeMobileMenu();
-            });
-        });
-        </script>
-        <!-- Add before closing </body> tag on ALL pages -->
-<script src="/js/app.js"></script>
-<script src="/js/navigation.js"></script>
-<script>
-  // Initialize page-specific functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check auth and update navigation
-    updateNavigation();
-    
-    // Page-specific initialization
-    if (typeof initializePage === 'function') {
-      initializePage();
-    }
-  });
-</script>
-// Add to dashboard.html, bookings.html, settings.html, etc.
-<script>
-function initializePage() {
-  // Check authentication first
-  if (!requireAuth()) return;
-  
-  // Load page-specific data
-  loadDashboardData();
-}
 
-async function loadDashboardData() {
-  try {
-    // TODO: Connect to Airtable via API
-    // const profile = await api.getProfile();
-    // const bookings = await api.getBookings();
-    
-    // Placeholder for now
-    console.log('Loading dashboard data...');
-    
-    // Update UI with data
-    // updateDashboardUI(profile, bookings);
-  } catch (error) {
-    console.error('Failed to load dashboard:', error);
-  }
-}
-</script>
+        // Standard initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof api === 'undefined') {
+                console.error('API client not loaded');
+                return;
+            }
+            
+            // Update navigation UI first
+            if (typeof updateNavigation === 'function') {
+                updateNavigation();
+            }
+            
+            // Check if this page requires authentication
+            if (!api.isAuthenticated()) {
+                sessionStorage.setItem('redirectUrl', window.location.href);
+                window.location.href = '/login.html';
+                return;
+            }
+            
+            // Call page initialization
+            if (typeof initializePage === 'function') {
+                initializePage();
+            }
+        });
+    </script>
 </body>
 </html>
