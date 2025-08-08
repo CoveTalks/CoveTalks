@@ -1,3 +1,7 @@
+// ============================================
+// FRONTEND INTEGRATION - FIXED VERSION
+// ============================================
+
 // File: public/js/app.js
 class CoveTalksAPI {
     constructor() {
@@ -472,6 +476,16 @@ class CoveTalksAPI {
             method: 'DELETE',
             headers: this.getHeaders(),
             body: JSON.stringify({ paymentMethodId })
+        });
+        
+        return this.handleResponse(response);
+    }
+    
+    async attachPaymentMethod(paymentMethodId, email) {
+        const response = await fetch(`${this.baseURL}/stripe-attach-payment-method`, {
+            method: 'POST',
+            headers: this.getHeaders(),
+            body: JSON.stringify({ paymentMethodId, email })
         });
         
         return this.handleResponse(response);

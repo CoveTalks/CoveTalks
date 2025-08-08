@@ -37,6 +37,8 @@
             line-height: 1.6;
             color: var(--text-primary);
             background-color: var(--bg-secondary);
+            margin: 0;
+            padding: 0;
         }
 
         /* Header Navigation (matching dashboard) */
@@ -347,12 +349,16 @@
             max-width: 1024px;
             margin: 0 auto;
             padding: 2rem 1.5rem;
-            padding-top: 100px;
+            margin-top: 80px; /* Use margin-top instead of padding-top for better layout */
+            position: relative;
+            z-index: 1;
         }
 
         /* Page Header */
         .page-header {
             margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         .page-header__title {
@@ -377,6 +383,7 @@
             box-shadow: var(--shadow-lg);
             position: relative;
             overflow: hidden;
+            z-index: 1; /* Ensure it's below the navigation */
         }
 
         .current-plan::before {
@@ -748,14 +755,15 @@
         }
 
         .btn-danger {
-            background: transparent;
-            color: var(--danger-color);
+            background: var(--danger-color);
+            color: white;
             border: 2px solid var(--danger-color);
         }
 
         .btn-danger:hover {
-            background: var(--danger-color);
-            color: white;
+            background: #dc2626;
+            border-color: #dc2626;
+            transform: translateY(-2px);
         }
 
         .btn-ghost {
@@ -906,12 +914,19 @@
 
         .loading-spinner {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
+            animation: spin 0.8s ease-in-out infinite;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        .loading-spinner.primary {
+            border-color: rgba(21, 85, 136, 0.2);
+            border-top-color: #155588;
         }
 
         @keyframes spin {
@@ -933,6 +948,10 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            .container {
+                margin-top: 70px; /* Less margin on mobile */
+            }
+            
             .nav-links {
                 display: none !important;
             }
@@ -978,6 +997,19 @@
         a:focus-visible {
             outline: 2px solid var(--primary-color);
             outline-offset: 2px;
+        }
+
+        /* Form input styles */
+        input[type="email"],
+        input[type="text"] {
+            transition: border-color 0.2s;
+        }
+
+        input[type="email"]:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(21, 85, 136, 0.1);
         }
     </style>
 </head>
@@ -1264,24 +1296,8 @@
         </div>
 
         <!-- Action Buttons -->
-        <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
-            <button class="btn btn-stripe" onclick="openStripeBillingPortal()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
-                    <rect x="2" y="5" width="20" height="14" rx="2"></rect>
-                    <line x1="2" y1="10" x2="22" y2="10"></line>
-                </svg>
-                Manage in Stripe
-            </button>
-            <button class="btn btn-secondary" onclick="changePlan()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
-                    <polyline points="16 3 21 3 21 8"></polyline>
-                    <line x1="4" y1="20" x2="21" y2="3"></line>
-                    <polyline points="21 16 21 21 16 21"></polyline>
-                    <line x1="3" y1="21" x2="20" y2="4"></line>
-                </svg>
-                Change Plan
-            </button>
-            <button class="btn btn-danger" onclick="handleCancelSubscription()" id="cancelBtn">
+        <div style="margin-top: 2rem; display: flex; justify-content: center;">
+            <button class="btn btn-danger" onclick="handleCancelSubscription()" id="cancelBtn" style="display: none; min-width: 200px;">
                 Cancel Subscription
             </button>
         </div>
@@ -1291,42 +1307,152 @@
     <div class="modal" id="paymentMethodModal">
         <div class="modal__content">
             <div class="modal__header">
-                <h2 class="modal__title">Manage Payment Methods</h2>
+                <h2 class="modal__title">Add Payment Method</h2>
                 <button class="modal__close" onclick="closePaymentMethodModal()">×</button>
             </div>
             <div class="modal__body">
-                <p style="margin-bottom: 1.5rem; color: var(--text-secondary);">
-                    You will be redirected to Stripe's secure portal to manage your payment methods.
-                </p>
-                <div style="background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem;">
-                    <h4 style="margin-bottom: 0.5rem; color: var(--text-primary);">What you can do in Stripe:</h4>
-                    <ul style="margin: 0; padding-left: 1.5rem; color: var(--text-secondary); font-size: 0.875rem;">
-                        <li>Add new credit/debit cards</li>
-                        <li>Remove existing payment methods</li>
-                        <li>Set a default payment method</li>
-                        <li>Update billing address</li>
-                        <li>View and download invoices</li>
-                    </ul>
-                </div>
+                <form id="payment-form">
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">
+                            Card Information
+                        </label>
+                        <div id="card-element" style="
+                            padding: 0.75rem;
+                            border: 1px solid var(--border-color);
+                            border-radius: var(--radius-md);
+                            background: white;
+                            min-height: 45px;
+                        ">
+                            <!-- Stripe Elements will be inserted here -->
+                        </div>
+                        <div id="card-errors" style="
+                            color: var(--danger-color);
+                            font-size: 0.875rem;
+                            margin-top: 0.5rem;
+                            min-height: 20px;
+                        "></div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">
+                            Billing Email
+                        </label>
+                        <input type="email" id="billing-email" style="
+                            width: 100%;
+                            padding: 0.75rem;
+                            border: 1px solid var(--border-color);
+                            border-radius: var(--radius-md);
+                            font-size: 1rem;
+                        " placeholder="you@example.com" required>
+                    </div>
+                    
+                    <div style="background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem;">
+                        <p style="font-size: 0.875rem; color: var(--text-secondary); margin: 0;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; margin-right: 0.5rem; vertical-align: middle;">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                            Your card information is securely processed by Stripe. We never store your card details.
+                        </p>
+                    </div>
+                </form>
             </div>
             <div class="modal__footer">
                 <button class="btn btn-secondary" onclick="closePaymentMethodModal()">Cancel</button>
-                <button class="btn btn-stripe" onclick="openStripeBillingPortal()">
-                    Open Stripe Portal
+                <button class="btn btn-primary" id="submit-payment" onclick="handleAddPaymentMethod()">
+                    <span id="button-text">Add Card</span>
+                    <span class="loading-spinner" style="display: none;"></span>
                 </button>
             </div>
         </div>
     </div>
+
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
 
     <!-- Include scripts -->
     <script src="/js/app.js"></script>
     <script src="/js/navigation.js"></script>
     
     <script>
+        // ⚠️ IMPORTANT: Add your Stripe publishable keys below
+        // Get them from: https://dashboard.stripe.com/apikeys
+        // 
+        // Your account has these keys starting with:
+        // Live: pk_live_51Rt9zz1Fvl67fP5V...
+        // Test: pk_test_51Rt9zz1Fvl67fP5V...
+        
+        const STRIPE_PUBLISHABLE_KEY_LIVE = 'pk_live_51Rt9zz1Fvl67fP5V...'; // Replace with your full LIVE key
+        const STRIPE_PUBLISHABLE_KEY_TEST = 'pk_test_51Rt9zz1Fvl67fP5V...'; // Replace with your full TEST key
+        
+        // Check if keys are configured on page load
+        if (STRIPE_PUBLISHABLE_KEY_LIVE.includes('...') || STRIPE_PUBLISHABLE_KEY_TEST.includes('...')) {
+            console.warn('═══════════════════════════════════════════════════════');
+            console.warn('⚠️  STRIPE KEYS NOT CONFIGURED!');
+            console.warn('═══════════════════════════════════════════════════════');
+            console.warn('Please add your Stripe publishable keys in billing.html');
+            console.warn('Get your keys from: https://dashboard.stripe.com/apikeys');
+            console.warn('═══════════════════════════════════════════════════════');
+        }
         // State management
         let subscriptionData = null;
         let stripeCustomerId = null;
         let billingHistory = [];
+        let stripe = null;
+        let elements = null;
+        let cardElement = null;
+
+        // Initialize Stripe Elements
+        function initializeStripe() {
+            // Check if Stripe.js is loaded
+            if (typeof Stripe === 'undefined') {
+                console.error('[Billing] Stripe.js not loaded. Check your internet connection.');
+                return false;
+            }
+            
+            // Check if Stripe keys are configured
+            if (!STRIPE_PUBLISHABLE_KEY_TEST.includes('pk_test_') || !STRIPE_PUBLISHABLE_KEY_LIVE.includes('pk_live_')) {
+                console.error('[Billing] ⚠️ Stripe publishable keys not configured! Add them at the top of the script section.');
+                return false;
+            }
+            
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                // Use test key for development
+                stripe = Stripe(STRIPE_PUBLISHABLE_KEY_TEST);
+                console.log('[Billing] Using Stripe TEST mode');
+            } else {
+                // Use live key for production
+                stripe = Stripe(STRIPE_PUBLISHABLE_KEY_LIVE);
+                console.log('[Billing] Using Stripe LIVE mode');
+            }
+            
+            // Create an instance of Elements
+            elements = stripe.elements();
+            
+            // Custom styling for card element
+            const style = {
+                base: {
+                    color: '#32325d',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                    fontSmoothing: 'antialiased',
+                    fontSize: '16px',
+                    '::placeholder': {
+                        color: '#aab7c4'
+                    }
+                },
+                invalid: {
+                    color: '#ef4444',
+                    iconColor: '#ef4444'
+                }
+            };
+            
+            // Create card element
+            cardElement = elements.create('card', { 
+                style: style,
+                hidePostalCode: false // Show zip code field
+            });
+            
+            return true;
+        }
 
         // Wait for API to be ready
         function waitForAPI(callback) {
@@ -1456,6 +1582,16 @@
 
         // Load payment methods from Stripe
         async function loadPaymentMethods() {
+            const container = document.getElementById('paymentMethodsList');
+            
+            // Show loading state
+            container.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div class="loading-spinner primary" style="display: inline-block;"></div>
+                    <p style="margin-top: 1rem; color: var(--text-secondary);">Loading payment methods...</p>
+                </div>
+            `;
+            
             try {
                 const response = await fetch(`${api.baseURL}/stripe-payment-methods`, {
                     headers: api.getHeaders()
@@ -1468,12 +1604,26 @@
                     stripeCustomerId = data.customerId;
                     displayPaymentMethods(data.paymentMethods);
                 } else {
-                    // Keep the empty state
+                    // Restore empty state
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state__icon">💳</div>
+                            <p>No payment methods on file</p>
+                            <p style="font-size: 0.875rem; margin-top: 0.5rem;">Add a payment method to manage your subscription</p>
+                        </div>
+                    `;
                     console.log('[Billing] No payment methods found');
                 }
             } catch (error) {
                 console.error('[Billing] Error loading payment methods:', error);
-                // Don't show error for payment methods, just leave empty state
+                // Restore empty state on error
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state__icon">💳</div>
+                        <p>No payment methods on file</p>
+                        <p style="font-size: 0.875rem; margin-top: 0.5rem;">Add a payment method to manage your subscription</p>
+                    </div>
+                `;
             }
         }
 
@@ -1643,7 +1793,9 @@
             
             // Update cancel button visibility
             const cancelBtn = document.getElementById('cancelBtn');
-            if (planType === 'Free' || status === 'Cancelled') {
+            if (planType !== 'Free' && status !== 'Cancelled') {
+                cancelBtn.style.display = 'inline-block';
+            } else {
                 cancelBtn.style.display = 'none';
             }
         }
@@ -1787,35 +1939,6 @@
             }, 5000);
         }
 
-        // Open Stripe billing portal
-        async function openStripeBillingPortal() {
-            try {
-                const button = event.target;
-                button.disabled = true;
-                button.innerHTML = '<span class="loading-spinner"></span> Opening...';
-                
-                await api.openBillingPortal();
-            } catch (error) {
-                console.error('[Billing] Error opening portal:', error);
-                showAlert('error', 'Error', 'Failed to open billing portal. Please try again.');
-                // Reset button
-                const button = event.target;
-                button.disabled = false;
-                button.innerHTML = `
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
-                        <rect x="2" y="5" width="20" height="14" rx="2"></rect>
-                        <line x1="2" y1="10" x2="22" y2="10"></line>
-                    </svg>
-                    Manage in Stripe
-                `;
-            }
-        }
-
-        // Change plan
-        function changePlan() {
-            window.location.href = '/pricing.html';
-        }
-
         // Cancel subscription
         async function handleCancelSubscription() {
             if (!confirm('Are you sure you want to cancel your subscription? You will lose access to premium features at the end of your billing period.')) {
@@ -1835,11 +1958,104 @@
 
         // Payment method modal
         function openPaymentMethodModal() {
+            // Check if Stripe is initialized
+            if (!stripe || !elements) {
+                showAlert('error', 'Configuration Error', 'Payment system not configured. Please contact support.');
+                console.error('[Billing] Stripe not initialized. Check your publishable keys.');
+                return;
+            }
+            
             document.getElementById('paymentMethodModal').classList.add('show');
+            
+            // Mount card element when modal opens
+            if (cardElement && !cardElement._mounted) {
+                cardElement.mount('#card-element');
+                
+                // Handle real-time validation errors from the card Element
+                cardElement.on('change', function(event) {
+                    const displayError = document.getElementById('card-errors');
+                    if (event.error) {
+                        displayError.textContent = event.error.message;
+                    } else {
+                        displayError.textContent = '';
+                    }
+                });
+            }
+            
+            // Pre-fill email if available
+            const user = api.getCurrentUser();
+            if (user && user.email) {
+                document.getElementById('billing-email').value = user.email;
+            }
         }
 
         function closePaymentMethodModal() {
             document.getElementById('paymentMethodModal').classList.remove('show');
+            // Clear form
+            if (cardElement) {
+                cardElement.clear();
+            }
+            document.getElementById('card-errors').textContent = '';
+            document.getElementById('billing-email').value = '';
+        }
+
+        // Handle adding payment method
+        async function handleAddPaymentMethod() {
+            // Check if Stripe is initialized
+            if (!stripe || !cardElement) {
+                showAlert('error', 'Configuration Error', 'Payment system not configured. Please contact support.');
+                return;
+            }
+            
+            const submitButton = document.getElementById('submit-payment');
+            const buttonText = document.getElementById('button-text');
+            const spinner = submitButton.querySelector('.loading-spinner');
+            
+            // Disable button and show loading
+            submitButton.disabled = true;
+            buttonText.textContent = 'Processing...';
+            spinner.style.display = 'inline-block';
+            
+            try {
+                // Get email
+                const email = document.getElementById('billing-email').value;
+                if (!email) {
+                    throw new Error('Please enter your billing email');
+                }
+                
+                // Create payment method with Stripe
+                const { error, paymentMethod } = await stripe.createPaymentMethod({
+                    type: 'card',
+                    card: cardElement,
+                    billing_details: {
+                        email: email
+                    }
+                });
+                
+                if (error) {
+                    throw error;
+                }
+                
+                // Send payment method to backend to attach to customer
+                const data = await api.attachPaymentMethod(paymentMethod.id, email);
+                
+                if (data.success) {
+                    showAlert('success', 'Success', 'Payment method added successfully');
+                    closePaymentMethodModal();
+                    await loadPaymentMethods(); // Reload payment methods
+                } else {
+                    throw new Error(data.error || 'Failed to add payment method');
+                }
+            } catch (error) {
+                console.error('[Billing] Error adding payment method:', error);
+                const displayError = document.getElementById('card-errors');
+                displayError.textContent = error.message || 'An error occurred. Please try again.';
+            } finally {
+                // Re-enable button
+                submitButton.disabled = false;
+                buttonText.textContent = 'Add Card';
+                spinner.style.display = 'none';
+            }
         }
 
         // Download invoice
@@ -1912,6 +2128,12 @@
 
         // Main initialization
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Stripe Elements (will return false if not configured)
+            const stripeInitialized = initializeStripe();
+            if (!stripeInitialized) {
+                console.warn('[Billing] Stripe not initialized - payment methods will not be available');
+            }
+            
             waitForAPI(function() {
                 console.log('[Billing] API ready');
                 
