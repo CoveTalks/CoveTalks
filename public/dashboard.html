@@ -1136,6 +1136,16 @@
             console.log('[Dashboard] Initializing page content');
             loadDashboardData();
         }
+
+        setTimeout(() => {
+            // Force remove loading state if stuck
+            const loadingEls = document.querySelectorAll('.loading');
+            loadingEls.forEach(el => {
+                if (el.parentElement.id === 'planName') {
+                    el.parentElement.textContent = 'Unable to load';
+                }
+            });
+        }, 5000);
     
         // Load dashboard data
         async function loadDashboardData() {
