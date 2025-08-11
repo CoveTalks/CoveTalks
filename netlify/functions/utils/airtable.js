@@ -1,5 +1,5 @@
 // netlify/functions/utils/airtable.js
-// UPDATED VERSION with Specialty table support
+// COMPLETE VERSION with Hybrid Smart Login Support
 
 const Airtable = require('airtable');
 
@@ -33,8 +33,25 @@ const tables = {
   speakingOpportunities: base ? base('Speaking_Opportunities') : null,
   applications: base ? base('Applications') : null,
   reviews: base ? base('Reviews') : null,
-  specialty: base ? base('Specialty') : null  // NEW: Added Specialty table
+  specialty: base ? base('Specialty') : null
 };
+
+// ============================================
+// CACHING SYSTEM FOR PERFORMANCE
+// ============================================
+
+// Cache for specialties
+let specialtyCache = new Map();
+let specialtyCacheTime = 0;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+// Cache for users
+const userCache = new Map();
+const USER_CACHE_DURATION = 60 * 1000; // 1 minute
+
+// ============================================
+// ORIGINAL FUNCTIONS
+// ============================================
 
 async function findByField(table, fieldName, value) {
   console.log(`Looking up ${fieldName} = ${value} in table`);
@@ -190,7 +207,208 @@ async function resolveSpecialties(specialtyNames) {
   return specialtyIds;
 }
 
-// Seed function to populate common specialties (run once)
+// ============================================
+// NEW SMART LOGIN FUNCTIONS
+// ============================================
+
+/**
+ * Batch fetch specialties by IDs with caching
+ * @param {Array<string>} specialtyIds - Array of Airtable record IDs
+ * @returns {Promise<Map<string, string>>} Map of ID to Name
+ */
+async function getBatchSpecialties(specialtyIds) {
+  if (!specialtyIds || specialtyIds.length === 0) {
+    return new Map();
+  }
+
+  const now = Date.now();
+  const result = new Map();
+  const missingIds = [];
+
+  // Check cache first
+  if (specialtyCache.size > 0 && (now - specialtyCacheTime) < CACHE_DURATION) {
+    for (const id of specialtyIds) {
+      if (specialtyCache.has(id)) {
+        result.set(id, specialtyCache.get(id));
+      } else {
+        missingIds.push(id);
+      }
+    }
+    
+    // If all found in cache, return immediately
+    if (missingIds.length === 0) {
+      console.log(`[Cache] All ${specialtyIds.length} specialties from cache`);
+      return result;
+    }
+  } else {
+    // Cache expired or empty
+    missingIds.push(...specialtyIds);
+  }
+
+  console.log(`[Cache] Fetching ${missingIds.length} specialties from Airtable`);
+
+  try {
+    // Build OR formula for batch fetch
+    const filterFormula = `OR(${missingIds.map(id => 
+      `RECORD_ID() = '${id}'`
+    ).join(',')})`;
+    
+    // Fetch all missing specialties in one query
+    const records = await tables.specialty.select({
+      filterByFormula: filterFormula,
+      fields: ['Name']
+    }).all();
+    
+    // Update cache and result
+    for (const record of records) {
+      specialtyCache.set(record.id, record.fields.Name);
+      result.set(record.id, record.fields.Name);
+    }
+    
+    // Update cache time if we fetched anything
+    if (records.length > 0) {
+      specialtyCacheTime = now;
+    }
+    
+    // Add cached items to result
+    for (const id of specialtyIds) {
+      if (!result.has(id) && specialtyCache.has(id)) {
+        result.set(id, specialtyCache.get(id));
+      }
+    }
+    
+    return result;
+  } catch (error) {
+    console.error('Error batch fetching specialties:', error);
+    return result; // Return partial results if any
+  }
+}
+
+/**
+ * Preload all specialties into cache
+ * Call this on cold start to warm the cache
+ */
+async function preloadSpecialtyCache() {
+  try {
+    console.log('[Cache] Preloading all specialties...');
+    
+    const allSpecialties = await tables.specialty.select({
+      fields: ['Name'],
+      pageSize: 100
+    }).all();
+    
+    specialtyCache.clear();
+    for (const record of allSpecialties) {
+      specialtyCache.set(record.id, record.fields.Name);
+    }
+    
+    specialtyCacheTime = Date.now();
+    console.log(`[Cache] Preloaded ${specialtyCache.size} specialties`);
+    
+    return specialtyCache;
+  } catch (error) {
+    console.error('Error preloading specialty cache:', error);
+    return specialtyCache;
+  }
+}
+
+/**
+ * Clear specialty cache
+ */
+function clearSpecialtyCache() {
+  specialtyCache.clear();
+  specialtyCacheTime = 0;
+  console.log('[Cache] Specialty cache cleared');
+}
+
+/**
+ * Batch create records (more efficient than individual creates)
+ */
+async function batchCreateRecords(table, recordsData, batchSize = 10) {
+  const results = [];
+  
+  // Process in batches (Airtable limit is 10 per request)
+  for (let i = 0; i < recordsData.length; i += batchSize) {
+    const batch = recordsData.slice(i, i + batchSize);
+    
+    try {
+      const created = await table.create(batch.map(fields => ({ fields })));
+      results.push(...created);
+    } catch (error) {
+      console.error(`Batch create error at index ${i}:`, error);
+      // Continue with next batch even if one fails
+    }
+  }
+  
+  return results;
+}
+
+/**
+ * Batch update records
+ */
+async function batchUpdateRecords(table, updates, batchSize = 10) {
+  const results = [];
+  
+  // Process in batches
+  for (let i = 0; i < updates.length; i += batchSize) {
+    const batch = updates.slice(i, i + batchSize);
+    
+    try {
+      const updated = await table.update(batch.map(({ id, fields }) => ({
+        id,
+        fields
+      })));
+      results.push(...updated);
+    } catch (error) {
+      console.error(`Batch update error at index ${i}:`, error);
+    }
+  }
+  
+  return results;
+}
+
+/**
+ * Optimized user lookup with caching
+ */
+async function findUserCached(userId) {
+  const cached = userCache.get(userId);
+  
+  if (cached && (Date.now() - cached.time) < USER_CACHE_DURATION) {
+    return cached.data;
+  }
+  
+  try {
+    const user = await tables.members.find(userId);
+    userCache.set(userId, {
+      data: user,
+      time: Date.now()
+    });
+    
+    // Limit cache size
+    if (userCache.size > 100) {
+      const firstKey = userCache.keys().next().value;
+      userCache.delete(firstKey);
+    }
+    
+    return user;
+  } catch (error) {
+    console.error('Error finding user:', error);
+    return null;
+  }
+}
+
+/**
+ * Clear user cache
+ */
+function clearUserCache() {
+  userCache.clear();
+  console.log('[Cache] User cache cleared');
+}
+
+// ============================================
+// SEED FUNCTION
+// ============================================
+
 async function seedSpecialties() {
   console.log('=== SEEDING SPECIALTY TABLE ===');
   
@@ -248,7 +466,10 @@ async function seedSpecialties() {
   console.log('=== SEEDING COMPLETE ===');
 }
 
-// Test function to verify connection
+// ============================================
+// TEST CONNECTION
+// ============================================
+
 async function testConnection() {
   console.log('Testing Airtable connection...');
   
@@ -272,13 +493,67 @@ async function testConnection() {
   }
 }
 
+// ============================================
+// WARM UP FUNCTION (for cold starts)
+// ============================================
+
+async function warmUp() {
+  console.log('[WarmUp] Starting Airtable warm-up...');
+  
+  try {
+    // Test connection
+    await testConnection();
+    
+    // Preload specialty cache
+    await preloadSpecialtyCache();
+    
+    console.log('[WarmUp] Warm-up complete');
+    return true;
+  } catch (error) {
+    console.error('[WarmUp] Warm-up failed:', error);
+    return false;
+  }
+}
+
+// ============================================
+// EXPORTS
+// ============================================
+
 module.exports = {
+  // Tables
   tables,
+  base,
+  
+  // Original functions
   findByField,
   createRecord,
   updateRecord,
-  resolveSpecialties,  // Export the new function
-  seedSpecialties,      // Export seed function
-  base,
-  testConnection
+  resolveSpecialties,
+  
+  // Smart login functions
+  getBatchSpecialties,
+  preloadSpecialtyCache,
+  clearSpecialtyCache,
+  batchCreateRecords,
+  batchUpdateRecords,
+  findUserCached,
+  clearUserCache,
+  
+  // Utility functions
+  seedSpecialties,
+  testConnection,
+  warmUp
 };
+
+// ============================================
+// AUTO WARM-UP ON COLD START
+// ============================================
+
+// Automatically warm up cache on function cold start
+if (process.env.NODE_ENV !== 'test') {
+  setTimeout(() => {
+    warmUp().catch(err => {
+      console.error('[AutoWarmUp] Failed:', err);
+    });
+  }, 100);
+}

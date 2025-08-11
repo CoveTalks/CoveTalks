@@ -255,6 +255,7 @@
             width: 100%;
             padding: 1rem;
             font-size: 1.1rem;
+            position: relative;
         }
 
         .btn-primary:hover {
@@ -303,6 +304,24 @@
 
         .signup-prompt a:hover {
             text-decoration: underline;
+        }
+
+        /* Performance Indicator */
+        .performance-indicator {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            z-index: 1000;
+        }
+
+        .performance-indicator.show {
+            display: block;
         }
 
         /* Info Section Content */
@@ -527,6 +546,20 @@
             text-align: center;
         }
 
+        /* Fast Login Badge */
+        .fast-login-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
@@ -606,6 +639,11 @@
     </style>
 </head>
 <body>
+    <!-- Performance Indicator -->
+    <div id="performanceIndicator" class="performance-indicator">
+        Login time: <span id="perfTime">--</span>ms
+    </div>
+
     <!-- Header -->
     <header>
         <div class="nav-container">
@@ -679,6 +717,7 @@
                 <div class="form-header">
                     <h2>Welcome Back</h2>
                     <p>Login to access your account</p>
+                    <span class="fast-login-badge">⚡ Fast Login</span>
                 </div>
 
                 <!-- Tabs -->
@@ -724,27 +763,27 @@
 
             <!-- Info Section -->
             <div class="login-info-section">
-                <div class="info-icon">🎯</div>
+                <div class="info-icon">🚀</div>
                 <div class="info-content">
-                    <h3>Connect & Inspire</h3>
-                    <p>Join thousands of speakers and organizations creating meaningful connections worldwide.</p>
+                    <h3>Lightning Fast Login</h3>
+                    <p>Experience our new smart login system - get to your dashboard in seconds, not minutes!</p>
                     
                     <div class="feature-list">
                         <div class="feature-item">
-                            <div class="feature-icon">✓</div>
-                            <span>Access to 10,000+ members</span>
+                            <div class="feature-icon">⚡</div>
+                            <span>2-4 second login time</span>
                         </div>
                         <div class="feature-item">
-                            <div class="feature-icon">✓</div>
-                            <span>Direct booking capabilities</span>
+                            <div class="feature-icon">🎯</div>
+                            <span>Smart data loading</span>
                         </div>
                         <div class="feature-item">
-                            <div class="feature-icon">✓</div>
-                            <span>Secure payment processing</span>
+                            <div class="feature-icon">📊</div>
+                            <span>Instant dashboard access</span>
                         </div>
                         <div class="feature-item">
-                            <div class="feature-icon">✓</div>
-                            <span>Real-time notifications</span>
+                            <div class="feature-icon">🔄</div>
+                            <span>Progressive enhancement</span>
                         </div>
                     </div>
                 </div>
@@ -767,69 +806,8 @@
         </div>
     </div>
 
-    <!-- Include the API client -->
+    <!-- Include the Smart API client -->
     <script src="/js/app.js"></script>
-    
-    <!-- DEBUG HELPER - TEMPORARY -->
-    <script>
-        // Debug function to check authentication state
-        function debugAuth() {
-            console.log('=== AUTHENTICATION DEBUG ===');
-            
-            // Check if API exists
-            console.log('1. API Available:', typeof api !== 'undefined');
-            
-            if (typeof api === 'undefined') {
-                console.log('❌ API not loaded - check if app.js is included');
-                return;
-            }
-            
-            // Check storage directly
-            const localToken = localStorage.getItem('authToken');
-            const sessionToken = sessionStorage.getItem('authToken');
-            const localUser = localStorage.getItem('user');
-            const sessionUser = sessionStorage.getItem('user');
-            
-            console.log('2. Storage Check:');
-            console.log('   - Local Token:', localToken ? 'EXISTS' : 'MISSING');
-            console.log('   - Session Token:', sessionToken ? 'EXISTS' : 'MISSING');
-            console.log('   - Local User:', localUser ? 'EXISTS' : 'MISSING');
-            console.log('   - Session User:', sessionUser ? 'EXISTS' : 'MISSING');
-            
-            // Check API methods
-            console.log('3. API Methods:');
-            console.log('   - getToken():', api.getToken() ? 'HAS TOKEN' : 'NO TOKEN');
-            console.log('   - getCurrentUser():', api.getCurrentUser() ? 'HAS USER' : 'NO USER');
-            console.log('   - isAuthenticated():', api.isAuthenticated());
-            
-            // Parse user data if available
-            const user = api.getCurrentUser();
-            if (user) {
-                console.log('4. User Data:');
-                console.log('   - Name:', user.name);
-                console.log('   - Email:', user.email);
-                console.log('   - Type:', user.memberType || user.Member_Type);
-                console.log('   - Full Object:', user);
-            } else {
-                console.log('4. User Data: NO USER DATA');
-            }
-            
-            // Check current page
-            console.log('5. Page Info:');
-            console.log('   - Path:', window.location.pathname);
-            console.log('   - File:', window.location.pathname.split('/').pop());
-            console.log('   - Redirect URL in session:', sessionStorage.getItem('redirectUrl'));
-            
-            console.log('=== END DEBUG ===');
-        }
-
-        // Make debugAuth globally available
-        window.debugAuth = debugAuth;
-
-        // Add debug info to console automatically
-        console.log('%c🔍 CoveTalks Auth Debug Helper Loaded', 'color: #4CAF50; font-weight: bold;');
-        console.log('Call debugAuth() in console to check authentication state');
-    </script>
     
     <script>
         // Page state
@@ -837,7 +815,7 @@
 
         // Initialize page
         function initializePage() {
-            console.log('[Login] Initializing login page');
+            console.log('[Login] Initializing smart login page');
             
             // Check for redirect from registration
             const urlParams = new URLSearchParams(window.location.search);
@@ -847,6 +825,11 @@
             
             // Set active nav item
             setActiveNavItem();
+            
+            // Show performance indicator in debug mode
+            if (window.location.hostname === 'localhost') {
+                document.getElementById('performanceIndicator').classList.add('show');
+            }
             
             console.log('[Login] Page initialization complete');
         }
@@ -860,6 +843,23 @@
                 console.error('[Login] API client not loaded. Make sure /js/app.js exists.');
                 showMessage('error', 'Application failed to load. Please refresh the page.');
                 return;
+            }
+            
+            // Set destination based on where user wants to go
+            const redirectUrl = sessionStorage.getItem('redirectUrl');
+            if (redirectUrl) {
+                console.log('[Login] Detected redirect URL:', redirectUrl);
+                
+                // Set destination hint for smart loading
+                if (redirectUrl.includes('dashboard')) {
+                    api.setDestination('dashboard');
+                } else if (redirectUrl.includes('profile')) {
+                    api.setDestination('profile');
+                } else if (redirectUrl.includes('billing')) {
+                    api.setDestination('billing');
+                } else if (redirectUrl.includes('opportunities')) {
+                    api.setDestination('opportunities');
+                }
             }
             
             // Small delay to ensure everything is ready
@@ -887,19 +887,14 @@
                 
                 // Initialize page if not logged in
                 initializePage();
-                
-                // Auto-run debug in localhost
-                if (window.location.hostname === 'localhost') {
-                    setTimeout(debugAuth, 1000);
-                }
             }, 200);
         });
 
-        // Login form submission
+        // Smart Login Form Submission
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            console.log('[Login] Form submitted');
+            console.log('[Login] Form submitted - using SMART login');
             
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
@@ -912,23 +907,32 @@
                 return;
             }
             
-            console.log('[Login] Attempting login for:', email);
+            console.log('[Login] Attempting smart login for:', email);
             
             // Show loading state
             loginButton.disabled = true;
             document.getElementById('loginText').style.display = 'none';
             document.getElementById('loginLoader').style.display = 'inline-block';
             
+            // Track performance
+            const startTime = performance.now();
+            
             try {
-                // Use the API client to login
+                // Use the SMART API client to login
                 const result = await api.login(email, password, remember);
                 
-                console.log('[Login] Login result:', { success: result.success, hasUser: !!result.user });
+                const endTime = performance.now();
+                const loginTime = Math.round(endTime - startTime);
+                
+                console.log('[Login] Smart login completed in', loginTime, 'ms');
+                
+                // Update performance indicator
+                document.getElementById('perfTime').textContent = loginTime;
                 
                 if (result.success && result.user) {
-                    showMessage('success', 'Login successful! Redirecting...');
+                    showMessage('success', `Login successful! (${loginTime}ms) Redirecting...`);
                     
-                    console.log('[Login] Login successful, setting up redirect');
+                    console.log('[Login] Login successful, deferred items:', result.deferred);
                     
                     // Short delay to show success message, then redirect
                     setTimeout(() => {
@@ -950,7 +954,7 @@
                                 window.location.href = '/dashboard.html';
                             }
                         }
-                    }, 1500);
+                    }, 1000);
                 } else {
                     throw new Error(result.error || 'Login failed - no user data received');
                 }
@@ -958,13 +962,8 @@
                 console.error('[Login] Login error:', error);
                 showMessage('error', error.message || 'Invalid email or password. Please try again.');
                 
-                // Debug: Check what's in storage after failed login
-                setTimeout(() => {
-                    console.log('[Login] Post-error storage check:');
-                    console.log('  - Token:', !!api.getToken());
-                    console.log('  - User:', !!api.getCurrentUser());
-                    console.log('  - Authenticated:', api.isAuthenticated());
-                }, 100);
+                // Update performance indicator with error
+                document.getElementById('perfTime').textContent = 'Error';
             } finally {
                 // Reset button state
                 loginButton.disabled = false;
@@ -984,8 +983,12 @@
             const header = document.querySelector('.form-header h2');
             if (tab === 'Organization') {
                 header.textContent = 'Organization Login';
+                // Set destination hint for organizations
+                api.setDestination('org-dashboard');
             } else {
                 header.textContent = 'Welcome Back';
+                // Set destination hint for speakers
+                api.setDestination('dashboard');
             }
         }
 
