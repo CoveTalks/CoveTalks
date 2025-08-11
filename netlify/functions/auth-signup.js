@@ -1,5 +1,5 @@
 // File: netlify/functions/auth-signup.js
-// ENHANCED DEBUG VERSION with schema corrections
+// UPDATED VERSION with Specialty table linking
 
 // Check for required environment variables at startup
 const requiredEnvVars = ['AIRTABLE_API_KEY', 'AIRTABLE_BASE_ID', 'JWT_SECRET'];
@@ -9,7 +9,7 @@ if (missingEnvVars.length > 0) {
   console.error('🔴 Missing required environment variables:', missingEnvVars);
 }
 
-const { tables, findByField, createRecord } = require('./utils/airtable');
+const { tables, findByField, createRecord, resolveSpecialties } = require('./utils/airtable');
 const { hashPassword, generateToken } = require('./utils/auth');
 
 exports.handler = async (event) => {
@@ -77,6 +77,7 @@ exports.handler = async (event) => {
     console.log('   Has Phone:', !!phone);
     console.log('   Has Location:', !!location);
     console.log('   Has Bio:', !!bio);
+    console.log('   Has Specialty:', !!specialty);
     console.log('   Has Organization Data:', !!organizationData);
 
     // Validate required fields
@@ -172,7 +173,22 @@ exports.handler = async (event) => {
       };
     }
 
-    // Create member record - matching YOUR schema exactly
+    // Resolve specialties if this is a speaker
+    let specialtyIds = [];
+    if (memberType === 'Speaker' && specialty) {
+      console.log('\n🔍 STEP 2.5: Resolving specialties...');
+      
+      // Convert specialty to array if it's a string
+      const specialtyArray = Array.isArray(specialty) 
+        ? specialty 
+        : specialty.split(',').map(s => s.trim()).filter(s => s);
+      
+      // Get or create specialty records
+      specialtyIds = await resolveSpecialties(specialtyArray);
+      console.log(`   Resolved ${specialtyIds.length} specialties`);
+    }
+
+    // Create member record
     console.log('\n📝 STEP 3: Creating member record...');
     const memberFields = {
       Name: name,
@@ -188,11 +204,10 @@ exports.handler = async (event) => {
       // NOTE: Member_ID is automatically set by Airtable (Autonumber field)
     };
 
-    // Add specialty for speakers (matching Multiple select field)
-    if (memberType === 'Speaker' && specialty) {
-      // Ensure specialty is an array for Multiple select field
-      memberFields.Specialty = Array.isArray(specialty) ? specialty : [specialty];
-      console.log('   Adding Specialty:', memberFields.Specialty);
+    // Add specialty IDs for speakers (as linked records)
+    if (memberType === 'Speaker' && specialtyIds.length > 0) {
+      memberFields.Specialty = specialtyIds; // Array of record IDs for the linked field
+      console.log('   Adding Specialty links:', specialtyIds);
     }
 
     console.log('   Fields to create:', Object.keys(memberFields));
@@ -200,6 +215,8 @@ exports.handler = async (event) => {
     Object.entries(memberFields).forEach(([key, value]) => {
       if (key === 'Password_Hash') {
         console.log(`      ${key}: [HIDDEN - ${value.length} chars]`);
+      } else if (key === 'Specialty') {
+        console.log(`      ${key}: [${value.length} linked records]`);
       } else {
         console.log(`      ${key}:`, value);
       }
@@ -291,7 +308,28 @@ exports.handler = async (event) => {
       };
     }
 
-    // Prepare user data for response - matching YOUR schema field names
+    // For the response, we need to fetch the specialty names if they exist
+    let specialtyNames = [];
+    if (specialtyIds.length > 0) {
+      try {
+        const specialtyPromises = specialtyIds.map(id => 
+          tables.specialty.find(id).catch(err => {
+            console.error(`Failed to fetch specialty ${id}:`, err);
+            return null;
+          })
+        );
+        
+        const specialtyRecords = await Promise.all(specialtyPromises);
+        specialtyNames = specialtyRecords
+          .filter(record => record !== null)
+          .map(record => record.fields.Name)
+          .filter(name => name);
+      } catch (error) {
+        console.error('Failed to fetch specialty names:', error);
+      }
+    }
+
+    // Prepare user data for response
     const userData = {
       id: newUser.id,  // Airtable record ID
       memberId: newUser.fields.Member_ID,  // Your autonumber field
@@ -302,7 +340,7 @@ exports.handler = async (event) => {
       location: newUser.fields.Location || null,
       bio: newUser.fields.Bio || null,
       website: newUser.fields.Website || null,
-      specialty: newUser.fields.Specialty || []
+      specialty: specialtyNames  // Return the names, not the IDs
     };
 
     console.log('\n✅ SIGNUP SUCCESSFUL!');
@@ -310,6 +348,7 @@ exports.handler = async (event) => {
     console.log('   Type:', userData.memberType);
     console.log('   Record ID:', userData.id);
     console.log('   Member ID:', userData.memberId);
+    console.log('   Specialties:', userData.specialty);
     console.log('=====================================\n');
 
     return {

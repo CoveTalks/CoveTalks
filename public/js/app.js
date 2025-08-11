@@ -1,5 +1,5 @@
 // ============================================
-// FRONTEND INTEGRATION - FIXED VERSION
+// FRONTEND INTEGRATION
 // ============================================
 
 // File: public/js/app.js

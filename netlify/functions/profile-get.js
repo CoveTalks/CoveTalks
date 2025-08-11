@@ -1,5 +1,5 @@
 // File: netlify/functions/profile-get.js
-// COMPLETE VERSION - Includes all functionality from both versions
+// UPDATED VERSION - Fetches specialty names from linked records
 
 const { tables } = require('./utils/airtable');
 const { requireAuth } = require('./utils/auth');
@@ -83,7 +83,7 @@ exports.handler = async (event) => {
       memberType: user.fields.Member_Type || '',
       location: user.fields.Location || '',
       bio: user.fields.Bio || '',
-      specialty: user.fields.Specialty || [],
+      specialty: [], // Will populate below
       website: user.fields.Website || '',
       profileImage: user.fields.Profile_Image ? 
         (user.fields.Profile_Image[0]?.url || user.fields.Profile_Image[0]?.thumbnails?.large?.url || null) : 
@@ -92,8 +92,36 @@ exports.handler = async (event) => {
       status: user.fields.Status || 'Active',
       createdDate: user.fields.Created_Date,
       lastLogin: user.fields.Last_Login,
-      profileViews: user.fields.Profile_Views || 0 // Add profile views for dashboard
+      profileViews: user.fields.Profile_Views || 0
     };
+
+    // Fetch specialty names if they exist (linked records)
+    if (user.fields.Specialty && user.fields.Specialty.length > 0) {
+      try {
+        console.log('[Profile Get] Fetching specialty names for IDs:', user.fields.Specialty);
+        
+        // Fetch all linked specialty records
+        const specialtyPromises = user.fields.Specialty.map(specialtyId => 
+          tables.specialty.find(specialtyId).catch(err => {
+            console.error(`Failed to fetch specialty ${specialtyId}:`, err);
+            return null;
+          })
+        );
+        
+        const specialtyRecords = await Promise.all(specialtyPromises);
+        
+        // Extract names from the records
+        profile.specialty = specialtyRecords
+          .filter(record => record !== null)
+          .map(record => record.fields.Name)
+          .filter(name => name);
+        
+        console.log('[Profile Get] Specialty names:', profile.specialty);
+      } catch (error) {
+        console.error('[Profile Get] Failed to fetch specialties:', error);
+        profile.specialty = [];
+      }
+    }
 
     // Check if user has testimonials/reviews (for profile completion)
     let hasTestimonials = false;
@@ -180,7 +208,7 @@ exports.handler = async (event) => {
             taxId: isAuthenticated && profileId === authenticatedUserId ? org.fields.Tax_ID : undefined
           };
           
-          // NEW: Merge organization data into main profile for frontend compatibility
+          // Merge organization data into main profile for frontend compatibility
           profile.organizationId = org.id;
           profile.organizationName = org.fields.Organization_Name;
           profile.organizationType = org.fields.Organization_Type;
@@ -253,7 +281,6 @@ exports.handler = async (event) => {
         } else {
           profile.averageRating = '0.0';
           profile.totalReviews = 0;
-          // Keep the hasTestimonials value from earlier check
         }
         
         console.log('[Profile Get] Reviews found:', profile.reviews.length);
@@ -262,7 +289,6 @@ exports.handler = async (event) => {
         profile.reviews = [];
         profile.averageRating = '0.0';
         profile.totalReviews = 0;
-        // Keep the hasTestimonials value from earlier check
       }
     } else {
       // Not a speaker, no reviews

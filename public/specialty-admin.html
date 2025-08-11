@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Specialty Table Admin - CoveTalks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f7fa;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+
+        h1 {
+            color: #155588;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .section p {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #155588;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0d3d5f;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .result.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .result.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .result.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
+        }
+
+        .result h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .result pre {
+            background: rgba(0,0,0,0.05);
+            padding: 0.5rem;
+            border-radius: 3px;
+            overflow-x: auto;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #155588;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ffeeba;
+            margin-bottom: 1rem;
+        }
+
+        input[type="text"] {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            width: 300px;
+            margin-right: 10px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .checkbox-label input {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Specialty Table Administration</h1>
+        <p class="subtitle">Manage the Specialty lookup table for your CoveTalks database</p>
+
+        <div class="warning">
+            <strong>⚠️ Important:</strong> This page is for administrative use only. Make sure you have the correct permissions and understand the implications of these actions before proceeding.
+        </div>
+
+        <!-- Seed Specialties Section -->
+        <div class="section">
+            <h2>1. Seed Specialty Table</h2>
+            <p>
+                This will populate your Specialty table with a comprehensive list of common specialties. 
+                It will skip any specialties that already exist to avoid duplicates.
+            </p>
+            <p><strong>Use this when:</strong> Setting up your database for the first time or adding standard specialties.</p>
+            
+            <div style="margin: 1rem 0;">
+                <input type="text" id="seedSecretKey" placeholder="Enter secret key (if configured)">
+            </div>
+            
+            <button class="btn-primary" onclick="seedSpecialties()">
+                Seed Specialties
+                <span class="loading" style="display: none;" id="seedLoader"></span>
+            </button>
+            
+            <div class="result" id="seedResult"></div>
+        </div>
+
+        <!-- Cleanup Duplicates Section -->
+        <div class="section">
+            <h2>2. Cleanup Duplicate Specialties</h2>
+            <p>
+                This will find and merge duplicate specialties (same name, different records). 
+                It will keep the best-formatted version and update all member references.
+            </p>
+            <p><strong>Use this when:</strong> You notice duplicate specialties in your table and want to consolidate them.</p>
+            
+            <div style="margin: 1rem 0;">
+                <input type="text" id="cleanupSecretKey" placeholder="Enter secret key (if configured)">
+            </div>
+            
+            <div class="checkbox-label">
+                <input type="checkbox" id="dryRun" checked>
+                <label for="dryRun">Dry Run (preview changes without making them)</label>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn-secondary" onclick="cleanupSpecialties(true)">
+                    Preview Cleanup
+                    <span class="loading" style="display: none;" id="cleanupPreviewLoader"></span>
+                </button>
+                <button class="btn-danger" onclick="cleanupSpecialties(false)">
+                    Execute Cleanup
+                    <span class="loading" style="display: none;" id="cleanupExecuteLoader"></span>
+                </button>
+            </div>
+            
+            <div class="result" id="cleanupResult"></div>
+        </div>
+
+        <!-- Status Section -->
+        <div class="section">
+            <h2>3. Current Status</h2>
+            <p>View the current state of your Specialty table.</p>
+            
+            <button class="btn-primary" onclick="checkStatus()">
+                Check Status
+                <span class="loading" style="display: none;" id="statusLoader"></span>
+            </button>
+            
+            <div class="result" id="statusResult"></div>
+        </div>
+    </div>
+
+    <script>
+        // Base URL for your Netlify functions
+        const FUNCTIONS_BASE = window.location.hostname === 'localhost' 
+            ? 'http://localhost:8888/.netlify/functions'
+            : '/.netlify/functions';
+
+        // Seed Specialties
+        async function seedSpecialties() {
+            const button = event.target;
+            const loader = document.getElementById('seedLoader');
+            const result = document.getElementById('seedResult');
+            const secretKey = document.getElementById('seedSecretKey').value;
+            
+            button.disabled = true;
+            loader.style.display = 'inline-block';
+            result.className = 'result';
+            result.innerHTML = '';
+            
+            try {
+                const response = await fetch(`${FUNCTIONS_BASE}/seed-specialties`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ secretKey })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    result.className = 'result success';
+                    result.innerHTML = `
+                        <h3>✅ Seeding Complete!</h3>
+                        <p>Created: ${data.results.created} new specialties</p>
+                        <p>Skipped: ${data.results.skipped} existing specialties</p>
+                        <p>Errors: ${data.results.errors}</p>
+                        ${data.results.details ? `
+                            <details style="margin-top: 1rem;">
+                                <summary style="cursor: pointer;">View Details</summary>
+                                <pre>${JSON.stringify(data.results.details, null, 2)}</pre>
+                            </details>
+                        ` : ''}
+                    `;
+                } else {
+                    throw new Error(data.error || 'Seeding failed');
+                }
+            } catch (error) {
+                result.className = 'result error';
+                result.innerHTML = `
+                    <h3>❌ Error</h3>
+                    <p>${error.message}</p>
+                `;
+            } finally {
+                button.disabled = false;
+                loader.style.display = 'none';
+            }
+        }
+
+        // Cleanup Specialties
+        async function cleanupSpecialties(preview = true) {
+            const dryRun = preview || document.getElementById('dryRun').checked;
+            const loader = preview ? document.getElementById('cleanupPreviewLoader') : document.getElementById('cleanupExecuteLoader');
+            const result = document.getElementById('cleanupResult');
+            const secretKey = document.getElementById('cleanupSecretKey').value;
+            const button = event.target;
+            
+            button.disabled = true;
+            loader.style.display = 'inline-block';
+            result.className = 'result';
+            result.innerHTML = '';
+            
+            try {
+                const response = await fetch(`${FUNCTIONS_BASE}/cleanup-specialties`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ secretKey, dryRun })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    result.className = dryRun ? 'result info' : 'result success';
+                    result.innerHTML = `
+                        <h3>${dryRun ? '🔍 Preview Results' : '✅ Cleanup Complete!'}</h3>
+                        <p>Total specialties: ${data.results.totalSpecialties}</p>
+                        <p>Duplicate sets found: ${data.results.duplicateSets}</p>
+                        ${data.results.duplicates.length > 0 ? `
+                            <h4 style="margin-top: 1rem;">Duplicates ${dryRun ? 'Found' : 'Processed'}:</h4>
+                            <ul style="margin-top: 0.5rem;">
+                                ${data.results.duplicates.map(dup => `
+                                    <li>
+                                        <strong>"${dup.keeper.name}"</strong> - Keep this one<br>
+                                        Duplicates to ${dryRun ? 'remove' : 'removed'}: 
+                                        ${dup.duplicates.map(d => `"${d.name}"`).join(', ')}
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        ` : '<p>No duplicates found!</p>'}
+                        ${!dryRun && data.results.actions && data.results.actions.length > 0 ? `
+                            <details style="margin-top: 1rem;">
+                                <summary style="cursor: pointer;">View Actions Taken</summary>
+                                <pre>${JSON.stringify(data.results.actions, null, 2)}</pre>
+                            </details>
+                        ` : ''}
+                    `;
+                } else {
+                    throw new Error(data.error || 'Cleanup failed');
+                }
+            } catch (error) {
+                result.className = 'result error';
+                result.innerHTML = `
+                    <h3>❌ Error</h3>
+                    <p>${error.message}</p>
+                `;
+            } finally {
+                button.disabled = false;
+                loader.style.display = 'none';
+            }
+        }
+
+        // Check Status
+        async function checkStatus() {
+            const button = event.target;
+            const loader = document.getElementById('statusLoader');
+            const result = document.getElementById('statusResult');
+            
+            button.disabled = true;
+            loader.style.display = 'inline-block';
+            result.className = 'result';
+            result.innerHTML = '';
+            
+            try {
+                // For now, just show instructions
+                // You could create a separate status endpoint if needed
+                result.className = 'result info';
+                result.innerHTML = `
+                    <h3>📊 How to Check Status</h3>
+                    <p>To view your current specialties:</p>
+                    <ol style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                        <li>Go to your Airtable base</li>
+                        <li>Open the "Specialty" table</li>
+                        <li>You'll see all specialties and their usage counts</li>
+                    </ol>
+                    <p style="margin-top: 1rem;">
+                        <strong>Tip:</strong> Add a "Count" field with formula 
+                        <code>COUNTALL({Members})</code> to see how many members use each specialty.
+                    </p>
+                `;
+            } catch (error) {
+                result.className = 'result error';
+                result.innerHTML = `
+                    <h3>❌ Error</h3>
+                    <p>${error.message}</p>
+                `;
+            } finally {
+                button.disabled = false;
+                loader.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

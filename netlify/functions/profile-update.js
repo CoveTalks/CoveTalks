@@ -1,5 +1,7 @@
 // File: netlify/functions/profile-update.js
-const { tables, updateRecord } = require('./utils/airtable');
+// UPDATED VERSION - Handles specialty as linked records
+
+const { tables, updateRecord, resolveSpecialties } = require('./utils/airtable');
 const { requireAuth } = require('./utils/auth');
 
 exports.handler = async (event) => {
@@ -55,12 +57,29 @@ exports.handler = async (event) => {
     if (updates.website !== undefined) allowedFields.Website = updates.website;
     if (updates.bookingLink !== undefined) allowedFields.Booking_Link = updates.bookingLink;
 
-    // Handle specialty array
+    // Handle specialty array - now as linked records
     if (updates.specialty !== undefined) {
+      let specialtyArray = [];
+      
       if (Array.isArray(updates.specialty)) {
-        allowedFields.Specialty = updates.specialty;
+        specialtyArray = updates.specialty;
       } else if (typeof updates.specialty === 'string') {
-        allowedFields.Specialty = updates.specialty.split(',').map(s => s.trim()).filter(s => s);
+        specialtyArray = updates.specialty.split(',').map(s => s.trim()).filter(s => s);
+      }
+      
+      // Resolve specialty names to record IDs
+      if (specialtyArray.length > 0) {
+        console.log('[Profile Update] Resolving specialties:', specialtyArray);
+        const specialtyIds = await resolveSpecialties(specialtyArray);
+        
+        if (specialtyIds.length > 0) {
+          allowedFields.Specialty = specialtyIds;
+          console.log('[Profile Update] Specialty IDs to link:', specialtyIds);
+        }
+      } else {
+        // Clear specialties if empty array provided
+        allowedFields.Specialty = [];
+        console.log('[Profile Update] Clearing specialties');
       }
     }
 
@@ -73,7 +92,6 @@ exports.handler = async (event) => {
       if (updates.profileImage.startsWith('data:image')) {
         // Note: Airtable attachments don't directly accept base64
         // You would typically upload to a service like Cloudinary here
-        // For MVP, we'll skip the image if it's base64
         console.log('[Profile Update] Base64 image detected - skipping for now (needs cloud storage integration)');
         
         // TODO: Integrate with Cloudinary or similar service
@@ -151,6 +169,27 @@ exports.handler = async (event) => {
       }
     }
 
+    // Fetch specialty names for the response
+    let specialtyNames = [];
+    if (updatedUser.fields.Specialty && updatedUser.fields.Specialty.length > 0) {
+      try {
+        const specialtyPromises = updatedUser.fields.Specialty.map(specialtyId => 
+          tables.specialty.find(specialtyId).catch(err => {
+            console.error(`Failed to fetch specialty ${specialtyId}:`, err);
+            return null;
+          })
+        );
+        
+        const specialtyRecords = await Promise.all(specialtyPromises);
+        specialtyNames = specialtyRecords
+          .filter(record => record !== null)
+          .map(record => record.fields.Name)
+          .filter(name => name);
+      } catch (error) {
+        console.error('[Profile Update] Failed to fetch specialty names:', error);
+      }
+    }
+
     // Prepare updated profile data for response
     const profile = {
       id: updatedUser.id,
@@ -160,7 +199,7 @@ exports.handler = async (event) => {
       memberType: updatedUser.fields.Member_Type,
       location: updatedUser.fields.Location,
       bio: updatedUser.fields.Bio,
-      specialty: updatedUser.fields.Specialty || [],
+      specialty: specialtyNames, // Return the names, not the IDs
       website: updatedUser.fields.Website,
       profileImage: updatedUser.fields.Profile_Image ? updatedUser.fields.Profile_Image[0]?.url : null,
       bookingLink: updatedUser.fields.Booking_Link,

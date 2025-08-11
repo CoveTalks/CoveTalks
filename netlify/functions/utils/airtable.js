@@ -1,5 +1,5 @@
 // netlify/functions/utils/airtable.js
-// FIXED VERSION with better error handling and debugging
+// UPDATED VERSION with Specialty table support
 
 const Airtable = require('airtable');
 
@@ -32,7 +32,8 @@ const tables = {
   contactSubmissions: base ? base('Contact_Submissions') : null,
   speakingOpportunities: base ? base('Speaking_Opportunities') : null,
   applications: base ? base('Applications') : null,
-  reviews: base ? base('Reviews') : null
+  reviews: base ? base('Reviews') : null,
+  specialty: base ? base('Specialty') : null  // NEW: Added Specialty table
 };
 
 async function findByField(table, fieldName, value) {
@@ -140,6 +141,113 @@ async function updateRecord(table, recordId, fields) {
   }
 }
 
+/**
+ * Find or create specialty records and return their IDs
+ * @param {Array<string>} specialtyNames - Array of specialty names
+ * @returns {Promise<Array<string>>} Array of Airtable record IDs
+ */
+async function resolveSpecialties(specialtyNames) {
+  if (!specialtyNames || specialtyNames.length === 0) {
+    return [];
+  }
+
+  const specialtyIds = [];
+  
+  for (const specialtyName of specialtyNames) {
+    const trimmedName = specialtyName.trim();
+    if (!trimmedName) continue;
+    
+    try {
+      // First, check if this specialty already exists
+      console.log(`   Checking for specialty: "${trimmedName}"`);
+      
+      const existingSpecialties = await tables.specialty.select({
+        filterByFormula: `LOWER({Name}) = LOWER('${trimmedName.replace(/'/g, "\\'")}')`
+      }).firstPage();
+      
+      if (existingSpecialties.length > 0) {
+        // Specialty exists, use its ID
+        const specialtyId = existingSpecialties[0].id;
+        specialtyIds.push(specialtyId);
+        console.log(`   ✅ Found existing specialty: ${trimmedName} (ID: ${specialtyId})`);
+      } else {
+        // Specialty doesn't exist, create it
+        console.log(`   Creating new specialty: ${trimmedName}`);
+        
+        const newSpecialty = await createRecord(tables.specialty, {
+          Name: trimmedName
+        });
+        
+        specialtyIds.push(newSpecialty.id);
+        console.log(`   ✅ Created new specialty: ${trimmedName} (ID: ${newSpecialty.id})`);
+      }
+    } catch (error) {
+      console.error(`   ❌ Failed to process specialty "${trimmedName}":`, error.message);
+      // Continue with other specialties even if one fails
+    }
+  }
+  
+  return specialtyIds;
+}
+
+// Seed function to populate common specialties (run once)
+async function seedSpecialties() {
+  console.log('=== SEEDING SPECIALTY TABLE ===');
+  
+  const commonSpecialties = [
+    'Mortgage Banking',
+    'Banking',
+    'Finance',
+    'Real Estate',
+    'Technology',
+    'Healthcare',
+    'Education',
+    'Marketing',
+    'Sales',
+    'Leadership',
+    'Management',
+    'Entrepreneurship',
+    'Innovation',
+    'Digital Transformation',
+    'Cybersecurity',
+    'Data Analytics',
+    'Artificial Intelligence',
+    'Sustainability',
+    'Diversity & Inclusion',
+    'Human Resources',
+    'Project Management',
+    'Agile Methodology',
+    'Customer Service',
+    'Public Speaking',
+    'Communications',
+    'Social Media',
+    'Content Strategy',
+    'Brand Development',
+    'Business Strategy',
+    'Change Management'
+  ];
+  
+  for (const name of commonSpecialties) {
+    try {
+      // Check if already exists
+      const existing = await tables.specialty.select({
+        filterByFormula: `{Name} = '${name.replace(/'/g, "\\'")}'`
+      }).firstPage();
+      
+      if (existing.length === 0) {
+        await tables.specialty.create({ Name: name });
+        console.log(`✅ Created: ${name}`);
+      } else {
+        console.log(`⏭️ Skipped (already exists): ${name}`);
+      }
+    } catch (error) {
+      console.error(`❌ Failed to seed specialty "${name}":`, error.message);
+    }
+  }
+  
+  console.log('=== SEEDING COMPLETE ===');
+}
+
 // Test function to verify connection
 async function testConnection() {
   console.log('Testing Airtable connection...');
@@ -169,6 +277,8 @@ module.exports = {
   findByField,
   createRecord,
   updateRecord,
+  resolveSpecialties,  // Export the new function
+  seedSpecialties,      // Export seed function
   base,
   testConnection
 };
