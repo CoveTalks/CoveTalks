@@ -12,7 +12,7 @@
 | Member_Type | Single select | "Speaker" or "Organization" |
 | Location | Single line text | City, State/Country |
 | Bio | Long text | Member biography |
-| Specialty | Multiple select | Areas of expertise |
+| Specialty | Link to Specialty | Areas of expertise |
 | Website | URL | Personal/company website |
 | Profile_Image | Attachment | Profile photo |
 | Booking_Link | URL | Calendar/booking URL |
