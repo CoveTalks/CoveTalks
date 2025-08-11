@@ -1,5 +1,5 @@
 // File: netlify/functions/auth-login.js
-// ENHANCED DEBUG VERSION with schema corrections
+// UPDATED VERSION with specialty name fetching
 
 const { tables, findByField, updateRecord } = require('./utils/airtable');
 const { verifyPassword, generateToken } = require('./utils/auth');
@@ -225,7 +225,31 @@ exports.handler = async (event) => {
       }
     }
 
-    // Prepare user data for response - matching YOUR schema field names
+    // Fetch specialty names if they exist (for speakers)
+    let specialtyNames = [];
+    if (user.fields.Specialty && user.fields.Specialty.length > 0) {
+      console.log('   Fetching specialty names...');
+      try {
+        const specialtyPromises = user.fields.Specialty.map(specialtyId => 
+          tables.specialty.find(specialtyId).catch(err => {
+            console.error(`Failed to fetch specialty ${specialtyId}:`, err);
+            return null;
+          })
+        );
+        
+        const specialtyRecords = await Promise.all(specialtyPromises);
+        specialtyNames = specialtyRecords
+          .filter(record => record !== null)
+          .map(record => record.fields.Name)
+          .filter(name => name);
+        
+        console.log('   ✅ Specialty names:', specialtyNames);
+      } catch (error) {
+        console.error('   ⚠️ Failed to fetch specialty names:', error);
+      }
+    }
+
+    // Prepare user data for response
     const userData = {
       id: user.id,  // Airtable record ID
       memberId: user.fields.Member_ID,  // Your autonumber field
@@ -236,7 +260,7 @@ exports.handler = async (event) => {
       location: user.fields.Location || null,
       bio: user.fields.Bio || null,
       website: user.fields.Website || null,
-      specialty: user.fields.Specialty || [],
+      specialty: specialtyNames, // Return names instead of IDs
       profileImage: user.fields.Profile_Image ? user.fields.Profile_Image[0]?.url : null,
       bookingLink: user.fields.Booking_Link || null,
       subscription: subscriptionStatus,
@@ -248,6 +272,7 @@ exports.handler = async (event) => {
     console.log('   Type:', userData.memberType);
     console.log('   Has Subscription:', !!subscriptionStatus);
     console.log('   Has Organization:', !!organizationInfo);
+    console.log('   Specialties:', userData.specialty);
     console.log('=====================================\n');
 
     return {

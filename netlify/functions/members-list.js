@@ -1,4 +1,6 @@
 // File: netlify/functions/members-list.js
+// UPDATED VERSION - Fetches specialty names from linked records
+
 const { tables } = require('./utils/airtable');
 const { getTokenFromHeaders, verifyToken } = require('./utils/auth');
 
@@ -70,6 +72,8 @@ exports.handler = async (event) => {
       }
     }
     
+    console.log('[Members List] Fetching members with filter:', filterFormula);
+    
     // Fetch members from Airtable
     const members = await tables.members.select({
       filterByFormula: filterFormula,
@@ -91,9 +95,46 @@ exports.handler = async (event) => {
       ]
     }).all();
     
+    console.log(`[Members List] Found ${members.length} members`);
+    
+    // Fetch all specialty names in batch for efficiency
+    const allSpecialtyIds = new Set();
+    members.forEach(member => {
+      if (member.fields.Specialty && member.fields.Specialty.length > 0) {
+        member.fields.Specialty.forEach(id => allSpecialtyIds.add(id));
+      }
+    });
+    
+    console.log(`[Members List] Need to fetch ${allSpecialtyIds.size} unique specialties`);
+    
+    // Fetch all unique specialties
+    const specialtyMap = new Map();
+    if (allSpecialtyIds.size > 0) {
+      const specialtyPromises = Array.from(allSpecialtyIds).map(specialtyId => 
+        tables.specialty.find(specialtyId).then(record => {
+          specialtyMap.set(specialtyId, record.fields.Name);
+          return record;
+        }).catch(err => {
+          console.error(`[Members List] Failed to fetch specialty ${specialtyId}:`, err);
+          return null;
+        })
+      );
+      
+      await Promise.all(specialtyPromises);
+      console.log(`[Members List] Fetched ${specialtyMap.size} specialty names`);
+    }
+    
     // Format the response based on authentication status
     const formattedMembers = await Promise.all(members.map(async (member) => {
       const fields = member.fields;
+      
+      // Get specialty names from the map
+      let specialtyNames = [];
+      if (fields.Specialty && fields.Specialty.length > 0) {
+        specialtyNames = fields.Specialty
+          .map(id => specialtyMap.get(id))
+          .filter(name => name); // Filter out any undefined names
+      }
       
       // Basic information available to all
       const basicInfo = {
@@ -102,7 +143,7 @@ exports.handler = async (event) => {
         memberType: fields.Member_Type || '',
         location: fields.Location || '',
         bio: fields.Bio || '',
-        specialty: fields.Specialty || [],
+        specialty: specialtyNames, // Now contains names instead of IDs
         profileImage: fields.Profile_Image ? fields.Profile_Image[0]?.url : null,
         createdDate: fields.Created_Date
       };
@@ -124,7 +165,7 @@ exports.handler = async (event) => {
             additionalInfo.speakingTopics = orgRecords[0].fields.Speaking_Topics || [];
           }
         } catch (e) {
-          console.error('Failed to fetch organization details:', e);
+          console.error('[Members List] Failed to fetch organization details:', e);
         }
       }
       
@@ -142,7 +183,7 @@ exports.handler = async (event) => {
             additionalInfo.totalReviews = reviews.length;
           }
         } catch (e) {
-          console.error('Failed to fetch reviews:', e);
+          console.error('[Members List] Failed to fetch reviews:', e);
         }
       }
       
@@ -183,6 +224,7 @@ exports.handler = async (event) => {
            member.specialty.some(s => s.toLowerCase().includes(searchLower)))
         );
       });
+      console.log(`[Members List] Search filter applied, ${filteredResults.length} results match "${search}"`);
     }
     
     // Apply specialty filter if provided
@@ -192,6 +234,7 @@ exports.handler = async (event) => {
         return Array.isArray(member.specialty) && 
                member.specialty.some(s => s.toLowerCase().includes(specialtyLower));
       });
+      console.log(`[Members List] Specialty filter applied, ${filteredResults.length} results match "${specialty}"`);
     }
     
     // Calculate statistics
@@ -200,6 +243,8 @@ exports.handler = async (event) => {
       speakers: filteredResults.filter(m => m.memberType === 'Speaker').length,
       organizations: filteredResults.filter(m => m.memberType === 'Organization').length
     };
+    
+    console.log('[Members List] Returning results:', stats);
     
     return {
       statusCode: 200,
@@ -213,7 +258,7 @@ exports.handler = async (event) => {
       })
     };
   } catch (error) {
-    console.error('Members fetch error:', error);
+    console.error('[Members List] Error:', error);
     return {
       statusCode: 500,
       headers,
