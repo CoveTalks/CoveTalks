@@ -212,8 +212,8 @@
         .status-header {
             background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
             color: white;
-            padding: 3rem 0;
-            margin-bottom: 2rem;
+            padding: 3rem;
+            margin: 2rem ;
             border-radius: 15px;
         }
 
@@ -269,7 +269,7 @@
         .content-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            gap: 2rem;
+            gap: 1rem;
         }
 
         /* Card Styles */
@@ -278,7 +278,7 @@
             padding: 2rem;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
         }
 
         .card h2 {
@@ -1158,13 +1158,13 @@
         // Get status icon
         function getStatusIcon(status) {
             const icons = {
-                'Submitted': '✉️',
-                'Pending': '⏳',
-                'Accepted': '✅',
-                'Rejected': '❌',
-                'Withdrawn': '↩️'
+                'Submitted': '<i class="fas fa-envelope"></i>',
+                'Pending': '<i class="fas fa-clock"></i>',
+                'Accepted': '<i class="fas fa-check-circle"></i>',
+                'Rejected': '<i class="fas fa-times-circle"></i>',
+                'Withdrawn': '<i class="fas fa-undo"></i>'
             };
-            return icons[status] || '•';
+            return icons[status] || '<i class="fas fa-circle"></i>';
         }
 
         // Get status title
