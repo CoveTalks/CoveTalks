@@ -24,7 +24,7 @@
             padding: 0 20px;
         }
 
-        /* Header styles - reuse from other pages */
+        /* Header */
         header {
             background: white;
             color: #333;
@@ -34,6 +34,64 @@
             top: 0;
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .logo-img {
+            height: 70px;
+            width: auto;
+            display: block;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #155588;
+        }
+
+        .nav-links a.active {
+            color: #155588;
+            border-bottom: 2px solid #155588;
+            padding-bottom: 2px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
         }
 
         .btn {
@@ -69,19 +127,68 @@
             color: white;
         }
 
-        .btn-success {
-            background: #27ae60;
-            color: white;
-        }
-
-        .btn-danger {
-            background: #e74c3c;
-            color: white;
-        }
-
         .btn-small {
             padding: 0.5rem 1rem;
             font-size: 0.9rem;
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e1e8ed;
+            margin: 0;
         }
 
         /* Page Header */
@@ -90,6 +197,7 @@
             color: white;
             padding: 8rem 0 4rem;
             text-align: center;
+            margin-top: 70px;
         }
 
         .page-header h1 {
@@ -107,31 +215,6 @@
         .main-content {
             padding: 3rem 0;
             margin-top: -4rem;
-        }
-
-        /* Loading States */
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            color: #666;
-        }
-
-        .loading::after {
-            content: '';
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ddd;
-            border-top: 2px solid #155588;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-left: 0.5rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         /* Stats Cards */
@@ -174,12 +257,12 @@
 
         .stat-icon.purple {
             background: #f3e5f5;
-            color: #1e93b7;
+            color: #9b59b6;
         }
 
         .stat-icon.orange {
             background: #fff3e0;
-            color: #f2b236;
+            color: #f39c12;
         }
 
         .stat-content h3 {
@@ -271,12 +354,16 @@
             border-left-color: #27ae60;
         }
 
+        .booking-card.pending {
+            border-left-color: #f39c12;
+        }
+
         .booking-card.past {
             border-left-color: #95a5a6;
             opacity: 0.8;
         }
 
-        .booking-card.cancelled {
+        .booking-card.rejected {
             border-left-color: #e74c3c;
             opacity: 0.7;
         }
@@ -314,17 +401,17 @@
 
         .status-pending {
             background: #fff3cd;
-            color: #f2b236;
-        }
-
-        .status-completed {
-            background: #e8f4fd;
-            color: #155588;
+            color: #f39c12;
         }
 
         .status-rejected {
             background: #f8d7da;
             color: #e74c3c;
+        }
+
+        .status-withdrawn {
+            background: #e2e3e5;
+            color: #6c757d;
         }
 
         .booking-details {
@@ -345,6 +432,7 @@
 
         .detail-icon {
             color: #155588;
+            font-size: 1.2rem;
         }
 
         .detail-label {
@@ -364,31 +452,6 @@
             margin-top: 1rem;
             padding-top: 1rem;
             border-top: 1px solid #e1e8ed;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-
-        .empty-state-icon {
-            font-size: 4rem;
-            color: #ddd;
-            margin-bottom: 1rem;
-        }
-
-        .empty-state h3 {
-            color: #666;
-            margin-bottom: 0.5rem;
-        }
-
-        .empty-state p {
-            color: #999;
-            margin-bottom: 1.5rem;
         }
 
         /* Filter Bar */
@@ -423,195 +486,66 @@
             font-family: inherit;
         }
 
-        /* Mobile styles and navigation - keeping existing styles */
-        /* [All the existing mobile and navigation styles remain the same] */
-        
-        /* Navigation styles */
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .nav-links {
+        /* Loading State */
+        .loading {
             display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #155588;
-        }
-
-        .nav-links a.active {
-            color: #155588;
-            border-bottom: 2px solid #155588;
-            padding-bottom: 2px;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
+            padding: 3rem;
+            color: #666;
         }
 
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
+        .loading-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #155588;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
         }
 
-        .user-dropdown {
-            position: relative;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-            padding: 1rem 0;
-            min-width: 200px;
-            display: none;
-            margin-top: 0.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
         }
 
-        .dropdown-menu.show {
-            display: block;
+        .empty-state-icon {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 1rem;
         }
 
-        .dropdown-menu a {
-            display: block;
-            padding: 0.5rem 1.5rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.3s;
+        .empty-state h3 {
+            color: #666;
+            margin-bottom: 0.5rem;
         }
 
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
+        .empty-state p {
+            color: #999;
+            margin-bottom: 1.5rem;
         }
 
-        .dropdown-divider {
-            border-top: 1px solid #e1e8ed;
-            margin: 0.5rem 0;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-        }
-
-        .logo-img {
-            height: 70px;
-            width: auto;
-            display: block;
-        }
-
-        /* Mobile menu styles */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 35px;
-            height: 35px;
-            cursor: pointer;
-            z-index: 1002;
-            background: none;
-            border: none;
-            padding: 5px;
-        }
-
-        .hamburger span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background: #333;
-            margin: 3px 0;
-            transition: all 0.3s ease;
-            border-radius: 2px;
-        }
-
-        .mobile-menu-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: 300px;
-            height: 100vh;
-            background: white;
-            z-index: 1001;
-            transition: right 0.3s ease;
-            overflow-y: auto;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-        }
-
-        .mobile-menu-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e1e8ed;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .mobile-nav-links {
-            list-style: none;
-            padding: 1rem 0;
-        }
-
-        .mobile-nav-links a {
-            display: block;
-            padding: 1rem 1.5rem;
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
+        .hidden {
+            display: none !important;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
             .page-header h1 {
                 font-size: 2rem;
             }
@@ -637,133 +571,57 @@
                 flex-direction: column;
                 align-items: stretch;
             }
-
-            .nav-links {
-                display: none !important;
-            }
-            
-            .auth-buttons.desktop-only {
-                display: none !important;
-            }
-            
-            .hamburger {
-                display: flex;
-            }
-            
-            header {
-                padding: 0.75rem 0;
-            }
-            
-            .logo-img {
-                height: 50px;
-            }
-
-            body {
-                padding-top: 60px;
-            }
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header>
         <div class="nav-container">
             <nav>
-                <!-- Logo -->
                 <a href="index.html" class="logo">
-                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
                 </a>
                 
-                <!-- Desktop Navigation -->
-                <!-- Logged Out Navigation -->
-                <ul class="nav-links nav-logged-out" id="navLoggedOut">
+                <!-- Navigation links will be dynamically inserted here -->
+                <ul class="nav-links" id="navLinks">
+                    <!-- Default logged out navigation -->
                     <li><a href="index.html">Home</a></li>
                     <li><a href="members.html">Find Speakers</a></li>
                     <li><a href="pricing.html">Pricing</a></li>
                     <li><a href="register.html">Register</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                
-                <!-- Logged In Navigation (Speakers) -->
-                <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="opportunities.html">Opportunities</a></li>
-                    <li><a href="bookings.html" class="active">My Bookings</a></li>
-                    <li><a href="profile.html">Profile</a></li>
-                </ul>
-                
-                <!-- Logged In Navigation (Organizations) -->
-                <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
-                    <li><a href="organization-dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                    <li><a href="my-opportunities.html">My Opportunities</a></li>
-                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                </ul>
     
-                <!-- Right Side Navigation -->
                 <div class="nav-right">
-                    <!-- For Logged In Users -->
-                    <div class="user-menu" id="userMenuDesktop" style="display: none;">
-                        <div class="user-dropdown">
-                            <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
-                            <div class="dropdown-menu" id="dropdownMenu">
-                                <a href="profile-edit.html">Edit Profile</a>
-                                <a href="settings.html">Settings</a>
-                                <a href="billing.html">Billing</a>
-                                <div class="dropdown-divider"></div>
-                                <a href="#" onclick="logout()">Logout</a>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <!-- For Logged Out Users -->
-                    <div class="auth-buttons desktop-only" id="authButtonsDesktop">
+                    <!-- Auth buttons (shown when logged out) -->
+                    <div class="auth-buttons" id="authButtons">
                         <a href="register.html" class="btn btn-secondary">Join</a>
                         <a href="login.html" class="btn btn-primary">Login</a>
                     </div>
-    
-                    <!-- Hamburger Menu Button -->
-                    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
+                    
+                    <!-- User menu (shown when logged in) -->
+                    <div class="user-menu hidden" id="userMenu">
+                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="inbox.html">Inbox</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="settings.html">Settings</a>
+                            <a href="billing.html">Billing</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" onclick="logout(); return false;">Logout</a>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </div>
     </header>
 
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
-
-    <!-- Mobile Menu Panel -->
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-header">
-            <a href="index.html" class="logo">
-                <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
-            </a>
-            <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
-        </div>
-
-        <!-- Mobile Navigation Links -->
-        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
-            <li><a href="dashboard.html">Dashboard</a></li>
-            <li><a href="members.html">Find Speakers</a></li>
-            <li><a href="opportunities.html">Opportunities</a></li>
-            <li><a href="bookings.html" class="active">My Bookings</a></li>
-            <li><a href="profile.html">Profile</a></li>
-            <li><a href="settings.html">Settings</a></li>
-            <li><a href="billing.html">Billing</a></li>
-            <li><a href="help.html">Help & Support</a></li>
-        </ul>
-    </div>
-
     <!-- Page Header -->
     <div class="page-header">
         <div class="container">
             <h1>My Bookings</h1>
-            <p>Manage your speaking engagements and calendar</p>
+            <p>Manage your speaking engagements and applications</p>
         </div>
     </div>
 
@@ -775,26 +633,26 @@
                 <div class="stat-card">
                     <div class="stat-icon blue">📅</div>
                     <div class="stat-content">
-                        <h3 id="upcomingCount">--</h3>
+                        <h3 id="upcomingCount">0</h3>
                         <p>Upcoming Bookings</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">⏳</div>
+                    <div class="stat-content">
+                        <h3 id="pendingCount">0</h3>
+                        <p>Pending Applications</p>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon green">✅</div>
                     <div class="stat-content">
-                        <h3 id="completedCount">--</h3>
+                        <h3 id="completedCount">0</h3>
                         <p>Completed This Year</p>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon purple">⏰</div>
-                    <div class="stat-content">
-                        <h3 id="totalHours">--</h3>
-                        <p>Total Hours Spoken</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon orange">⭐</div>
+                    <div class="stat-icon purple">⭐</div>
                     <div class="stat-content">
                         <h3 id="averageRating">--</h3>
                         <p>Average Rating</p>
@@ -806,18 +664,19 @@
             <div class="filter-bar">
                 <div class="filter-group">
                     <label for="statusFilter">Status:</label>
-                    <select id="statusFilter">
-                        <option value="">All Bookings</option>
+                    <select id="statusFilter" onchange="applyFilters()">
+                        <option value="">All Applications</option>
                         <option value="Pending">Pending</option>
                         <option value="Accepted">Accepted</option>
                         <option value="Rejected">Rejected</option>
+                        <option value="Withdrawn">Withdrawn</option>
                     </select>
                 </div>
                 <div class="filter-group">
                     <label for="dateFilter">Date Range:</label>
-                    <select id="dateFilter">
+                    <select id="dateFilter" onchange="applyFilters()">
                         <option value="">All Time</option>
-                        <option value="upcoming">Upcoming</option>
+                        <option value="upcoming">Upcoming Events</option>
                         <option value="this-month">This Month</option>
                         <option value="next-month">Next Month</option>
                         <option value="past">Past Events</option>
@@ -828,422 +687,248 @@
             <!-- Tabs Container -->
             <div class="tabs-container">
                 <div class="tabs">
-                    <button class="tab active" onclick="showTab('list')">
-                        List View
-                        <span class="tab-badge" id="upcomingBadge">--</span>
+                    <button class="tab active" onclick="showTab('all', this)">
+                        All Applications
+                        <span class="tab-badge" id="allBadge">0</span>
                     </button>
-                    <button class="tab" onclick="showTab('calendar')">
-                        Calendar View
+                    <button class="tab" onclick="showTab('upcoming', this)">
+                        Upcoming Bookings
+                        <span class="tab-badge" id="upcomingBadge">0</span>
                     </button>
-                    <button class="tab" onclick="showTab('past')">
-                        Past Bookings
-                        <span class="tab-badge" id="pastBadge">--</span>
+                    <button class="tab" onclick="showTab('pending', this)">
+                        Pending Applications
+                        <span class="tab-badge" id="pendingBadge">0</span>
                     </button>
                 </div>
 
-                <!-- List View Tab -->
-                <div id="listTab" class="tab-content">
-                    <div class="loading" id="listLoading">Loading bookings...</div>
-                    <div class="bookings-grid" id="bookingsGrid" style="display: none;"></div>
-                </div>
-
-                <!-- Calendar View Tab -->
-                <div id="calendarTab" class="tab-content" style="display: none;">
-                    <div class="loading" id="calendarLoading">Loading calendar...</div>
-                    <div class="calendar-container" id="calendarContainer" style="display: none;">
-                        <p>Calendar view coming soon...</p>
+                <!-- Tab Content -->
+                <div id="tabContent">
+                    <div class="loading" id="loadingState">
+                        <div class="loading-spinner"></div>
+                        Loading your applications and bookings...
                     </div>
-                </div>
-
-                <!-- Past Bookings Tab -->
-                <div id="pastTab" class="tab-content" style="display: none;">
-                    <div class="loading" id="pastLoading">Loading past bookings...</div>
-                    <div class="bookings-grid" id="pastBookingsGrid" style="display: none;"></div>
+                    <div class="bookings-grid hidden" id="bookingsGrid"></div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Include the API client -->
-    <script src="/js/app.js"></script>
-    <script src="/js/navigation.js"></script>
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load config and Supabase client -->
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
     
     <script>
         // Global state
-        let allBookings = [];
-        let userRating = null;
         let currentUser = null;
+        let allApplications = [];
+        let filteredApplications = [];
+        let currentTab = 'all';
 
-        // Wait for API to be fully loaded
-        function waitForAPI(callback) {
-            if (typeof api !== 'undefined' && typeof updateNavigation !== 'undefined') {
-                callback();
-            } else {
-                setTimeout(() => waitForAPI(callback), 50);
+        // Wait for Supabase client
+        function waitForSupabase(callback) {
+            let attempts = 0;
+            const maxAttempts = 10;
+            
+            function check() {
+                attempts++;
+                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                    callback();
+                } else if (attempts < maxAttempts) {
+                    setTimeout(check, 500);
+                } else {
+                    showError('Failed to initialize. Please refresh the page.');
+                }
             }
+            check();
         }
 
-        // Initialize page - This runs AFTER authentication is verified
+        // Initialize page
         async function initializePage() {
-            currentUser = api.getCurrentUser();
-            console.log('Current user:', currentUser);
-            
-            // Load all data
-            await Promise.all([
-                loadBookingsData(),
-                loadUserRating()
-            ]);
-            
-            // Setup filter listeners
-            setupFilters();
-            
-            // Update all displays
-            updateStats();
-            updateTabBadges();
-            displayBookings();
+            waitForSupabase(async () => {
+                try {
+                    // Check authentication
+                    const session = await window.covetalks.checkAuth();
+                    if (!session) {
+                        window.location.href = '/login.html';
+                        return;
+                    }
+
+                    // Get current user
+                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                    
+                    // Check if user is a speaker
+                    if (currentUser.member_type !== 'Speaker') {
+                        window.location.href = '/organization-dashboard.html';
+                        return;
+                    }
+
+                    updateNavigation(currentUser);
+
+                    // Load all data
+                    await loadAllData();
+
+                } catch (error) {
+                    console.error('Error initializing:', error);
+                    showError('Failed to load your bookings. Please refresh the page.');
+                }
+            });
         }
 
-        // Load bookings data from API
-        async function loadBookingsData() {
-            try {
-                console.log('Loading bookings data...');
-                const response = await fetch('/.netlify/functions/bookings-list', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${api.getToken()}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log('Bookings data received:', data);
+        // Update navigation
+        function updateNavigation(user) {
+            const navLinks = document.getElementById('navLinks');
+            const authButtons = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userAvatar = document.getElementById('userAvatar');
+            
+            if (user) {
+                authButtons.classList.add('hidden');
+                userMenu.classList.remove('hidden');
                 
-                if (data.success) {
-                    allBookings = data.bookings || [];
-                    console.log('Processed bookings:', allBookings);
-                } else {
-                    console.error('API returned error:', data.error);
-                    allBookings = [];
-                }
-            } catch (error) {
-                console.error('Failed to load bookings:', error);
-                allBookings = [];
+                const initials = user.name ? 
+                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                    'U';
+                userAvatar.textContent = initials;
+                
+                // Update navigation links for speakers
+                navLinks.innerHTML = `
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="opportunities.html">Opportunities</a></li>
+                    <li><a href="bookings.html" class="active">My Bookings</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                `;
             }
         }
 
-        // Load user rating from reviews
-        async function loadUserRating() {
+        // Load all data
+        async function loadAllData() {
             try {
-                console.log('Loading user reviews...');
-                const response = await fetch(`/.netlify/functions/reviews-list?speakerId=${currentUser.id}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${api.getToken()}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
+                document.getElementById('loadingState').classList.remove('hidden');
+                document.getElementById('bookingsGrid').classList.add('hidden');
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log('Reviews data received:', data);
+                // Get all applications for the current speaker
+                allApplications = await window.covetalks.getApplications(currentUser.id);
                 
-                if (data.success && data.stats) {
-                    userRating = data.stats.averageRating || null;
-                    console.log('User average rating:', userRating);
-                } else {
-                    console.log('No reviews found or API error');
-                    userRating = null;
-                }
+                // Also get user's rating
+                const reviews = await window.covetalks.getReviews(currentUser.id);
+                const avgRating = reviews.length > 0 ? 
+                    reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length : 0;
+                
+                // Update stats
+                updateStats(avgRating);
+                
+                // Update tab badges
+                updateTabBadges();
+                
+                // Display initial data
+                applyFilters();
+
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('bookingsGrid').classList.remove('hidden');
+
             } catch (error) {
-                console.error('Failed to load user rating:', error);
-                userRating = null;
+                console.error('Error loading data:', error);
+                showError('Failed to load your bookings.');
             }
         }
 
-        // Update statistics cards
-        function updateStats() {
+        // Update statistics
+        function updateStats(avgRating) {
             const now = new Date();
             const currentYear = now.getFullYear();
             
-            // Calculate stats based on actual data
             let upcomingCount = 0;
+            let pendingCount = 0;
             let completedThisYear = 0;
-            let totalHours = 0;
             
-            allBookings.forEach(booking => {
-                const eventDate = booking.opportunity?.eventDate || booking.eventDate;
-                const opportunityHours = booking.opportunity?.totalHours || 1; // Use the actual Total_Hours field
+            allApplications.forEach(app => {
+                const eventDate = app.opportunity?.event_date;
+                
+                if (app.status === 'Pending') {
+                    pendingCount++;
+                }
                 
                 if (eventDate) {
                     const date = new Date(eventDate);
                     
-                    // Count upcoming (accepted bookings in future)
-                    if (booking.status === 'Accepted' && date > now) {
+                    if (app.status === 'Accepted' && date > now) {
                         upcomingCount++;
                     }
                     
-                    // Count completed this year (accepted bookings in past this year)
-                    if (booking.status === 'Accepted' && 
-                        date < now && 
-                        date.getFullYear() === currentYear) {
+                    if (app.status === 'Accepted' && date < now && date.getFullYear() === currentYear) {
                         completedThisYear++;
-                        // Add actual hours from opportunity Total_Hours field
-                        totalHours += opportunityHours;
                     }
                 }
             });
             
-            // Update display
             document.getElementById('upcomingCount').textContent = upcomingCount;
+            document.getElementById('pendingCount').textContent = pendingCount;
             document.getElementById('completedCount').textContent = completedThisYear;
-            document.getElementById('totalHours').textContent = totalHours;
-            document.getElementById('averageRating').textContent = userRating ? userRating.toFixed(1) : '--';
+            document.getElementById('averageRating').textContent = avgRating > 0 ? avgRating.toFixed(1) : '--';
         }
 
-        // Update tab badges with real counts
+        // Update tab badges
         function updateTabBadges() {
             const now = new Date();
             
-            // Count upcoming bookings (accepted + in future)
-            const upcomingCount = allBookings.filter(booking => {
-                const eventDate = booking.opportunity?.eventDate || booking.eventDate;
-                return eventDate && 
-                       booking.status === 'Accepted' && 
-                       new Date(eventDate) > now;
+            const allCount = allApplications.length;
+            const upcomingCount = allApplications.filter(app => {
+                const eventDate = app.opportunity?.event_date;
+                return app.status === 'Accepted' && eventDate && new Date(eventDate) > now;
             }).length;
+            const pendingCount = allApplications.filter(app => app.status === 'Pending').length;
             
-            // Count past bookings (accepted + in past)
-            const pastCount = allBookings.filter(booking => {
-                const eventDate = booking.opportunity?.eventDate || booking.eventDate;
-                return eventDate && 
-                       booking.status === 'Accepted' && 
-                       new Date(eventDate) < now;
-            }).length;
-            
+            document.getElementById('allBadge').textContent = allCount;
             document.getElementById('upcomingBadge').textContent = upcomingCount;
-            document.getElementById('pastBadge').textContent = pastCount;
+            document.getElementById('pendingBadge').textContent = pendingCount;
         }
 
-        // Display bookings in the list
-        function displayBookings(filteredBookings = null) {
-            const bookingsToShow = filteredBookings || allBookings;
-            const bookingsGrid = document.getElementById('bookingsGrid');
-            const loading = document.getElementById('listLoading');
+        // Show tab
+        function showTab(tab, tabElement) {
+            currentTab = tab;
             
-            // Hide loading
-            loading.style.display = 'none';
-            bookingsGrid.style.display = 'block';
+            // Update active tab styling
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            tabElement.classList.add('active');
             
-            if (bookingsToShow.length === 0) {
-                bookingsGrid.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📅</div>
-                        <h3>No bookings yet</h3>
-                        <p>Your speaking applications and bookings will appear here</p>
-                        <a href="opportunities.html" class="btn btn-primary">Browse Opportunities</a>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Display bookings
-            bookingsGrid.innerHTML = bookingsToShow.map(booking => {
-                const opportunity = booking.opportunity;
-                const organization = booking.organization;
-                const eventDate = opportunity?.eventDate || booking.eventDate;
-                const isUpcoming = eventDate && new Date(eventDate) > new Date();
-                
-                return `
-                    <div class="booking-card ${isUpcoming ? 'upcoming' : 'past'}">
-                        <div class="booking-header">
-                            <div>
-                                <div class="booking-title">${opportunity?.title || booking.title || 'Speaking Opportunity'}</div>
-                                <div class="booking-org">${organization?.name || 'Unknown Organization'}</div>
-                            </div>
-                            <div class="booking-status status-${booking.status.toLowerCase()}">${booking.status}</div>
-                        </div>
-                        
-                        <div class="booking-details">
-                            <div class="detail-item">
-                                <span class="detail-icon">📅</span>
-                                <div>
-                                    <div class="detail-label">Date</div>
-                                    <div class="detail-value">${formatDate(eventDate)}</div>
-                                </div>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-icon">📍</span>
-                                <div>
-                                    <div class="detail-label">Location</div>
-                                    <div class="detail-value">${opportunity?.location || 'TBD'}</div>
-                                </div>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-icon">📝</span>
-                                <div>
-                                    <div class="detail-label">Applied</div>
-                                    <div class="detail-value">${formatDate(booking.appliedDate)}</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        ${booking.coverLetter ? `
-                            <div class="booking-details">
-                                <div class="detail-item">
-                                    <span class="detail-icon">💬</span>
-                                    <div>
-                                        <div class="detail-label">Cover Letter</div>
-                                        <div class="detail-value">${booking.coverLetter.substring(0, 150)}${booking.coverLetter.length > 150 ? '...' : ''}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        ` : ''}
-                        
-                        <div class="booking-actions">
-                            <button class="btn btn-secondary btn-small" onclick="viewDetails('${booking.id}')">View Details</button>
-                            ${booking.status === 'Pending' ? `
-                                <button class="btn btn-primary btn-small" onclick="followUp('${booking.id}')">Follow Up</button>
-                            ` : ''}
-                            ${booking.status === 'Accepted' && isUpcoming ? `
-                                <button class="btn btn-success btn-small">Confirmed ✓</button>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Tab switching
-        function showTab(tab) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.style.display = 'none';
-            });
-            
-            // Remove active class from all tabs
-            document.querySelectorAll('.tab').forEach(tabBtn => {
-                tabBtn.classList.remove('active');
-            });
-            
-            // Show selected tab
-            document.getElementById(tab + 'Tab').style.display = 'block';
-            
-            // Add active class to clicked tab
-            event.target.classList.add('active');
-            
-            // Load tab-specific data
-            if (tab === 'calendar') {
-                loadCalendar();
-            } else if (tab === 'past') {
-                loadPastBookings();
-            }
-        }
-
-        // Load past bookings
-        function loadPastBookings() {
-            const now = new Date();
-            const pastBookings = allBookings.filter(booking => {
-                const eventDate = booking.opportunity?.eventDate || booking.eventDate;
-                return eventDate && 
-                       booking.status === 'Accepted' && 
-                       new Date(eventDate) < now;
-            });
-            
-            const pastBookingsGrid = document.getElementById('pastBookingsGrid');
-            const loading = document.getElementById('pastLoading');
-            
-            // Hide loading
-            loading.style.display = 'none';
-            pastBookingsGrid.style.display = 'block';
-            
-            if (pastBookings.length === 0) {
-                pastBookingsGrid.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📅</div>
-                        <h3>No past bookings yet</h3>
-                        <p>Your completed speaking engagements will appear here</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Display past bookings (reuse the same display logic)
-            pastBookingsGrid.innerHTML = pastBookings.map(booking => {
-                const opportunity = booking.opportunity;
-                const organization = booking.organization;
-                const eventDate = opportunity?.eventDate || booking.eventDate;
-                
-                return `
-                    <div class="booking-card past">
-                        <div class="booking-header">
-                            <div>
-                                <div class="booking-title">${opportunity?.title || booking.title || 'Speaking Event'}</div>
-                                <div class="booking-org">${organization?.name || 'Unknown Organization'}</div>
-                            </div>
-                            <div class="booking-status status-completed">Completed</div>
-                        </div>
-                        
-                        <div class="booking-details">
-                            <div class="detail-item">
-                                <span class="detail-icon">📅</span>
-                                <div>
-                                    <div class="detail-label">Date</div>
-                                    <div class="detail-value">${formatDate(eventDate)}</div>
-                                </div>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-icon">📍</span>
-                                <div>
-                                    <div class="detail-label">Location</div>
-                                    <div class="detail-value">${opportunity?.location || 'N/A'}</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="booking-actions">
-                            <button class="btn btn-secondary btn-small" onclick="viewDetails('${booking.id}')">View Details</button>
-                            <button class="btn btn-primary btn-small" onclick="requestReview('${booking.id}')">Request Review</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Setup filters
-        function setupFilters() {
-            document.getElementById('statusFilter').addEventListener('change', applyFilters);
-            document.getElementById('dateFilter').addEventListener('change', applyFilters);
+            // Apply filters with new tab
+            applyFilters();
         }
 
         // Apply filters
         function applyFilters() {
             const statusFilter = document.getElementById('statusFilter').value;
             const dateFilter = document.getElementById('dateFilter').value;
+            const now = new Date();
             
-            let filteredBookings = [...allBookings];
+            let filtered = [...allApplications];
+            
+            // Apply tab filter first
+            if (currentTab === 'upcoming') {
+                filtered = filtered.filter(app => {
+                    const eventDate = app.opportunity?.event_date;
+                    return app.status === 'Accepted' && eventDate && new Date(eventDate) > now;
+                });
+            } else if (currentTab === 'pending') {
+                filtered = filtered.filter(app => app.status === 'Pending');
+            }
             
             // Apply status filter
             if (statusFilter) {
-                filteredBookings = filteredBookings.filter(booking => 
-                    booking.status === statusFilter
-                );
+                filtered = filtered.filter(app => app.status === statusFilter);
             }
             
             // Apply date filter
             if (dateFilter) {
-                const now = new Date();
                 const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
                 const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
                 
-                filteredBookings = filteredBookings.filter(booking => {
-                    const eventDate = booking.opportunity?.eventDate || booking.eventDate;
+                filtered = filtered.filter(app => {
+                    const eventDate = app.opportunity?.event_date;
                     if (!eventDate) return false;
                     
                     const date = new Date(eventDate);
@@ -1263,73 +948,164 @@
                 });
             }
             
-            displayBookings(filteredBookings);
+            filteredApplications = filtered;
+            displayApplications();
         }
 
-        // Format date helper
+        // Display applications
+        function displayApplications() {
+            const grid = document.getElementById('bookingsGrid');
+            
+            if (filteredApplications.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📅</div>
+                        <h3>No ${currentTab === 'pending' ? 'pending applications' : currentTab === 'upcoming' ? 'upcoming bookings' : 'applications'} found</h3>
+                        <p>${currentTab === 'pending' ? 'Your pending applications will appear here' : currentTab === 'upcoming' ? 'Your confirmed bookings will appear here' : 'Start applying to speaking opportunities'}</p>
+                        <a href="opportunities.html" class="btn btn-primary">Browse Opportunities</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = filteredApplications.map(app => {
+                const opp = app.opportunity;
+                const eventDate = opp?.event_date;
+                const isUpcoming = eventDate && new Date(eventDate) > new Date();
+                const isPast = eventDate && new Date(eventDate) < new Date();
+                
+                let cardClass = 'booking-card';
+                if (app.status === 'Accepted' && isUpcoming) cardClass += ' upcoming';
+                else if (app.status === 'Pending') cardClass += ' pending';
+                else if (app.status === 'Rejected') cardClass += ' rejected';
+                else if (isPast) cardClass += ' past';
+                
+                return `
+                    <div class="${cardClass}">
+                        <div class="booking-header">
+                            <div>
+                                <div class="booking-title">${opp?.title || 'Speaking Opportunity'}</div>
+                                <div class="booking-org">${opp?.organization?.name || 'Organization'}</div>
+                            </div>
+                            <div class="booking-status status-${app.status.toLowerCase()}">${app.status}</div>
+                        </div>
+                        
+                        <div class="booking-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">📅</span>
+                                <div>
+                                    <div class="detail-label">Event Date</div>
+                                    <div class="detail-value">${formatDate(eventDate)}</div>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">📍</span>
+                                <div>
+                                    <div class="detail-label">Location</div>
+                                    <div class="detail-value">${opp?.location || 'TBD'}</div>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">💰</span>
+                                <div>
+                                    <div class="detail-label">Compensation</div>
+                                    <div class="detail-value">${app.requested_fee ? `$${app.requested_fee}` : opp?.compensation_amount ? `$${opp.compensation_amount}` : 'Volunteer'}</div>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">📝</span>
+                                <div>
+                                    <div class="detail-label">Applied</div>
+                                    <div class="detail-value">${formatDate(app.created_at)}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="booking-actions">
+                            ${app.status === 'Accepted' ? `
+                                <a href="booking-details.html?id=${app.id}" class="btn btn-primary btn-small">View Booking Details</a>
+                            ` : `
+                                <a href="application-status.html?id=${app.id}" class="btn btn-secondary btn-small">View Application</a>
+                            `}
+                            ${app.status === 'Accepted' && isUpcoming ? `
+                                <button class="btn btn-secondary btn-small" onclick="addToCalendar('${app.id}')">📅 Add to Calendar</button>
+                            ` : ''}
+                            ${app.status === 'Pending' ? `
+                                <button class="btn btn-secondary btn-small" onclick="withdrawApplication('${app.id}')">Withdraw</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Format date
         function formatDate(dateString) {
             if (!dateString) return 'Date TBD';
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { 
-                month: 'long', 
-                day: 'numeric', 
-                year: 'numeric' 
+            return new Date(dateString).toLocaleDateString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
             });
         }
 
-        // Action handlers
-        function viewDetails(id) {
-            // For now, just show alert - would redirect to details page
-            alert(`Viewing details for booking ${id}`);
-        }
-
-        function followUp(id) {
-            alert(`Following up on application ${id}`);
-        }
-
-        function requestReview(id) {
-            alert(`Requesting review for completed booking ${id}`);
-        }
-
-        function loadCalendar() {
-            const loading = document.getElementById('calendarLoading');
-            const container = document.getElementById('calendarContainer');
+        // Add to calendar
+        function addToCalendar(applicationId) {
+            const app = allApplications.find(a => a.id === applicationId);
+            if (!app || !app.opportunity) return;
             
-            setTimeout(() => {
-                loading.style.display = 'none';
-                container.style.display = 'block';
-            }, 1000);
+            const opp = app.opportunity;
+            const eventDate = new Date(opp.event_date);
+            
+            // Create Google Calendar URL
+            const title = encodeURIComponent(opp.title);
+            const details = encodeURIComponent(`Speaking engagement at ${opp.organization?.name || 'Organization'}`);
+            const location = encodeURIComponent(opp.location || '');
+            const startDate = eventDate.toISOString().replace(/-|:|\.\d\d\d/g, '');
+            
+            const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startDate}/${startDate}&details=${details}&location=${location}`;
+            
+            window.open(googleUrl, '_blank');
         }
 
-        // Mobile menu functions
-        function toggleMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
+        // Withdraw application
+        async function withdrawApplication(applicationId) {
+            if (!confirm('Are you sure you want to withdraw this application?')) return;
             
-            hamburger.classList.toggle('active');
-            mobileMenu.classList.toggle('show');
-            overlay.classList.toggle('show');
-            
-            if (mobileMenu.classList.contains('show')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
+            try {
+                const { error } = await window.covetalks.supabase
+                    .from('applications')
+                    .update({ status: 'Withdrawn' })
+                    .eq('id', applicationId);
+
+                if (error) throw error;
+
+                alert('Application withdrawn successfully');
+                await loadAllData();
+
+            } catch (error) {
+                console.error('Error withdrawing application:', error);
+                alert('Failed to withdraw application. Please try again.');
             }
         }
 
-        function closeMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            
-            hamburger.classList.remove('active');
-            mobileMenu.classList.remove('show');
-            overlay.classList.remove('show');
-            document.body.style.overflow = '';
+        // Show error
+        function showError(message) {
+            const grid = document.getElementById('bookingsGrid');
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <h3>Error</h3>
+                    <p>${message}</p>
+                    <button class="btn btn-primary" onclick="location.reload()">Refresh Page</button>
+                </div>
+            `;
+            document.getElementById('loadingState').classList.add('hidden');
+            grid.classList.remove('hidden');
         }
 
-        // Dropdown menu
+        // Toggle dropdown
         function toggleDropdown() {
             const dropdown = document.getElementById('dropdownMenu');
             dropdown.classList.toggle('show');
@@ -1340,55 +1116,24 @@
             const dropdown = document.getElementById('dropdownMenu');
             const avatar = document.getElementById('userAvatar');
             
-            if (dropdown && avatar && !avatar.contains(event.target) && !dropdown.contains(event.target)) {
+            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
                 dropdown.classList.remove('show');
             }
         });
 
-        // Logout function
-        function logout() {
-            api.logout();
+        // Logout
+        async function logout() {
+            if (window.covetalks) {
+                await window.covetalks.logout();
+            }
         }
 
-        // Main initialization
-        document.addEventListener('DOMContentLoaded', function() {
-            // Wait for API and navigation to be ready
-            waitForAPI(function() {
-                console.log('[Bookings] API and navigation ready');
-                
-                // Update navigation UI first
-                updateNavigation();
-                
-                // Check authentication
-                if (!api.isAuthenticated()) {
-                    console.log('[Bookings] Not authenticated, redirecting to login');
-                    sessionStorage.setItem('redirectUrl', window.location.href);
-                    window.location.href = '/login.html';
-                    return;
-                }
-                
-                // Check user type access - only speakers should see bookings
-                const user = api.getCurrentUser();
-                if (user) {
-                    // Update user display
-                    const initials = user.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U';
-                    if (document.getElementById('userAvatar')) {
-                        document.getElementById('userAvatar').textContent = initials;
-                    }
-                    
-                    // Check if user is speaker
-                    if (user.memberType !== 'Speaker') {
-                        console.log('[Bookings] User is not a speaker, redirecting to appropriate dashboard');
-                        window.location.href = user.memberType === 'Organization' ? '/organization-dashboard.html' : '/dashboard.html';
-                        return;
-                    }
-                }
-                
-                console.log('[Bookings] Authentication verified, initializing page');
-                // Initialize page
-                initializePage();
-            });
-        });
+        // Initialize on load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
     </script>
 </body>
 </html>

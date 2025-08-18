@@ -1,7 +1,7 @@
 {
   "name": "covetalks-backend",
-  "version": "1.0.0",
-  "description": "CoveTalks MVP Backend - Connecting speakers with organizations",
+  "version": "2.0.0",
+  "description": "CoveTalks MVP Backend - Connecting speakers with organizations (Supabase Edition)",
   "main": "index.js",
   "scripts": {
     "dev": "netlify dev",
@@ -18,7 +18,7 @@
     "logs": "netlify logs:function",
     "stripe:listen": "stripe listen --forward-to localhost:8888/.netlify/functions/stripe-webhook",
     "stripe:test": "stripe trigger payment_intent.succeeded",
-    "airtable:test": "node scripts/test-airtable.js",
+    "supabase:test": "node scripts/test-supabase.js",
     "clean": "rm -rf .netlify node_modules",
     "reinstall": "npm run clean && npm install",
     "check:security": "npm audit",
@@ -27,10 +27,10 @@
   "keywords": [
     "netlify",
     "serverless",
-    "airtable",
+    "supabase",
     "stripe",
     "authentication",
-    "jwt"
+    "postgresql"
   ],
   "author": "CoveTalks",
   "license": "MIT",
@@ -39,9 +39,7 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "airtable": "^0.12.2",
-    "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.2",
+    "@supabase/supabase-js": "^2.39.0",
     "stripe": "^14.10.0"
   },
   "devDependencies": {

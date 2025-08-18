@@ -24,7 +24,7 @@
             padding: 0 20px;
         }
 
-        /* Header - reuse from other pages */
+        /* Header Styles */
         header {
             background: white;
             color: #333;
@@ -34,6 +34,12 @@
             top: 0;
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .logo {
@@ -46,6 +52,41 @@
             height: 70px;
             width: auto;
             display: block;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #155588;
+        }
+
+        .nav-links a.active {
+            color: #155588;
+            border-bottom: 2px solid #155588;
+            padding-bottom: 2px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .btn {
@@ -61,379 +102,348 @@
         }
 
         .btn-primary {
-            background: #f2b236;
+            background: #155588;
             color: white;
         }
 
         .btn-primary:hover {
-            background: #229954;
+            background: #1e3d6f;
             transform: translateY(-2px);
         }
 
         .btn-secondary {
             background: transparent;
-            color: #f2b236;
-            border: 2px solid #f2b236;
+            color: #155588;
+            border: 2px solid #155588;
         }
 
         .btn-secondary:hover {
-            background: #f2b236;
+            background: #155588;
             color: white;
         }
 
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
         .btn-danger {
-            background: #e74c3c;
+            background: #dc3545;
             color: white;
         }
 
         .btn-danger:hover {
-            background: #c0392b;
+            background: #c82333;
+            transform: translateY(-2px);
         }
 
-        .btn-small {
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .btn-sm {
             padding: 0.5rem 1rem;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
-        /* Page Header */
-        .page-header {
-            background: linear-gradient(135deg, #f2b236 0%, #2ecc71 100%);
+        /* User Menu */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
             color: white;
-            padding: 8rem 0 4rem;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
         }
 
-        .page-header h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+        .user-avatar:hover {
+            transform: scale(1.05);
         }
 
-        .page-header p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto;
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e1e8ed;
+            margin: 0;
         }
 
         /* Main Content */
         .main-content {
-            padding: 3rem 0;
-            margin-top: -4rem;
+            padding-top: 6rem;
+            padding-bottom: 3rem;
+            min-height: 100vh;
         }
 
-        /* Stats Cards */
-        .stats-row {
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            border-radius: 15px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
 
         .stat-card {
             background: white;
-            border-radius: 15px;
             padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .stat-icon.green {
-            background: #d4edda;
-            color: #f2b236;
-        }
-
-        .stat-icon.blue {
-            background: #e8f4fd;
-            color: #155588;
-        }
-
-        .stat-icon.orange {
-            background: #fff3e0;
-            color: #f2b236;
-        }
-
-        .stat-icon.red {
-            background: #f8d7da;
-            color: #e74c3c;
-        }
-
-        .stat-content h3 {
-            font-size: 2rem;
-            color: #f2b236;
-            margin-bottom: 0.25rem;
-        }
-
-        .stat-content p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        /* Action Bar */
-        .action-bar {
-            background: white;
             border-radius: 15px;
-            padding: 1.5rem;
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .filter-group {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .filter-group select {
-            padding: 0.5rem 1rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 5px;
-            font-family: inherit;
-        }
-
-        /* Tabs */
-        .tabs-container {
-            background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-
-        .tabs {
-            display: flex;
-            gap: 1rem;
-            border-bottom: 2px solid #e1e8ed;
-            margin-bottom: 2rem;
-        }
-
-        .tab {
-            padding: 1rem 1.5rem;
-            background: none;
-            border: none;
-            color: #666;
-            font-weight: 500;
-            cursor: pointer;
-            position: relative;
-            transition: color 0.3s;
-        }
-
-        .tab:hover {
-            color: #f2b236;
-        }
-
-        .tab.active {
-            color: #f2b236;
-        }
-
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #f2b236;
-        }
-
-        .tab-badge {
-            background: #f2b236;
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            margin-left: 0.5rem;
-        }
-
-        /* Opportunity Cards */
-        .opportunities-grid {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .opportunity-card {
-            background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            border-left: 4px solid #f2b236;
-            transition: all 0.3s;
-        }
-
-        .opportunity-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-        }
-
-        .opportunity-card.closed {
-            border-left-color: #95a5a6;
-            opacity: 0.8;
-        }
-
-        .opportunity-card.draft {
-            border-left-color: #f2b236;
-        }
-
-        .opportunity-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1rem;
-        }
-
-        .opportunity-title {
-            font-size: 1.2rem;
-            color: #f2b236;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .opportunity-date {
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        .opportunity-status {
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            font-weight: bold;
-        }
-
-        .status-open {
-            background: #d4edda;
-            color: #f2b236;
-        }
-
-        .status-closed {
-            background: #e1e8ed;
-            color: #666;
-        }
-
-        .status-draft {
-            background: #fff3cd;
-            color: #f2b236;
-        }
-
-        .opportunity-details {
-            margin: 1rem 0;
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .opportunity-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin: 1rem 0;
-        }
-
-        .stat-item {
             text-align: center;
         }
 
         .stat-value {
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: bold;
-            color: #f2b236;
+            color: #155588;
+            margin-bottom: 0.25rem;
         }
 
         .stat-label {
-            font-size: 0.9rem;
             color: #666;
+            font-size: 0.9rem;
         }
 
-        .opportunity-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #e1e8ed;
+        /* Filters Section */
+        .filters-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
         }
 
-        /* Applicants Section */
-        .applicants-section {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 2px solid #e1e8ed;
-        }
-
-        .applicants-header {
+        .filters-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1rem;
         }
 
-        .applicants-header h4 {
-            color: #f2b236;
-        }
-
-        .applicants-list {
+        .filters-grid {
             display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
         }
 
-        .applicant-card {
+        .filter-group {
             display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 10px;
-            transition: background 0.3s;
+            flex-direction: column;
         }
 
-        .applicant-card:hover {
-            background: #e9ecef;
-        }
-
-        .applicant-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-
-        .applicant-info {
-            flex: 1;
-        }
-
-        .applicant-name {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 0.25rem;
-        }
-
-        .applicant-details {
-            color: #666;
+        .filter-group label {
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 0.5rem;
             font-size: 0.9rem;
         }
 
-        .applicant-actions {
+        .filter-group select,
+        .filter-group input {
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #155588;
+        }
+
+        /* Opportunities Table */
+        .opportunities-table {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .table-header h2 {
+            color: #155588;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            font-weight: 600;
+            color: #666;
+            font-size: 0.9rem;
+            border-bottom: 2px solid #e1e8ed;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+            transition: background 0.2s;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Opportunity Title Cell */
+        .opportunity-title {
+            font-weight: 600;
+            color: #155588;
+            margin-bottom: 0.25rem;
+        }
+
+        .opportunity-meta {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-badge.open {
+            background: #d4edda;
+            color: #27ae60;
+        }
+
+        .status-badge.closed {
+            background: #f8d7da;
+            color: #dc3545;
+        }
+
+        .status-badge.draft {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-badge.filled {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        /* Applications Count */
+        .applications-count {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .count-badge {
+            background: #155588;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .count-badge.new {
+            background: #dc3545;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        /* Action Buttons */
+        .action-buttons {
             display: flex;
             gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
         /* Empty State */
@@ -445,12 +455,38 @@
 
         .empty-state-icon {
             font-size: 4rem;
-            color: #ddd;
             margin-bottom: 1rem;
+            opacity: 0.5;
         }
 
         .empty-state h3 {
+            color: #333;
             margin-bottom: 0.5rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #155588;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* Modal */
@@ -459,9 +495,9 @@
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
             z-index: 2000;
             align-items: center;
             justify-content: center;
@@ -475,60 +511,68 @@
             background: white;
             border-radius: 15px;
             padding: 2rem;
-            max-width: 600px;
+            max-width: 500px;
             width: 90%;
-            max-height: 80vh;
+            max-height: 90vh;
             overflow-y: auto;
         }
 
         .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             margin-bottom: 1.5rem;
         }
 
-        .modal-close {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: #f8f9fa;
-            border: none;
-            cursor: pointer;
+        .modal-header h3 {
+            color: #155588;
+        }
+
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-footer {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .hidden {
+            display: none !important;
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            .page-header h1 {
-                font-size: 2rem;
-            }
-
-            .action-bar {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .filter-group {
-                width: 100%;
-            }
-
-            .tabs {
-                flex-direction: column;
-            }
-
-            .opportunity-stats {
+        @media (max-width: 992px) {
+            .filters-grid {
                 grid-template-columns: 1fr 1fr;
             }
 
-            .opportunity-actions {
-                flex-direction: column;
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
             }
 
-            .opportunity-actions .btn {
-                width: 100%;
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-responsive {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 600px;
             }
         }
     </style>
@@ -536,420 +580,580 @@
 <body>
     <!-- Header -->
     <header>
-        <div class="container">
+        <div class="nav-container">
             <nav>
                 <a href="index.html" class="logo">
-                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
                 </a>
-                <!-- Navigation same as other organization pages -->
+                
+                <!-- Navigation links for Organization -->
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="organization-dashboard.html">Dashboard</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
+                    <li><a href="my-opportunities.html" class="active">My Opportunities</a></li>
+                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
+                </ul>
+    
+                <div class="nav-right">
+                    <!-- User menu -->
+                    <div class="user-menu" id="userMenu">
+                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">O</div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="settings.html">Settings</a>
+                            <a href="billing.html">Billing</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" onclick="logout(); return false;">Logout</a>
+                        </div>
+                    </div>
+                </div>
             </nav>
         </div>
     </header>
 
-    <!-- Page Header -->
-    <div class="page-header">
-        <div class="container">
-            <h1>My Opportunities</h1>
-            <p>Manage your speaking opportunities and review applications</p>
-        </div>
-    </div>
-
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Stats Row -->
-            <div class="stats-row">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>My Speaking Opportunities</h1>
+                <p>Manage your posted opportunities and review applications</p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-icon green">📝</div>
-                    <div class="stat-content">
-                        <h3>5</h3>
-                        <p>Active Opportunities</p>
-                    </div>
+                    <div class="stat-value" id="totalOpportunities">0</div>
+                    <div class="stat-label">Total Opportunities</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon blue">👥</div>
-                    <div class="stat-content">
-                        <h3>48</h3>
-                        <p>Total Applications</p>
-                    </div>
+                    <div class="stat-value" id="activeOpportunities">0</div>
+                    <div class="stat-label">Active</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon orange">⏳</div>
-                    <div class="stat-content">
-                        <h3>12</h3>
-                        <p>Pending Review</p>
-                    </div>
+                    <div class="stat-value" id="totalApplications">0</div>
+                    <div class="stat-label">Total Applications</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon red">✅</div>
-                    <div class="stat-content">
-                        <h3>8</h3>
-                        <p>Filled Positions</p>
+                    <div class="stat-value" id="pendingReviews">0</div>
+                    <div class="stat-label">Pending Reviews</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="acceptedApplications">0</div>
+                    <div class="stat-label">Accepted</div>
+                </div>
+            </div>
+
+            <!-- Filters Section -->
+            <div class="filters-section">
+                <div class="filters-header">
+                    <h3>Filter Opportunities</h3>
+                    <button onclick="clearFilters()" class="btn btn-secondary btn-sm">Clear Filters</button>
+                </div>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label for="statusFilter">Status</label>
+                        <select id="statusFilter" onchange="applyFilters()">
+                            <option value="">All Status</option>
+                            <option value="Open">Open</option>
+                            <option value="Closed">Closed</option>
+                            <option value="Draft">Draft</option>
+                            <option value="Filled">Filled</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="dateFilter">Event Date</label>
+                        <select id="dateFilter" onchange="applyFilters()">
+                            <option value="">All Dates</option>
+                            <option value="upcoming">Upcoming</option>
+                            <option value="past">Past Events</option>
+                            <option value="thisMonth">This Month</option>
+                            <option value="nextMonth">Next Month</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="applicationFilter">Applications</label>
+                        <select id="applicationFilter" onchange="applyFilters()">
+                            <option value="">All</option>
+                            <option value="hasApplications">Has Applications</option>
+                            <option value="noApplications">No Applications</option>
+                            <option value="newApplications">New Applications</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="searchFilter">Search</label>
+                        <input type="text" id="searchFilter" placeholder="Search by title..." onkeyup="applyFilters()">
                     </div>
                 </div>
             </div>
 
-            <!-- Action Bar -->
-            <div class="action-bar">
-                <div class="filter-group">
-                    <select id="statusFilter">
-                        <option value="">All Status</option>
-                        <option value="open">Open</option>
-                        <option value="closed">Closed</option>
-                        <option value="draft">Draft</option>
-                    </select>
-                    <select id="dateFilter">
-                        <option value="">All Dates</option>
-                        <option value="upcoming">Upcoming</option>
-                        <option value="past">Past Events</option>
-                    </select>
+            <!-- Opportunities Table -->
+            <div class="opportunities-table">
+                <div class="table-header">
+                    <h2>Your Opportunities</h2>
+                    <a href="post-opportunity.html" class="btn btn-success">
+                        + Post New Opportunity
+                    </a>
                 </div>
-                <a href="post-opportunity.html" class="btn btn-primary">Post New Opportunity</a>
-            </div>
-
-            <!-- Tabs Container -->
-            <div class="tabs-container">
-                <div class="tabs">
-                    <button class="tab active" onclick="showTab('active')">
-                        Active
-                        <span class="tab-badge">5</span>
-                    </button>
-                    <button class="tab" onclick="showTab('closed')">
-                        Closed
-                        <span class="tab-badge">8</span>
-                    </button>
-                    <button class="tab" onclick="showTab('drafts')">
-                        Drafts
-                        <span class="tab-badge">2</span>
-                    </button>
-                </div>
-
-                <!-- Active Tab -->
-                <div id="activeTab" class="tab-content">
-                    <div class="opportunities-grid">
-                        <!-- Opportunity 1 -->
-                        <div class="opportunity-card">
-                            <div class="opportunity-header">
-                                <div>
-                                    <div class="opportunity-title">Keynote Speaker - Annual Business Summit</div>
-                                    <div class="opportunity-date">📅 March 15, 2024 • Phoenix Convention Center</div>
-                                </div>
-                                <div class="opportunity-status status-open">Open</div>
-                            </div>
-
-                            <div class="opportunity-details">
-                                We're seeking an experienced business leader to deliver a 45-minute keynote on digital transformation and innovation in the post-pandemic era.
-                            </div>
-
-                            <div class="opportunity-stats">
-                                <div class="stat-item">
-                                    <div class="stat-value">12</div>
-                                    <div class="stat-label">Applications</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-value">5</div>
-                                    <div class="stat-label">New Today</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-value">7</div>
-                                    <div class="stat-label">Days Left</div>
-                                </div>
-                            </div>
-
-                            <div class="applicants-section">
-                                <div class="applicants-header">
-                                    <h4>Recent Applicants</h4>
-                                    <a href="#" onclick="viewAllApplicants('opp1')" style="color: #f2b236; text-decoration: none;">View All →</a>
-                                </div>
-                                
-                                <div class="applicants-list">
-                                    <div class="applicant-card">
-                                        <div class="applicant-avatar">SJ</div>
-                                        <div class="applicant-info">
-                                            <div class="applicant-name">Sarah Johnson</div>
-                                            <div class="applicant-details">Tech Innovation Expert • 4.9★ • Applied 2 hours ago</div>
-                                        </div>
-                                        <div class="applicant-actions">
-                                            <button class="btn btn-primary btn-small">Accept</button>
-                                            <button class="btn btn-secondary btn-small">View Profile</button>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="applicant-card">
-                                        <div class="applicant-avatar">MD</div>
-                                        <div class="applicant-info">
-                                            <div class="applicant-name">Michael Davis</div>
-                                            <div class="applicant-details">Business Coach • 4.7★ • Applied 5 hours ago</div>
-                                        </div>
-                                        <div class="applicant-actions">
-                                            <button class="btn btn-primary btn-small">Accept</button>
-                                            <button class="btn btn-secondary btn-small">View Profile</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="opportunity-actions">
-                                <button class="btn btn-secondary btn-small" onclick="editOpportunity('opp1')">Edit</button>
-                                <button class="btn btn-secondary btn-small" onclick="closeOpportunity('opp1')">Close Applications</button>
-                                <button class="btn btn-secondary btn-small" onclick="shareOpportunity('opp1')">Share</button>
-                                <button class="btn btn-danger btn-small" onclick="deleteOpportunity('opp1')">Delete</button>
-                            </div>
-                        </div>
-
-                        <!-- Opportunity 2 -->
-                        <div class="opportunity-card">
-                            <div class="opportunity-header">
-                                <div>
-                                    <div class="opportunity-title">Workshop Facilitator - Leadership Training</div>
-                                    <div class="opportunity-date">📅 April 5, 2024 • Virtual Event</div>
-                                </div>
-                                <div class="opportunity-status status-open">Open</div>
-                            </div>
-
-                            <div class="opportunity-details">
-                                Looking for an engaging workshop facilitator to lead a 2-hour session on "Breaking Barriers in Technology Leadership."
-                            </div>
-
-                            <div class="opportunity-stats">
-                                <div class="stat-item">
-                                    <div class="stat-value">6</div>
-                                    <div class="stat-label">Applications</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-value">2</div>
-                                    <div class="stat-label">New Today</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-value">14</div>
-                                    <div class="stat-label">Days Left</div>
-                                </div>
-                            </div>
-
-                            <div class="opportunity-actions">
-                                <button class="btn btn-secondary btn-small" onclick="editOpportunity('opp2')">Edit</button>
-                                <button class="btn btn-secondary btn-small" onclick="viewApplicants('opp2')">View Applications</button>
-                                <button class="btn btn-secondary btn-small" onclick="shareOpportunity('opp2')">Share</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Closed Tab -->
-                <div id="closedTab" class="tab-content" style="display: none;">
-                    <div class="opportunities-grid">
-                        <div class="opportunity-card closed">
-                            <div class="opportunity-header">
-                                <div>
-                                    <div class="opportunity-title">Panel Moderator - Healthcare Summit</div>
-                                    <div class="opportunity-date">📅 February 10, 2024 • Scottsdale Healthcare Center</div>
-                                </div>
-                                <div class="opportunity-status status-closed">Closed</div>
-                            </div>
-
-                            <div class="opportunity-details">
-                                Successfully filled. Speaker: Dr. Emily Chen
-                            </div>
-
-                            <div class="opportunity-stats">
-                                <div class="stat-item">
-                                    <div class="stat-value">23</div>
-                                    <div class="stat-label">Total Applications</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-value">Dr. Emily Chen</div>
-                                    <div class="stat-label">Selected Speaker</div>
-                                </div>
-                            </div>
-
-                            <div class="opportunity-actions">
-                                <button class="btn btn-secondary btn-small" onclick="viewDetails('opp3')">View Details</button>
-                                <button class="btn btn-secondary btn-small" onclick="duplicateOpportunity('opp3')">Duplicate</button>
-                                <button class="btn btn-danger btn-small" onclick="deleteOpportunity('opp3')">Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Drafts Tab -->
-                <div id="draftsTab" class="tab-content" style="display: none;">
-                    <div class="opportunities-grid">
-                        <div class="opportunity-card draft">
-                            <div class="opportunity-header">
-                                <div>
-                                    <div class="opportunity-title">Untitled Opportunity</div>
-                                    <div class="opportunity-date">Created: January 28, 2024</div>
-                                </div>
-                                <div class="opportunity-status status-draft">Draft</div>
-                            </div>
-
-                            <div class="opportunity-details">
-                                Draft in progress...
-                            </div>
-
-                            <div class="opportunity-actions">
-                                <button class="btn btn-primary btn-small" onclick="continueDraft('draft1')">Continue Editing</button>
-                                <button class="btn btn-danger btn-small" onclick="deleteDraft('draft1')">Delete Draft</button>
-                            </div>
-                        </div>
+                <div id="opportunitiesContent">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        Loading opportunities...
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Applicant Details Modal -->
-    <div id="applicantModal" class="modal">
+    <!-- Close Opportunity Modal -->
+    <div id="closeModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Applicant Details</h2>
-                <button class="modal-close" onclick="closeModal()">×</button>
+                <h3>Close Opportunity</h3>
             </div>
-            <div id="modalBody">
-                <!-- Applicant details will be loaded here -->
+            <div class="modal-body">
+                <p>Are you sure you want to close this opportunity?</p>
+                <p style="margin-top: 1rem; color: #666;">
+                    This will stop accepting new applications. You can still review existing applications.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal()" class="btn btn-secondary">Cancel</button>
+                <button onclick="confirmCloseOpportunity()" class="btn btn-danger">Close Opportunity</button>
             </div>
         </div>
     </div>
 
+    <!-- Delete Opportunity Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Opportunity</h3>
+            </div>
+            <div class="modal-body">
+                <p><strong>Warning:</strong> This action cannot be undone!</p>
+                <p style="margin-top: 1rem; color: #666;">
+                    Deleting this opportunity will remove it permanently along with all applications.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal()" class="btn btn-secondary">Cancel</button>
+                <button onclick="confirmDeleteOpportunity()" class="btn btn-danger">Delete Permanently</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load config and Supabase client -->
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    
     <script>
-        // Tab switching
-        function showTab(tab) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.style.display = 'none';
+        // Page state
+        let currentUser = null;
+        let allOpportunities = [];
+        let filteredOpportunities = [];
+        let allApplications = {};
+        let selectedOpportunityId = null;
+
+        // Wait for Supabase client
+        function waitForSupabase(callback) {
+            let attempts = 0;
+            const maxAttempts = 10;
+            
+            function check() {
+                attempts++;
+                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                    callback();
+                } else if (attempts < maxAttempts) {
+                    setTimeout(check, 500);
+                } else {
+                    console.error('Failed to initialize Supabase client');
+                    window.location.href = '/login.html';
+                }
+            }
+            check();
+        }
+
+        // Initialize page
+        async function initializePage() {
+            waitForSupabase(async () => {
+                try {
+                    // Check authentication
+                    const session = await window.covetalks.checkAuth();
+                    if (!session) {
+                        window.location.href = '/login.html';
+                        return;
+                    }
+
+                    // Get user profile
+                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                    if (!currentUser || currentUser.member_type !== 'Organization') {
+                        // Redirect non-organization users
+                        window.location.href = '/dashboard.html';
+                        return;
+                    }
+
+                    // Update UI with user info
+                    updateUserInterface();
+
+                    // Load opportunities
+                    await loadOpportunities();
+
+                } catch (error) {
+                    console.error('Initialization error:', error);
+                    alert('Failed to load opportunities. Please try refreshing the page.');
+                }
+            });
+        }
+
+        // Update user interface
+        function updateUserInterface() {
+            const initials = currentUser.name ? 
+                currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                'O';
+            document.getElementById('userAvatar').textContent = initials;
+        }
+
+        // Load opportunities
+        async function loadOpportunities() {
+            try {
+                // Get all opportunities for this organization
+                allOpportunities = await window.covetalks.getMyOpportunities();
+                
+                // Load applications for each opportunity
+                await loadApplicationsForOpportunities();
+                
+                // Update stats
+                updateStats();
+                
+                // Display opportunities
+                filteredOpportunities = [...allOpportunities];
+                displayOpportunities();
+                
+            } catch (error) {
+                console.error('Error loading opportunities:', error);
+                displayError();
+            }
+        }
+
+        // Load applications for all opportunities
+        async function loadApplicationsForOpportunities() {
+            try {
+                for (const opp of allOpportunities) {
+                    const applications = await window.covetalks.getOpportunityApplications(opp.id);
+                    allApplications[opp.id] = applications || [];
+                }
+            } catch (error) {
+                console.error('Error loading applications:', error);
+            }
+        }
+
+        // Update statistics
+        function updateStats() {
+            const total = allOpportunities.length;
+            const active = allOpportunities.filter(o => o.status === 'Open').length;
+            
+            let totalApps = 0;
+            let pendingApps = 0;
+            let acceptedApps = 0;
+            
+            Object.values(allApplications).forEach(apps => {
+                totalApps += apps.length;
+                pendingApps += apps.filter(a => a.status === 'Pending').length;
+                acceptedApps += apps.filter(a => a.status === 'Accepted').length;
             });
             
-            // Remove active class from all tabs
-            document.querySelectorAll('.tab').forEach(tabBtn => {
-                tabBtn.classList.remove('active');
+            document.getElementById('totalOpportunities').textContent = total;
+            document.getElementById('activeOpportunities').textContent = active;
+            document.getElementById('totalApplications').textContent = totalApps;
+            document.getElementById('pendingReviews').textContent = pendingApps;
+            document.getElementById('acceptedApplications').textContent = acceptedApps;
+        }
+
+        // Display opportunities
+        function displayOpportunities() {
+            const container = document.getElementById('opportunitiesContent');
+            
+            if (filteredOpportunities.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📢</div>
+                        <h3>No opportunities found</h3>
+                        <p>You haven't posted any opportunities yet.</p>
+                        <a href="post-opportunity.html" class="btn btn-primary" style="margin-top: 1.5rem;">
+                            Post Your First Opportunity
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+            
+            const tableHtml = `
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Opportunity</th>
+                                <th>Status</th>
+                                <th>Event Date</th>
+                                <th>Applications</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${filteredOpportunities.map(opp => {
+                                const applications = allApplications[opp.id] || [];
+                                const pendingCount = applications.filter(a => a.status === 'Pending').length;
+                                const hasNew = pendingCount > 0;
+                                
+                                return `
+                                    <tr>
+                                        <td>
+                                            <div class="opportunity-title">${opp.title}</div>
+                                            <div class="opportunity-meta">
+                                                ${opp.location || 'Location TBD'} • 
+                                                ${opp.compensation_amount ? `$${opp.compensation_amount}` : 'Volunteer'}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge ${opp.status.toLowerCase()}">${opp.status}</span>
+                                        </td>
+                                        <td>${formatDate(opp.event_date)}</td>
+                                        <td>
+                                            <div class="applications-count">
+                                                <span>${applications.length}</span>
+                                                ${hasNew ? `<span class="count-badge new">${pendingCount} new</span>` : ''}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <a href="opportunity-details.html?id=${opp.id}" 
+                                                   class="btn btn-primary btn-sm">View</a>
+                                                ${applications.length > 0 ? 
+                                                    `<a href="review-applications.html?id=${opp.id}" 
+                                                        class="btn btn-secondary btn-sm">
+                                                        Review (${applications.length})
+                                                    </a>` : ''
+                                                }
+                                                ${opp.status === 'Open' ? 
+                                                    `<button onclick="showCloseModal('${opp.id}')" 
+                                                        class="btn btn-warning btn-sm">Close</button>` :
+                                                    ''
+                                                }
+                                                <button onclick="editOpportunity('${opp.id}')" 
+                                                    class="btn btn-secondary btn-sm">Edit</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            container.innerHTML = tableHtml;
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const status = document.getElementById('statusFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            const applicationFilter = document.getElementById('applicationFilter').value;
+            const search = document.getElementById('searchFilter').value.toLowerCase();
+            
+            filteredOpportunities = allOpportunities.filter(opp => {
+                // Status filter
+                if (status && opp.status !== status) return false;
+                
+                // Date filter
+                if (dateFilter) {
+                    const eventDate = new Date(opp.event_date);
+                    const now = new Date();
+                    
+                    switch(dateFilter) {
+                        case 'upcoming':
+                            if (eventDate <= now) return false;
+                            break;
+                        case 'past':
+                            if (eventDate >= now) return false;
+                            break;
+                        case 'thisMonth':
+                            if (eventDate.getMonth() !== now.getMonth() || 
+                                eventDate.getFullYear() !== now.getFullYear()) return false;
+                            break;
+                        case 'nextMonth':
+                            const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+                            if (eventDate.getMonth() !== nextMonth.getMonth() || 
+                                eventDate.getFullYear() !== nextMonth.getFullYear()) return false;
+                            break;
+                    }
+                }
+                
+                // Application filter
+                if (applicationFilter) {
+                    const apps = allApplications[opp.id] || [];
+                    const pendingApps = apps.filter(a => a.status === 'Pending').length;
+                    
+                    switch(applicationFilter) {
+                        case 'hasApplications':
+                            if (apps.length === 0) return false;
+                            break;
+                        case 'noApplications':
+                            if (apps.length > 0) return false;
+                            break;
+                        case 'newApplications':
+                            if (pendingApps === 0) return false;
+                            break;
+                    }
+                }
+                
+                // Search filter
+                if (search && !opp.title.toLowerCase().includes(search)) return false;
+                
+                return true;
             });
             
-            // Show selected tab
-            document.getElementById(tab + 'Tab').style.display = 'block';
+            displayOpportunities();
+        }
+
+        // Clear filters
+        function clearFilters() {
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('dateFilter').value = '';
+            document.getElementById('applicationFilter').value = '';
+            document.getElementById('searchFilter').value = '';
             
-            // Add active class to clicked tab
-            event.target.classList.add('active');
+            filteredOpportunities = [...allOpportunities];
+            displayOpportunities();
         }
 
-        // Opportunity management functions
-        function editOpportunity(id) {
-            window.location.href = `post-opportunity.html?edit=${id}`;
+        // Show close modal
+        function showCloseModal(oppId) {
+            selectedOpportunityId = oppId;
+            document.getElementById('closeModal').classList.add('show');
         }
 
-        function closeOpportunity(id) {
-            if (confirm('Are you sure you want to close applications for this opportunity?')) {
-                // API call to close opportunity
-                console.log('Closing opportunity:', id);
-            }
+        // Show delete modal
+        function showDeleteModal(oppId) {
+            selectedOpportunityId = oppId;
+            document.getElementById('deleteModal').classList.add('show');
         }
 
-        function deleteOpportunity(id) {
-            if (confirm('Are you sure you want to delete this opportunity? This action cannot be undone.')) {
-                // API call to delete opportunity
-                console.log('Deleting opportunity:', id);
-            }
-        }
-
-        function shareOpportunity(id) {
-            // Copy share link to clipboard
-            const shareUrl = `${window.location.origin}/opportunity-details.html?id=${id}`;
-            navigator.clipboard.writeText(shareUrl);
-            alert('Share link copied to clipboard!');
-        }
-
-        function duplicateOpportunity(id) {
-            // API call to duplicate opportunity
-            console.log('Duplicating opportunity:', id);
-            window.location.href = `post-opportunity.html?duplicate=${id}`;
-        }
-
-        function viewApplicants(id) {
-            // Show applicants modal or navigate to applicants page
-            console.log('Viewing applicants for:', id);
-        }
-
-        function viewAllApplicants(id) {
-            // Navigate to detailed applicants view
-            console.log('Viewing all applicants for:', id);
-        }
-
-        function continueDraft(id) {
-            window.location.href = `post-opportunity.html?draft=${id}`;
-        }
-
-        function deleteDraft(id) {
-            if (confirm('Are you sure you want to delete this draft?')) {
-                // API call to delete draft
-                console.log('Deleting draft:', id);
-            }
-        }
-
-        // Modal functions
+        // Close modal
         function closeModal() {
-            document.getElementById('applicantModal').classList.remove('show');
+            document.getElementById('closeModal').classList.remove('show');
+            document.getElementById('deleteModal').classList.remove('show');
+            selectedOpportunityId = null;
         }
 
-        // Filter functionality
-        document.getElementById('statusFilter').addEventListener('change', function() {
-            // Filter opportunities by status
-            console.log('Filtering by status:', this.value);
-        });
-
-        document.getElementById('dateFilter').addEventListener('change', function() {
-            // Filter opportunities by date
-            console.log('Filtering by date:', this.value);
-        });
-
-        // Check authentication on load
-        document.addEventListener('DOMContentLoaded', function() {
-            const token = localStorage.getItem('token');
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
+        // Confirm close opportunity
+        async function confirmCloseOpportunity() {
+            if (!selectedOpportunityId) return;
             
-            if (!token || user.type !== 'Organization') {
-                window.location.href = 'login.html';
+            try {
+                await window.covetalks.updateOpportunity(selectedOpportunityId, { status: 'Closed' });
+                closeModal();
+                await loadOpportunities();
+                alert('Opportunity closed successfully');
+            } catch (error) {
+                console.error('Error closing opportunity:', error);
+                alert('Failed to close opportunity. Please try again.');
+            }
+        }
+
+        // Confirm delete opportunity
+        async function confirmDeleteOpportunity() {
+            if (!selectedOpportunityId) return;
+            
+            try {
+                await window.covetalks.deleteOpportunity(selectedOpportunityId);
+                closeModal();
+                await loadOpportunities();
+                alert('Opportunity deleted successfully');
+            } catch (error) {
+                console.error('Error deleting opportunity:', error);
+                alert('Failed to delete opportunity. Please try again.');
+            }
+        }
+
+        // Edit opportunity
+        function editOpportunity(oppId) {
+            window.location.href = `edit-opportunity.html?id=${oppId}`;
+        }
+
+        // Display error
+        function displayError() {
+            const container = document.getElementById('opportunitiesContent');
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <h3>Error Loading Opportunities</h3>
+                    <p>There was an error loading your opportunities.</p>
+                    <button onclick="location.reload()" class="btn btn-primary" style="margin-top: 1rem;">
+                        Try Again
+                    </button>
+                </div>
+            `;
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return 'Date TBD';
+            const date = new Date(dateString);
+            const now = new Date();
+            
+            // Check if the date is in the past
+            const isPast = date < now;
+            
+            const formatted = date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            
+            return isPast ? `<span style="color: #999;">${formatted}</span>` : formatted;
+        }
+
+        // Toggle dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdownMenu');
+            const avatar = document.getElementById('userAvatar');
+            
+            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('show');
             }
         });
-    </script>
-    <!-- Add before closing </body> tag on ALL pages -->
-<script src="/js/app.js"></script>
-<script src="/js/navigation.js"></script>
-<script>
-  // Initialize page-specific functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check auth and update navigation
-    updateNavigation();
-    
-    // Page-specific initialization
-    if (typeof initializePage === 'function') {
-      initializePage();
-    }
-  });
-</script>
-// Add to dashboard.html, bookings.html, settings.html, etc.
-<script>
-function initializePage() {
-  // Check authentication first
-  if (!requireAuth()) return;
-  
-  // Load page-specific data
-  loadDashboardData();
-}
 
-async function loadDashboardData() {
-  try {
-    // TODO: Connect to Airtable via API
-    // const profile = await api.getProfile();
-    // const bookings = await api.getBookings();
-    
-    // Placeholder for now
-    console.log('Loading dashboard data...');
-    
-    // Update UI with data
-    // updateDashboardUI(profile, bookings);
-  } catch (error) {
-    console.error('Failed to load dashboard:', error);
-  }
-}
-</script>
+        // Close modals when clicking outside
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                closeModal();
+            }
+        });
+
+        // Logout
+        async function logout() {
+            if (window.covetalks) {
+                await window.covetalks.logout();
+            }
+        }
+
+        // Initialize on load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
+    </script>
 </body>
 </html>

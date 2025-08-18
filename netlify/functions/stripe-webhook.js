@@ -1,13 +1,18 @@
 // File: netlify/functions/stripe-webhook.js
-// FIXED VERSION with better logging and Airtable integration
+// Updated version for Supabase integration
 
-const { stripe } = require('./utils/stripe');
-const { tables, createRecord, updateRecord, findByField } = require('./utils/airtable');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { createClient } = require('@supabase/supabase-js');
+
+// Initialize Supabase client with service role key for admin operations
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 
 exports.handler = async (event) => {
-  console.log('=== STRIPE WEBHOOK RECEIVED ===');
+  console.log('=== STRIPE WEBHOOK RECEIVED (SUPABASE) ===');
   console.log('Method:', event.httpMethod);
-  console.log('Headers:', Object.keys(event.headers));
   
   // Only allow POST
   if (event.httpMethod !== 'POST') {
@@ -24,12 +29,11 @@ exports.handler = async (event) => {
   console.log('Signature present:', !!sig);
   console.log('Webhook secret configured:', !!webhookSecret);
 
-  // If no webhook secret, process without signature verification (for testing)
+  // Verify webhook signature
   let stripeEvent;
   
   if (webhookSecret && sig) {
     try {
-      // Verify webhook signature
       stripeEvent = stripe.webhooks.constructEvent(
         event.body,
         sig,
@@ -44,7 +48,7 @@ exports.handler = async (event) => {
       };
     }
   } else {
-    // Parse without verification (development/testing only)
+    // Parse without verification (development only)
     console.log('⚠️ Processing webhook without signature verification');
     try {
       stripeEvent = JSON.parse(event.body);
@@ -69,37 +73,39 @@ exports.handler = async (event) => {
         console.log('Session ID:', session.id);
         console.log('Customer:', session.customer);
         console.log('Subscription:', session.subscription);
-        console.log('Amount:', session.amount_total);
         console.log('Metadata:', session.metadata);
         
-        const { airtable_id, plan_type, billing_period } = session.metadata || {};
+        const { supabase_user_id, plan_type, billing_period } = session.metadata || {};
 
-        if (!airtable_id) {
-          console.error('❌ No airtable_id in session metadata');
+        if (!supabase_user_id) {
+          console.error('❌ No supabase_user_id in session metadata');
           // Try to find user by customer ID
-          const customer = await stripe.customers.retrieve(session.customer);
-          if (customer.metadata.airtable_id) {
-            console.log('Found airtable_id in customer metadata:', customer.metadata.airtable_id);
-            session.metadata.airtable_id = customer.metadata.airtable_id;
+          const { data: member } = await supabase
+            .from('members')
+            .select('*')
+            .eq('stripe_customer_id', session.customer)
+            .single();
+          
+          if (member) {
+            session.metadata.supabase_user_id = member.id;
           } else {
-            console.error('Could not find airtable_id');
+            console.error('Could not find user for customer:', session.customer);
             break;
           }
         }
 
-        // Get the member record to verify it exists
-        let member;
-        try {
-          member = await tables.members.find(airtable_id || session.metadata.airtable_id);
-          if (!member) {
-            console.error('❌ Member not found:', airtable_id);
-            break;
-          }
-          console.log('✅ Member found:', member.fields.Name);
-        } catch (error) {
-          console.error('❌ Error finding member:', error);
+        // Get the member record
+        const { data: member, error: memberError } = await supabase
+          .from('members')
+          .select('*')
+          .eq('id', supabase_user_id || session.metadata.supabase_user_id)
+          .single();
+
+        if (memberError || !member) {
+          console.error('❌ Member not found:', memberError);
           break;
         }
+        console.log('✅ Member found:', member.name);
 
         // Get subscription details from Stripe
         let subscription;
@@ -118,102 +124,101 @@ exports.handler = async (event) => {
         const amount = subscription.items.data[0].price.unit_amount / 100;
         const interval = subscription.items.data[0].price.recurring.interval;
         
-        console.log('Price details:', { priceId, amount, interval });
-
-        // Determine plan type from price
+        // Determine plan type from price ID using environment variables
         let planType = plan_type || 'Standard';
-        let billingPeriod = billing_period || 'Monthly';
         
-        if (priceId.includes('price_1RtaID')) planType = 'Standard';
-        else if (priceId.includes('price_1RtaIp')) planType = 'Plus';
-        else if (priceId.includes('price_1RtaKG')) planType = 'Premium';
+        // Check against actual price IDs from environment
+        if (priceId === process.env.STRIPE_PRICE_STANDARD_MONTHLY || 
+            priceId === process.env.STRIPE_PRICE_STANDARD_YEARLY) {
+          planType = 'Standard';
+        } else if (priceId === process.env.STRIPE_PRICE_PLUS_MONTHLY || 
+                   priceId === process.env.STRIPE_PRICE_PLUS_YEARLY) {
+          planType = 'Plus';
+        } else if (priceId === process.env.STRIPE_PRICE_PREMIUM_MONTHLY || 
+                   priceId === process.env.STRIPE_PRICE_PREMIUM_YEARLY) {
+          planType = 'Premium';
+        }
         
-        billingPeriod = interval === 'year' ? 'Yearly' : 'Monthly';
+        const billingPeriod = interval === 'year' ? 'Yearly' : 'Monthly';
 
         console.log('Determined plan:', { planType, billingPeriod });
 
         // Check if subscription already exists
-        let existingSubscription;
-        try {
-          const existingSubs = await tables.subscriptions.select({
-            filterByFormula: `{Stripe_Subscription_ID} = '${subscription.id}'`,
-            maxRecords: 1
-          }).firstPage();
-          
-          if (existingSubs.length > 0) {
-            existingSubscription = existingSubs[0];
-            console.log('⚠️ Subscription already exists:', existingSubscription.id);
-          }
-        } catch (error) {
-          console.error('Error checking existing subscription:', error);
-        }
+        const { data: existingSubscription } = await supabase
+          .from('subscriptions')
+          .select('*')
+          .eq('stripe_subscription_id', subscription.id)
+          .single();
 
-        // Create or update subscription record in Airtable
+        let subscriptionRecordId;
+
         if (!existingSubscription) {
-          try {
-            const subscriptionData = {
-              Member_ID: [airtable_id || session.metadata.airtable_id],
-              Stripe_Subscription_ID: subscription.id,
-              Plan_Type: planType,
-              Billing_Period: billingPeriod,
-              Status: 'Active',
-              Start_Date: new Date().toISOString().split('T')[0], // Format as YYYY-MM-DD
-              Amount: amount,
-              Next_Billing_Date: new Date(subscription.current_period_end * 1000).toISOString().split('T')[0],
-              Payment_Method: subscription.default_payment_method || 'card'
-            };
-            
-            console.log('Creating subscription with data:', subscriptionData);
-            
-            const subscriptionRecord = await createRecord(tables.subscriptions, subscriptionData);
-            console.log('✅ Subscription record created:', subscriptionRecord.id);
-            
-            // Create initial payment record
-            try {
-              const paymentData = {
-                Subscription_ID: [subscriptionRecord.id],
-                Member_ID: [airtable_id || session.metadata.airtable_id],
-                Stripe_Payment_Intent: session.payment_intent,
-                Amount: session.amount_total / 100,
-                Status: 'Succeeded',
-                Payment_Date: new Date().toISOString().split('T')[0],
-                Invoice_URL: subscription.latest_invoice ? 
-                  (typeof subscription.latest_invoice === 'string' ? 
-                    subscription.latest_invoice : 
-                    subscription.latest_invoice.hosted_invoice_url) : '',
-                Description: `Initial payment - ${planType} ${billingPeriod}`
-              };
-              
-              console.log('Creating payment with data:', paymentData);
-              
-              const paymentRecord = await createRecord(tables.payments, paymentData);
-              console.log('✅ Payment record created:', paymentRecord.id);
-            } catch (paymentError) {
-              console.error('❌ Failed to create payment record:', paymentError);
-              console.error('Payment error details:', paymentError.message);
-            }
-          } catch (subError) {
-            console.error('❌ Failed to create subscription record:', subError);
-            console.error('Subscription error details:', subError.message);
-          }
-        }
-
-        // Update member record with subscription status
-        try {
-          const memberUpdate = {
-            Subscription_Status: 'Active',
-            Current_Plan: planType
+          // Create subscription record in Supabase
+          const subscriptionData = {
+            member_id: supabase_user_id || session.metadata.supabase_user_id,
+            stripe_subscription_id: subscription.id,
+            plan_type: planType,
+            billing_period: billingPeriod,
+            status: 'Active',
+            amount: amount,
+            current_period_end: new Date(subscription.current_period_end * 1000).toISOString()
           };
           
-          // Only update Stripe_Customer_ID if it's not already set
-          if (!member.fields.Stripe_Customer_ID) {
-            memberUpdate.Stripe_Customer_ID = session.customer;
-          }
+          console.log('Creating subscription with data:', subscriptionData);
           
-          await updateRecord(tables.members, airtable_id || session.metadata.airtable_id, memberUpdate);
-          console.log('✅ Member record updated');
-        } catch (updateError) {
+          const { data: newSubscription, error: subError } = await supabase
+            .from('subscriptions')
+            .insert(subscriptionData)
+            .select()
+            .single();
+          
+          if (subError) {
+            console.error('❌ Failed to create subscription:', subError);
+          } else {
+            console.log('✅ Subscription created:', newSubscription.id);
+            subscriptionRecordId = newSubscription.id;
+          }
+        } else {
+          subscriptionRecordId = existingSubscription.id;
+          console.log('⚠️ Subscription already exists:', subscriptionRecordId);
+        }
+
+        // Create payment record
+        if (subscriptionRecordId && session.payment_intent) {
+          const paymentData = {
+            member_id: supabase_user_id || session.metadata.supabase_user_id,
+            subscription_id: subscriptionRecordId,
+            stripe_payment_intent_id: session.payment_intent,
+            amount: session.amount_total / 100,
+            status: 'Succeeded',
+            description: `Initial payment - ${planType} ${billingPeriod}`
+          };
+          
+          console.log('Creating payment with data:', paymentData);
+          
+          const { error: paymentError } = await supabase
+            .from('payments')
+            .insert(paymentData);
+          
+          if (paymentError) {
+            console.error('❌ Failed to create payment:', paymentError);
+          } else {
+            console.log('✅ Payment record created');
+          }
+        }
+
+        // Update member record
+        const { error: updateError } = await supabase
+          .from('members')
+          .update({
+            stripe_customer_id: session.customer
+          })
+          .eq('id', supabase_user_id || session.metadata.supabase_user_id);
+
+        if (updateError) {
           console.error('❌ Failed to update member:', updateError);
+        } else {
+          console.log('✅ Member record updated');
         }
         
         break;
@@ -225,40 +230,37 @@ exports.handler = async (event) => {
         console.log('Subscription ID:', subscription.id);
         console.log('Status:', subscription.status);
         
-        try {
-          // Find subscription in Airtable
-          const airtableSubs = await tables.subscriptions.select({
-            filterByFormula: `{Stripe_Subscription_ID} = '${subscription.id}'`,
-            maxRecords: 1
-          }).firstPage();
+        // Find subscription in Supabase
+        const { data: existingSubscription } = await supabase
+          .from('subscriptions')
+          .select('*')
+          .eq('stripe_subscription_id', subscription.id)
+          .single();
 
-          if (airtableSubs.length > 0) {
-            const airtableSubscription = airtableSubs[0];
-            
-            // Update subscription details
-            const updates = {
-              Status: subscription.status === 'active' ? 'Active' : 
-                     subscription.status === 'past_due' ? 'Past_Due' : 
-                     subscription.status === 'canceled' ? 'Cancelled' : 
-                     'Other',
-              Next_Billing_Date: new Date(subscription.current_period_end * 1000).toISOString().split('T')[0]
-            };
+        if (existingSubscription) {
+          // Map Stripe status to database status
+          let dbStatus = 'Active';
+          if (subscription.status === 'past_due') dbStatus = 'Past_Due';
+          else if (subscription.status === 'canceled') dbStatus = 'Cancelled';
+          else if (subscription.status === 'unpaid') dbStatus = 'Past_Due';
+          else if (subscription.status === 'incomplete') dbStatus = 'Incomplete';
+          
+          // Update subscription
+          const { error: updateError } = await supabase
+            .from('subscriptions')
+            .update({
+              status: dbStatus,
+              current_period_end: new Date(subscription.current_period_end * 1000).toISOString()
+            })
+            .eq('id', existingSubscription.id);
 
-            await updateRecord(tables.subscriptions, airtableSubscription.id, updates);
-            console.log('✅ Subscription updated in Airtable');
-            
-            // Update member subscription status
-            if (airtableSubscription.fields.Member_ID && airtableSubscription.fields.Member_ID[0]) {
-              await updateRecord(tables.members, airtableSubscription.fields.Member_ID[0], {
-                Subscription_Status: updates.Status
-              });
-              console.log('✅ Member status updated');
-            }
+          if (updateError) {
+            console.error('❌ Failed to update subscription:', updateError);
           } else {
-            console.log('⚠️ Subscription not found in Airtable');
+            console.log('✅ Subscription updated');
           }
-        } catch (error) {
-          console.error('❌ Error updating subscription:', error);
+        } else {
+          console.log('⚠️ Subscription not found in database');
         }
         break;
       }
@@ -268,33 +270,27 @@ exports.handler = async (event) => {
         console.log('=== SUBSCRIPTION CANCELLED ===');
         console.log('Subscription ID:', subscription.id);
         
-        try {
-          // Find and update subscription in Airtable
-          const airtableSubs = await tables.subscriptions.select({
-            filterByFormula: `{Stripe_Subscription_ID} = '${subscription.id}'`,
-            maxRecords: 1
-          }).firstPage();
+        // Find and update subscription in Supabase
+        const { data: existingSubscription } = await supabase
+          .from('subscriptions')
+          .select('*')
+          .eq('stripe_subscription_id', subscription.id)
+          .single();
 
-          if (airtableSubs.length > 0) {
-            const airtableSubscription = airtableSubs[0];
-            
-            await updateRecord(tables.subscriptions, airtableSubscription.id, {
-              Status: 'Cancelled',
-              End_Date: new Date().toISOString().split('T')[0]
-            });
-            console.log('✅ Subscription cancelled in Airtable');
-            
-            // Update member subscription status
-            if (airtableSubscription.fields.Member_ID && airtableSubscription.fields.Member_ID[0]) {
-              await updateRecord(tables.members, airtableSubscription.fields.Member_ID[0], {
-                Subscription_Status: 'Cancelled',
-                Current_Plan: null
-              });
-              console.log('✅ Member status updated to cancelled');
-            }
+        if (existingSubscription) {
+          const { error: updateError } = await supabase
+            .from('subscriptions')
+            .update({
+              status: 'Cancelled',
+              ended_at: new Date().toISOString()
+            })
+            .eq('id', existingSubscription.id);
+
+          if (updateError) {
+            console.error('❌ Failed to cancel subscription:', updateError);
+          } else {
+            console.log('✅ Subscription cancelled');
           }
-        } catch (error) {
-          console.error('❌ Error cancelling subscription:', error);
         }
         break;
       }
@@ -312,47 +308,47 @@ exports.handler = async (event) => {
           break;
         }
         
-        try {
-          // Find subscription
-          const airtableSubs = await tables.subscriptions.select({
-            filterByFormula: `{Stripe_Subscription_ID} = '${invoice.subscription}'`,
-            maxRecords: 1
-          }).firstPage();
+        // Find subscription
+        const { data: subscription } = await supabase
+          .from('subscriptions')
+          .select('*')
+          .eq('stripe_subscription_id', invoice.subscription)
+          .single();
 
-          if (airtableSubs.length > 0) {
-            const subscription = airtableSubs[0];
-            
-            // Create payment record
-            const paymentData = {
-              Subscription_ID: [subscription.id],
-              Member_ID: subscription.fields.Member_ID,
-              Stripe_Payment_Intent: invoice.payment_intent,
-              Amount: invoice.amount_paid / 100,
-              Status: 'Succeeded',
-              Payment_Date: new Date().toISOString().split('T')[0],
-              Invoice_URL: invoice.hosted_invoice_url || '',
-              Invoice_Number: invoice.number || '',
-              Description: `Recurring payment - ${subscription.fields.Plan_Type} ${subscription.fields.Billing_Period}`
-            };
-            
-            await createRecord(tables.payments, paymentData);
+        if (subscription) {
+          // Create payment record
+          const paymentData = {
+            member_id: subscription.member_id,
+            subscription_id: subscription.id,
+            stripe_payment_intent_id: invoice.payment_intent,
+            amount: invoice.amount_paid / 100,
+            status: 'Succeeded',
+            receipt_url: invoice.hosted_invoice_url || null,
+            description: `Recurring payment - ${subscription.plan_type}`
+          };
+          
+          const { error: paymentError } = await supabase
+            .from('payments')
+            .insert(paymentData);
+          
+          if (paymentError) {
+            console.error('❌ Failed to create payment record:', paymentError);
+          } else {
             console.log('✅ Payment record created');
-            
-            // Update subscription next billing date
-            await updateRecord(tables.subscriptions, subscription.id, {
-              Next_Billing_Date: new Date(invoice.period_end * 1000).toISOString().split('T')[0],
-              Status: 'Active'
-            });
-            
-            // Ensure member status is active
-            if (subscription.fields.Member_ID && subscription.fields.Member_ID[0]) {
-              await updateRecord(tables.members, subscription.fields.Member_ID[0], {
-                Subscription_Status: 'Active'
-              });
-            }
           }
-        } catch (error) {
-          console.error('❌ Error creating payment record:', error);
+          
+          // Update subscription
+          const { error: updateError } = await supabase
+            .from('subscriptions')
+            .update({
+              status: 'Active',
+              current_period_end: new Date(invoice.period_end * 1000).toISOString()
+            })
+            .eq('id', subscription.id);
+          
+          if (updateError) {
+            console.error('❌ Failed to update subscription:', updateError);
+          }
         }
         break;
       }
@@ -363,44 +359,43 @@ exports.handler = async (event) => {
         console.log('Invoice ID:', invoice.id);
         console.log('Amount:', invoice.amount_due / 100);
         
-        try {
-          // Find subscription
-          const airtableSubs = await tables.subscriptions.select({
-            filterByFormula: `{Stripe_Subscription_ID} = '${invoice.subscription}'`,
-            maxRecords: 1
-          }).firstPage();
+        // Find subscription
+        const { data: subscription } = await supabase
+          .from('subscriptions')
+          .select('*')
+          .eq('stripe_subscription_id', invoice.subscription)
+          .single();
 
-          if (airtableSubs.length > 0) {
-            const subscription = airtableSubs[0];
-            
-            // Create failed payment record
-            const paymentData = {
-              Subscription_ID: [subscription.id],
-              Member_ID: subscription.fields.Member_ID,
-              Stripe_Payment_Intent: invoice.payment_intent,
-              Amount: invoice.amount_due / 100,
-              Status: 'Failed',
-              Payment_Date: new Date().toISOString().split('T')[0],
-              Description: `Failed payment - ${subscription.fields.Plan_Type}`
-            };
-            
-            await createRecord(tables.payments, paymentData);
+        if (subscription) {
+          // Create failed payment record
+          const paymentData = {
+            member_id: subscription.member_id,
+            subscription_id: subscription.id,
+            stripe_payment_intent_id: invoice.payment_intent,
+            amount: invoice.amount_due / 100,
+            status: 'Failed',
+            description: `Failed payment - ${subscription.plan_type}`
+          };
+          
+          const { error: paymentError } = await supabase
+            .from('payments')
+            .insert(paymentData);
+          
+          if (paymentError) {
+            console.error('❌ Failed to create payment record:', paymentError);
+          } else {
             console.log('✅ Failed payment record created');
-            
-            // Update subscription status
-            await updateRecord(tables.subscriptions, subscription.id, {
-              Status: 'Past_Due'
-            });
-            
-            // Update member status
-            if (subscription.fields.Member_ID && subscription.fields.Member_ID[0]) {
-              await updateRecord(tables.members, subscription.fields.Member_ID[0], {
-                Subscription_Status: 'Past_Due'
-              });
-            }
           }
-        } catch (error) {
-          console.error('❌ Error recording failed payment:', error);
+          
+          // Update subscription status
+          const { error: updateError } = await supabase
+            .from('subscriptions')
+            .update({ status: 'Past_Due' })
+            .eq('id', subscription.id);
+          
+          if (updateError) {
+            console.error('❌ Failed to update subscription:', updateError);
+          }
         }
         break;
       }
@@ -415,7 +410,6 @@ exports.handler = async (event) => {
     };
   } catch (error) {
     console.error('❌ Webhook processing error:', error);
-    console.error('Error stack:', error.stack);
     return {
       statusCode: 200, // Return 200 to prevent Stripe from retrying
       body: JSON.stringify({ 

@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Details - CoveTalks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            color: #333;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .logo-img {
+            height: 70px;
+            width: auto;
+            display: block;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #155588;
+        }
+
+        .nav-links a.active {
+            color: #155588;
+            border-bottom: 2px solid #155588;
+            padding-bottom: 2px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #155588;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e3d6f;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #155588;
+            border: 2px solid #155588;
+        }
+
+        .btn-secondary:hover {
+            background: #155588;
+            color: white;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e1e8ed;
+            margin: 0;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 7rem;
+            padding-bottom: 3rem;
+            min-height: 100vh;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .breadcrumb a {
+            color: #155588;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.confirmed {
+            background: #d4edda;
+            color: #27ae60;
+        }
+
+        .status-badge.pending {
+            background: #fff3cd;
+            color: #f2b236;
+        }
+
+        .status-badge.cancelled {
+            background: #f8d7da;
+            color: #dc3545;
+        }
+
+        /* Booking Header */
+        .booking-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .booking-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
+        .booking-title h1 {
+            color: #155588;
+            margin-bottom: 0.5rem;
+        }
+
+        .booking-meta {
+            display: flex;
+            gap: 2rem;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .booking-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .booking-meta-item i {
+            font-size: 1.2rem;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Detail Card */
+        .detail-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .detail-card h2 {
+            color: #155588;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .detail-row {
+            display: flex;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+            flex: 0 0 150px;
+        }
+
+        .detail-value {
+            flex: 1;
+            color: #333;
+        }
+
+        /* Organization Card */
+        .org-card {
+            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .org-card h3 {
+            margin-bottom: 1rem;
+        }
+
+        .org-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .org-info p {
+            margin: 0.5rem 0;
+            opacity: 0.95;
+        }
+
+        /* Contact Card */
+        .contact-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-top: 2rem;
+        }
+
+        .contact-card h3 {
+            color: #155588;
+            margin-bottom: 1rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 0;
+        }
+
+        .contact-item i {
+            font-size: 1.2rem;
+            color: #155588;
+        }
+
+        .contact-item a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            color: #155588;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        /* Messages Section */
+        .messages-section {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .messages-section h3 {
+            color: #155588;
+            margin-bottom: 1rem;
+        }
+
+        .message {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .message:last-child {
+            margin-bottom: 0;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .message-author {
+            font-weight: 600;
+            color: #155588;
+        }
+
+        .message-time {
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        .message-content {
+            color: #333;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #155588;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error State */
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .booking-title {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .booking-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .detail-row {
+                flex-direction: column;
+            }
+
+            .detail-label {
+                margin-bottom: 0.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="nav-container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
+                </a>
+                
+                <!-- Navigation links will be dynamically inserted here -->
+                <ul class="nav-links" id="navLinks">
+                    <!-- Default logged out navigation -->
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+    
+                <div class="nav-right">
+                    <!-- Auth buttons (shown when logged out) -->
+                    <div class="auth-buttons" id="authButtons">
+                        <a href="register.html" class="btn btn-secondary">Join</a>
+                        <a href="login.html" class="btn btn-primary">Login</a>
+                    </div>
+                    
+                    <!-- User menu (shown when logged in) -->
+                    <div class="user-menu hidden" id="userMenu">
+                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="inbox.html">Inbox</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="settings.html">Settings</a>
+                            <a href="billing.html">Billing</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" onclick="logout(); return false;">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="dashboard.html">Dashboard</a> / 
+                <a href="bookings.html">My Bookings</a> / 
+                <span id="breadcrumbTitle">Booking Details</span>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="loading">
+                <div class="loading-spinner"></div>
+                Loading booking details...
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="error-message hidden">
+                <h3>Unable to Load Booking</h3>
+                <p id="errorMessage">The booking could not be found or you don't have permission to view it.</p>
+                <div style="margin-top: 1rem;">
+                    <a href="bookings.html" class="btn btn-primary">Back to Bookings</a>
+                </div>
+            </div>
+
+            <!-- Booking Content (Hidden Initially) -->
+            <div id="bookingContent" class="hidden">
+                <!-- Booking Header -->
+                <div class="booking-header">
+                    <div class="booking-title">
+                        <div>
+                            <h1 id="eventTitle">Loading...</h1>
+                            <div class="booking-meta">
+                                <div class="booking-meta-item">
+                                    <i>📅</i>
+                                    <span id="eventDate">Loading...</span>
+                                </div>
+                                <div class="booking-meta-item">
+                                    <i>📍</i>
+                                    <span id="eventLocation">Loading...</span>
+                                </div>
+                                <div class="booking-meta-item">
+                                    <i>💻</i>
+                                    <span id="eventFormat">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <span id="statusBadge" class="status-badge confirmed">Confirmed</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Grid -->
+                <div class="content-grid">
+                    <!-- Left Column -->
+                    <div>
+                        <!-- Event Details -->
+                        <div class="detail-card">
+                            <h2>Event Details</h2>
+                            <div class="detail-row">
+                                <div class="detail-label">Event Title</div>
+                                <div class="detail-value" id="detailTitle">Loading...</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Date & Time</div>
+                                <div class="detail-value" id="detailDateTime">Loading...</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Duration</div>
+                                <div class="detail-value" id="detailDuration">Loading...</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Location</div>
+                                <div class="detail-value" id="detailLocation">Loading...</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Format</div>
+                                <div class="detail-value" id="detailFormat">Loading...</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Audience Size</div>
+                                <div class="detail-value" id="detailAudienceSize">Loading...</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Topics</div>
+                                <div class="detail-value" id="detailTopics">Loading...</div>
+                            </div>
+                        </div>
+
+                        <!-- Compensation Details -->
+                        <div class="detail-card">
+                            <h2>Compensation & Terms</h2>
+                            <div class="detail-row">
+                                <div class="detail-label">Speaking Fee</div>
+                                <div class="detail-value" id="detailFee">Loading...</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Travel Coverage</div>
+                                <div class="detail-value" id="detailTravel">Loading...</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Accommodation</div>
+                                <div class="detail-value" id="detailAccommodation">Loading...</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Additional Terms</div>
+                                <div class="detail-value" id="detailTerms">Loading...</div>
+                            </div>
+                        </div>
+
+                        <!-- Messages/Notes -->
+                        <div class="detail-card">
+                            <h2>Communication</h2>
+                            <div id="messagesSection" class="messages-section">
+                                <!-- Messages will be loaded here -->
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="detail-card">
+                            <div class="action-buttons">
+                                <button id="addToCalendarBtn" class="btn btn-primary">
+                                    📅 Add to Calendar
+                                </button>
+                                <button id="contactOrgBtn" class="btn btn-secondary">
+                                    ✉️ Contact Organizer
+                                </button>
+                                <button id="cancelBookingBtn" class="btn btn-danger">
+                                    ❌ Cancel Booking
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div>
+                        <!-- Organization Info -->
+                        <div class="org-card">
+                            <h3>Organization</h3>
+                            <div class="org-info">
+                                <h4 id="orgName">Loading...</h4>
+                                <p id="orgType">Loading...</p>
+                                <p id="orgLocation">Loading...</p>
+                            </div>
+                            <a href="#" id="viewOrgProfile" class="btn btn-secondary" style="background: white; color: #155588;">
+                                View Organization Profile
+                            </a>
+                        </div>
+
+                        <!-- Contact Info -->
+                        <div class="contact-card">
+                            <h3>Contact Information</h3>
+                            <div class="contact-item">
+                                <i>👤</i>
+                                <div>
+                                    <div id="contactName">Loading...</div>
+                                    <small style="color: #666;">Event Organizer</small>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i>✉️</i>
+                                <a href="#" id="contactEmail">Loading...</a>
+                            </div>
+                            <div class="contact-item">
+                                <i>📞</i>
+                                <a href="#" id="contactPhone">Loading...</a>
+                            </div>
+                        </div>
+
+                        <!-- Quick Links -->
+                        <div class="contact-card">
+                            <h3>Quick Links</h3>
+                            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                <a href="bookings.html" style="color: #155588; text-decoration: none;">
+                                    ← Back to All Bookings
+                                </a>
+                                <a href="#" id="viewOpportunityLink" style="color: #155588; text-decoration: none;">
+                                    📋 View Original Opportunity
+                                </a>
+                                <a href="#" id="downloadContractLink" style="color: #155588; text-decoration: none;">
+                                    📄 Download Contract
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load config and Supabase client -->
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    
+    <script>
+        // Page state
+        let currentUser = null;
+        let bookingData = null;
+        let applicationId = null;
+
+        // Get application ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        applicationId = urlParams.get('id');
+
+        // Wait for Supabase client
+        function waitForSupabase(callback) {
+            let attempts = 0;
+            const maxAttempts = 10;
+            
+            function check() {
+                attempts++;
+                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                    callback();
+                } else if (attempts < maxAttempts) {
+                    setTimeout(check, 500);
+                } else {
+                    showError('Failed to initialize. Please refresh the page.');
+                }
+            }
+            check();
+        }
+
+        // Update navigation
+        function updateNavigation(user) {
+            const navLinks = document.getElementById('navLinks');
+            const authButtons = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userAvatar = document.getElementById('userAvatar');
+            
+            if (user) {
+                authButtons.classList.add('hidden');
+                userMenu.classList.remove('hidden');
+                
+                const initials = user.name ? 
+                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                    'U';
+                userAvatar.textContent = initials;
+                
+                if (user.member_type === 'Organization') {
+                    navLinks.innerHTML = `
+                        <li><a href="organization-dashboard.html">Dashboard</a></li>
+                        <li><a href="members.html">Find Speakers</a></li>
+                        <li><a href="post-opportunity.html">Post Opportunity</a></li>
+                        <li><a href="my-opportunities.html">My Opportunities</a></li>
+                        <li><a href="saved-speakers.html">Saved Speakers</a></li>
+                    `;
+                } else {
+                    navLinks.innerHTML = `
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="members.html">Find Speakers</a></li>
+                        <li><a href="opportunities.html">Opportunities</a></li>
+                        <li><a href="bookings.html" class="active">My Bookings</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                    `;
+                }
+            }
+        }
+
+        // Initialize page
+        async function initializePage() {
+            waitForSupabase(async () => {
+                try {
+                    // Check authentication
+                    const session = await window.covetalks.checkAuth();
+                    if (!session) {
+                        window.location.href = '/login.html';
+                        return;
+                    }
+
+                    // Get current user
+                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                    updateNavigation(currentUser);
+
+                    // Check if application ID provided
+                    if (!applicationId) {
+                        showError('No booking ID provided');
+                        return;
+                    }
+
+                    // Load booking details
+                    await loadBookingDetails();
+
+                } catch (error) {
+                    console.error('Error initializing:', error);
+                    showError('Failed to load booking details');
+                }
+            });
+        }
+
+        // Load booking details
+        async function loadBookingDetails() {
+            try {
+                // Query the application with opportunity and organization details
+                const { data, error } = await window.covetalks.supabase
+                    .from('applications')
+                    .select(`
+                        *,
+                        opportunity:speaking_opportunities(*,
+                            organization:organizations(*),
+                            posted_by_member:members!posted_by(name, email, phone)
+                        )
+                    `)
+                    .eq('id', applicationId)
+                    .eq('speaker_id', currentUser.id)
+                    .single();
+
+                if (error || !data) {
+                    showError('Booking not found or you don\'t have permission to view it');
+                    return;
+                }
+
+                // Check if this is actually an accepted booking
+                if (data.status !== 'Accepted') {
+                    // Redirect to application status page instead
+                    window.location.href = `application-status.html?id=${applicationId}`;
+                    return;
+                }
+
+                bookingData = data;
+                displayBookingDetails();
+
+            } catch (error) {
+                console.error('Error loading booking:', error);
+                showError('Failed to load booking details');
+            }
+        }
+
+        // Display booking details
+        function displayBookingDetails() {
+            const opp = bookingData.opportunity;
+            const org = opp?.organization;
+
+            // Hide loading, show content
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('bookingContent').classList.remove('hidden');
+
+            // Update breadcrumb
+            document.getElementById('breadcrumbTitle').textContent = opp?.title || 'Booking Details';
+
+            // Header information
+            document.getElementById('eventTitle').textContent = opp?.title || 'Untitled Event';
+            document.getElementById('eventDate').textContent = formatDate(opp?.event_date);
+            document.getElementById('eventLocation').textContent = opp?.location || 'Location TBD';
+            document.getElementById('eventFormat').textContent = opp?.event_format || 'TBD';
+
+            // Event details
+            document.getElementById('detailTitle').textContent = opp?.title || 'Untitled Event';
+            document.getElementById('detailDateTime').textContent = formatDateTime(opp?.event_date);
+            document.getElementById('detailDuration').textContent = opp?.duration ? `${opp.duration} hours` : 'TBD';
+            document.getElementById('detailLocation').textContent = opp?.location || 'Location TBD';
+            document.getElementById('detailFormat').textContent = opp?.event_format || 'TBD';
+            document.getElementById('detailAudienceSize').textContent = opp?.audience_size ? 
+                `${opp.audience_size} attendees` : 'TBD';
+            
+            // Topics
+            const topics = opp?.topics || [];
+            document.getElementById('detailTopics').innerHTML = topics.length > 0 ? 
+                topics.map(t => `<span style="background: #e8f4fd; color: #155588; padding: 0.25rem 0.75rem; border-radius: 15px; margin-right: 0.5rem; display: inline-block; margin-bottom: 0.25rem;">${t}</span>`).join('') : 
+                'Not specified';
+
+            // Compensation
+            const fee = bookingData.requested_fee || opp?.compensation_amount;
+            document.getElementById('detailFee').textContent = fee ? `$${fee}` : 'Volunteer';
+            document.getElementById('detailTravel').textContent = opp?.travel_covered ? 'Covered by organizer' : 'Not covered';
+            document.getElementById('detailAccommodation').textContent = opp?.accommodation_covered ? 'Covered by organizer' : 'Not covered';
+            document.getElementById('detailTerms').textContent = opp?.additional_terms || 'No additional terms';
+
+            // Organization info
+            document.getElementById('orgName').textContent = org?.name || 'Unknown Organization';
+            document.getElementById('orgType').textContent = org?.organization_type || 'Organization';
+            document.getElementById('orgLocation').textContent = org?.location || 'Location not specified';
+            
+            // Contact info
+            document.getElementById('contactName').textContent = opp?.posted_by_member?.name || 'Event Organizer';
+            const contactEmail = opp?.posted_by_member?.email || opp?.contact_email;
+            if (contactEmail) {
+                document.getElementById('contactEmail').href = `mailto:${contactEmail}`;
+                document.getElementById('contactEmail').textContent = contactEmail;
+            }
+            const contactPhone = opp?.posted_by_member?.phone || opp?.contact_phone;
+            if (contactPhone) {
+                document.getElementById('contactPhone').href = `tel:${contactPhone}`;
+                document.getElementById('contactPhone').textContent = contactPhone;
+            }
+
+            // Messages
+            displayMessages();
+
+            // Update links
+            document.getElementById('viewOpportunityLink').href = `opportunity-details.html?id=${opp?.id}`;
+            if (org?.id) {
+                document.getElementById('viewOrgProfile').href = `organization-profile.html?id=${org.id}`;
+            }
+
+            // Set up action buttons
+            setupActionButtons();
+        }
+
+        // Display messages
+        function displayMessages() {
+            const messagesSection = document.getElementById('messagesSection');
+            const messages = bookingData.messages || [];
+
+            if (messages.length === 0 && !bookingData.cover_letter) {
+                messagesSection.innerHTML = '<p style="color: #666;">No messages yet</p>';
+                return;
+            }
+
+            let html = '';
+
+            // Show cover letter first
+            if (bookingData.cover_letter) {
+                html += `
+                    <div class="message">
+                        <div class="message-header">
+                            <span class="message-author">Your Application Message</span>
+                            <span class="message-time">${formatTimeAgo(bookingData.created_at)}</span>
+                        </div>
+                        <div class="message-content">${bookingData.cover_letter}</div>
+                    </div>
+                `;
+            }
+
+            // Show other messages
+            messages.forEach(msg => {
+                html += `
+                    <div class="message">
+                        <div class="message-header">
+                            <span class="message-author">${msg.author || 'Organizer'}</span>
+                            <span class="message-time">${formatTimeAgo(msg.created_at)}</span>
+                        </div>
+                        <div class="message-content">${msg.content}</div>
+                    </div>
+                `;
+            });
+
+            messagesSection.innerHTML = html;
+        }
+
+        // Set up action buttons
+        function setupActionButtons() {
+            // Add to calendar
+            document.getElementById('addToCalendarBtn').addEventListener('click', () => {
+                addToCalendar();
+            });
+
+            // Contact organizer
+            document.getElementById('contactOrgBtn').addEventListener('click', () => {
+                const email = bookingData.opportunity?.posted_by_member?.email;
+                if (email) {
+                    window.location.href = `mailto:${email}?subject=Re: ${bookingData.opportunity?.title}`;
+                }
+            });
+
+            // Cancel booking
+            document.getElementById('cancelBookingBtn').addEventListener('click', () => {
+                if (confirm('Are you sure you want to cancel this booking? This action cannot be undone.')) {
+                    cancelBooking();
+                }
+            });
+        }
+
+        // Add to calendar
+        function addToCalendar() {
+            const opp = bookingData.opportunity;
+            const eventDate = new Date(opp.event_date);
+            
+            // Create calendar event details
+            const event = {
+                title: opp.title,
+                start: eventDate.toISOString().replace(/-|:|\.\d\d\d/g, ''),
+                duration: 'PT' + (opp.duration || 1) + 'H',
+                description: `Speaking engagement at ${opp.organization?.name}`,
+                location: opp.location || ''
+            };
+
+            // Google Calendar URL
+            const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${event.start}/${event.start}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
+            
+            window.open(googleUrl, '_blank');
+        }
+
+        // Cancel booking
+        async function cancelBooking() {
+            try {
+                const { error } = await window.covetalks.supabase
+                    .from('applications')
+                    .update({ status: 'Withdrawn' })
+                    .eq('id', applicationId);
+
+                if (error) throw error;
+
+                alert('Booking cancelled successfully');
+                window.location.href = 'bookings.html';
+
+            } catch (error) {
+                console.error('Error cancelling booking:', error);
+                alert('Failed to cancel booking. Please try again.');
+            }
+        }
+
+        // Show error
+        function showError(message) {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('bookingContent').classList.add('hidden');
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorState').classList.remove('hidden');
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return 'Date TBD';
+            return new Date(dateString).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Format date and time
+        function formatDateTime(dateString) {
+            if (!dateString) return 'Date & Time TBD';
+            const date = new Date(dateString);
+            return date.toLocaleString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+        }
+
+        // Format time ago
+        function formatTimeAgo(dateString) {
+            if (!dateString) return 'recently';
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return 'today';
+            if (diffDays === 1) return 'yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+            return `${Math.floor(diffDays / 30)} months ago`;
+        }
+
+        // Toggle dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdownMenu');
+            const avatar = document.getElementById('userAvatar');
+            
+            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Logout
+        async function logout() {
+            if (window.covetalks) {
+                await window.covetalks.logout();
+            }
+        }
+
+        // Initialize on load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
+    </script>
+</body>
+</html>

@@ -53,11 +53,11 @@
             width: auto;
             display: block;
         }
-        
-        @media (max-width: 768px) {
-            .logo-img {
-                height: 50px;
-            }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
         .nav-links {
@@ -83,52 +83,119 @@
             padding-bottom: 2px;
         }
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
         .nav-right {
             display: flex;
             align-items: center;
             gap: 1rem;
         }
 
-        .user-menu {
+        .auth-buttons {
             display: flex;
-            align-items: center;
             gap: 1rem;
         }
 
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #155588;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e3d6f;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #155588;
+            border: 2px solid #155588;
+        }
+
+        .btn-secondary:hover {
+            background: #155588;
+            color: white;
+        }
+
+        .btn-white {
+            background: white;
+            color: #155588;
+        }
+
+        .btn-white:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-white {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-outline-white:hover {
+            background: white;
+            color: #155588;
+        }
+
+        /* User Menu Styles */
+        .user-menu {
+            position: relative;
+        }
+
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             background: linear-gradient(135deg, #667eea, #1e93b7);
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
             font-weight: bold;
             cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+            position: relative;
         }
 
-        .user-dropdown {
-            position: relative;
+        .user-avatar.has-image {
+            background: none;
+            padding: 0;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
         }
 
         .dropdown-menu {
             position: absolute;
-            top: 100%;
+            top: calc(100% + 10px);
             right: 0;
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-            padding: 1rem 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             min-width: 200px;
             display: none;
-            margin-top: 0.5rem;
+            z-index: 1000;
+            overflow: hidden;
         }
 
         .dropdown-menu.show {
@@ -137,10 +204,10 @@
 
         .dropdown-menu a {
             display: block;
-            padding: 0.5rem 1.5rem;
+            padding: 0.75rem 1.25rem;
             color: #333;
             text-decoration: none;
-            transition: background 0.3s;
+            transition: background 0.2s;
         }
 
         .dropdown-menu a:hover {
@@ -148,8 +215,9 @@
         }
 
         .dropdown-divider {
-            border-top: 1px solid #e1e8ed;
-            margin: 0.5rem 0;
+            height: 1px;
+            background: #e1e8ed;
+            margin: 0;
         }
 
         /* Dashboard Layout */
@@ -185,49 +253,6 @@
             gap: 1rem;
         }
 
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .btn-white {
-            background: white;
-            color: #155588;
-        }
-
-        .btn-white:hover {
-            background: #f8f9fa;
-            transform: translateY(-2px);
-        }
-
-        .btn-primary {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1e3d6f;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #155588;
-            border: 2px solid #155588;
-        }
-
-        .btn-secondary:hover {
-            background: #155588;
-            color: white;
-        }
-
         /* Stats Cards */
         .stats-grid {
             display: grid;
@@ -244,6 +269,23 @@
             display: flex;
             align-items: center;
             gap: 1rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
         }
 
         .stat-icon {
@@ -285,6 +327,16 @@
         .stat-content p {
             color: #666;
             font-size: 0.9rem;
+        }
+
+        .stat-loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #155588;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
         /* Main Dashboard Content */
@@ -348,10 +400,34 @@
             background: #f8f9fa;
             border-radius: 10px;
             transition: background 0.3s;
+            position: relative;
         }
 
         .activity-item:hover {
             background: #e9ecef;
+        }
+        
+        .activity-item.clickable {
+            cursor: pointer;
+        }
+        
+        .activity-item .view-btn {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 0.5rem 1rem;
+            background: #155588;
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        
+        .activity-item .view-btn:hover {
+            background: #1e3d6f;
+            transform: translateY(-50%) translateX(-2px);
         }
 
         .activity-icon {
@@ -386,6 +462,13 @@
 
         .activity-content {
             flex: 1;
+            padding-right: 5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .activity-content {
+                padding-right: 0;
+            }
         }
 
         .activity-content h4 {
@@ -401,6 +484,25 @@
         .activity-time {
             color: #999;
             font-size: 0.8rem;
+        }
+
+        /* Real-time notification */
+        .real-time-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #dc3545;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
         /* Profile Completion */
@@ -486,17 +588,6 @@
             margin-bottom: 1rem;
         }
 
-        .btn-outline-white {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn-outline-white:hover {
-            background: white;
-            color: #155588;
-        }
-
         /* Quick Actions */
         .quick-actions {
             display: grid;
@@ -529,179 +620,70 @@
             margin-bottom: 0.5rem;
         }
 
-        /* Mobile Navigation */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 35px;
-            height: 35px;
-            cursor: pointer;
-            z-index: 1002;
-            background: none;
-            border: none;
-            padding: 5px;
+        .hidden {
+            display: none !important;
         }
 
-        .hamburger span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background: #333;
-            margin: 3px 0;
-            transition: all 0.3s ease;
-            border-radius: 2px;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-
-        .mobile-menu-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .mobile-menu-overlay.show {
-            display: block;
-            opacity: 1;
-        }
-
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: 300px;
-            height: 100vh;
-            background: white;
-            z-index: 1001;
-            transition: right 0.3s ease;
-            overflow-y: auto;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-        }
-
-        .mobile-menu.show {
-            right: 0;
-        }
-
-        .mobile-menu-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e1e8ed;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .mobile-menu-close {
-            width: 30px;
-            height: 30px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: #666;
-        }
-
-        .mobile-nav-links {
-            list-style: none;
-            padding: 1rem 0;
-        }
-
-        .mobile-nav-links li {
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .mobile-nav-links a {
-            display: block;
-            padding: 1rem 1.5rem;
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .mobile-nav-links a:hover {
-            background: #f8f9fa;
-            color: #155588;
-            padding-left: 2rem;
-        }
-
-        .mobile-nav-links a.active {
-            color: #155588;
-            background: #e8f4fd;
-        }
-
-        .mobile-user-section {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e1e8ed;
-            background: #f8f9fa;
-        }
-
-        .mobile-user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .mobile-user-avatar {
-            width: 50px;
-            height: 50px;
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #155588;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
+            animation: spin 1s linear infinite;
+            margin-left: 0.5rem;
         }
 
-        .mobile-user-details h3 {
-            margin: 0;
-            color: #333;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .mobile-user-details p {
-            margin: 0;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .mobile-auth-buttons {
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .mobile-auth-buttons .btn {
-            width: 100%;
+        .empty-state {
             text-align: center;
+            padding: 3rem;
+            color: #666;
         }
 
-        .auth-buttons {
-            display: flex;
+        /* Notification Toast */
+        .notification-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            display: none;
+            align-items: center;
             gap: 1rem;
+            max-width: 400px;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification-toast.show {
+            display: flex;
+        }
+
+        .notification-toast.success {
+            border-left: 4px solid #27ae60;
+        }
+
+        .notification-toast.info {
+            border-left: 4px solid #155588;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         /* Responsive */
@@ -713,15 +695,7 @@
 
         @media (max-width: 768px) {
             .nav-links {
-                display: none !important;
-            }
-            
-            .auth-buttons.desktop-only {
-                display: none !important;
-            }
-            
-            .hamburger {
-                display: flex;
+                display: none;
             }
 
             .stats-grid {
@@ -744,25 +718,19 @@
             .quick-actions {
                 grid-template-columns: 1fr;
             }
-        }
-
-        @media (max-width: 480px) {
-            .mobile-menu {
-                width: 85vw;
-                right: -85vw;
+            
+            .activity-item .view-btn {
+                position: static;
+                transform: none;
+                margin-top: 1rem;
+                display: inline-block;
+                width: 100%;
+                text-align: center;
             }
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: #666;
-        }
-
-        .empty-state img {
-            width: 100px;
-            opacity: 0.5;
-            margin-bottom: 1rem;
+            
+            .activity-item .view-btn:hover {
+                transform: translateY(-2px);
+            }
         }
     </style>
 </head>
@@ -771,140 +739,43 @@
     <header>
         <div class="nav-container">
             <nav>
-                <!-- Logo -->
                 <a href="index.html" class="logo">
-                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
                 </a>
                 
-                <!-- Desktop Navigation -->
-                <!-- Logged Out Navigation -->
-                <ul class="nav-links nav-logged-out" id="navLoggedOut">
+                <!-- Navigation links will be dynamically inserted here -->
+                <ul class="nav-links" id="navLinks">
+                    <!-- Default logged out navigation -->
                     <li><a href="index.html">Home</a></li>
                     <li><a href="members.html">Find Speakers</a></li>
                     <li><a href="pricing.html">Pricing</a></li>
                     <li><a href="register.html">Register</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                
-                <!-- Logged In Navigation (Speakers) -->
-                <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
-                    <li><a href="dashboard.html" class="active">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="opportunities.html">Opportunities</a></li>
-                    <li><a href="bookings.html">My Bookings</a></li>
-                    <li><a href="profile.html">Profile</a></li>
-                </ul>
-                
-                <!-- Logged In Navigation (Organizations) -->
-                <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
-                    <li><a href="organization-dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                    <li><a href="my-opportunities.html">My Opportunities</a></li>
-                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                </ul>
-
-                <!-- Right Side Navigation -->
+    
                 <div class="nav-right">
-                    <!-- For Logged In Users -->
-                    <div class="user-menu" id="userMenuDesktop" style="display: none;">
-                        <div class="user-dropdown">
-                            <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
-                            <div class="dropdown-menu" id="dropdownMenu">
-                                <a href="settings.html">Settings</a>
-                                <a href="billing.html">Billing</a>
-                                <div class="dropdown-divider"></div>
-                                <a href="#" onclick="logout()">Logout</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- For Logged Out Users -->
-                    <div class="auth-buttons desktop-only" id="authButtonsDesktop">
+                    <!-- Auth buttons (shown when logged out) -->
+                    <div class="auth-buttons" id="authButtons">
                         <a href="register.html" class="btn btn-secondary">Join</a>
                         <a href="login.html" class="btn btn-primary">Login</a>
                     </div>
-
-                    <!-- Hamburger Menu Button -->
-                    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
+                    
+                    <!-- User menu (shown when logged in) -->
+                    <div class="user-menu hidden" id="userMenu">
+                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="inbox.html">Inbox</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="settings.html">Settings</a>
+                            <a href="billing.html">Billing</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" onclick="logout(); return false;">Logout</a>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </div>
     </header>
-
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
-
-    <!-- Mobile Menu Panel -->
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-header">
-            <a href="index.html" class="logo">
-                <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
-            </a>
-            <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
-        </div>
-
-        <!-- Mobile User Section (for logged in users) -->
-        <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
-            <div class="mobile-user-info">
-                <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
-                <div class="mobile-user-details">
-                    <h3 id="mobileUserName">John Doe</h3>
-                    <p id="mobileUserType">Speaker - Plus Plan</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Navigation Links -->
-        <!-- Logged Out Mobile Navigation -->
-        <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="members.html">Find Speakers</a></li>
-            <li><a href="pricing.html">Pricing</a></li>
-            <li><a href="register.html">Register</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="help.html">Help Center</a></li>
-        </ul>
-
-        <!-- Logged In Mobile Navigation (Speakers) -->
-        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
-            <li><a href="dashboard.html" class="active">Dashboard</a></li>
-            <li><a href="members.html">Find Speakers</a></li>
-            <li><a href="opportunities.html">Opportunities</a></li>
-            <li><a href="bookings.html">My Bookings</a></li>
-            <li><a href="profile.html">Profile</a></li>
-            <li><a href="settings.html">Settings</a></li>
-            <li><a href="billing.html">Billing</a></li>
-            <li><a href="help.html">Help & Support</a></li>
-        </ul>
-
-        <!-- Logged In Mobile Navigation (Organizations) -->
-        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
-            <li><a href="organization-dashboard.html">Dashboard</a></li>
-            <li><a href="members.html">Find Speakers</a></li>
-            <li><a href="post-opportunity.html">Post Opportunity</a></li>
-            <li><a href="my-opportunities.html">My Opportunities</a></li>
-            <li><a href="saved-speakers.html">Saved Speakers</a></li>
-            <li><a href="settings.html">Settings</a></li>
-            <li><a href="team.html">Team Members</a></li>
-            <li><a href="help.html">Help & Support</a></li>
-        </ul>
-
-        <!-- Mobile Auth Buttons (for logged out users) -->
-        <div class="mobile-auth-buttons" id="mobileAuthButtons">
-            <a href="register.html" class="btn btn-secondary">Join Community</a>
-            <a href="login.html" class="btn btn-primary">Login</a>
-        </div>
-
-        <!-- Mobile Logout Button (for logged in users) -->
-        <div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
-            <button class="btn btn-primary" onclick="logout()">Logout</button>
-        </div>
-    </div>
 
     <!-- Dashboard Container -->
     <div class="dashboard-container">
@@ -931,21 +802,21 @@
                 <div class="stat-card">
                     <div class="stat-icon blue">👁️</div>
                     <div class="stat-content">
-                        <h3 id="profileViews">0</h3>
+                        <h3 id="profileViews"><span class="stat-loading"></span></h3>
                         <p>Profile Views This Month</p>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon green">📅</div>
                     <div class="stat-content">
-                        <h3 id="bookingsCount">0</h3>
+                        <h3 id="bookingsCount"><span class="stat-loading"></span></h3>
                         <p>Confirmed Bookings</p>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon purple">🎯</div>
                     <div class="stat-content">
-                        <h3 id="applicationsCount">0</h3>
+                        <h3 id="applicationsCount"><span class="stat-loading"></span></h3>
                         <p>Active Applications</p>
                     </div>
                 </div>
@@ -969,7 +840,7 @@
                             <a href="activity.html">View All</a>
                         </div>
                         <div class="activity-list" id="activityList">
-                            <p style="padding: 1rem; color: #666;">No recent activity</p>
+                            <p style="padding: 1rem; color: #666;">Loading...</p>
                         </div>
                     </div>
 
@@ -980,7 +851,7 @@
                             <a href="bookings.html">Manage All</a>
                         </div>
                         <div id="upcomingBookings">
-                            <p style="padding: 1rem; color: #666;">No upcoming bookings</p>
+                            <p style="padding: 1rem; color: #666;">Loading...</p>
                         </div>
                     </div>
 
@@ -991,7 +862,7 @@
                             <a href="opportunities.html">Browse All</a>
                         </div>
                         <div id="opportunities">
-                            <p style="padding: 1rem; color: #666;">No new opportunities</p>
+                            <p style="padding: 1rem; color: #666;">Loading...</p>
                         </div>
                     </div>
                 </div>
@@ -1056,270 +927,232 @@
         </div>
     </div>
 
-<script src="/js/app.js"></script>
-<script src="/js/navigation.js"></script>
+    <!-- Notification Toast -->
+    <div class="notification-toast" id="notificationToast">
+        <div class="notification-icon">🔔</div>
+        <div class="notification-content">
+            <strong id="notificationTitle">New Notification</strong>
+            <p id="notificationMessage">You have a new message</p>
+        </div>
+    </div>
 
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load config and Supabase client -->
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    
     <script>
-        // State to track if we've already checked auth
-        let authCheckCompleted = false;
-        
-        // Wait for API to be fully loaded
-        function waitForAPI(callback, maxAttempts = 20) {
-            let attempts = 0;
+        // Page state
+        let currentUser = null;
+        let isAuthenticated = false;
+        let initAttempts = 0;
+        const MAX_INIT_ATTEMPTS = 10;
+        let realtimeChannel = null;
+
+        // Wait for Supabase client to be ready
+        function waitForSupabase(callback) {
+            initAttempts++;
             
-            function checkAPI() {
-                attempts++;
-                
-                if (typeof api !== 'undefined' && typeof updateNavigation !== 'undefined') {
-                    callback();
-                } else if (attempts < maxAttempts) {
-                    setTimeout(checkAPI, 100);
-                } else {
-                    console.error('[Dashboard] Failed to load API after', maxAttempts, 'attempts');
-                    showError('Failed to load application. Please refresh the page.');
-                }
+            if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                callback();
+            } else if (initAttempts < MAX_INIT_ATTEMPTS) {
+                setTimeout(() => waitForSupabase(callback), 500);
+            } else {
+                console.error('[Dashboard] Failed to load Supabase client');
+                showError('Failed to initialize. Please refresh the page.');
             }
-            
-            checkAPI();
-        }
-    
-        // Show error message to user
-        function showError(message) {
-            // You can implement a better error display here
-            console.error('[Dashboard Error]', message);
-            alert(message);
-        }
-        
-        // Show notification message
-        function showNotification(type, message) {
-            // Create notification element if it doesn't exist
-            let notification = document.getElementById('notification');
-            if (!notification) {
-                notification = document.createElement('div');
-                notification.id = 'notification';
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 100px;
-                    right: 20px;
-                    padding: 1rem 1.5rem;
-                    border-radius: 10px;
-                    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                    z-index: 9999;
-                    transition: all 0.3s ease;
-                    max-width: 400px;
-                `;
-                document.body.appendChild(notification);
-            }
-            
-            // Set styles based on type
-            if (type === 'success') {
-                notification.style.background = '#d4edda';
-                notification.style.color = '#155724';
-                notification.style.border = '1px solid #c3e6cb';
-            } else if (type === 'error') {
-                notification.style.background = '#f8d7da';
-                notification.style.color = '#721c24';
-                notification.style.border = '1px solid #f5c6cb';
-            }
-            
-            notification.textContent = message;
-            notification.style.display = 'block';
-            
-            // Auto-hide after 5 seconds
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 5000);
-        }
-    
-        // Initialize page - This runs AFTER authentication is verified
-        function initializePage() {
-            console.log('[Dashboard] Initializing page content');
-            loadDashboardData();
         }
 
-        setTimeout(() => {
-            // Force remove loading state if stuck
-            const loadingEls = document.querySelectorAll('.loading');
-            loadingEls.forEach(el => {
-                if (el.parentElement.id === 'planName') {
-                    el.parentElement.textContent = 'Unable to load';
+        // Update navigation based on user type
+        function updateNavigation(user) {
+            const navLinks = document.getElementById('navLinks');
+            const authButtons = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userAvatar = document.getElementById('userAvatar');
+            
+            if (user) {
+                // Hide auth buttons, show user menu
+                authButtons.classList.add('hidden');
+                userMenu.classList.remove('hidden');
+                
+                // Update avatar with user image or initials
+                if (user.profile_image_url) {
+                    userAvatar.classList.add('has-image');
+                    userAvatar.innerHTML = `<img src="${user.profile_image_url}" alt="${user.name}" />`;
+                } else {
+                    const initials = user.name ? 
+                        user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                        'U';
+                    userAvatar.textContent = initials;
+                }
+                
+                // Update navigation links based on user type
+                if (user.member_type === 'Organization') {
+                    // Redirect to organization dashboard
+                    window.location.href = '/organization-dashboard.html';
+                    return;
+                } else {
+                    // Speaker navigation
+                    navLinks.innerHTML = `
+                        <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                        <li><a href="members.html">Find Speakers</a></li>
+                        <li><a href="opportunities.html">Opportunities</a></li>
+                        <li><a href="bookings.html">My Bookings</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                    `;
+                }
+            } else {
+                // Show default logged out navigation
+                authButtons.classList.remove('hidden');
+                userMenu.classList.add('hidden');
+                
+                navLinks.innerHTML = `
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                `;
+            }
+        }
+
+        // Toggle dropdown menu
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdownMenu');
+            const avatar = document.getElementById('userAvatar');
+            
+            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Initialize page
+        async function initializePage() {
+            console.log('[Dashboard] Initializing page');
+            
+            // Wait for Supabase client
+            waitForSupabase(async () => {
+                try {
+                    // Check authentication status
+                    const session = await window.covetalks.checkAuth();
+                    
+                    if (!session) {
+                        // Not authenticated, redirect to login
+                        console.log('[Dashboard] Not authenticated, redirecting to login');
+                        sessionStorage.setItem('redirectUrl', window.location.href);
+                        window.location.href = '/login.html';
+                        return;
+                    }
+                    
+                    isAuthenticated = true;
+                    
+                    // Get current user profile
+                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                    
+                    if (!currentUser) {
+                        console.error('[Dashboard] Failed to load user profile');
+                        showError('Failed to load user profile. Please try again.');
+                        return;
+                    }
+                    
+                    console.log('[Dashboard] User loaded:', currentUser);
+                    
+                    // Check if organization user
+                    if (currentUser.member_type === 'Organization') {
+                        window.location.href = '/organization-dashboard.html';
+                        return;
+                    }
+                    
+                    // Update navigation with user info
+                    updateNavigation(currentUser);
+                    
+                    // Update welcome message
+                    document.getElementById('userName').textContent = 
+                        currentUser.name?.split(' ')[0] || 'Speaker';
+                    
+                    // Load all dashboard data
+                    await loadDashboardData();
+                    
+                    // Set up real-time subscriptions
+                    setupRealtimeSubscriptions();
+                    
+                } catch (error) {
+                    console.error('[Dashboard] Initialization error:', error);
+                    showError('Failed to load dashboard. Please refresh the page.');
                 }
             });
-        }, 5000);
-    
-        // Load dashboard data
-        async function loadDashboardData() {
-            try {
-                // Check if returning from successful Stripe checkout
-                const urlParams = new URLSearchParams(window.location.search);
-                if (urlParams.get('subscription') === 'success') {
-                    console.log('[Dashboard] User returned from successful checkout, syncing subscription...');
-                    
-                    // Show success message
-                    showNotification('success', 'Payment successful! Syncing your subscription data...');
-                    
-                    // Sync subscription data with Stripe
-                    try {
-                        const syncResponse = await fetch('/.netlify/functions/stripe-sync-subscription', {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${api.getToken()}`,
-                                'Content-Type': 'application/json'
-                            }
-                        });
-                        
-                        const syncResult = await syncResponse.json();
-                        console.log('[Dashboard] Subscription sync result:', syncResult);
-                        
-                        if (syncResult.success) {
-                            showNotification('success', 'Subscription activated successfully!');
-                        }
-                    } catch (syncError) {
-                        console.error('[Dashboard] Failed to sync subscription:', syncError);
-                        // Continue loading dashboard even if sync fails
-                    }
-                    
-                    // Remove the query parameter from URL
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                }
-                
-                // Get user info
-                const user = api.getCurrentUser();
-                if (user) {
-                    document.getElementById('userName').textContent = user.name?.split(' ')[0] || 'Speaker';
-                    
-                    // Update avatars with initials
-                    const initials = user.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U';
-                    document.getElementById('userAvatar').textContent = initials;
-                    document.getElementById('mobileUserAvatar').textContent = initials;
-                    document.getElementById('mobileUserName').textContent = user.name || 'User';
-                    document.getElementById('mobileUserType').textContent = user.memberType || 'Member';
-                }
-                
-                // Load profile data
-                try {
-                    const profileData = await api.getProfile();
-                    if (profileData && profileData.profile) {
-                        updateProfileCompletion(profileData.profile);
-                    }
-                } catch (error) {
-                    console.error('Error loading profile:', error);
-                }
-                
-                // Load subscription status
-                try {
-                    const subscriptionData = await api.getSubscriptionStatus();
-                    if (subscriptionData) {
-                        updateSubscriptionInfo(subscriptionData);
-                    }
-                } catch (error) {
-                    console.error('Error loading subscription:', error);
-                    // Set default values on error
-                    document.getElementById('planName').textContent = 'Free Plan';
-                    document.getElementById('planStatus').textContent = 'Status: Active';
-                    document.getElementById('planBilling').textContent = 'No active subscription';
-                }
-                
-                // Load bookings
-                try {
-                    const bookingsData = await api.getBookings({ limit: 3 });
-                    if (bookingsData && bookingsData.bookings) {
-                        updateUpcomingBookings(bookingsData.bookings);
-                        document.getElementById('bookingsCount').textContent = bookingsData.stats?.accepted || '0';
-                    }
-                } catch (error) {
-                    console.error('Error loading bookings:', error);
-                }
-                
-                // Load opportunities
-                try {
-                    const opportunitiesData = await api.getOpportunities({ limit: 3, status: 'Open' });
-                    if (opportunitiesData && opportunitiesData.opportunities) {
-                        updateOpportunities(opportunitiesData.opportunities);
-                    }
-                } catch (error) {
-                    console.error('Error loading opportunities:', error);
-                }
-                
-                // Load stats
-                try {
-                    const statsData = await api.getDashboardStats();
-                    if (statsData && statsData.stats) {
-                        document.getElementById('profileViews').textContent = statsData.stats.profileViews || '0';
-                        document.getElementById('applicationsCount').textContent = statsData.stats.applications || '0';
-                        document.getElementById('rating').textContent = statsData.stats.rating || '0.0';
-                    }
-                } catch (error) {
-                    console.error('Error loading stats:', error);
-                }
-                
-                // Load recent activity
-                try {
-                    const activityData = await api.getDashboardActivity();
-                    if (activityData && activityData.activities) {
-                        updateRecentActivity(activityData.activities);
-                    }
-                } catch (error) {
-                    console.error('Error loading activity:', error);
-                }
-                
-            } catch (error) {
-                console.error('Error loading dashboard data:', error);
-            }
         }
-    
-        // Update profile completion - FIXED VERSION
+
+        // Load dashboard data using optimized methods
+        async function loadDashboardData() {
+            console.log('[Dashboard] Loading dashboard data');
+            
+            // Load profile completion
+            updateProfileCompletion(currentUser);
+            
+            // Load all data in parallel for better performance
+            const [subscription, stats, activity, applications, opportunities] = await Promise.all([
+                loadSubscriptionStatus(),
+                loadDashboardStatsOptimized(), // Using optimized method
+                loadRecentActivity(),
+                loadApplications(),
+                loadOpportunities()
+            ]);
+        }
+
+        // Update profile completion
         function updateProfileCompletion(profile) {
             let completedFields = 0;
-            const totalFields = 9; // Including testimonials
+            const totalFields = 8;
             const missingFields = [];
             
             // Check each field
-            if (!profile.name) missingFields.push('Add your full name');
-            else completedFields++;
+            if (profile.name) completedFields++;
+            else missingFields.push('Add your full name');
             
-            if (!profile.bio || profile.bio.length < 50) missingFields.push('Write a compelling bio');
-            else completedFields++;
+            if (profile.bio && profile.bio.length >= 50) completedFields++;
+            else missingFields.push('Write a compelling bio');
             
-            if (!profile.location) missingFields.push('Add your location');
-            else completedFields++;
+            if (profile.location) completedFields++;
+            else missingFields.push('Add your location');
             
-            if (!profile.profileImage) missingFields.push('Add a professional photo');
-            else completedFields++;
+            if (profile.profile_image_url) completedFields++;
+            else missingFields.push('Add a professional photo');
             
-            if (!profile.specialty || profile.specialty.length === 0) missingFields.push('List your speaking topics');
-            else completedFields++;
+            if (profile.specialties && profile.specialties.length > 0) completedFields++;
+            else missingFields.push('List your speaking topics');
             
-            if (!profile.website) missingFields.push('Add your website');
-            else completedFields++;
+            if (profile.website) completedFields++;
+            else missingFields.push('Add your website');
             
-            if (!profile.bookingLink) missingFields.push('Add booking calendar link');
-            else completedFields++;
+            if (profile.years_experience) completedFields++;
+            else missingFields.push('Add years of experience');
             
-            if (!profile.phone) missingFields.push('Add phone number');
-            else completedFields++;
-            
-            // Check for testimonials/reviews
-            if (!profile.hasTestimonials) missingFields.push('Add testimonials');
-            else completedFields++;
+            if (profile.phone) completedFields++;
+            else missingFields.push('Add phone number');
             
             const percentage = Math.round((completedFields / totalFields) * 100);
             
             document.getElementById('completionPercent').textContent = percentage + '%';
             document.getElementById('completionBar').style.width = percentage + '%';
             
-            // Update the completion content
             const completionContent = document.getElementById('completionContent');
             
             if (percentage === 100) {
-                // Profile is complete
                 completionContent.innerHTML = `
                     <div class="completion-complete">
                         ✅ Your profile is complete! Great job!
                     </div>
                 `;
             } else if (missingFields.length > 0) {
-                // Show missing fields
                 completionContent.innerHTML = `
                     <div class="completion-tips">
                         <h4>Complete Your Profile:</h4>
@@ -1331,167 +1164,258 @@
                 `;
             }
         }
-    
-        // Update subscription info - FIXED VERSION
-        function updateSubscriptionInfo(subscriptionData) {
-            console.log('[Dashboard] Updating subscription info:', subscriptionData);
-            
-            // Get the subscription object
-            const subscription = subscriptionData.subscription;
-            
-            if (!subscription) {
-                console.log('[Dashboard] No subscription data found');
+
+        // Load subscription status
+        async function loadSubscriptionStatus() {
+            try {
+                const subscription = await window.covetalks.getSubscriptionStatus(currentUser.id);
+                
+                if (subscription) {
+                    const planType = subscription.plan_type || 'Free';
+                    const billingPeriod = subscription.billing_period || '';
+                    const amount = subscription.amount || 0;
+                    
+                    document.getElementById('planName').textContent = `${planType} Plan`;
+                    document.getElementById('planStatus').textContent = 'Status: Active';
+                    
+                    if (amount > 0) {
+                        const period = billingPeriod === 'Yearly' ? 'year' : 'month';
+                        document.getElementById('planBilling').textContent = `$${amount}/${period}`;
+                    } else {
+                        document.getElementById('planBilling').textContent = 'No active subscription';
+                    }
+                } else {
+                    // No active subscription
+                    document.getElementById('planName').textContent = 'Free Plan';
+                    document.getElementById('planStatus').textContent = 'Status: Active';
+                    document.getElementById('planBilling').textContent = 'No active subscription';
+                }
+            } catch (error) {
+                console.error('[Dashboard] Error loading subscription:', error);
                 document.getElementById('planName').textContent = 'Free Plan';
                 document.getElementById('planStatus').textContent = 'Status: Active';
                 document.getElementById('planBilling').textContent = 'No active subscription';
-                return;
             }
-            
-            // Get the plan type - check both field name formats
-            const planType = subscription.Plan_Type || subscription.planType || 'Free';
-            const billingPeriod = subscription.Billing_Period || subscription.billingPeriod || '';
-            const status = subscription.Status || subscription.status || 'Active';
-            const amount = subscription.Amount || subscription.amount || 0;
-            
-            console.log('[Dashboard] Subscription details:', { planType, billingPeriod, status, amount });
-            
-            // Format plan name
-            let displayPlanName = 'Free Plan';
-            if (planType && planType !== 'Free') {
-                displayPlanName = `${planType} Plan`;
+        }
+        
+        // Load dashboard stats using optimized method
+        async function loadDashboardStatsOptimized() {
+            try {
+                // Use the optimized method that runs queries in parallel
+                const stats = await window.covetalks.getDashboardStatsOptimized(currentUser.id);
+                
+                document.getElementById('profileViews').textContent = stats.profileViews || '0';
+                document.getElementById('applicationsCount').textContent = stats.applications || '0';
+                document.getElementById('bookingsCount').textContent = stats.bookings || '0';
+                
+                // Rating from user profile
+                const rating = currentUser.average_rating || 0;
+                document.getElementById('rating').textContent = rating.toFixed(1);
+            } catch (error) {
+                console.error('[Dashboard] Error loading stats:', error);
+                document.getElementById('profileViews').textContent = '0';
+                document.getElementById('applicationsCount').textContent = '0';
+                document.getElementById('bookingsCount').textContent = '0';
             }
-            
-            // Format billing info
-            let billingDisplay = 'No active subscription';
-            if (amount > 0) {
-                if (billingPeriod === 'Yearly') {
-                    billingDisplay = `${amount}/year`;
-                } else if (billingPeriod === 'Monthly') {
-                    billingDisplay = `${amount}/month`;
+        }
+
+        // Load recent activity
+        async function loadRecentActivity() {
+            try {
+                const activities = await window.covetalks.getRecentActivity(currentUser.id, 5);
+                
+                if (activities && activities.length > 0) {
+                    const activityHtml = activities.map(activity => {
+                        let icon = '📋';
+                        let iconClass = 'view';
+                        let title = 'Activity';
+                        let description = '';
+                        let viewLink = null;
+                        
+                        switch (activity.activity_type) {
+                            case 'profile_view':
+                                icon = '👁️';
+                                iconClass = 'view';
+                                title = 'Profile View';
+                                description = 'Someone viewed your profile';
+                                break;
+                            case 'application_submitted':
+                                icon = '🎯';
+                                iconClass = 'application';
+                                title = 'New Application';
+                                description = 'You submitted an application';
+                                if (activity.metadata?.application_id) {
+                                    viewLink = `application-status.html?id=${activity.metadata.application_id}`;
+                                }
+                                break;
+                            case 'application_accepted':
+                                icon = '✅';
+                                iconClass = 'booking';
+                                title = 'Application Accepted';
+                                description = 'Your application was accepted';
+                                if (activity.metadata?.application_id) {
+                                    viewLink = `booking-details.html?id=${activity.metadata.application_id}`;
+                                }
+                                break;
+                            case 'application_rejected':
+                                icon = '❌';
+                                iconClass = 'message';
+                                title = 'Application Update';
+                                description = 'Your application status was updated';
+                                if (activity.metadata?.application_id) {
+                                    viewLink = `application-status.html?id=${activity.metadata.application_id}`;
+                                }
+                                break;
+                            case 'review_received':
+                                icon = '⭐';
+                                iconClass = 'message';
+                                title = 'New Review';
+                                description = 'You received a new review';
+                                viewLink = 'reviews.html';
+                                break;
+                            case 'opportunity_posted':
+                                icon = '🎤';
+                                iconClass = 'view';
+                                title = 'New Opportunity';
+                                description = 'A new speaking opportunity was posted';
+                                if (activity.metadata?.opportunity_id) {
+                                    viewLink = `opportunity-details.html?id=${activity.metadata.opportunity_id}`;
+                                }
+                                break;
+                        }
+                        
+                        const clickableClass = viewLink ? 'clickable' : '';
+                        const viewButton = viewLink ? 
+                            `<a href="${viewLink}" class="view-btn">View</a>` : '';
+                        
+                        return `
+                            <div class="activity-item ${clickableClass}">
+                                <div class="activity-icon ${iconClass}">${icon}</div>
+                                <div class="activity-content">
+                                    <h4>${title}</h4>
+                                    <p>${description}</p>
+                                    <span class="activity-time">${formatTimeAgo(activity.created_at)}</span>
+                                </div>
+                                ${viewButton}
+                            </div>
+                        `;
+                    }).join('');
+                    
+                    document.getElementById('activityList').innerHTML = activityHtml;
                 } else {
-                    // If no period specified, assume monthly
-                    billingDisplay = `${amount}/month`;
+                    document.getElementById('activityList').innerHTML = 
+                        '<p style="padding: 1rem; color: #666;">No recent activity</p>';
                 }
-            }
-            
-            // Format status
-            let statusDisplay = 'Active';
-            if (status === 'Past_Due') {
-                statusDisplay = 'Past Due';
-            } else if (status === 'Cancelled') {
-                statusDisplay = 'Cancelled';
-            } else if (status === 'Active') {
-                statusDisplay = 'Active';
-            } else {
-                statusDisplay = status;
-            }
-            
-            // Update UI
-            document.getElementById('planName').textContent = displayPlanName;
-            document.getElementById('planStatus').textContent = `Status: ${statusDisplay}`;
-            document.getElementById('planBilling').textContent = billingDisplay;
-            
-            // Update mobile user type display
-            const mobileUserType = document.getElementById('mobileUserType');
-            if (mobileUserType && planType !== 'Free') {
-                mobileUserType.textContent = `Speaker - ${planType} Plan`;
+            } catch (error) {
+                console.error('[Dashboard] Error loading activity:', error);
+                document.getElementById('activityList').innerHTML = 
+                    '<p style="padding: 1rem; color: #666;">No recent activity</p>';
             }
         }
-    
-        // Update recent activity - NEW FUNCTION
-        function updateRecentActivity(activities) {
-            const container = document.getElementById('activityList');
-            
-            if (!activities || activities.length === 0) {
-                container.innerHTML = '<p style="padding: 1rem; color: #666;">No recent activity</p>';
-                return;
-            }
-            
-            const activityHtml = activities.slice(0, 5).map(activity => {
-                let icon = '📋';
-                let iconClass = 'view';
+
+        // Load applications
+        async function loadApplications() {
+            try {
+                const applications = await window.covetalks.getApplications(currentUser.id);
                 
-                if (activity.type === 'profile_view') {
-                    icon = '👁️';
-                    iconClass = 'view';
-                } else if (activity.type === 'application') {
-                    icon = '🎯';
-                    iconClass = 'application';
-                } else if (activity.type === 'booking') {
-                    icon = '📅';
-                    iconClass = 'booking';
-                } else if (activity.type === 'review') {
-                    icon = '⭐';
-                    iconClass = 'message';
-                }
+                // Get upcoming bookings (accepted applications with future dates)
+                const upcomingBookings = await window.covetalks.getUpcomingBookings(currentUser.id);
                 
-                return `
-                    <div class="activity-item">
-                        <div class="activity-icon ${iconClass}">${icon}</div>
-                        <div class="activity-content">
-                            <h4>${activity.title}</h4>
-                            <p>${activity.description}</p>
-                            <span class="activity-time">${formatTimeAgo(activity.date)}</span>
+                // Display upcoming bookings
+                const bookingsContainer = document.getElementById('upcomingBookings');
+                if (upcomingBookings.length > 0) {
+                    const bookingsHtml = upcomingBookings.slice(0, 3).map(app => `
+                        <div class="activity-item clickable">
+                            <div class="activity-icon booking">📅</div>
+                            <div class="activity-content">
+                                <h4>${app.opportunity?.title || 'Untitled Event'}</h4>
+                                <p>${formatDate(app.opportunity?.event_date)} • ${app.opportunity?.location || 'Location TBD'}</p>
+                                <span class="activity-time">Format: ${app.opportunity?.event_format || 'TBD'}</span>
+                            </div>
+                            <a href="booking-details.html?id=${app.id}" class="view-btn">View Details</a>
                         </div>
-                    </div>
-                `;
-            }).join('');
-            
-            container.innerHTML = activityHtml;
-        }
-    
-        // Update upcoming bookings
-        function updateUpcomingBookings(bookings) {
-            const container = document.getElementById('upcomingBookings');
-            
-            // Filter for accepted bookings with future dates
-            const upcomingBookings = bookings.filter(booking => {
-                const eventDate = booking.opportunity?.eventDate;
-                return booking.status === 'Accepted' && eventDate && new Date(eventDate) > new Date();
-            });
-            
-            if (upcomingBookings.length === 0) {
-                container.innerHTML = '<p style="padding: 1rem; color: #666;">No upcoming bookings</p>';
-                return;
+                    `).join('');
+                    
+                    bookingsContainer.innerHTML = `<div class="activity-list">${bookingsHtml}</div>`;
+                } else {
+                    bookingsContainer.innerHTML = '<p style="padding: 1rem; color: #666;">No upcoming bookings</p>';
+                }
+            } catch (error) {
+                console.error('[Dashboard] Error loading applications:', error);
+                document.getElementById('upcomingBookings').innerHTML = 
+                    '<p style="padding: 1rem; color: #666;">No upcoming bookings</p>';
             }
-            
-            const bookingsHtml = upcomingBookings.slice(0, 3).map(booking => `
-                <div class="activity-item">
-                    <div class="activity-icon booking">📅</div>
-                    <div class="activity-content">
-                        <h4>${booking.opportunity?.title || 'Untitled Event'}</h4>
-                        <p>${formatDate(booking.opportunity?.eventDate)} • ${booking.opportunity?.location || 'Location TBD'}</p>
-                        <span class="activity-time">Duration: ${booking.opportunity?.totalHours || 1} hour${booking.opportunity?.totalHours > 1 ? 's' : ''}</span>
-                    </div>
-                </div>
-            `).join('');
-            
-            container.innerHTML = `<div class="activity-list">${bookingsHtml}</div>`;
         }
-    
-        // Update opportunities
-        function updateOpportunities(opportunities) {
-            const container = document.getElementById('opportunities');
-            
-            if (!opportunities || opportunities.length === 0) {
-                container.innerHTML = '<p style="padding: 1rem; color: #666;">No new opportunities</p>';
-                return;
+
+        // Load opportunities
+        async function loadOpportunities() {
+            try {
+                const opportunities = await window.covetalks.getRecentOpportunities(3);
+                
+                if (opportunities && opportunities.length > 0) {
+                    const opportunitiesHtml = opportunities.map(opp => `
+                        <div class="activity-item clickable">
+                            <div class="activity-icon view">🎤</div>
+                            <div class="activity-content">
+                                <h4>${opp.title}</h4>
+                                <p>${opp.location || 'Remote'} • ${formatDate(opp.event_date)}</p>
+                                <span class="activity-time">
+                                    ${opp.compensation_amount ? `💰 $${opp.compensation_amount}` : 'Volunteer'} • 
+                                    Posted ${formatTimeAgo(opp.created_at)}
+                                </span>
+                            </div>
+                            <a href="opportunity-details.html?id=${opp.id}" class="view-btn">View & Apply</a>
+                        </div>
+                    `).join('');
+                    
+                    document.getElementById('opportunities').innerHTML = 
+                        `<div class="activity-list">${opportunitiesHtml}</div>`;
+                } else {
+                    document.getElementById('opportunities').innerHTML = 
+                        '<p style="padding: 1rem; color: #666;">No new opportunities</p>';
+                }
+            } catch (error) {
+                console.error('[Dashboard] Error loading opportunities:', error);
+                document.getElementById('opportunities').innerHTML = 
+                    '<p style="padding: 1rem; color: #666;">No new opportunities</p>';
             }
-            
-            const opportunitiesHtml = opportunities.slice(0, 3).map(opp => `
-                <div class="activity-item">
-                    <div class="activity-icon view">🎤</div>
-                    <div class="activity-content">
-                        <h4>${opp.title}</h4>
-                        <p>${opp.location} • ${formatDate(opp.eventDate)}</p>
-                        <span class="activity-time">Posted ${formatTimeAgo(opp.postedDate)}</span>
-                    </div>
-                </div>
-            `).join('');
-            
-            container.innerHTML = `<div class="activity-list">${opportunitiesHtml}</div>`;
         }
-    
+
+        // Set up real-time subscriptions
+        function setupRealtimeSubscriptions() {
+            // Subscribe to application updates for this user
+            if (currentUser) {
+                realtimeChannel = window.covetalks.subscribeToApplicationUpdates(
+                    currentUser.id,
+                    (update) => {
+                        console.log('[Dashboard] Real-time update:', update);
+                        showNotification(
+                            'Application Update',
+                            `Your application status has been updated to: ${update.status}`,
+                            'info'
+                        );
+                        // Reload dashboard data
+                        loadDashboardData();
+                    }
+                );
+            }
+        }
+
+        // Show notification toast
+        function showNotification(title, message, type = 'info') {
+            const toast = document.getElementById('notificationToast');
+            const titleEl = document.getElementById('notificationTitle');
+            const messageEl = document.getElementById('notificationMessage');
+            
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            toast.className = `notification-toast show ${type}`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 5000);
+        }
+
         // Format date helper
         function formatDate(dateString) {
             if (!dateString) return 'Date TBD';
@@ -1502,7 +1426,7 @@
                 year: 'numeric' 
             });
         }
-    
+
         // Format time ago helper
         function formatTimeAgo(dateString) {
             if (!dateString) return 'recently';
@@ -1517,164 +1441,36 @@
             if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
             return `${Math.floor(diffDays / 30)} months ago`;
         }
-    
-        // Toggle dropdown menu
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
+
+        // Show error message
+        function showError(message) {
+            showNotification('Error', message, 'error');
         }
-    
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-    
-        // Mobile menu functions
-        function toggleMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            
-            hamburger.classList.toggle('active');
-            mobileMenu.classList.toggle('show');
-            overlay.classList.toggle('show');
-            
-            if (mobileMenu.classList.contains('show')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
-            }
-        }
-    
-        function closeMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            
-            hamburger.classList.remove('active');
-            mobileMenu.classList.remove('show');
-            overlay.classList.remove('show');
-            document.body.style.overflow = '';
-        }
-    
+
         // Logout function
-        function logout() {
-            api.logout();
+        async function logout() {
+            // Clean up real-time subscriptions
+            if (realtimeChannel) {
+                window.covetalks.unsubscribeChannel(realtimeChannel);
+            }
+            
+            if (window.covetalks) {
+                await window.covetalks.logout();
+            }
         }
-    
-        // Close mobile menu on window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                closeMobileMenu();
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (realtimeChannel) {
+                window.covetalks.unsubscribeChannel(realtimeChannel);
             }
         });
-    
-        // Check authentication and initialize page
-        function checkAuthAndInitialize() {
-            // Prevent multiple auth checks
-            if (authCheckCompleted) {
-                console.log('[Dashboard] Auth check already completed, skipping');
-                return;
-            }
-            
-            authCheckCompleted = true;
-            console.log('[Dashboard] Starting authentication check');
-            
-            // First update navigation UI
-            if (typeof updateNavigation === 'function') {
-                updateNavigation();
-            }
-            
-            // Check authentication with retry logic
-            let authenticated = false;
-            let user = null;
-            
-            try {
-                authenticated = api.isAuthenticated();
-                user = api.getCurrentUser();
-                
-                console.log('[Dashboard] Auth check result:', { authenticated, hasUser: !!user });
-            } catch (e) {
-                console.error('[Dashboard] Error during auth check:', e);
-            }
-            
-            if (!authenticated) {
-                // Give it one more chance with a small delay
-                setTimeout(() => {
-                    try {
-                        authenticated = api.isAuthenticated();
-                        user = api.getCurrentUser();
-                        
-                        if (!authenticated) {
-                            console.log('[Dashboard] Not authenticated after retry, redirecting to login');
-                            sessionStorage.setItem('redirectUrl', window.location.href);
-                            window.location.href = '/login.html';
-                            return;
-                        }
-                        
-                        // Check user type access
-                        if (user && (user.memberType === 'Organization' || user.Member_Type === 'Organization')) {
-                            console.log('[Dashboard] Organization user, redirecting to org dashboard');
-                            window.location.href = '/organization-dashboard.html';
-                            return;
-                        }
-                        
-                        console.log('[Dashboard] Authentication verified on retry, initializing page');
-                        initializePage();
-                    } catch (e) {
-                        console.error('[Dashboard] Error during auth retry:', e);
-                        window.location.href = '/login.html';
-                    }
-                }, 200);
-                return;
-            }
-            
-            // Check user type access
-            if (user && (user.memberType === 'Organization' || user.Member_Type === 'Organization')) {
-                console.log('[Dashboard] Organization user, redirecting to org dashboard');
-                window.location.href = '/organization-dashboard.html';
-                return;
-            }
-            
-            console.log('[Dashboard] Authentication verified, initializing page');
-            // Initialize page
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
             initializePage();
-        }
-    
-        // Main initialization
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('[Dashboard] DOM loaded, waiting for API');
-            
-            // Wait for API and navigation to be ready
-            waitForAPI(function() {
-                console.log('[Dashboard] API and navigation ready');
-                
-                // Add a small delay to ensure everything is properly initialized
-                setTimeout(() => {
-                    checkAuthAndInitialize();
-                }, 100);
-            });
-        });
-    
-        // Prevent auth check on page visibility change (this can cause issues)
-        document.addEventListener('visibilitychange', function(e) {
-            e.stopPropagation();
-        });
-    
-        // Add debug helper for development
-        if (window.location.hostname === 'localhost') {
-            window.addEventListener('load', function() {
-                setTimeout(() => {
-                    if (typeof debugAuth === 'function') {
-                        console.log('[Dashboard] Debug auth available - run debugAuth() to check state');
-                    }
-                }, 1000);
-            });
         }
     </script>
 </body>

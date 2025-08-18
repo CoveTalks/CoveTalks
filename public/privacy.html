@@ -47,11 +47,143 @@
             width: auto;
             display: block;
         }
-        
-        @media (max-width: 768px) {
-            .logo-img {
-                height: 50px;
-            }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #155588;
+        }
+
+        .nav-links a.active {
+            color: #155588;
+            border-bottom: 2px solid #155588;
+            padding-bottom: 2px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #155588;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e3d6f;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #155588;
+            border: 2px solid #155588;
+        }
+
+        .btn-secondary:hover {
+            background: #155588;
+            color: white;
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e1e8ed;
+            margin: 0;
         }
 
         /* Page Header */
@@ -160,8 +292,55 @@
             margin-bottom: 1rem;
         }
 
+        .hidden {
+            display: none !important;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #f2b236;
+        }
+
+        .footer-section a {
+            color: #bdc3c7;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #f2b236;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #34495e;
+            padding-top: 1rem;
+            text-align: center;
+            color: #bdc3c7;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
             .policy-content {
                 padding: 2rem 1.5rem;
             }
@@ -169,275 +348,51 @@
             .page-header h1 {
                 font-size: 2rem;
             }
+
+            .logo-img {
+                height: 50px;
+            }
         }
-        /* Mobile Navigation Styles */
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-/* Hamburger Menu */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-    z-index: 1002;
-    background: none;
-    border: none;
-    padding: 5px;
-}
-
-.hamburger span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background: #333;
-    margin: 3px 0;
-    transition: all 0.3s ease;
-    border-radius: 2px;
-}
-
-.hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
-
-.hamburger.active span:nth-child(2) {
-    opacity: 0;
-}
-
-.hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -6px);
-}
-
-/* Mobile Menu Overlay */
-.mobile-menu-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.mobile-menu-overlay.show {
-    display: block;
-    opacity: 1;
-}
-
-/* Mobile Menu Panel */
-.mobile-menu {
-    position: fixed;
-    top: 0;
-    right: -320px;
-    width: 300px;
-    height: 100vh;
-    background: white;
-    z-index: 1001;
-    transition: right 0.3s ease;
-    overflow-y: auto;
-    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-}
-
-.mobile-menu.show {
-    right: 0;
-}
-
-.mobile-menu-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.mobile-menu-close {
-    width: 30px;
-    height: 30px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #666;
-}
-
-.mobile-nav-links {
-    list-style: none;
-    padding: 1rem 0;
-}
-
-.mobile-nav-links li {
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.mobile-nav-links a {
-    display: block;
-    padding: 1rem 1.5rem;
-    color: #333;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s;
-}
-
-.mobile-nav-links a:hover {
-    background: #f8f9fa;
-    color: #155588;
-    padding-left: 2rem;
-}
-
-.mobile-nav-links a.active {
-    color: #155588;
-    background: #e8f4fd;
-}
-
-.mobile-user-section {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    background: #f8f9fa;
-}
-
-.mobile-user-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.mobile-user-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #1e93b7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-}
-
-.mobile-user-details h3 {
-    margin: 0;
-    color: #333;
-}
-
-.mobile-user-details p {
-    margin: 0;
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.mobile-auth-buttons {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.mobile-auth-buttons .btn {
-    width: 100%;
-    text-align: center;
-}
-
-/* Responsive Breakpoints */
-@media (max-width: 768px) {
-    .nav-links {
-        display: none !important;
-    }
-    
-    .auth-buttons.desktop-only {
-        display: none !important;
-    }
-    
-    .hamburger {
-        display: flex;
-    }
-    
-    header {
-        padding: 0.75rem 0;
-    }
-    
-    .logo {
-        font-size: 1.5rem;
-    }
-
-    body {
-        padding-top: 60px;
-    }
-}
-
-@media (max-width: 480px) {
-    .mobile-menu {
-        width: 85vw;
-        right: -85vw;
-    }
-}
-
-/* Footer */
-footer {
-    background: #2c3e50;
-    color: white;
-    padding: 3rem 0 1rem;
-    margin-top: 4rem;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.footer-section h3 {
-    margin-bottom: 1rem;
-    color: #f2b236;
-}
-
-.footer-section a {
-    color: #bdc3c7;
-    text-decoration: none;
-    display: block;
-    margin-bottom: 0.5rem;
-    transition: color 0.3s;
-}
-
-.footer-section a:hover {
-    color: #f2b236;
-}
-
-.footer-bottom {
-    border-top: 1px solid #34495e;
-    padding-top: 1rem;
-    text-align: center;
-    color: #bdc3c7;
-}
     </style>
 </head>
 <body>
     <!-- Header -->
     <header>
-        <div class="container">
+        <div class="nav-container">
             <nav>
                 <a href="index.html" class="logo">
-                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
                 </a>
-                <!-- Navigation will be same as other pages -->
+                
+                <!-- Navigation links will be dynamically updated -->
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+
+                <div class="nav-right">
+                    <!-- Auth buttons (shown when logged out) -->
+                    <div class="auth-buttons" id="authButtons">
+                        <a href="register.html" class="btn btn-secondary">Join</a>
+                        <a href="login.html" class="btn btn-primary">Login</a>
+                    </div>
+                    
+                    <!-- User menu (shown when logged in) -->
+                    <div class="user-menu hidden" id="userMenu">
+                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="inbox.html">Inbox</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="settings.html">Settings</a>
+                            <a href="billing.html">Billing</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" onclick="logout(); return false;">Logout</a>
+                        </div>
+                    </div>
+                </div>
             </nav>
         </div>
     </header>
@@ -532,7 +487,7 @@ footer {
                 <h3>4.2 With Service Providers</h3>
                 <ul>
                     <li><strong>Payment Processing:</strong> Stripe for secure payment handling</li>
-                    <li><strong>Data Storage:</strong> Airtable for database management</li>
+                    <li><strong>Data Storage:</strong> Supabase for database management</li>
                     <li><strong>Email Services:</strong> For transactional and marketing emails</li>
                     <li><strong>Analytics:</strong> To understand usage patterns</li>
                 </ul>
@@ -608,6 +563,7 @@ footer {
             </div>
         </div>
     </main>
+
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -638,24 +594,125 @@ footer {
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; <script>document.write(new Date().getFullYear());</script> CoveTalks. All rights reserved.</p>
+                <p>&copy; 2024 CoveTalks. All rights reserved.</p>
             </div>
         </div>
     </footer>
-    <!-- Add before closing </body> tag on ALL pages -->
-<script src="/js/app.js"></script>
-<script src="/js/navigation.js"></script>
-<script>
-  // Initialize page-specific functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check auth and update navigation
-    updateNavigation();
+
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
-    // Page-specific initialization
-    if (typeof initializePage === 'function') {
-      initializePage();
-    }
-  });
-</script>
+    <!-- Load config and Supabase client -->
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
+    
+    <script>
+        // Page state
+        let currentUser = null;
+        let isAuthenticated = false;
+
+        // Wait for Supabase client
+        function waitForSupabase(callback) {
+            let attempts = 0;
+            const maxAttempts = 10;
+            
+            function check() {
+                attempts++;
+                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                    callback();
+                } else if (attempts < maxAttempts) {
+                    setTimeout(check, 500);
+                } else {
+                    console.log('Supabase not loaded, continuing as public page');
+                }
+            }
+            check();
+        }
+
+        // Update navigation
+        function updateNavigation(user) {
+            const navLinks = document.getElementById('navLinks');
+            const authButtons = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userAvatar = document.getElementById('userAvatar');
+            
+            if (user) {
+                authButtons.classList.add('hidden');
+                userMenu.classList.remove('hidden');
+                
+                const initials = user.name ? 
+                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                    'U';
+                userAvatar.textContent = initials;
+                
+                if (user.member_type === 'Organization') {
+                    navLinks.innerHTML = `
+                        <li><a href="organization-dashboard.html">Dashboard</a></li>
+                        <li><a href="members.html">Find Speakers</a></li>
+                        <li><a href="post-opportunity.html">Post Opportunity</a></li>
+                        <li><a href="my-opportunities.html">My Opportunities</a></li>
+                        <li><a href="saved-speakers.html">Saved Speakers</a></li>
+                    `;
+                } else {
+                    navLinks.innerHTML = `
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="members.html">Find Speakers</a></li>
+                        <li><a href="opportunities.html">Opportunities</a></li>
+                        <li><a href="bookings.html">My Bookings</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                    `;
+                }
+            } else {
+                authButtons.classList.remove('hidden');
+                userMenu.classList.add('hidden');
+            }
+        }
+
+        // Initialize page
+        async function initializePage() {
+            waitForSupabase(async () => {
+                try {
+                    const session = await window.covetalks.checkAuth();
+                    if (session) {
+                        isAuthenticated = true;
+                        currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                        updateNavigation(currentUser);
+                    }
+                } catch (error) {
+                    console.log('Not authenticated, showing public navigation');
+                }
+            });
+        }
+
+        // Toggle dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdownMenu');
+            const avatar = document.getElementById('userAvatar');
+            
+            if (dropdown && avatar && !avatar.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Logout
+        async function logout() {
+            if (window.covetalks) {
+                await window.covetalks.logout();
+            }
+        }
+
+        // Initialize on load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
+    </script>
 </body>
 </html>

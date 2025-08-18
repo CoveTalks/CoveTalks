@@ -1,12 +1,17 @@
 // File: netlify/functions/stripe-attach-payment-method.js
-// Attach a payment method to a customer
+// Attach a payment method to a customer - Supabase version
 
-const { stripe } = require('./utils/stripe');
-const { requireAuth } = require('./utils/auth');
-const { tables, updateRecord } = require('./utils/airtable');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { createClient } = require('@supabase/supabase-js');
+
+// Initialize Supabase client
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 
 exports.handler = async (event) => {
-  console.log('=== STRIPE ATTACH PAYMENT METHOD ===');
+  console.log('=== STRIPE ATTACH PAYMENT METHOD (SUPABASE) ===');
   
   // Handle CORS
   if (event.httpMethod === 'OPTIONS') {
@@ -25,7 +30,10 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
       body: JSON.stringify({ error: 'Method Not Allowed' })
     };
   }
@@ -37,14 +45,9 @@ exports.handler = async (event) => {
     'Access-Control-Allow-Headers': 'Content-Type, Authorization'
   };
 
-  // Verify authentication
-  const auth = await requireAuth(event);
-  if (auth.statusCode) {
-    return { ...auth, headers };
-  }
-
   try {
-    const { paymentMethodId, email } = JSON.parse(event.body);
+    const body = JSON.parse(event.body);
+    const { paymentMethodId, email, userId } = body;
 
     if (!paymentMethodId) {
       return {
@@ -57,12 +60,29 @@ exports.handler = async (event) => {
       };
     }
 
-    console.log('Attaching payment method:', paymentMethodId);
+    if (!userId) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ 
+          success: false,
+          error: 'User ID required' 
+        })
+      };
+    }
 
-    // Get user from Airtable
-    const user = await tables.members.find(auth.userId);
+    console.log('Attaching payment method:', paymentMethodId);
+    console.log('For user:', userId);
+
+    // Get user from Supabase
+    const { data: user, error: userError } = await supabase
+      .from('members')
+      .select('*')
+      .eq('id', userId)
+      .single();
     
-    if (!user) {
+    if (userError || !user) {
+      console.error('User not found:', userError);
       return {
         statusCode: 404,
         headers,
@@ -74,7 +94,7 @@ exports.handler = async (event) => {
     }
 
     // Check if user is a speaker (only speakers have billing)
-    if (user.fields.Member_Type !== 'Speaker') {
+    if (user.member_type !== 'Speaker') {
       return {
         statusCode: 403,
         headers,
@@ -85,29 +105,34 @@ exports.handler = async (event) => {
       };
     }
 
-    let customerId = user.fields.Stripe_Customer_ID;
+    let customerId = user.stripe_customer_id;
 
     // Create customer if doesn't exist
     if (!customerId) {
       console.log('Creating new Stripe customer...');
       
       const customer = await stripe.customers.create({
-        email: email || user.fields.Email,
-        name: user.fields.Name,
-        phone: user.fields.Phone || undefined,
+        email: email || user.email,
+        name: user.name,
+        phone: user.phone || undefined,
         metadata: {
-          airtable_id: auth.userId,
-          member_type: user.fields.Member_Type
+          supabase_user_id: userId,
+          member_type: user.member_type
         }
       });
       
       customerId = customer.id;
       console.log('Created Stripe customer:', customerId);
       
-      // Save customer ID to Airtable
-      await updateRecord(tables.members, auth.userId, {
-        Stripe_Customer_ID: customerId
-      });
+      // Save customer ID to Supabase
+      const { error: updateError } = await supabase
+        .from('members')
+        .update({ stripe_customer_id: customerId })
+        .eq('id', userId);
+      
+      if (updateError) {
+        console.error('Failed to update customer ID in Supabase:', updateError);
+      }
     }
 
     // Attach payment method to customer
@@ -145,6 +170,7 @@ exports.handler = async (event) => {
         await stripe.subscriptions.update(subscription.id, {
           default_payment_method: paymentMethodId
         });
+        console.log('Updated default payment method for subscription:', subscription.id);
       }
     }
 
@@ -176,6 +202,18 @@ exports.handler = async (event) => {
         body: JSON.stringify({ 
           success: false,
           error: error.message 
+        })
+      };
+    }
+    
+    if (error.type === 'StripeInvalidRequestError') {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ 
+          success: false,
+          error: 'Invalid payment method or request',
+          details: error.message 
         })
       };
     }

@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opportunity Details - CoveTalks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            color: #333;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .logo-img {
+            height: 70px;
+            width: auto;
+            display: block;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #155588;
+        }
+
+        .nav-links a.active {
+            color: #155588;
+            border-bottom: 2px solid #155588;
+            padding-bottom: 2px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #155588;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e3d6f;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #155588;
+            border: 2px solid #155588;
+        }
+
+        .btn-secondary:hover {
+            background: #155588;
+            color: white;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+            font-size: 1.1rem;
+            padding: 1rem 2rem;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e1e8ed;
+            margin: 0;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 1rem;
+            padding-bottom: 3rem;
+            min-height: 100vh;
+        }
+
+        /* Opportunity Header */
+        .opportunity-header {
+            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            color: white;
+            padding: 10rem 0 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .opportunity-title {
+            margin-bottom: 1rem;
+        }
+
+        .opportunity-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.95;
+        }
+
+        .opportunity-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .opportunity-meta-item i {
+            font-size: 1.2rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .status-badge.open {
+            background: #27ae60;
+        }
+
+        .status-badge.closed {
+            background: #dc3545;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Detail Card */
+        .detail-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .detail-card h2 {
+            color: #155588;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .detail-content {
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .detail-row {
+            display: flex;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+            flex: 0 0 150px;
+        }
+
+        .detail-value {
+            flex: 1;
+            color: #333;
+        }
+
+        .topic-tag {
+            display: inline-block;
+            background: #e8f4fd;
+            color: #155588;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            margin-right: 0.5rem;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        /* Apply Card */
+        .apply-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 100px;
+        }
+
+        .apply-card h3 {
+            color: #155588;
+            margin-bottom: 1rem;
+        }
+
+        .compensation-highlight {
+            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .compensation-amount {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .compensation-details {
+            font-size: 0.9rem;
+            opacity: 0.95;
+        }
+
+        .application-stats {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .application-stats p {
+            margin: 0.25rem 0;
+            font-size: 0.9rem;
+        }
+
+        /* Application Form */
+        .application-form {
+            display: none;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .application-form.show {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #155588;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-help {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+
+        /* Organization Card */
+        .org-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-top: 2rem;
+        }
+
+        .org-card h3 {
+            color: #155588;
+            margin-bottom: 1rem;
+        }
+
+        .org-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            background: #f0f0f0;
+            margin-bottom: 1rem;
+        }
+
+        .org-info p {
+            margin: 0.5rem 0;
+            color: #666;
+        }
+
+        /* Already Applied Message */
+        .already-applied {
+            background: #d4edda;
+            color: #27ae60;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .already-applied h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .already-applied p {
+            margin-bottom: 1rem;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #155588;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error State */
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .apply-card {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .opportunity-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .detail-row {
+                flex-direction: column;
+            }
+
+            .detail-label {
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="nav-container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
+                </a>
+                
+                <!-- Navigation links will be dynamically inserted here -->
+                <ul class="nav-links" id="navLinks">
+                    <!-- Default logged out navigation -->
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+    
+                <div class="nav-right">
+                    <!-- Auth buttons (shown when logged out) -->
+                    <div class="auth-buttons" id="authButtons">
+                        <a href="register.html" class="btn btn-secondary">Join</a>
+                        <a href="login.html" class="btn btn-primary">Login</a>
+                    </div>
+                    
+                    <!-- User menu (shown when logged in) -->
+                    <div class="user-menu hidden" id="userMenu">
+                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="inbox.html">Inbox</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="settings.html">Settings</a>
+                            <a href="billing.html">Billing</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" onclick="logout(); return false;">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Opportunity Header -->
+    <div class="opportunity-header">
+        <div class="container">
+            <h1 class="opportunity-title" id="oppTitle">Loading...</h1>
+            <div class="opportunity-meta">
+                <div class="opportunity-meta-item">
+                    <i>📅</i>
+                    <span id="oppDate">Loading...</span>
+                </div>
+                <div class="opportunity-meta-item">
+                    <i>📍</i>
+                    <span id="oppLocation">Loading...</span>
+                </div>
+                <div class="opportunity-meta-item">
+                    <i>💻</i>
+                    <span id="oppFormat">Loading...</span>
+                </div>
+                <div class="opportunity-meta-item">
+                    <i>👥</i>
+                    <span id="oppAudience">Loading...</span>
+                </div>
+            </div>
+            <span id="oppStatus" class="status-badge open">OPEN</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Loading State -->
+            <div id="loadingState" class="loading">
+                <div class="loading-spinner"></div>
+                Loading opportunity details...
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="error-message hidden">
+                <h3>Unable to Load Opportunity</h3>
+                <p id="errorMessage">The opportunity could not be found.</p>
+                <div style="margin-top: 1rem;">
+                    <a href="opportunities.html" class="btn btn-primary">Browse Opportunities</a>
+                </div>
+            </div>
+
+            <!-- Content Grid -->
+            <div id="opportunityContent" class="content-grid hidden">
+                <!-- Left Column -->
+                <div>
+                    <!-- Description -->
+                    <div class="detail-card">
+                        <h2>About This Opportunity</h2>
+                        <div class="detail-content" id="oppDescription">
+                            Loading...
+                        </div>
+                    </div>
+
+                    <!-- Event Details -->
+                    <div class="detail-card">
+                        <h2>Event Details</h2>
+                        <div class="detail-row">
+                            <div class="detail-label">Event Date</div>
+                            <div class="detail-value" id="detailDate">Loading...</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Duration</div>
+                            <div class="detail-value" id="detailDuration">Loading...</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Location</div>
+                            <div class="detail-value" id="detailLocation">Loading...</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Format</div>
+                            <div class="detail-value" id="detailFormat">Loading...</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Audience Size</div>
+                            <div class="detail-value" id="detailAudience">Loading...</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Audience Type</div>
+                            <div class="detail-value" id="detailAudienceType">Loading...</div>
+                        </div>
+                    </div>
+
+                    <!-- Topics & Requirements -->
+                    <div class="detail-card">
+                        <h2>Topics & Requirements</h2>
+                        <div class="detail-row">
+                            <div class="detail-label">Topics</div>
+                            <div class="detail-value" id="detailTopics">Loading...</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Requirements</div>
+                            <div class="detail-value" id="detailRequirements">Loading...</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Preferred Experience</div>
+                            <div class="detail-value" id="detailExperience">Loading...</div>
+                        </div>
+                    </div>
+
+                    <!-- Compensation & Benefits -->
+                    <div class="detail-card">
+                        <h2>Compensation & Benefits</h2>
+                        <div class="detail-row">
+                            <div class="detail-label">Speaking Fee</div>
+                            <div class="detail-value" id="detailFee">Loading...</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Travel Coverage</div>
+                            <div class="detail-value" id="detailTravel">Loading...</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Accommodation</div>
+                            <div class="detail-value" id="detailAccommodation">Loading...</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Additional Benefits</div>
+                            <div class="detail-value" id="detailBenefits">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div>
+                    <!-- Apply Card -->
+                    <div class="apply-card">
+                        <h3>Apply for This Opportunity</h3>
+                        
+                        <!-- Compensation Highlight -->
+                        <div class="compensation-highlight">
+                            <div class="compensation-amount" id="applyFee">$0</div>
+                            <div class="compensation-details" id="applyDetails">Plus travel & accommodation</div>
+                        </div>
+
+                        <!-- Application Stats -->
+                        <div class="application-stats">
+                            <p><strong>Application Deadline:</strong> <span id="applyDeadline">Open</span></p>
+                            <p><strong>Applications Received:</strong> <span id="applyCount">0</span></p>
+                            <p><strong>Posted:</strong> <span id="applyPosted">Recently</span></p>
+                        </div>
+
+                        <!-- Apply Button or Status -->
+                        <div id="applySection">
+                            <!-- This will be populated based on user status -->
+                        </div>
+
+                        <!-- Application Form (Hidden by default) -->
+                        <div id="applicationForm" class="application-form">
+                            <form id="applyForm">
+                                <div class="form-group">
+                                    <label for="coverLetter">Cover Letter</label>
+                                    <textarea id="coverLetter" name="coverLetter" required 
+                                        placeholder="Explain why you're the perfect speaker for this event..."></textarea>
+                                    <p class="form-help">Highlight your relevant experience and what you'll bring to the audience</p>
+                                </div>
+                                <div class="form-group">
+                                    <label for="requestedFee">Your Speaking Fee ($)</label>
+                                    <input type="number" id="requestedFee" name="requestedFee" 
+                                        placeholder="Enter your fee or leave blank to accept offered amount">
+                                    <p class="form-help">Optional: Propose a different fee if needed</p>
+                                </div>
+                                <button type="submit" class="btn btn-success" style="width: 100%;">
+                                    Submit Application
+                                </button>
+                                <button type="button" onclick="cancelApplication()" class="btn btn-secondary" style="width: 100%; margin-top: 0.5rem;">
+                                    Cancel
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Organization Info -->
+                    <div class="org-card">
+                        <h3>About the Organization</h3>
+                        <h4 id="orgName">Loading...</h4>
+                        <div class="org-info">
+                            <p><strong>Type:</strong> <span id="orgType">Loading...</span></p>
+                            <p><strong>Location:</strong> <span id="orgLocation">Loading...</span></p>
+                            <p id="orgDescription">Loading...</p>
+                        </div>
+                        <a href="#" id="viewOrgProfile" class="btn btn-secondary" style="width: 100%; margin-top: 1rem;">
+                            View Organization Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load config and Supabase client -->
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    
+    <script>
+        // Page state
+        let currentUser = null;
+        let opportunityData = null;
+        let opportunityId = null;
+        let hasApplied = false;
+
+        // Get opportunity ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        opportunityId = urlParams.get('id');
+
+        // Wait for Supabase client
+        function waitForSupabase(callback) {
+            let attempts = 0;
+            const maxAttempts = 10;
+            
+            function check() {
+                attempts++;
+                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                    callback();
+                } else if (attempts < maxAttempts) {
+                    setTimeout(check, 500);
+                } else {
+                    showError('Failed to initialize. Please refresh the page.');
+                }
+            }
+            check();
+        }
+
+        // Update navigation
+        function updateNavigation(user) {
+            const navLinks = document.getElementById('navLinks');
+            const authButtons = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userAvatar = document.getElementById('userAvatar');
+            
+            if (user) {
+                authButtons.classList.add('hidden');
+                userMenu.classList.remove('hidden');
+                
+                const initials = user.name ? 
+                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                    'U';
+                userAvatar.textContent = initials;
+                
+                if (user.member_type === 'Organization') {
+                    navLinks.innerHTML = `
+                        <li><a href="organization-dashboard.html">Dashboard</a></li>
+                        <li><a href="members.html">Find Speakers</a></li>
+                        <li><a href="post-opportunity.html">Post Opportunity</a></li>
+                        <li><a href="my-opportunities.html">My Opportunities</a></li>
+                        <li><a href="saved-speakers.html">Saved Speakers</a></li>
+                    `;
+                } else {
+                    navLinks.innerHTML = `
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="members.html">Find Speakers</a></li>
+                        <li><a href="opportunities.html" class="active">Opportunities</a></li>
+                        <li><a href="bookings.html">My Bookings</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                    `;
+                }
+            }
+        }
+
+        // Initialize page
+        async function initializePage() {
+            waitForSupabase(async () => {
+                try {
+                    // Check if opportunity ID provided
+                    if (!opportunityId) {
+                        showError('No opportunity ID provided');
+                        return;
+                    }
+
+                    // Check authentication (optional for viewing)
+                    const session = await window.covetalks.checkAuth();
+                    if (session) {
+                        currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                        updateNavigation(currentUser);
+                    }
+
+                    // Load opportunity details using client method
+                    await loadOpportunityDetails();
+
+                    // Check if user has already applied (if logged in)
+                    if (currentUser && currentUser.member_type === 'Speaker') {
+                        await checkApplicationStatus();
+                    }
+
+                    // Check for #apply hash to auto-open form
+                    if (window.location.hash === '#apply' && !hasApplied) {
+                        showApplicationForm();
+                    }
+
+                } catch (error) {
+                    console.error('Error initializing:', error);
+                    showError('Failed to load opportunity details');
+                }
+            });
+        }
+
+        // Load opportunity details using client wrapper
+        async function loadOpportunityDetails() {
+            try {
+                // Use the client wrapper method instead of direct query
+                opportunityData = await window.covetalks.getOpportunityWithRelations(opportunityId);
+                
+                if (!opportunityData) {
+                    showError('Opportunity not found');
+                    return;
+                }
+                
+                displayOpportunityDetails();
+
+            } catch (error) {
+                console.error('Error loading opportunity:', error);
+                showError('Failed to load opportunity details');
+            }
+        }
+
+        // Check if user has already applied using client wrapper
+        async function checkApplicationStatus() {
+            try {
+                // Use the client wrapper method
+                const application = await window.covetalks.checkApplicationStatus(opportunityId, currentUser.id);
+                
+                if (application) {
+                    hasApplied = true;
+                    displayApplicationStatus(application);
+                } else {
+                    displayApplyButton();
+                }
+            } catch (error) {
+                // No application found
+                displayApplyButton();
+            }
+        }
+
+        // Display opportunity details
+        function displayOpportunityDetails() {
+            // Hide loading, show content
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('opportunityContent').classList.remove('hidden');
+
+            // Header info
+            document.getElementById('oppTitle').textContent = opportunityData.title || 'Untitled Opportunity';
+            document.getElementById('oppDate').textContent = formatDate(opportunityData.event_date);
+            document.getElementById('oppLocation').textContent = opportunityData.location || 'Location TBD';
+            document.getElementById('oppFormat').textContent = opportunityData.event_format || 'TBD';
+            document.getElementById('oppAudience').textContent = 
+                opportunityData.audience_size ? `${opportunityData.audience_size} attendees` : 'Audience size TBD';
+
+            // Status
+            const statusBadge = document.getElementById('oppStatus');
+            if (opportunityData.status === 'Open') {
+                statusBadge.textContent = 'OPEN FOR APPLICATIONS';
+                statusBadge.className = 'status-badge open';
+            } else {
+                statusBadge.textContent = 'CLOSED';
+                statusBadge.className = 'status-badge closed';
+            }
+
+            // Description
+            document.getElementById('oppDescription').textContent = 
+                opportunityData.description || 'No description provided.';
+
+            // Event details
+            document.getElementById('detailDate').textContent = formatDateTime(opportunityData.event_date);
+            document.getElementById('detailDuration').textContent = 
+                opportunityData.duration ? `${opportunityData.duration} hours` : 'TBD';
+            document.getElementById('detailLocation').textContent = opportunityData.location || 'Location TBD';
+            document.getElementById('detailFormat').textContent = opportunityData.event_format || 'TBD';
+            document.getElementById('detailAudience').textContent = 
+                opportunityData.audience_size ? `${opportunityData.audience_size} attendees` : 'TBD';
+            document.getElementById('detailAudienceType').textContent = 
+                opportunityData.audience_type || 'General audience';
+
+            // Topics
+            const topics = opportunityData.topics || [];
+            document.getElementById('detailTopics').innerHTML = topics.length > 0 ? 
+                topics.map(t => `<span class="topic-tag">${t}</span>`).join('') : 
+                'No specific topics required';
+
+            // Requirements
+            document.getElementById('detailRequirements').textContent = 
+                opportunityData.requirements || 'No specific requirements';
+            document.getElementById('detailExperience').textContent = 
+                opportunityData.experience_level || 'Any experience level';
+
+            // Compensation
+            const fee = opportunityData.compensation_amount;
+            document.getElementById('detailFee').textContent = fee ? `$${fee}` : 'Volunteer/Unpaid';
+            document.getElementById('detailTravel').textContent = 
+                opportunityData.travel_covered ? 'Covered by organizer' : 'Not covered';
+            document.getElementById('detailAccommodation').textContent = 
+                opportunityData.accommodation_covered ? 'Covered by organizer' : 'Not covered';
+            document.getElementById('detailBenefits').textContent = 
+                opportunityData.additional_benefits || 'No additional benefits specified';
+
+            // Apply card
+            document.getElementById('applyFee').textContent = fee ? `$${fee}` : 'Volunteer';
+            const travelAccom = [];
+            if (opportunityData.travel_covered) travelAccom.push('Travel covered');
+            if (opportunityData.accommodation_covered) travelAccom.push('Accommodation covered');
+            document.getElementById('applyDetails').textContent = 
+                travelAccom.length > 0 ? travelAccom.join(' • ') : 'No additional coverage';
+
+            // Application stats
+            document.getElementById('applyDeadline').textContent = 
+                opportunityData.application_deadline ? formatDate(opportunityData.application_deadline) : 'Open until filled';
+            document.getElementById('applyCount').textContent = opportunityData.application_count || '0';
+            document.getElementById('applyPosted').textContent = formatTimeAgo(opportunityData.created_at);
+
+            // Organization info
+            const org = opportunityData.organization;
+            if (org) {
+                document.getElementById('orgName').textContent = org.name;
+                document.getElementById('orgType').textContent = org.organization_type || 'Organization';
+                document.getElementById('orgLocation').textContent = org.location || 'Location not specified';
+                document.getElementById('orgDescription').textContent = org.description || '';
+                document.getElementById('viewOrgProfile').href = `profile.html?id=${org.id}`;
+            }
+
+            // Set suggested fee in form
+            if (fee) {
+                document.getElementById('requestedFee').placeholder = `Suggested: $${fee}`;
+            }
+        }
+
+        // Display apply button
+        function displayApplyButton() {
+            const applySection = document.getElementById('applySection');
+            
+            if (!currentUser) {
+                applySection.innerHTML = `
+                    <div style="text-align: center;">
+                        <p style="margin-bottom: 1rem; color: #666;">Please log in to apply</p>
+                        <a href="login.html?redirect=${encodeURIComponent(window.location.href)}" class="btn btn-primary" style="width: 100%;">
+                            Login to Apply
+                        </a>
+                    </div>
+                `;
+            } else if (currentUser.member_type === 'Organization') {
+                applySection.innerHTML = `
+                    <div style="text-align: center; color: #666;">
+                        <p>Only speakers can apply to opportunities</p>
+                    </div>
+                `;
+            } else if (opportunityData.status !== 'Open') {
+                applySection.innerHTML = `
+                    <div style="text-align: center; color: #666;">
+                        <p>This opportunity is no longer accepting applications</p>
+                    </div>
+                `;
+            } else {
+                applySection.innerHTML = `
+                    <button onclick="showApplicationForm()" class="btn btn-success" style="width: 100%;">
+                        Apply Now
+                    </button>
+                `;
+            }
+        }
+
+        // Display application status
+        function displayApplicationStatus(application) {
+            const applySection = document.getElementById('applySection');
+            
+            let statusHtml = '';
+            if (application.status === 'Pending') {
+                statusHtml = `
+                    <div class="already-applied">
+                        <h4>Application Submitted</h4>
+                        <p>Your application is under review</p>
+                        <a href="application-status.html?id=${application.id}" class="btn btn-secondary">
+                            View Application Status
+                        </a>
+                    </div>
+                `;
+            } else if (application.status === 'Accepted') {
+                statusHtml = `
+                    <div class="already-applied">
+                        <h4>Application Accepted!</h4>
+                        <p>Congratulations! Your application has been accepted.</p>
+                        <a href="booking-details.html?id=${application.id}" class="btn btn-success">
+                            View Booking Details
+                        </a>
+                    </div>
+                `;
+            } else if (application.status === 'Rejected') {
+                statusHtml = `
+                    <div style="background: #f8d7da; color: #721c24; padding: 1.5rem; border-radius: 10px; text-align: center;">
+                        <h4>Application Not Selected</h4>
+                        <p>Unfortunately, your application was not selected for this opportunity.</p>
+                    </div>
+                `;
+            }
+            
+            applySection.innerHTML = statusHtml;
+        }
+
+        // Show application form
+        function showApplicationForm() {
+            document.getElementById('applySection').classList.add('hidden');
+            document.getElementById('applicationForm').classList.add('show');
+        }
+
+        // Cancel application
+        function cancelApplication() {
+            document.getElementById('applicationForm').classList.remove('show');
+            document.getElementById('applySection').classList.remove('hidden');
+        }
+
+        // Submit application using client wrapper
+        document.getElementById('applyForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const coverLetter = document.getElementById('coverLetter').value;
+            const requestedFee = document.getElementById('requestedFee').value || opportunityData.compensation_amount;
+            
+            try {
+                const applicationData = {
+                    coverLetter: coverLetter,
+                    requestedFee: requestedFee
+                };
+                
+                // Use client wrapper method
+                const result = await window.covetalks.applyToOpportunity(opportunityId, applicationData);
+                
+                if (result) {
+                    alert('Application submitted successfully!');
+                    window.location.href = `application-status.html?id=${result.id}`;
+                }
+            } catch (error) {
+                console.error('Error submitting application:', error);
+                alert('Failed to submit application. Please try again.');
+            }
+        });
+
+        // Show error
+        function showError(message) {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('opportunityContent').classList.add('hidden');
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorState').classList.remove('hidden');
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return 'Date TBD';
+            return new Date(dateString).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Format date and time
+        function formatDateTime(dateString) {
+            if (!dateString) return 'Date & Time TBD';
+            const date = new Date(dateString);
+            return date.toLocaleString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+        }
+
+        // Format time ago
+        function formatTimeAgo(dateString) {
+            if (!dateString) return 'Recently';
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return 'Today';
+            if (diffDays === 1) return 'Yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+            return `${Math.floor(diffDays / 30)} months ago`;
+        }
+
+        // Toggle dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdownMenu');
+            const avatar = document.getElementById('userAvatar');
+            
+            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Logout
+        async function logout() {
+            if (window.covetalks) {
+                await window.covetalks.logout();
+            }
+        }
+
+        // Initialize on load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
+    </script>
+</body>
+</html>

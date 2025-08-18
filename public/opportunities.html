@@ -53,12 +53,6 @@
             width: auto;
             display: block;
         }
-        
-        @media (max-width: 768px) {
-            .logo-img {
-                height: 50px;
-            }
-        }
 
         .nav-container {
             max-width: 1200px;
@@ -95,61 +89,9 @@
             gap: 1rem;
         }
 
-        .user-menu {
+        .auth-buttons {
             display: flex;
-            align-items: center;
             gap: 1rem;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .user-dropdown {
-            position: relative;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-            padding: 1rem 0;
-            min-width: 200px;
-            display: none;
-            margin-top: 0.5rem;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.5rem 1.5rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.3s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            border-top: 1px solid #e1e8ed;
-            margin: 0.5rem 0;
         }
 
         .btn {
@@ -186,7 +128,7 @@
         }
 
         .btn-success {
-            background: #f2b236;
+            background: #27ae60;
             color: white;
         }
 
@@ -195,9 +137,69 @@
             transform: translateY(-2px);
         }
 
-        .auth-buttons {
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* User Menu Styles */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            color: white;
             display: flex;
-            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e1e8ed;
+            margin: 0;
         }
 
         /* Page Header */
@@ -206,6 +208,7 @@
             color: white;
             padding: 8rem 0 4rem;
             text-align: center;
+            margin-top: 70px;
         }
 
         .page-header h1 {
@@ -244,6 +247,11 @@
         .filters-header h2 {
             color: #155588;
             font-size: 1.3rem;
+        }
+
+        .results-count {
+            color: #666;
+            font-size: 0.95rem;
         }
 
         .filters-grid {
@@ -348,7 +356,7 @@
 
         .badge-new {
             background: #d4edda;
-            color: #f2b236;
+            color: #27ae60;
         }
 
         .badge-urgent {
@@ -445,12 +453,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
         }
 
-        .empty-state img {
-            width: 150px;
-            opacity: 0.5;
-            margin-bottom: 1rem;
-        }
-
         .empty-state h3 {
             color: #666;
             margin-bottom: 0.5rem;
@@ -481,232 +483,24 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 3rem;
+        .hidden {
+            display: none !important;
         }
 
-        .pagination button {
-            padding: 0.5rem 1rem;
-            border: 1px solid #e1e8ed;
-            background: white;
-            color: #666;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .pagination button:hover:not(:disabled) {
-            background: #155588;
-            color: white;
-            border-color: #155588;
-        }
-
-        .pagination button.active {
-            background: #155588;
-            color: white;
-            border-color: #155588;
-        }
-
-        .pagination button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Mobile Navigation */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 35px;
-            height: 35px;
-            cursor: pointer;
-            z-index: 1002;
-            background: none;
-            border: none;
-            padding: 5px;
-        }
-
-        .hamburger span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background: #333;
-            margin: 3px 0;
-            transition: all 0.3s ease;
-            border-radius: 2px;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-
-        .mobile-menu-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .mobile-menu-overlay.show {
-            display: block;
-            opacity: 1;
-        }
-
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: 300px;
-            height: 100vh;
-            background: white;
-            z-index: 1001;
-            transition: right 0.3s ease;
-            overflow-y: auto;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-        }
-
-        .mobile-menu.show {
-            right: 0;
-        }
-
-        .mobile-menu-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e1e8ed;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .mobile-menu-close {
-            width: 30px;
-            height: 30px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: #666;
-        }
-
-        .mobile-nav-links {
-            list-style: none;
-            padding: 1rem 0;
-        }
-
-        .mobile-nav-links li {
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .mobile-nav-links a {
-            display: block;
-            padding: 1rem 1.5rem;
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .mobile-nav-links a:hover {
-            background: #f8f9fa;
-            color: #155588;
-            padding-left: 2rem;
-        }
-
-        .mobile-nav-links a.active {
-            color: #155588;
-            background: #e8f4fd;
-        }
-
-        .mobile-user-section {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e1e8ed;
-            background: #f8f9fa;
-        }
-
-        .mobile-user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .mobile-user-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        .mobile-user-details h3 {
-            margin: 0;
-            color: #333;
-        }
-
-        .mobile-user-details p {
-            margin: 0;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .mobile-auth-buttons {
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .mobile-auth-buttons .btn {
-            width: 100%;
+        /* Auth Required Message */
+        .auth-required {
+            background: #fff3cd;
+            color: #856404;
+            padding: 1rem;
+            border-radius: 10px;
             text-align: center;
+            margin-bottom: 2rem;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
-                display: none !important;
-            }
-            
-            .auth-buttons.desktop-only {
-                display: none !important;
-            }
-            
-            .hamburger {
-                display: flex;
-            }
-            
-            header {
-                padding: 0.75rem 0;
-            }
-            
-            body {
-                padding-top: 60px;
+                display: none;
             }
 
             .page-header h1 {
@@ -736,192 +530,50 @@
                 flex: 1;
             }
         }
-
-        @media (max-width: 480px) {
-            .mobile-menu {
-                width: 85vw;
-                right: -85vw;
-            }
-        }
-
-        /* Footer */
-        footer {
-            background: #2c3e50;
-            color: white;
-            padding: 3rem 0 1rem;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h3 {
-            margin-bottom: 1rem;
-            color: #f2b236;
-        }
-
-        .footer-section a {
-            color: #bdc3c7;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.5rem;
-            transition: color 0.3s;
-        }
-
-        .footer-section a:hover {
-            color: #f2b236;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #34495e;
-            padding-top: 1rem;
-            text-align: center;
-            color: #bdc3c7;
-        }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header>
         <div class="nav-container">
             <nav>
-                <!-- Logo -->
                 <a href="index.html" class="logo">
-                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
                 </a>
                 
-                <!-- Desktop Navigation -->
-                <!-- Logged Out Navigation -->
-                <ul class="nav-links nav-logged-out" id="navLoggedOut">
+                <!-- Navigation links will be dynamically inserted here -->
+                <ul class="nav-links" id="navLinks">
+                    <!-- Default logged out navigation -->
                     <li><a href="index.html">Home</a></li>
                     <li><a href="members.html">Find Speakers</a></li>
                     <li><a href="pricing.html">Pricing</a></li>
                     <li><a href="register.html">Register</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                
-                <!-- Logged In Navigation (Speakers) -->
-                <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="opportunities.html" class="active">Opportunities</a></li>
-                    <li><a href="bookings.html">My Bookings</a></li>
-                    <li><a href="profile.html">Profile</a></li>
-                </ul>
-                
-                <!-- Logged In Navigation (Organizations) -->
-                <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
-                    <li><a href="organization-dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                    <li><a href="my-opportunities.html">My Opportunities</a></li>
-                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                </ul>
-
-                <!-- Right Side Navigation -->
+    
                 <div class="nav-right">
-                    <!-- For Logged In Users -->
-                    <div class="user-menu" id="userMenuDesktop" style="display: none;">
-                        <div class="user-dropdown">
-                            <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
-                            <div class="dropdown-menu" id="dropdownMenu">
-                                <a href="profile-edit.html">Edit Profile</a>
-                                <a href="settings.html">Settings</a>
-                                <a href="billing.html">Billing</a>
-                                <div class="dropdown-divider"></div>
-                                <a href="#" onclick="logout()">Logout</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- For Logged Out Users -->
-                    <div class="auth-buttons desktop-only" id="authButtonsDesktop">
+                    <!-- Auth buttons (shown when logged out) -->
+                    <div class="auth-buttons" id="authButtons">
                         <a href="register.html" class="btn btn-secondary">Join</a>
                         <a href="login.html" class="btn btn-primary">Login</a>
                     </div>
-
-                    <!-- Hamburger Menu Button -->
-                    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
+                    
+                    <!-- User menu (shown when logged in) -->
+                    <div class="user-menu hidden" id="userMenu">
+                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="inbox.html">Inbox</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="settings.html">Settings</a>
+                            <a href="billing.html">Billing</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" onclick="logout(); return false;">Logout</a>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </div>
     </header>
-
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
-
-    <!-- Mobile Menu Panel -->
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-header">
-            <a href="index.html" class="logo">
-                <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
-            </a>
-            <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
-        </div>
-
-        <!-- Mobile User Section (for logged in users) -->
-        <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
-            <div class="mobile-user-info">
-                <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
-                <div class="mobile-user-details">
-                    <h3 id="mobileUserName">John Doe</h3>
-                    <p id="mobileUserType">Speaker - Plus Plan</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Navigation Links -->
-        <!-- Logged Out Mobile Navigation -->
-        <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="members.html">Find Speakers</a></li>
-            <li><a href="pricing.html">Pricing</a></li>
-            <li><a href="register.html">Register</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="help.html">Help Center</a></li>
-        </ul>
-
-        <!-- Logged In Mobile Navigation (Speakers) -->
-        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
-            <li><a href="dashboard.html">Dashboard</a></li>
-            <li><a href="members.html">Find Speakers</a></li>
-            <li><a href="opportunities.html" class="active">Opportunities</a></li>
-            <li><a href="bookings.html">My Bookings</a></li>
-            <li><a href="profile.html">Profile</a></li>
-            <li><a href="settings.html">Settings</a></li>
-            <li><a href="billing.html">Billing</a></li>
-            <li><a href="help.html">Help & Support</a></li>
-        </ul>
-
-        <!-- Logged In Mobile Navigation (Organizations) -->
-        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
-            <li><a href="organization-dashboard.html">Dashboard</a></li>
-            <li><a href="members.html">Find Speakers</a></li>
-            <li><a href="post-opportunity.html">Post Opportunity</a></li>
-            <li><a href="my-opportunities.html">My Opportunities</a></li>
-            <li><a href="saved-speakers.html">Saved Speakers</a></li>
-            <li><a href="settings.html">Settings</a></li>
-            <li><a href="team.html">Team Members</a></li>
-            <li><a href="help.html">Help & Support</a></li>
-        </ul>
-
-        <!-- Mobile Auth Buttons (for logged out users) -->
-        <div class="mobile-auth-buttons" id="mobileAuthButtons">
-            <a href="register.html" class="btn btn-secondary">Join Community</a>
-            <a href="login.html" class="btn btn-primary">Login</a>
-        </div>
-
-        <!-- Mobile Logout Button (for logged in users) -->
-        <div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
-            <button class="btn btn-primary" onclick="logout()">Logout</button>
-        </div>
-    </div>
 
     <!-- Page Header -->
     <div class="page-header">
@@ -934,11 +586,17 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
+            <!-- Auth Required Message (shown when not logged in) -->
+            <div id="authRequired" class="auth-required hidden">
+                <strong>Note:</strong> You must be logged in as a speaker to apply for opportunities. 
+                <a href="login.html">Login</a> or <a href="register.html">Register</a> to get started.
+            </div>
+
             <!-- Filters Section -->
             <div class="filters-section">
                 <div class="filters-header">
                     <h2>Filter Opportunities</h2>
-                    <span id="resultsCount">Loading opportunities...</span>
+                    <span class="results-count" id="resultsCount">Loading opportunities...</span>
                 </div>
                 
                 <div class="filters-grid">
@@ -948,44 +606,35 @@
                     </div>
                     
                     <div class="filter-group">
-                        <label for="topicFilter">Topic/Category</label>
-                        <select id="topicFilter">
-                            <option value="">All Topics</option>
-                            <option value="Business">Business & Leadership</option>
-                            <option value="Technology">Technology & Innovation</option>
-                            <option value="Health">Health & Wellness</option>
-                            <option value="Education">Education & Training</option>
-                            <option value="Marketing">Marketing & Sales</option>
-                            <option value="Finance">Finance & Investment</option>
-                            <option value="Personal">Personal Development</option>
+                        <label for="formatFilter">Event Format</label>
+                        <select id="formatFilter">
+                            <option value="">All Formats</option>
+                            <option value="In-Person">In-Person</option>
+                            <option value="Virtual">Virtual</option>
+                            <option value="Hybrid">Hybrid</option>
                         </select>
                     </div>
                     
                     <div class="filter-group">
-                        <label for="dateFilter">Event Date</label>
-                        <select id="dateFilter">
-                            <option value="">Any Time</option>
-                            <option value="week">Next 7 Days</option>
-                            <option value="month">Next 30 Days</option>
-                            <option value="quarter">Next 3 Months</option>
+                        <label for="compensationFilter">Compensation</label>
+                        <select id="compensationFilter">
+                            <option value="">Any</option>
+                            <option value="paid">Paid Only</option>
+                            <option value="volunteer">Volunteer</option>
                         </select>
                     </div>
                     
                     <div class="filter-group">
-                        <label for="typeFilter">Event Type</label>
-                        <select id="typeFilter">
-                            <option value="">All Types</option>
-                            <option value="Keynote">Keynote</option>
-                            <option value="Workshop">Workshop</option>
-                            <option value="Panel">Panel Discussion</option>
-                            <option value="Webinar">Webinar/Virtual</option>
-                            <option value="Training">Training Session</option>
-                        </select>
+                        <label for="topicFilter">Topic</label>
+                        <input type="text" id="topicFilter" placeholder="Search topics...">
                     </div>
                 </div>
                 
                 <div class="filter-buttons">
-                    <button class="btn btn-primary" onclick="applyFilters()">Apply Filters</button>
+                    <button class="btn btn-primary" onclick="applyFilters()">
+                        <span id="filterBtnText">Apply Filters</span>
+                        <span id="filterLoader" class="loading hidden"></span>
+                    </button>
                     <button class="btn btn-secondary" onclick="clearFilters()">Clear All</button>
                 </div>
             </div>
@@ -997,88 +646,317 @@
                     <p>Loading opportunities...</p>
                 </div>
             </div>
-
-            <!-- Pagination -->
-            <div class="pagination" id="paginationContainer" style="display: none;">
-                <button onclick="previousPage()" id="prevBtn" disabled>Previous</button>
-                <button class="active" onclick="goToPage(1)">1</button>
-                <button onclick="goToPage(2)">2</button>
-                <button onclick="goToPage(3)">3</button>
-                <button onclick="goToPage(4)">4</button>
-                <button onclick="nextPage()" id="nextBtn">Next</button>
-            </div>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>CoveTalks</h3>
-                    <p>Connecting speakers with organizations worldwide to create meaningful opportunities and lasting relationships.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <a href="index.html">Home</a>
-                    <a href="members.html">Members</a>
-                    <a href="register.html">Register</a>
-                    <a href="pricing.html">Pricing</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Support</h3>
-                    <a href="#">Help Center</a>
-                    <a href="#">Contact Us</a>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Connect</h3>
-                    <a href="#">LinkedIn</a>
-                    <a href="#">Twitter</a>
-                    <a href="#">Facebook</a>
-                    <a href="#">Email</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; <script>document.write(new Date().getFullYear());</script> CoveTalks. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Include the API client and navigation -->
-    <script src="/js/app.js"></script>
-    <script src="/js/navigation.js"></script>
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load config and Supabase client -->
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
     
     <script>
         // Page state
-        let currentPage = 1;
-        const itemsPerPage = 10;
+        let currentUser = null;
+        let isAuthenticated = false;
         let allOpportunities = [];
-        let filteredOpportunities = [];
+        let userApplications = [];
+        let initAttempts = 0;
+        const MAX_INIT_ATTEMPTS = 10;
 
-        // Initialize page - This runs AFTER authentication is verified
-        function initializePage() {
-            loadOpportunities();
+        // Wait for Supabase client to be ready
+        function waitForSupabase(callback) {
+            initAttempts++;
+            
+            if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                callback();
+            } else if (initAttempts < MAX_INIT_ATTEMPTS) {
+                setTimeout(() => waitForSupabase(callback), 500);
+            } else {
+                console.error('[Opportunities] Failed to load Supabase client');
+                showError('Failed to initialize. Please refresh the page.');
+            }
         }
 
-        // Load opportunities
+        // Update navigation based on user type
+        function updateNavigation(user) {
+            const navLinks = document.getElementById('navLinks');
+            const authButtons = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userAvatar = document.getElementById('userAvatar');
+            const authRequired = document.getElementById('authRequired');
+            
+            if (user) {
+                // Hide auth buttons, show user menu
+                authButtons.classList.add('hidden');
+                userMenu.classList.remove('hidden');
+                authRequired.classList.add('hidden');
+                
+                // Update avatar with user initials
+                const initials = user.name ? 
+                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                    'U';
+                userAvatar.textContent = initials;
+                
+                // Update navigation links based on user type
+                if (user.member_type === 'Organization') {
+                    navLinks.innerHTML = `
+                        <li><a href="organization-dashboard.html">Dashboard</a></li>
+                        <li><a href="members.html">Find Speakers</a></li>
+                        <li><a href="post-opportunity.html">Post Opportunity</a></li>
+                        <li><a href="my-opportunities.html">My Opportunities</a></li>
+                        <li><a href="saved-speakers.html">Saved Speakers</a></li>
+                    `;
+                } else {
+                    // Speaker navigation
+                    navLinks.innerHTML = `
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="members.html">Find Speakers</a></li>
+                        <li><a href="opportunities.html" class="active">Opportunities</a></li>
+                        <li><a href="bookings.html">My Bookings</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                    `;
+                }
+            } else {
+                // Show default logged out navigation
+                authButtons.classList.remove('hidden');
+                userMenu.classList.add('hidden');
+                authRequired.classList.remove('hidden');
+                
+                navLinks.innerHTML = `
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="opportunities.html" class="active">Opportunities</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                `;
+            }
+        }
+
+        // Initialize page
+        async function initializePage() {
+            console.log('[Opportunities] Initializing page');
+            
+            // Wait for Supabase client
+            waitForSupabase(async () => {
+                try {
+                    // Check authentication status
+                    const session = await window.covetalks.checkAuth();
+                    if (session) {
+                        isAuthenticated = true;
+                        currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                        
+                        // Load user's applications to check which opportunities they've applied to
+                        if (currentUser && currentUser.member_type === 'Speaker') {
+                            await loadUserApplications();
+                        }
+                    } else {
+                        isAuthenticated = false;
+                    }
+                    
+                    // Update navigation with user info
+                    updateNavigation(currentUser);
+                    
+                } catch (error) {
+                    console.error('[Opportunities] Auth check error:', error);
+                    isAuthenticated = false;
+                    updateNavigation(null);
+                }
+                
+                // Load opportunities (available to all users)
+                await loadOpportunities();
+            });
+        }
+
+        // Load user's applications using client method
+        async function loadUserApplications() {
+            try {
+                if (!currentUser) return;
+                
+                userApplications = await window.covetalks.getUserApplications(currentUser.id);
+                console.log('[Opportunities] Loaded user applications:', userApplications.length);
+            } catch (error) {
+                console.error('[Opportunities] Error loading user applications:', error);
+                userApplications = [];
+            }
+        }
+
+        // Load opportunities from Supabase using client wrapper
         async function loadOpportunities(filters = {}) {
             try {
-                const opportunitiesData = await api.getOpportunities(filters);
+                console.log('[Opportunities] Loading opportunities with filters:', filters);
                 
-                if (opportunitiesData && opportunitiesData.opportunities) {
-                    allOpportunities = opportunitiesData.opportunities;
-                    filteredOpportunities = allOpportunities;
-                    displayOpportunities();
-                    document.getElementById('paginationContainer').style.display = 'flex';
-                } else {
-                    displaySampleOpportunities();
+                // Map UI filters to client method filters
+                const searchFilters = {
+                    status: 'Open', // Always show open opportunities
+                    location: filters.location || null,
+                    format: filters.format || null,
+                    compensation: filters.compensation || null,
+                    topic: filters.topic || null
+                };
+                
+                // Remove null values
+                Object.keys(searchFilters).forEach(key => {
+                    if (searchFilters[key] === null || searchFilters[key] === '') {
+                        delete searchFilters[key];
+                    }
+                });
+                
+                // Use the optimized search method from the client
+                const opportunities = await window.covetalks.searchOpportunitiesOptimized(searchFilters);
+                
+                if (!opportunities || opportunities.length === 0) {
+                    console.log('[Opportunities] No opportunities found');
+                    allOpportunities = [];
+                    displayOpportunities([]);
+                    return;
                 }
+                
+                allOpportunities = opportunities;
+                console.log('[Opportunities] Loaded', allOpportunities.length, 'opportunities');
+                
+                displayOpportunities(allOpportunities);
+                
             } catch (error) {
-                console.error('Error loading opportunities:', error);
+                console.error('[Opportunities] Unexpected error:', error);
                 displaySampleOpportunities();
             }
+        }
+
+        // Display opportunities
+        function displayOpportunities(opportunities) {
+            const container = document.getElementById('opportunitiesList');
+            document.getElementById('resultsCount').textContent = 
+                `Showing ${opportunities.length} opportunities`;
+            
+            if (opportunities.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No opportunities found</h3>
+                        <p>Try adjusting your filters or check back later for new opportunities</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = opportunities.map(opp => {
+                // Check if user has applied to this opportunity
+                const hasApplied = userApplications.some(app => app.opportunity_id === opp.id);
+                const applicationStatus = userApplications.find(app => app.opportunity_id === opp.id)?.status;
+                
+                // Calculate days until deadline
+                const daysUntilDeadline = opp.application_deadline ? 
+                    Math.ceil((new Date(opp.application_deadline) - new Date()) / (1000 * 60 * 60 * 24)) : null;
+                
+                return `
+                    <div class="opportunity-card">
+                        <div class="opportunity-header">
+                            <div class="opportunity-title-section">
+                                <h3 class="opportunity-title">${opp.title || 'Untitled Opportunity'}</h3>
+                                <div class="opportunity-org">${opp.organization?.name || 'Organization'}</div>
+                                <div class="opportunity-location">
+                                    📍 ${opp.location || 'Location TBD'}
+                                </div>
+                            </div>
+                            ${getOpportunityBadge(opp, daysUntilDeadline)}
+                        </div>
+                        
+                        <div class="opportunity-details">
+                            <p class="opportunity-description">
+                                ${opp.description ? 
+                                    (opp.description.length > 200 ? 
+                                        opp.description.substring(0, 200) + '...' : 
+                                        opp.description) : 
+                                    'No description available'}
+                            </p>
+                            
+                            <div class="opportunity-info">
+                                <div class="info-item">
+                                    <span class="info-label">📅 Date:</span>
+                                    <span class="info-value">${formatDate(opp.event_date)}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">💻 Format:</span>
+                                    <span class="info-value">${opp.event_format || 'TBD'}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">👥 Audience:</span>
+                                    <span class="info-value">${opp.audience_size || 'TBD'} attendees</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">💰 Compensation:</span>
+                                    <span class="info-value">${opp.compensation_amount ? '$' + opp.compensation_amount : 'Volunteer'}</span>
+                                </div>
+                            </div>
+                            
+                            ${opp.topics && opp.topics.length > 0 ? `
+                                <div class="opportunity-tags">
+                                    ${opp.topics.slice(0, 5).map(topic => `<span class="tag">${topic}</span>`).join('')}
+                                    ${opp.topics.length > 5 ? `<span class="tag">+${opp.topics.length - 5} more</span>` : ''}
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="opportunity-footer">
+                            <div class="deadline-info">
+                                ${daysUntilDeadline !== null && daysUntilDeadline >= 0 ? 
+                                    (daysUntilDeadline <= 3 ? 
+                                        `<span class="deadline-urgent">${daysUntilDeadline} days left to apply</span>` : 
+                                        `${daysUntilDeadline} days left to apply`) : 
+                                    'Open until filled'}
+                            </div>
+                            <div class="opportunity-actions">
+                                <a href="opportunity-details.html?id=${opp.id}" class="btn btn-secondary">View Details</a>
+                                ${getApplyButton(opp, hasApplied, applicationStatus)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Get opportunity badge
+        function getOpportunityBadge(opp, daysUntilDeadline) {
+            const daysSincePosted = Math.floor((new Date() - new Date(opp.created_at)) / (1000 * 60 * 60 * 24));
+            
+            if (daysSincePosted <= 3) {
+                return '<div class="opportunity-badge badge-new">NEW</div>';
+            } else if (daysUntilDeadline !== null && daysUntilDeadline <= 3 && daysUntilDeadline >= 0) {
+                return '<div class="opportunity-badge badge-urgent">URGENT</div>';
+            } else if (opp.compensation_amount >= 5000) {
+                return '<div class="opportunity-badge badge-featured">FEATURED</div>';
+            }
+            return '';
+        }
+
+        // Get apply button based on status
+        function getApplyButton(opp, hasApplied, applicationStatus) {
+            if (!isAuthenticated) {
+                return `<a href="login.html?redirect=${encodeURIComponent(window.location.href)}" class="btn btn-primary">Login to Apply</a>`;
+            }
+            
+            if (currentUser && currentUser.member_type === 'Organization') {
+                return `<button class="btn btn-secondary" disabled>For Speakers Only</button>`;
+            }
+            
+            if (hasApplied) {
+                if (applicationStatus === 'Pending') {
+                    return `<button class="btn btn-secondary" disabled>Application Pending</button>`;
+                } else if (applicationStatus === 'Accepted') {
+                    return `<button class="btn btn-success" disabled>Accepted ✓</button>`;
+                } else {
+                    return `<button class="btn btn-secondary" disabled>Applied</button>`;
+                }
+            }
+            
+            return `<button class="btn btn-primary" onclick="quickApply('${opp.id}')">Apply Now</button>`;
+        }
+
+        // Quick apply (redirects to opportunity details)
+        function quickApply(opportunityId) {
+            window.location.href = `opportunity-details.html?id=${opportunityId}#apply`;
         }
 
         // Display sample opportunities (fallback)
@@ -1088,7 +966,7 @@
                 <div class="opportunity-card">
                     <div class="opportunity-header">
                         <div class="opportunity-title-section">
-                            <h3 class="opportunity-title">Keynote Speaker - Annual Business Summit 2024</h3>
+                            <h3 class="opportunity-title">Keynote Speaker - Annual Business Summit 2025</h3>
                             <div class="opportunity-org">Phoenix Chamber of Commerce</div>
                             <div class="opportunity-location">
                                 📍 Phoenix Convention Center, AZ
@@ -1105,15 +983,19 @@
                         <div class="opportunity-info">
                             <div class="info-item">
                                 <span class="info-label">📅 Date:</span>
-                                <span class="info-value">March 15, 2024</span>
+                                <span class="info-value">March 15, 2025</span>
                             </div>
                             <div class="info-item">
-                                <span class="info-label">⏰ Duration:</span>
-                                <span class="info-value">45 minutes</span>
+                                <span class="info-label">💻 Format:</span>
+                                <span class="info-value">In-Person</span>
                             </div>
                             <div class="info-item">
                                 <span class="info-label">👥 Audience:</span>
-                                <span class="info-value">500+ executives</span>
+                                <span class="info-value">500+ attendees</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">💰 Compensation:</span>
+                                <span class="info-value">$5,000</span>
                             </div>
                         </div>
                         
@@ -1129,58 +1011,10 @@
                             Application deadline: <span class="deadline-urgent">5 days left</span>
                         </div>
                         <div class="opportunity-actions">
-                            <button class="btn btn-secondary" onclick="viewDetails('sample1')">View Details</button>
-                            <button class="btn btn-primary" onclick="applyNow('sample1')">Apply Now</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="opportunity-card">
-                    <div class="opportunity-header">
-                        <div class="opportunity-title-section">
-                            <h3 class="opportunity-title">Workshop Facilitator - Youth Leadership Program</h3>
-                            <div class="opportunity-org">Desert Ridge High School</div>
-                            <div class="opportunity-location">
-                                📍 Scottsdale, AZ
-                            </div>
-                        </div>
-                        <div class="opportunity-badge badge-featured">FEATURED</div>
-                    </div>
-                    
-                    <div class="opportunity-details">
-                        <p class="opportunity-description">
-                            Looking for an inspiring speaker to conduct a 2-hour workshop on goal setting and personal development for high school students.
-                        </p>
-                        
-                        <div class="opportunity-info">
-                            <div class="info-item">
-                                <span class="info-label">📅 Date:</span>
-                                <span class="info-value">February 20, 2024</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">⏰ Duration:</span>
-                                <span class="info-value">2 hours</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">👥 Audience:</span>
-                                <span class="info-value">150 students</span>
-                            </div>
-                        </div>
-                        
-                        <div class="opportunity-tags">
-                            <span class="tag">Education</span>
-                            <span class="tag">Youth Development</span>
-                            <span class="tag">Workshop</span>
-                        </div>
-                    </div>
-                    
-                    <div class="opportunity-footer">
-                        <div class="deadline-info">
-                            Application deadline: <span>10 days left</span>
-                        </div>
-                        <div class="opportunity-actions">
-                            <button class="btn btn-secondary" onclick="viewDetails('sample2')">View Details</button>
-                            <button class="btn btn-primary" onclick="applyNow('sample2')">Apply Now</button>
+                            <a href="opportunity-details.html" class="btn btn-secondary">View Details</a>
+                            ${!isAuthenticated ? 
+                                '<a href="login.html" class="btn btn-primary">Login to Apply</a>' :
+                                '<button class="btn btn-primary">Apply Now</button>'}
                         </div>
                     </div>
                 </div>
@@ -1189,161 +1023,33 @@
             document.getElementById('resultsCount').textContent = 'Showing sample opportunities';
         }
 
-        // Display opportunities
-        function displayOpportunities() {
-            const container = document.getElementById('opportunitiesList');
-            const start = (currentPage - 1) * itemsPerPage;
-            const end = start + itemsPerPage;
-            const pageOpportunities = filteredOpportunities.slice(start, end);
-            
-            document.getElementById('resultsCount').textContent = 
-                `Showing ${filteredOpportunities.length} opportunities`;
-            
-            if (pageOpportunities.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h3>No opportunities found</h3>
-                        <p>Try adjusting your filters or check back later for new opportunities</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = pageOpportunities.map(opp => `
-                <div class="opportunity-card">
-                    <div class="opportunity-header">
-                        <div class="opportunity-title-section">
-                            <h3 class="opportunity-title">${opp.title}</h3>
-                            <div class="opportunity-org">${opp.organization?.name || 'Organization'}</div>
-                            <div class="opportunity-location">
-                                📍 ${opp.location || 'Location TBD'}
-                            </div>
-                        </div>
-                        ${opp.status === 'Open' ? '<div class="opportunity-badge badge-new">NEW</div>' : ''}
-                    </div>
-                    
-                    <div class="opportunity-details">
-                        <p class="opportunity-description">
-                            ${opp.description || 'No description available'}
-                        </p>
-                        
-                        <div class="opportunity-info">
-                            <div class="info-item">
-                                <span class="info-label">📅 Date:</span>
-                                <span class="info-value">${formatDate(opp.eventDate)}</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">👥 Audience:</span>
-                                <span class="info-value">${opp.audienceSize || 'TBD'} attendees</span>
-                            </div>
-                        </div>
-                        
-                        ${opp.topics && opp.topics.length > 0 ? `
-                            <div class="opportunity-tags">
-                                ${opp.topics.map(topic => `<span class="tag">${topic}</span>`).join('')}
-                            </div>
-                        ` : ''}
-                    </div>
-                    
-                    <div class="opportunity-footer">
-                        <div class="deadline-info">
-                            ${opp.hasApplied ? 'Already applied' : 'Open for applications'}
-                        </div>
-                        <div class="opportunity-actions">
-                            <button class="btn btn-secondary" onclick="viewDetails('${opp.id}')">View Details</button>
-                            ${!opp.hasApplied ? 
-                                `<button class="btn btn-primary" onclick="applyNow('${opp.id}')">Apply Now</button>` :
-                                `<button class="btn btn-secondary" disabled>Applied</button>`
-                            }
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            
-            updatePaginationButtons();
-        }
-
         // Apply filters
         function applyFilters() {
             const filters = {
-                location: document.getElementById('locationFilter').value,
-                topics: document.getElementById('topicFilter').value,
-                date: document.getElementById('dateFilter').value,
-                type: document.getElementById('typeFilter').value
+                location: document.getElementById('locationFilter').value.trim(),
+                format: document.getElementById('formatFilter').value,
+                compensation: document.getElementById('compensationFilter').value,
+                topic: document.getElementById('topicFilter').value.trim()
             };
             
-            currentPage = 1;
-            loadOpportunities(filters);
+            // Show loading state
+            document.getElementById('filterBtnText').textContent = 'Applying...';
+            document.getElementById('filterLoader').classList.remove('hidden');
+            
+            loadOpportunities(filters).finally(() => {
+                document.getElementById('filterBtnText').textContent = 'Apply Filters';
+                document.getElementById('filterLoader').classList.add('hidden');
+            });
         }
 
         // Clear filters
         function clearFilters() {
             document.getElementById('locationFilter').value = '';
+            document.getElementById('formatFilter').value = '';
+            document.getElementById('compensationFilter').value = '';
             document.getElementById('topicFilter').value = '';
-            document.getElementById('dateFilter').value = '';
-            document.getElementById('typeFilter').value = '';
             
-            currentPage = 1;
             loadOpportunities();
-        }
-
-        // View opportunity details
-        function viewDetails(id) {
-            sessionStorage.setItem('selectedOpportunity', id);
-            window.location.href = `opportunity-details.html?id=${id}`;
-        }
-
-        // Apply to opportunity
-        async function applyNow(id) {
-            if (confirm('Are you sure you want to apply for this opportunity?')) {
-                try {
-                    await api.applyToOpportunity(id, {
-                        message: 'I am interested in this opportunity.'
-                    });
-                    alert('Application submitted successfully!');
-                    loadOpportunities();
-                } catch (error) {
-                    console.error('Error applying:', error);
-                    alert('Failed to submit application. Please try again.');
-                }
-            }
-        }
-
-        // Pagination functions
-        function updatePaginationButtons() {
-            const totalPages = Math.ceil(filteredOpportunities.length / itemsPerPage);
-            
-            document.getElementById('prevBtn').disabled = currentPage === 1;
-            document.getElementById('nextBtn').disabled = currentPage === totalPages;
-            
-            document.querySelectorAll('.pagination button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            const currentBtn = document.querySelector(`.pagination button:nth-child(${currentPage + 1})`);
-            if (currentBtn) {
-                currentBtn.classList.add('active');
-            }
-        }
-
-        function previousPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                displayOpportunities();
-            }
-        }
-
-        function nextPage() {
-            const totalPages = Math.ceil(filteredOpportunities.length / itemsPerPage);
-            if (currentPage < totalPages) {
-                currentPage++;
-                displayOpportunities();
-            }
-        }
-
-        function goToPage(page) {
-            currentPage = page;
-            displayOpportunities();
         }
 
         // Format date helper
@@ -1357,35 +1063,7 @@
             });
         }
 
-        // Mobile menu functions
-        function toggleMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            
-            hamburger.classList.toggle('active');
-            mobileMenu.classList.toggle('show');
-            overlay.classList.toggle('show');
-            
-            if (mobileMenu.classList.contains('show')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
-            }
-        }
-
-        function closeMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            
-            hamburger.classList.remove('active');
-            mobileMenu.classList.remove('show');
-            overlay.classList.remove('show');
-            document.body.style.overflow = '';
-        }
-
-        // Dropdown menu
+        // Toggle dropdown menu
         function toggleDropdown() {
             const dropdown = document.getElementById('dropdownMenu');
             dropdown.classList.toggle('show');
@@ -1396,47 +1074,34 @@
             const dropdown = document.getElementById('dropdownMenu');
             const avatar = document.getElementById('userAvatar');
             
-            if (dropdown && avatar && !avatar.contains(event.target) && !dropdown.contains(event.target)) {
+            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
                 dropdown.classList.remove('show');
             }
         });
 
         // Logout function
-        function logout() {
-            api.logout();
+        async function logout() {
+            if (window.covetalks) {
+                await window.covetalks.logout();
+            }
         }
 
-        // Close mobile menu on window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                closeMobileMenu();
-            }
-        });
+        // Show error message
+        function showError(message) {
+            const container = document.getElementById('opportunitiesList');
+            container.innerHTML = `
+                <div style="text-align: center; padding: 2rem; color: #dc2626;">
+                    ${message}
+                </div>
+            `;
+        }
 
-        // Standard initialization
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof api === 'undefined') {
-                console.error('API client not loaded');
-                return;
-            }
-            
-            // Update navigation UI first
-            if (typeof updateNavigation === 'function') {
-                updateNavigation();
-            }
-            
-            // Check if this page requires authentication
-            if (!api.isAuthenticated()) {
-                sessionStorage.setItem('redirectUrl', window.location.href);
-                window.location.href = '/login.html';
-                return;
-            }
-            
-            // Call page initialization
-            if (typeof initializePage === 'function') {
-                initializePage();
-            }
-        });
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
     </script>
 </body>
 </html>

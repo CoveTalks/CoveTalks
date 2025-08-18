@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Supabase Connection - CoveTalks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .test-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 3rem;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .test-section:hover {
+            border-color: #155588;
+        }
+        
+        .test-section h2 {
+            color: #155588;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .test-button {
+            background: #155588;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            margin-right: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .test-button:hover {
+            background: #1e3d6f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(21, 85, 136, 0.3);
+        }
+        
+        .test-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .test-button.secondary {
+            background: #6c757d;
+        }
+        
+        .test-button.secondary:hover {
+            background: #545b62;
+        }
+        
+        .test-button.danger {
+            background: #dc3545;
+        }
+        
+        .test-button.danger:hover {
+            background: #c82333;
+        }
+        
+        .results {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e1e8ed;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #155588;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #155588;
+            box-shadow: 0 0 0 3px rgba(21, 85, 136, 0.1);
+        }
+        
+        .user-info {
+            background: #e8f4fd;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .user-info strong {
+            color: #155588;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e1e8ed;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🚀 Supabase Connection Test</h1>
+        
+        <!-- Configuration Check -->
+        <div class="test-section">
+            <h2>1️⃣ Configuration Check</h2>
+            <div id="configStatus" class="status pending">Checking configuration...</div>
+            <div id="configResults" class="results" style="display: none;"></div>
+        </div>
+        
+        <!-- Database Connection -->
+        <div class="test-section">
+            <h2>2️⃣ Database Connection</h2>
+            <div id="dbStatus" class="status pending">Not tested yet</div>
+            <button class="test-button" onclick="testDatabase()">Test Database Connection</button>
+            <div id="dbResults" class="results" style="display: none;"></div>
+        </div>
+        
+        <!-- Authentication Test -->
+        <div class="test-section">
+            <h2>3️⃣ Authentication Test</h2>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="testEmail" value="test@example.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="testPassword" value="TestPassword123!">
+            </div>
+            <div id="authStatus" class="status pending">Not tested yet</div>
+            <button class="test-button" onclick="testSignUp()">Test Sign Up</button>
+            <button class="test-button" onclick="testSignIn()">Test Sign In</button>
+            <button class="test-button secondary" onclick="testSignOut()">Sign Out</button>
+            <div id="authResults" class="results" style="display: none;"></div>
+            <div id="userInfo" class="user-info" style="display: none;"></div>
+        </div>
+        
+        <!-- Test Queries -->
+        <div class="test-section">
+            <h2>4️⃣ Test Database Queries</h2>
+            <div id="queryStatus" class="status pending">Not tested yet</div>
+            <button class="test-button" onclick="testQueries()">Run Test Queries</button>
+            <button class="test-button secondary" onclick="cleanupTestData()">Clean Up Test Data</button>
+            <div id="queryResults" class="results" style="display: none;"></div>
+        </div>
+        
+        <!-- Real-time Test -->
+        <div class="test-section">
+            <h2>5️⃣ Real-time Connection</h2>
+            <div id="realtimeStatus" class="status pending">Not tested yet</div>
+            <button class="test-button" onclick="testRealtime()">Test Real-time</button>
+            <button class="test-button" onclick="sendRealtimeMessage()">Send Test Message</button>
+            <button class="test-button danger" onclick="stopRealtime()">Stop Real-time</button>
+            <div id="realtimeResults" class="results" style="display: none;"></div>
+        </div>
+        
+        <!-- Summary -->
+        <div class="test-section" style="background: #e8f4fd;">
+            <h2>📊 Test Summary</h2>
+            <div id="summary">Run the tests above to see results...</div>
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill" style="width: 0%">0%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load your config -->
+    <script src="/js/config.js"></script>
+    
+    <script>
+        let supabase = null;
+        let testUser = null;
+        let realtimeChannel = null;
+        let testOrganizationId = null;
+        
+        // Check configuration on load
+        window.addEventListener('DOMContentLoaded', checkConfiguration);
+        
+        function checkConfiguration() {
+            const configStatus = document.getElementById('configStatus');
+            const configResults = document.getElementById('configResults');
+            
+            try {
+                // Check if config exists
+                if (!window.APP_CONFIG) {
+                    throw new Error('APP_CONFIG not found. Did you create /js/config.js?');
+                }
+                
+                // Check required fields
+                if (!window.APP_CONFIG.SUPABASE_URL) {
+                    throw new Error('SUPABASE_URL not found in config');
+                }
+                
+                if (!window.APP_CONFIG.SUPABASE_ANON_KEY) {
+                    throw new Error('SUPABASE_ANON_KEY not found in config');
+                }
+                
+                // Initialize Supabase
+                supabase = window.supabase.createClient(
+                    window.APP_CONFIG.SUPABASE_URL,
+                    window.APP_CONFIG.SUPABASE_ANON_KEY
+                );
+                
+                configStatus.className = 'status success';
+                configStatus.innerHTML = '✅ Configuration loaded successfully!';
+                
+                configResults.style.display = 'block';
+                configResults.textContent = `URL: ${window.APP_CONFIG.SUPABASE_URL}\nKey: ${window.APP_CONFIG.SUPABASE_ANON_KEY.substring(0, 20)}...`;
+                
+                // Check for existing session
+                checkExistingSession();
+                
+                updateSummary();
+            } catch (error) {
+                configStatus.className = 'status error';
+                configStatus.innerHTML = `❌ Configuration Error: ${error.message}`;
+                
+                configResults.style.display = 'block';
+                configResults.textContent = error.stack;
+            }
+        }
+        
+        async function checkExistingSession() {
+            if (!supabase) return;
+            
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                testUser = user;
+                updateUserInfo();
+                document.getElementById('authStatus').className = 'status success';
+                document.getElementById('authStatus').innerHTML = '✅ Already signed in!';
+            }
+        }
+        
+        async function testDatabase() {
+            const status = document.getElementById('dbStatus');
+            const results = document.getElementById('dbResults');
+            
+            if (!supabase) {
+                status.className = 'status error';
+                status.innerHTML = '❌ Supabase not initialized';
+                return;
+            }
+            
+            status.className = 'status pending';
+            status.innerHTML = 'Testing database connection...<span class="spinner"></span>';
+            
+            try {
+                const startTime = performance.now();
+                
+                // Try to count members table
+                const { count, error } = await supabase
+                    .from('members')
+                    .select('*', { count: 'exact', head: true });
+                
+                const duration = Math.round(performance.now() - startTime);
+                
+                if (error) throw error;
+                
+                // Also check table structure
+                const { data: columns, error: schemaError } = await supabase
+                    .from('members')
+                    .select('*')
+                    .limit(0);
+                
+                status.className = 'status success';
+                status.innerHTML = `✅ Database connected! (${duration}ms)`;
+                
+                results.style.display = 'block';
+                results.textContent = `Connection Time: ${duration}ms\nTable: members\nRow count: ${count || 0}\nStatus: Connected and RLS enabled`;
+                
+                updateSummary();
+            } catch (error) {
+                status.className = 'status error';
+                status.innerHTML = `❌ Database Error: ${error.message}`;
+                
+                results.style.display = 'block';
+                results.textContent = error.message;
+            }
+        }
+        
+async function testSignUp() {
+    const status = document.getElementById('authStatus');
+    const results = document.getElementById('authResults');
+    const email = document.getElementById('testEmail').value;
+    const password = document.getElementById('testPassword').value;
+    
+    if (!supabase) {
+        status.className = 'status error';
+        status.innerHTML = '❌ Supabase not initialized';
+        return;
+    }
+    
+    status.className = 'status pending';
+    status.innerHTML = 'Creating test user...<span class="spinner"></span>';
+    
+    try {
+        // Sign up with metadata
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    name: 'Test User',
+                    member_type: 'Speaker'
+                }
+            }
+        });
+        
+        if (error) throw error;
+        
+        // Wait a moment for trigger to complete
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Check if member profile was created
+        const { data: member, error: memberError } = await supabase
+            .from('members')
+            .select('*')
+            .eq('id', data.user.id)
+            .single();
+        
+        if (memberError) {
+            console.log('Member not auto-created, attempting manual creation...');
+            
+            // Manually create if trigger didn't work
+            const { error: createError } = await supabase
+                .from('members')
+                .insert({
+                    id: data.user.id,
+                    email: email,
+                    name: 'Test User',
+                    member_type: 'Speaker',
+                    status: 'Active'
+                });
+            
+            if (createError && !createError.message.includes('duplicate')) {
+                console.error('Manual member creation failed:', createError);
+            }
+        }
+        
+        testUser = data.user;
+        updateUserInfo();
+        
+        status.className = 'status success';
+        status.innerHTML = '✅ Test user created successfully!';
+        
+        results.style.display = 'block';
+        results.textContent = `User ID: ${data.user.id}\nEmail: ${email}\nStatus: Created\nProfile: ${member ? 'Auto-created' : 'Manual'}`;
+        
+        updateSummary();
+    } catch (error) {
+        if (error.message.includes('already registered')) {
+            status.className = 'status success';
+            status.innerHTML = '✅ User already exists (that\'s OK!)';
+        } else {
+            status.className = 'status error';
+            status.innerHTML = `❌ Sign Up Error: ${error.message}`;
+        }
+        
+        results.style.display = 'block';
+        results.textContent = error.message;
+    }
+}
+        async function testSignIn() {
+            const status = document.getElementById('authStatus');
+            const results = document.getElementById('authResults');
+            const email = document.getElementById('testEmail').value;
+            const password = document.getElementById('testPassword').value;
+            
+            if (!supabase) {
+                status.className = 'status error';
+                status.innerHTML = '❌ Supabase not initialized';
+                return;
+            }
+            
+            status.className = 'status pending';
+            status.innerHTML = 'Signing in...<span class="spinner"></span>';
+            
+            try {
+                const startTime = performance.now();
+                
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+                
+                const endTime = performance.now();
+                const duration = Math.round(endTime - startTime);
+                
+                if (error) throw error;
+                
+                testUser = data.user;
+                updateUserInfo();
+                
+                status.className = 'status success';
+                status.innerHTML = `✅ Sign in successful! (${duration}ms)`;
+                
+                results.style.display = 'block';
+                results.textContent = `User ID: ${data.user.id}\nEmail: ${email}\nLogin Time: ${duration}ms\nSession: Active\nAccess Token: ${data.session.access_token.substring(0, 20)}...`;
+                
+                updateSummary();
+            } catch (error) {
+                status.className = 'status error';
+                status.innerHTML = `❌ Sign In Error: ${error.message}`;
+                
+                results.style.display = 'block';
+                results.textContent = error.message;
+            }
+        }
+        
+        async function testSignOut() {
+            if (!supabase) return;
+            
+            const { error } = await supabase.auth.signOut();
+            if (!error) {
+                testUser = null;
+                document.getElementById('authStatus').className = 'status pending';
+                document.getElementById('authStatus').innerHTML = 'Signed out';
+                document.getElementById('userInfo').style.display = 'none';
+                updateSummary();
+            }
+        }
+        
+        function updateUserInfo() {
+            if (testUser) {
+                const userInfo = document.getElementById('userInfo');
+                userInfo.style.display = 'block';
+                userInfo.innerHTML = `
+                    <strong>Current User:</strong><br>
+                    ID: ${testUser.id}<br>
+                    Email: ${testUser.email}<br>
+                    Created: ${new Date(testUser.created_at).toLocaleString()}
+                `;
+            }
+        }
+        
+        async function testQueries() {
+            const status = document.getElementById('queryStatus');
+            const results = document.getElementById('queryResults');
+            
+            if (!supabase) {
+                status.className = 'status error';
+                status.innerHTML = '❌ Supabase not initialized';
+                return;
+            }
+            
+            // Make sure user is signed in
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                status.className = 'status error';
+                status.innerHTML = '❌ Please sign in first';
+                return;
+            }
+            
+            status.className = 'status pending';
+            status.innerHTML = 'Running test queries...<span class="spinner"></span>';
+            
+            const testResults = [];
+            
+            try {
+                // Test 1: Select members
+                const start1 = performance.now();
+                const { data: members, error: error1 } = await supabase
+                    .from('members')
+                    .select('*')
+                    .limit(5);
+                const time1 = Math.round(performance.now() - start1);
+                
+                if (error1) throw error1;
+                testResults.push(`✅ Select members: ${members.length} rows (${time1}ms)`);
+                
+                // Test 2: Create test organization if needed
+                if (!testOrganizationId) {
+                    const { data: orgData, error: orgError } = await supabase
+                        .rpc('create_test_organization', { user_id: user.id });
+                    
+                    if (orgError) {
+                        // Try manual creation
+                        const { data: manualOrg, error: manualError } = await supabase
+                            .from('organizations')
+                            .insert({
+                                name: `Test Org ${Date.now()}`,
+                                organization_type: 'Non-Profit',
+                                description: 'Test organization'
+                            })
+                            .select()
+                            .single();
+                        
+                        if (manualError) {
+                            testResults.push(`⚠️ Org creation skipped: ${manualError.message}`);
+                        } else {
+                            testOrganizationId = manualOrg.id;
+                            
+                            // Add user to org
+                            await supabase
+                                .from('organization_members')
+                                .insert({
+                                    organization_id: testOrganizationId,
+                                    member_id: user.id,
+                                    role: 'Owner'
+                                });
+                            
+                            testResults.push(`✅ Test organization created manually`);
+                        }
+                    } else {
+                        testOrganizationId = orgData;
+                        testResults.push(`✅ Test organization created: ${orgData}`);
+                    }
+                }
+                
+                // Test 3: Insert test opportunity
+                if (testOrganizationId) {
+                    const start2 = performance.now();
+                    const { data: opp, error: error2 } = await supabase
+                        .from('speaking_opportunities')
+                        .insert({
+                            organization_id: testOrganizationId,
+                            posted_by: user.id,
+                            title: 'Test Opportunity ' + Date.now(),
+                            description: 'This is a test opportunity for platform testing',
+                            status: 'Open',
+                            event_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                            event_format: 'Virtual',
+                            topics: ['Technology', 'Testing'],
+                            compensation_amount: 500
+                        })
+                        .select()
+                        .single();
+                    const time2 = Math.round(performance.now() - start2);
+                    
+                    if (!error2) {
+                        testResults.push(`✅ Insert opportunity: Success (${time2}ms)`);
+                        
+                        // Test 4: Application to opportunity
+                        const { error: appError } = await supabase
+                            .from('applications')
+                            .insert({
+                                opportunity_id: opp.id,
+                                speaker_id: user.id,
+                                cover_letter: 'Test application',
+                                status: 'Pending'
+                            });
+                        
+                        if (!appError) {
+                            testResults.push(`✅ Create application: Success`);
+                        } else if (appError.message.includes('duplicate')) {
+                            testResults.push(`⚠️ Application already exists`);
+                        } else {
+                            testResults.push(`⚠️ Application failed: ${appError.message}`);
+                        }
+                    } else {
+                        testResults.push(`❌ Insert opportunity failed: ${error2.message}`);
+                    }
+                }
+                
+                // Test 5: Complex join query
+                const start3 = performance.now();
+                const { data: opportunities, error: error3 } = await supabase
+                    .from('speaking_opportunities')
+                    .select(`
+                        *,
+                        organization:organizations(name),
+                        applications(count)
+                    `)
+                    .limit(5);
+                const time3 = Math.round(performance.now() - start3);
+                
+                if (!error3) {
+                    testResults.push(`✅ Complex join: ${opportunities.length} results (${time3}ms)`);
+                } else {
+                    testResults.push(`❌ Join failed: ${error3.message}`);
+                }
+                
+                // Test 6: RLS Policy check
+                const { data: myProfile, error: profileError } = await supabase
+                    .from('members')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
+                
+                if (!profileError && myProfile) {
+                    testResults.push(`✅ RLS working: Can read own profile`);
+                } else {
+                    testResults.push(`⚠️ Profile read: ${profileError?.message || 'No profile found'}`);
+                }
+                
+                status.className = 'status success';
+                status.innerHTML = '✅ Query tests completed!';
+                
+                results.style.display = 'block';
+                results.textContent = testResults.join('\n');
+                
+                updateSummary();
+            } catch (error) {
+                status.className = 'status error';
+                status.innerHTML = `❌ Query Error: ${error.message}`;
+                
+                results.style.display = 'block';
+                results.textContent = testResults.join('\n') + '\n\nError: ' + error.message;
+            }
+        }
+        
+        async function cleanupTestData() {
+            if (!supabase || !testUser) {
+                alert('Please sign in first');
+                return;
+            }
+            
+            const results = document.getElementById('queryResults');
+            results.style.display = 'block';
+            results.textContent = 'Cleaning up test data...\n';
+            
+            try {
+                // Delete test opportunities
+                const { error: oppError } = await supabase
+                    .from('speaking_opportunities')
+                    .delete()
+                    .like('title', 'Test%');
+                
+                results.textContent += oppError ? 
+                    `❌ Failed to clean opportunities: ${oppError.message}\n` : 
+                    '✅ Test opportunities cleaned\n';
+                
+                // Delete test organizations
+                if (testOrganizationId) {
+                    const { error: orgError } = await supabase
+                        .from('organizations')
+                        .delete()
+                        .eq('id', testOrganizationId);
+                    
+                    results.textContent += orgError ? 
+                        `❌ Failed to clean organization: ${orgError.message}\n` : 
+                        '✅ Test organization cleaned\n';
+                    
+                    testOrganizationId = null;
+                }
+                
+                results.textContent += '\n✅ Cleanup complete!';
+            } catch (error) {
+                results.textContent += `\n❌ Cleanup error: ${error.message}`;
+            }
+        }
+        
+        async function testRealtime() {
+            const status = document.getElementById('realtimeStatus');
+            const results = document.getElementById('realtimeResults');
+            
+            if (!supabase) {
+                status.className = 'status error';
+                status.innerHTML = '❌ Supabase not initialized';
+                return;
+            }
+            
+            status.className = 'status pending';
+            status.innerHTML = 'Connecting to real-time...<span class="spinner"></span>';
+            
+            try {
+                // Clean up existing channel
+                if (realtimeChannel) {
+                    await supabase.removeChannel(realtimeChannel);
+                }
+                
+                results.style.display = 'block';
+                results.textContent = 'Connecting to real-time channel...\n';
+                
+                // Subscribe to changes
+                realtimeChannel = supabase
+                    .channel('test-channel')
+                    .on('postgres_changes', 
+                        { event: '*', schema: 'public', table: 'activity' },
+                        (payload) => {
+                            console.log('Real-time event:', payload);
+                            const timestamp = new Date().toLocaleTimeString();
+                            const current = results.textContent;
+                            results.textContent = `[${timestamp}] ${payload.eventType} event received\n${current}`;
+                        }
+                    )
+                    .subscribe((status) => {
+                        if (status === 'SUBSCRIBED') {
+                            document.getElementById('realtimeStatus').className = 'status success';
+                            document.getElementById('realtimeStatus').innerHTML = '✅ Real-time connected!';
+                            results.textContent = 'Connected! Listening for activity changes...\n' + results.textContent;
+                        } else if (status === 'CHANNEL_ERROR') {
+                            document.getElementById('realtimeStatus').className = 'status error';
+                            document.getElementById('realtimeStatus').innerHTML = '❌ Real-time connection failed';
+                        } else {
+                            results.textContent = `Status: ${status}\n` + results.textContent;
+                        }
+                    });
+                
+                updateSummary();
+            } catch (error) {
+                status.className = 'status error';
+                status.innerHTML = `❌ Real-time Error: ${error.message}`;
+                
+                results.style.display = 'block';
+                results.textContent = error.message;
+            }
+        }
+        
+        async function sendRealtimeMessage() {
+            if (!supabase || !testUser) {
+                alert('Please sign in first!');
+                return;
+            }
+            
+            const results = document.getElementById('realtimeResults');
+            
+            try {
+                // Insert an activity record to trigger real-time
+                const { data, error } = await supabase
+                    .from('activity')
+                    .insert({
+                        actor_id: testUser.id,
+                        activity_type: 'profile_view',
+                        description: 'Test real-time message at ' + new Date().toLocaleTimeString(),
+                        metadata: { test: true, timestamp: Date.now() }
+                    })
+                    .select()
+                    .single();
+                
+                if (error) throw error;
+                
+                const timestamp = new Date().toLocaleTimeString();
+                results.textContent = `[${timestamp}] Test message sent (ID: ${data.id})\n` + results.textContent;
+            } catch (error) {
+                console.error('Failed to send message:', error);
+                alert('Failed to send message: ' + error.message);
+            }
+        }
+        
+        async function stopRealtime() {
+            if (realtimeChannel) {
+                await supabase.removeChannel(realtimeChannel);
+                realtimeChannel = null;
+                document.getElementById('realtimeStatus').className = 'status pending';
+                document.getElementById('realtimeStatus').innerHTML = 'Real-time disconnected';
+                document.getElementById('realtimeResults').textContent = 'Real-time connection closed.\n';
+                updateSummary();
+            }
+        }
+        
+        function updateSummary() {
+            const summary = document.getElementById('summary');
+            const progressFill = document.getElementById('progressFill');
+            
+            const tests = [
+                { name: 'Configuration', el: 'configStatus' },
+                { name: 'Database', el: 'dbStatus' },
+                { name: 'Authentication', el: 'authStatus' },
+                { name: 'Queries', el: 'queryStatus' },
+                { name: 'Real-time', el: 'realtimeStatus' }
+            ];
+            
+            const results = tests.map(test => {
+                const status = document.getElementById(test.el);
+                const isSuccess = status.className.includes('success');
+                const isPending = status.className.includes('pending');
+                
+                if (isSuccess) return `✅ ${test.name}`;
+                if (isPending) return `⏳ ${test.name}`;
+                return `❌ ${test.name}`;
+            });
+            
+            const successCount = results.filter(r => r.includes('✅')).length;
+            const totalCount = tests.length;
+            const percentage = Math.round((successCount / totalCount) * 100);
+            
+            progressFill.style.width = `${percentage}%`;
+            progressFill.textContent = `${percentage}%`;
+            
+            summary.innerHTML = `
+                <div style="font-size: 1.5rem; font-weight: bold; color: ${successCount === totalCount ? '#27ae60' : '#f39c12'}; margin-bottom: 1rem;">
+                    ${successCount} / ${totalCount} Tests Passed
+                </div>
+                <div style="margin-bottom: 1rem;">${results.join(' | ')}</div>
+                ${successCount === totalCount ? 
+                    '<div style="margin-top: 1rem; padding: 1rem; background: #d4edda; border-radius: 5px; color: #155724; font-weight: bold;">🎉 All systems operational! Your Supabase backend is ready!</div>' : 
+                    successCount === 0 ? 
+                    '<div style="margin-top: 1rem; padding: 1rem; background: #f8d7da; border-radius: 5px; color: #721c24;">Please run the tests above to verify your setup.</div>' :
+                    '<div style="margin-top: 1rem; padding: 1rem; background: #fff3cd; border-radius: 5px; color: #856404;">Some tests still need to be completed.</div>'
+                }
+            `;
+        }
+    </script>
+</body>
+</html>

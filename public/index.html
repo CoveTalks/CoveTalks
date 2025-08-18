@@ -5,976 +5,890 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CoveTalks - Where Connections Ignite Opportunities</title>
     <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
-    <script src="https://js.stripe.com/v3/"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header Styles */
-        header {
-            background: white;
-            color: #333;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        
-        .logo-img {
-            height: 70px;
-            width: auto;
-            display: block;
-        }
-        
-        @media (max-width: 768px) {
-            .logo-img {
-                height: 50px;
-            }
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #155588;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1e3d6f;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #155588;
-            border: 2px solid #155588;
-        }
-
-        .btn-secondary:hover {
-            background: #155588;
-            color: white;
-
-        }
-
-        .btn-secondary-speaker {
-            background: white;
-            color: #155588;
-            border: 2px solid #155588;
-        }
-
-        .btn-secondary-speaker:hover {
-            background: #1e93b7;
-            color: white;
-
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #155588 0%, #1e93b7 100%);
-            color: white;
-            padding: 8rem 0 4rem;
-            text-align: center;
-            min-height: 80vh;
-            display: flex;
-            align-items: center;
-        }
-
-        .hero-content {
-            width: 100%;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .hero .subtitle {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            opacity: 0.9;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .hero-cta {
-            margin-top: 2rem;
-        }
-
-        /* Two Ways Section */
-        .two-ways {
-            padding: 4rem 0;
-            background: #f8f9fa;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: #2c3e50;
-            margin-bottom: 1rem;
-        }
-
-        .ways-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            margin-top: 3rem;
-        }
-
-        .way-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: transform 0.3s;
-        }
-
-        .way-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .way-card h3 {
-            color: #155588;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-
-        /* Meet Our CoveTalkers Section */
-        .meet-section {
-            padding: 4rem 0;
-            background: white;
-        }
-
-        .speakers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .speaker-card {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .speaker-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-
-        .speaker-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin: 0 auto 1rem;
-        }
-
-        .speaker-card h4 {
-            color: #155588;
-            margin-bottom: 0.5rem;
-        }
-
-        .speaker-specialty {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        .premium-overlay {
-            background: rgba(44, 90, 160, 0.9);
-            color: white;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-        }
-
-        /* Organizations Section with Tabs */
-        .organizations {
-            padding: 4rem 0;
-            background: #f8f9fa;
-        }
-
-        .org-tabs {
-            margin-top: 3rem;
-        }
-
-        .tab-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .tab-btn {
-            padding: 1rem 2rem;
-            background: white;
-            border: 2px solid #e1e8ed;
-            border-radius: 30px;
-            color: #666;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .tab-btn:hover {
-            border-color: #155588;
-            color: #155588;
-        }
-
-        .tab-btn.active {
-            background: #155588;
-            color: white;
-            border-color: #155588;
-        }
-
-        .tab-content {
-            background: white;
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .tab-pane {
-            display: none;
-        }
-
-        .tab-pane.active {
-            display: block;
-        }
-
-        .tab-inner {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .tab-icon {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .tab-inner h3 {
-            color: #155588;
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .tab-inner p {
-            line-height: 1.8;
-            margin-bottom: 2rem;
-            color: #666;
-        }
-
-        /* Steps Section */
-        .steps-section {
-            padding: 4rem 0;
-            background: white;
-        }
-
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .step {
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .step-number {
-            width: 60px;
-            height: 60px;
-            background: #155588;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin: 0 auto 1rem;
-        }
-
-        .step h3 {
-            color: #155588;
-            margin-bottom: 1rem;
-        }
-
-        /* Footer */
-        footer {
-            background: #2c3e50;
-            color: white;
-            padding: 3rem 0 1rem;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h3 {
-            margin-bottom: 1rem;
-            color: #f2b236;
-        }
-
-        .footer-section a {
-            color: #bdc3c7;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.5rem;
-            transition: color 0.3s;
-        }
-
-        .footer-section a:hover {
-            color: #f2b236;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #34495e;
-            padding-top: 1rem;
-            text-align: center;
-            color: #bdc3c7;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 2rem;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            position: relative;
-        }
-
-        .close {
-            position: absolute;
-            right: 1rem;
-            top: 1rem;
-            font-size: 2rem;
-            cursor: pointer;
-            color: #7f8c8d;
-        }
-
-        .close:hover {
-            color: #2c3e50;
-        }
-
-        .auth-form {
-            margin-top: 1rem;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 5px;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #155588;
-        }
-
-        .error-message {
-            color: #e74c3c;
-            font-size: 0.9rem;
-            margin-top: 0.25rem;
-        }
-
-        .success-message {
-            color: #27ae60;
-            font-size: 0.9rem;
-            margin-top: 0.25rem;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .ways-grid,
-            .steps-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .org-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Pricing Styles */
-        .pricing-section {
-            padding: 4rem 0;
-            background: white;
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .pricing-card {
-            background: white;
-            border: 2px solid #e1e8ed;
-            border-radius: 15px;
-            padding: 2rem;
-            text-align: center;
-            position: relative;
-            transition: all 0.3s;
-        }
-
-        .pricing-card:hover {
-            border-color: #155588;
-            transform: translateY(-5px);
-        }
-
-        .pricing-card.popular {
-            border-color: #f2b236;
-            background: linear-gradient(135deg, #fff, #fff8e1);
-        }
-
-        .popular-badge {
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #f2b236;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .price {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #155588;
-            margin: 1rem 0;
-        }
-
-        .price-period {
-            font-size: 1rem;
-            color: #7f8c8d;
-        }
-
-        .features {
-            list-style: none;
-            margin: 2rem 0;
-        }
-
-        .features li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #ecf0f1;
-        }
-
-        .features li:last-child {
-            border-bottom: none;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #155588;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-/* Mobile Navigation Styles */
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-/* Hamburger Menu */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-    z-index: 1002;
-    background: none;
-    border: none;
-    padding: 5px;
-}
-
-.hamburger span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background: #333;
-    margin: 3px 0;
-    transition: all 0.3s ease;
-    border-radius: 2px;
-}
-
-.hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
-
-.hamburger.active span:nth-child(2) {
-    opacity: 0;
-}
-
-.hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -6px);
-}
-
-/* Mobile Menu Overlay */
-.mobile-menu-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.mobile-menu-overlay.show {
-    display: block;
-    opacity: 1;
-}
-
-/* Mobile Menu Panel */
-.mobile-menu {
-    position: fixed;
-    top: 0;
-    right: -320px;
-    width: 300px;
-    height: 100vh;
-    background: white;
-    z-index: 1001;
-    transition: right 0.3s ease;
-    overflow-y: auto;
-    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-}
-
-.mobile-menu.show {
-    right: 0;
-}
-
-.mobile-menu-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.mobile-menu-close {
-    width: 30px;
-    height: 30px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #666;
-}
-
-.mobile-nav-links {
-    list-style: none;
-    padding: 1rem 0;
-}
-
-.mobile-nav-links li {
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.mobile-nav-links a {
-    display: block;
-    padding: 1rem 1.5rem;
-    color: #333;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s;
-}
-
-.mobile-nav-links a:hover {
-    background: #f8f9fa;
-    color: #155588;
-    padding-left: 2rem;
-}
-
-.mobile-nav-links a.active {
-    color: #155588;
-    background: #e8f4fd;
-}
-
-.mobile-user-section {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    background: #f8f9fa;
-}
-
-.mobile-user-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.mobile-user-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #1e93b7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-}
-
-.mobile-user-details h3 {
-    margin: 0;
-    color: #333;
-}
-
-.mobile-user-details p {
-    margin: 0;
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.mobile-auth-buttons {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.mobile-auth-buttons .btn {
-    width: 100%;
-    text-align: center;
-}
-
-/* Responsive Breakpoints */
-@media (max-width: 768px) {
-    .nav-links {
-        display: none !important;
-    }
-    
-    .auth-buttons.desktop-only {
-        display: none !important;
-    }
-    
-    .hamburger {
-        display: flex;
-    }
-    
-    header {
-        padding: 0.75rem 0;
-    }
-    
-    .logo {
-        font-size: 1.5rem;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
 
     body {
-        padding-top: 60px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
     }
-}
 
-@media (max-width: 480px) {
-    .mobile-menu {
-        width: 85vw;
-        right: -85vw;
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
     }
-}
-    </style>
+
+    /* Header Styles */
+    header {
+        background: white;
+        color: #333;
+        padding: 1rem 0;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+    }
+    
+    .logo-img {
+        height: 70px;
+        width: auto;
+        display: block;
+    }
+
+    .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+    }
+
+    .nav-links a {
+        color: #333;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+        color: #155588;
+    }
+
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .auth-buttons {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+        font-weight: 500;
+        text-align: center;
+    }
+
+    .btn-primary {
+        background: #155588;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #1e3d6f;
+        transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+        background: white;
+        color: #155588;
+        border: 2px solid #155588;
+    }
+
+    .btn-secondary:hover {
+        background: #155588;
+        color: white;
+    }
+
+    /* User Menu */
+    .user-menu {
+        position: relative;
+    }
+
+    .user-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea, #1e93b7);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 1.1rem;
+        transition: transform 0.2s;
+    }
+
+    .user-avatar:hover {
+        transform: scale(1.05);
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        min-width: 200px;
+        display: none;
+        z-index: 1000;
+        overflow: hidden;
+    }
+
+    .dropdown-menu.show {
+        display: block;
+    }
+
+    .dropdown-menu a {
+        display: block;
+        padding: 0.75rem 1.25rem;
+        color: #333;
+        text-decoration: none;
+        transition: background 0.2s;
+    }
+
+    .dropdown-menu a:hover {
+        background: #f8f9fa;
+    }
+
+    .dropdown-divider {
+        height: 1px;
+        background: #e1e8ed;
+        margin: 0;
+    }
+
+    /* Hero Section */
+    .hero {
+        background: linear-gradient(135deg, #155588 0%, #1e93b7 100%);
+        color: white;
+        padding: 8rem 0 4rem;
+        text-align: center;
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .hero-content {
+        width: 100%;
+    }
+
+    .hero h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .hero .subtitle {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        opacity: 0.9;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-cta {
+        margin-top: 2rem;
+    }
+
+    /* Two Ways Section */
+    .two-ways {
+        padding: 4rem 0;
+        background: #f8f9fa;
+    }
+
+    .section-title {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .section-title h2 {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 1rem;
+    }
+
+    .ways-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        margin-top: 3rem;
+    }
+
+    .way-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        text-align: center;
+        transition: transform 0.3s;
+    }
+
+    .way-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .way-card h3 {
+        color: #155588;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    /* Enhanced Featured Speakers Section */
+    .featured-speakers {
+        padding: 4rem 0;
+        background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .section-header h2 {
+        font-size: 2.5rem;
+        color: #2c3e50;
+    }
+
+    .view-all-link {
+        color: #155588;
+        text-decoration: none;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: color 0.3s;
+    }
+
+    .view-all-link:hover {
+        color: #1e3d6f;
+    }
+
+    .speakers-showcase {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .speaker-showcase-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .speaker-showcase-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    }
+
+    .speaker-image-container {
+        position: relative;
+        height: 200px;
+        background: linear-gradient(135deg, #667eea, #1e93b7);
+        overflow: hidden;
+    }
+
+    .speaker-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .speaker-initials-large {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        font-weight: bold;
+        color: white;
+        background: linear-gradient(135deg, #155588, #1e93b7);
+    }
+
+    .speaker-badge {
+        position: absolute;
+        top: 0.75rem;
+        left: 0.75rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 15px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: white;
+    }
+
+    .badge-featured {
+        background: linear-gradient(135deg, #f2b236, #ff8c42);
+    }
+
+    .badge-new {
+        background: linear-gradient(135deg, #00c9ff, #92fe9d);
+    }
+
+    .badge-verified {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    .speaker-info {
+        padding: 1.25rem;
+    }
+
+    .speaker-name {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #155588;
+        margin-bottom: 0.35rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .speaker-tagline {
+        color: #666;
+        font-size: 0.85rem;
+        margin-bottom: 0.75rem;
+        line-height: 1.3;
+        min-height: 2.2rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .speaker-location {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        color: #999;
+        font-size: 0.8rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .speaker-location::before {
+        content: "📍";
+        font-size: 0.9rem;
+    }
+
+    .speaker-specialties {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        margin-bottom: 0.75rem;
+        min-height: 2rem;
+    }
+
+    .specialty-tag {
+        background: #e8f4fd;
+        color: #155588;
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        font-weight: 500;
+        border: 1px solid rgba(21, 85, 136, 0.1);
+        transition: all 0.2s;
+    }
+
+    .specialty-tag:hover {
+        background: #155588;
+        color: white;
+    }
+
+    .more-tags {
+        background: #f0f0f0;
+        color: #666;
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        font-weight: 500;
+    }
+
+    .speaker-rating {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .stars {
+        display: flex;
+        gap: 0.1rem;
+    }
+
+    .star {
+        color: #f2b236;
+        font-size: 0.85rem;
+    }
+
+    .star.empty {
+        color: #ddd;
+    }
+
+    .rating-count {
+        color: #999;
+        font-size: 0.75rem;
+    }
+
+    .speaker-footer {
+        padding: 0.75rem 1.25rem;
+        border-top: 1px solid #f0f0f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .availability-status {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.75rem;
+        color: #666;
+    }
+
+    .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #4caf50;
+    }
+
+    .status-dot.busy {
+        background: #ff9800;
+    }
+
+    .status-dot.unavailable {
+        background: #f44336;
+    }
+
+    .view-profile-btn {
+        padding: 0.4rem 1rem;
+        background: #155588;
+        color: white;
+        border: none;
+        border-radius: 15px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .view-profile-btn:hover {
+        background: #1e3d6f;
+        transform: translateY(-1px);
+    }
+
+    /* Loading skeleton */
+    .speaker-skeleton {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .skeleton-image {
+        height: 200px;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+    }
+
+    .skeleton-content {
+        padding: 1.25rem;
+    }
+
+    .skeleton-line {
+        height: 16px;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+        margin-bottom: 0.5rem;
+        border-radius: 4px;
+    }
+
+    .skeleton-line.short {
+        width: 60%;
+    }
+
+    @keyframes loading {
+        0% {
+            background-position: 200% 0;
+        }
+        100% {
+            background-position: -200% 0;
+        }
+    }
+
+    /* Organizations Section with Tabs */
+    .organizations {
+        padding: 4rem 0;
+        background: #f8f9fa;
+    }
+
+    .tab-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .tab-btn {
+        padding: 1rem 2rem;
+        background: white;
+        border: 2px solid #e1e8ed;
+        border-radius: 30px;
+        color: #666;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .tab-btn:hover {
+        border-color: #155588;
+        color: #155588;
+    }
+
+    .tab-btn.active {
+        background: #155588;
+        color: white;
+        border-color: #155588;
+    }
+
+    .tab-content {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .tab-pane {
+        display: none;
+    }
+
+    .tab-pane.active {
+        display: block;
+    }
+
+    .tab-inner {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .tab-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .tab-inner h3 {
+        color: #155588;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .tab-inner p {
+        line-height: 1.8;
+        margin-bottom: 2rem;
+        color: #666;
+    }
+
+    /* Steps Section */
+    .steps-section {
+        padding: 4rem 0;
+        background: white;
+    }
+
+    .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .step {
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .step-number {
+        width: 60px;
+        height: 60px;
+        background: #155588;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0 auto 1rem;
+    }
+
+    .step h3 {
+        color: #155588;
+        margin-bottom: 1rem;
+    }
+
+    /* Footer */
+    footer {
+        background: #2c3e50;
+        color: white;
+        padding: 3rem 0 1rem;
+    }
+
+    .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .footer-section h3 {
+        margin-bottom: 1rem;
+        color: #f2b236;
+    }
+
+    .footer-section p,
+    .footer-section a {
+        color: #bdc3c7;
+        text-decoration: none;
+        display: block;
+        margin-bottom: 0.5rem;
+        transition: color 0.3s;
+    }
+
+    .footer-section a:hover {
+        color: #f2b236;
+    }
+
+    .footer-bottom {
+        border-top: 1px solid #34495e;
+        padding-top: 1rem;
+        text-align: center;
+        color: #bdc3c7;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    /* Responsive - Featured Speakers */
+    @media (max-width: 1200px) {
+        .speakers-showcase {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .speakers-showcase {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+        
+        .speaker-image-container {
+            height: 180px;
+        }
+        
+        .speaker-initials-large {
+            font-size: 2.5rem;
+        }
+    }
+
+    /* General Responsive */
+    @media (max-width: 768px) {
+        .nav-links {
+            display: none;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+        }
+
+        .ways-grid,
+        .steps-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .section-header {
+            flex-direction: column;
+            align-items: start;
+            gap: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+        }
+
+        .speakers-showcase {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .speaker-image-container {
+            height: 160px;
+        }
+
+        .speaker-info {
+            padding: 1rem;
+        }
+
+        .speaker-name {
+            font-size: 1.1rem;
+        }
+
+        .speaker-footer {
+            padding: 0.75rem 1rem;
+        }
+
+        .logo-img {
+            height: 50px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .speakers-showcase {
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        .speaker-image-container {
+            height: 200px;
+        }
+
+        .speaker-initials-large {
+            font-size: 3rem;
+        }
+
+        .speaker-info {
+            padding: 1.25rem;
+        }
+
+        .speaker-name {
+            font-size: 1.25rem;
+        }
+
+        .speaker-tagline {
+            font-size: 0.9rem;
+        }
+
+        .speaker-location {
+            font-size: 0.85rem;
+        }
+
+        .specialty-tag,
+        .more-tags {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+        }
+
+        .speaker-footer {
+            padding: 1rem 1.25rem;
+        }
+
+        .view-profile-btn {
+            padding: 0.5rem 1.2rem;
+            font-size: 0.8rem;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .featured-speakers {
+            padding: 3rem 0;
+        }
+
+        .section-header h2 {
+            font-size: 1.75rem;
+        }
+
+        .speaker-image-container {
+            height: 180px;
+        }
+    }
+</style>
 </head>
 <body>
+    <!-- Header -->
     <header>
         <div class="nav-container">
             <nav>
-                <!-- Logo -->
                 <a href="index.html" class="logo">
-                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
                 </a>
                 
-                <!-- Desktop Navigation -->
-                <!-- Logged Out Navigation -->
-                <ul class="nav-links nav-logged-out" id="navLoggedOut">
-                    <li><a href="index.html">Home</a></li>
+                <!-- Navigation links will be dynamically updated -->
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html" class="active">Home</a></li>
                     <li><a href="members.html">Find Speakers</a></li>
                     <li><a href="pricing.html">Pricing</a></li>
                     <li><a href="register.html">Register</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                
-                <!-- Logged In Navigation (Speakers) -->
-                <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="opportunities.html">Opportunities</a></li>
-                    <li><a href="bookings.html">My Bookings</a></li>
-                    <li><a href="profile.html">Profile</a></li>
-                </ul>
-                
-                <!-- Logged In Navigation (Organizations) -->
-                <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
-                    <li><a href="organization-dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                    <li><a href="my-opportunities.html">My Opportunities</a></li>
-                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                </ul>
     
-                <!-- Right Side Navigation -->
                 <div class="nav-right">
-                    <!-- For Logged In Users -->
-                    <div class="user-menu" id="userMenuDesktop" style="display: none;">
-                        <div class="user-dropdown">
-                            <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
-                            <div class="dropdown-menu" id="dropdownMenu">
-                                <a href="profile-edit.html">Edit Profile</a>
-                                <a href="settings.html">Settings</a>
-                                <a href="billing.html">Billing</a>
-                                <div class="dropdown-divider"></div>
-                                <a href="#" onclick="logout()">Logout</a>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <!-- For Logged Out Users -->
-                    <div class="auth-buttons desktop-only" id="authButtonsDesktop">
+                    <!-- Auth buttons (shown when logged out) -->
+                    <div class="auth-buttons" id="authButtons">
                         <a href="register.html" class="btn btn-secondary">Join</a>
                         <a href="login.html" class="btn btn-primary">Login</a>
                     </div>
-    
-                    <!-- Hamburger Menu Button -->
-                    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
+                    
+                    <!-- User menu (shown when logged in) -->
+                    <div class="user-menu hidden" id="userMenu">
+                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="inbox.html">Inbox</a>
+                            <a href="settings.html">Settings</a>
+                            <a href="billing.html">Billing</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" onclick="logout(); return false;">Logout</a>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </div>
     </header>
-
-    <!-- Mobile Menu Overlay -->
-<div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
-
-<!-- Mobile Menu Panel -->
-<div class="mobile-menu" id="mobileMenu">
-    <div class="mobile-menu-header">
-        <a href="index.html" class="logo">
-            <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
-        </a>
-        <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
-    </div>
-
-    <!-- Mobile User Section (for logged in users) -->
-    <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
-        <div class="mobile-user-info">
-            <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
-            <div class="mobile-user-details">
-                <h3 id="mobileUserName">John Doe</h3>
-                <p id="mobileUserType">Speaker - Plus Plan</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mobile Navigation Links -->
-    <!-- Logged Out Mobile Navigation -->
-    <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="pricing.html">Pricing</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="help.html">Help Center</a></li>
-    </ul>
-    
-    <!-- Logged In Mobile Navigation (Speakers) -->
-    <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="opportunities.html">Opportunities</a></li>
-        <li><a href="bookings.html">My Bookings</a></li>
-        <li><a href="profile.html">Profile</a></li>
-        <li><a href="settings.html">Settings</a></li>
-        <li><a href="billing.html">Billing</a></li>
-        <li><a href="help.html">Help & Support</a></li>
-    </ul>
-    
-    <!-- Logged In Mobile Navigation (Organizations) -->
-    <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
-        <li><a href="organization-dashboard.html">Dashboard</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="post-opportunity.html">Post Opportunity</a></li>
-        <li><a href="my-opportunities.html">My Opportunities</a></li>
-        <li><a href="saved-speakers.html">Saved Speakers</a></li>
-        <li><a href="settings.html">Settings</a></li>
-        <li><a href="team.html">Team Members</a></li>
-        <li><a href="help.html">Help & Support</a></li>
-    </ul>
-
-    <!-- Mobile Auth Buttons (for logged out users) -->
-    <div class="mobile-auth-buttons" id="mobileAuthButtons">
-        <a href="register.html" class="btn btn-secondary">Join Community</a>
-        <a href="login.html" class="btn btn-primary">Login</a>
-    </div>
-
-    <!-- Mobile Logout Button (for logged in users) -->
-    <div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
-        <button class="btn btn-primary" onclick="logout()">Logout</button>
-    </div>
-</div>
 
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="container">
             <div class="hero-content">
                 <h1>Where in the world can we help you with your outreach?</h1>
-                <div class="subtitle">Community Outreach. voices everywhere.</div>
+                <div class="subtitle">Community Outreach. Voices everywhere.</div>
                 <p>CoveTalks fulfills the speaking needs of charitable, service, educational, philanthropic and religious organizations around the world.</p>
                 <div class="hero-cta">
                     <a href="register.html" class="btn btn-primary">Join the Community</a>
@@ -1010,22 +924,54 @@
         </div>
     </section>
 
-    <!-- Meet Our CoveTalkers -->
-    <section class="meet-section">
+    <!-- Enhanced Featured Speakers Section -->
+    <section class="featured-speakers">
         <div class="container">
-            <div class="section-title">
-                <h2>MEET OUR COVETALKERS</h2>
-                <p>Looking for a specific topic or specialty? Use the filters of our most popular topics to see the top rated CoveTalker in that field.</p>
+            <div class="section-header">
+                <div>
+                    <h2>Featured Speakers</h2>
+                    <p style="color: #666; margin-top: 0.5rem;">Discover expert speakers ready to inspire your audience</p>
+                </div>
+                <a href="members.html" class="view-all-link">
+                    View all speakers
+                    <span style="font-size: 1.2rem;">→</span>
+                </a>
             </div>
             
-            <div class="speakers-grid" id="speakersGrid">
-                <!-- Sample speakers will be loaded here -->
-            </div>
-            
-            <div style="text-align: center; margin-top: 2rem;">
-                <a href="members.html" class="btn btn-secondary">View More</a>
-                <br><br>
-                <p>Not seeing what you're looking for? <a href="register.html" style="color: #155588;">Submit a new category or speaker now!</a></p>
+            <div class="speakers-showcase" id="speakersShowcase">
+                <!-- Loading skeletons -->
+                <div class="speaker-skeleton">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line"></div>
+                    </div>
+                </div>
+                <div class="speaker-skeleton">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line"></div>
+                    </div>
+                </div>
+                <div class="speaker-skeleton">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line"></div>
+                    </div>
+                </div>
+                <div class="speaker-skeleton">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1052,7 +998,7 @@
                         <div class="tab-inner">
                             <div class="tab-icon">🏢</div>
                             <h3>Non-Profits</h3>
-                            <p>Non-profits and Classrooms gain substantial advantages by engaging external experts for training and development, as these specialists bring new perspectives and targeted expertise that may not be readily available within the organization. Experts can introduce staff to the latest strategies in fundraising, volunteer management, community outreach, and digital tools that improve operational efficiency and expand impact. By learning from professionals deeply versed in specific areas, non-profit teams can enhance their skills and adapt more effectively to the evolving needs of the communities they serve.</p>
+                            <p>Non-profits and Classrooms gain substantial advantages by engaging external experts for training and development, as these specialists bring new perspectives and targeted expertise that may not be readily available within the organization. Experts can introduce staff to the latest strategies in fundraising, volunteer management, community outreach, and digital tools that improve operational efficiency and expand impact.</p>
                             <a href="register.html" class="btn btn-primary">Register Your Non-Profit</a>
                         </div>
                     </div>
@@ -1061,7 +1007,7 @@
                         <div class="tab-inner">
                             <div class="tab-icon">🎓</div>
                             <h3>Education/Schools</h3>
-                            <p>Schools and educational institutions benefit immensely from bringing in external experts for training and professional development, as these professionals offer fresh perspectives and specialized knowledge that may not be present within the institution. Experts can introduce educators to the latest research-based teaching strategies, classroom management techniques, and technology tools that enhance student engagement and learning outcomes. By learning from those who are deeply knowledgeable in specific fields, teachers can expand their skill sets and adapt more effectively to the evolving educational landscape.</p>
+                            <p>Schools and educational institutions benefit immensely from bringing in external experts for training and professional development, as these professionals offer fresh perspectives and specialized knowledge that may not be present within the institution. Experts can introduce educators to the latest research-based teaching strategies, classroom management techniques, and technology tools that enhance student engagement and learning outcomes.</p>
                             <a href="register.html" class="btn btn-primary">Register Your School</a>
                         </div>
                     </div>
@@ -1070,7 +1016,7 @@
                         <div class="tab-inner">
                             <div class="tab-icon">⛪</div>
                             <h3>Religious/Churches</h3>
-                            <p>Religious organizations and churches benefit significantly from bringing in external experts for training and development, as these professionals offer fresh insights and specialized knowledge that may not be available within the congregation. Experts can introduce ministry teams to effective community outreach strategies, volunteer engagement techniques, and technology tools that enhance worship and communication. By learning from those who are deeply knowledgeable in specific areas, faith leaders and staff can expand their capabilities and adapt more readily to the evolving needs of their community.</p>
+                            <p>Religious organizations and churches benefit significantly from bringing in external experts for training and development, as these professionals offer fresh insights and specialized knowledge that may not be available within the congregation. Experts can introduce ministry teams to effective community outreach strategies, volunteer engagement techniques, and technology tools that enhance worship and communication.</p>
                             <a href="register.html" class="btn btn-primary">Register Your Organization</a>
                         </div>
                     </div>
@@ -1079,7 +1025,7 @@
                         <div class="tab-inner">
                             <div class="tab-icon">👥</div>
                             <h3>Youth Groups</h3>
-                            <p>Youth groups gain tremendous value from bringing in external experts for training and skill development, as these professionals provide fresh perspectives and expertise that complement the organization's mission. Experts can introduce leaders to innovative approaches in youth mentoring, team-building exercises, outdoor skills, and safety practices that enhance program quality and engagement. By learning from specialists in various fields, youth group leaders can broaden their skillsets and adapt to the evolving interests and needs of young members.</p>
+                            <p>Youth groups gain tremendous value from bringing in external experts for training and skill development, as these professionals provide fresh perspectives and expertise that complement the organization's mission. Experts can introduce leaders to innovative approaches in youth mentoring, team-building exercises, outdoor skills, and safety practices that enhance program quality and engagement.</p>
                             <a href="register.html" class="btn btn-primary">Register Your Youth Group</a>
                         </div>
                     </div>
@@ -1149,65 +1095,294 @@
         </div>
     </footer>
 
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Member Login</h2>
-            <form id="loginForm" class="auth-form">
-                <div class="form-group">
-                    <label for="loginEmail">Email</label>
-                    <input type="email" id="loginEmail" required>
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <input type="password" id="loginPassword" required>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
-                <div id="loginError" class="error-message"></div>
-            </form>
-        </div>
-    </div>
-
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load config and Supabase client -->
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    
     <script>
-        // Configuration
-        const CONFIG = {
-            AIRTABLE: {
-                API_KEY: 'patI3b0QZgesfoKWh.3160fe85c7238ed5cc4a0d6153bec4cef493d3c086233d3304e1211c41fbfd69',
-                BASE_ID: 'appa7KVa8HcVheTOo',
-                TABLE_ID: 'tblHWh5J8t4oPDeI5'
-            },
-            STRIPE: {
-                PUBLISHABLE_KEY: 'pk_live_51RrABe1Fvl67fP5VrtH3hkNvl4chaiFtlskEMSHJIw6M1tAHdcgZ21pgup7DCEajjyQFUDM1jnIE7W1KrGBDjieV002ztaIRXk'
-            },
-            API_BASE: window.location.hostname === 'localhost' ? 'http://localhost:3001' : '/.netlify/functions/api'
-        };
-
-        // Global state
+        // Page state
         let currentUser = null;
+        let featuredSpeakers = [];
 
-        // Initialize Stripe
-        const stripe = Stripe(CONFIG.STRIPE.PUBLISHABLE_KEY);
+        // Wait for Supabase client
+        function waitForSupabase(callback) {
+            let attempts = 0;
+            const maxAttempts = 10;
+            
+            function check() {
+                attempts++;
+                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                    callback();
+                } else if (attempts < maxAttempts) {
+                    setTimeout(check, 500);
+                } else {
+                    console.error('Failed to initialize Supabase client');
+                    displayEnhancedFallbackSpeakers();
+                }
+            }
+            check();
+        }
 
-        // DOM Elements
-        const loginModal = document.getElementById('loginModal');
-        const loginBtn = document.getElementById('loginBtn');
-        const closeModal = document.querySelector('.close');
-        const loginForm = document.getElementById('loginForm');
+        // Initialize page
+        async function initializePage() {
+            waitForSupabase(async () => {
+                try {
+                    // Check authentication
+                    const session = await window.covetalks.checkAuth();
+                    if (session) {
+                        currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                        updateNavigation(currentUser);
+                    } else {
+                        updateNavigation(null);
+                    }
 
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            loadSampleSpeakers();
-            checkAuthStatus();
-            setupTabs();
-        });
+                    // Load featured speakers
+                    await loadFeaturedSpeakers();
 
-        loginBtn.addEventListener('click', () => loginModal.style.display = 'block');
-        closeModal.addEventListener('click', () => loginModal.style.display = 'none');
-        window.addEventListener('click', (e) => {
-            if (e.target === loginModal) loginModal.style.display = 'none';
-        });
-        loginForm.addEventListener('submit', handleLogin);
+                    // Setup tabs
+                    setupTabs();
+
+                } catch (error) {
+                    console.error('Initialization error:', error);
+                    displayEnhancedFallbackSpeakers();
+                }
+            });
+        }
+
+        // Update navigation based on user
+        function updateNavigation(user) {
+            const navLinks = document.getElementById('navLinks');
+            const authButtons = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userAvatar = document.getElementById('userAvatar');
+            
+            if (user) {
+                // Hide auth buttons, show user menu
+                authButtons.classList.add('hidden');
+                userMenu.classList.remove('hidden');
+                
+                // Update avatar with user initials
+                const initials = user.name ? 
+                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                    'U';
+                userAvatar.textContent = initials;
+                
+                // Update navigation links based on user type
+                if (user.member_type === 'Organization') {
+                    navLinks.innerHTML = `
+                        <li><a href="organization-dashboard.html">Dashboard</a></li>
+                        <li><a href="members.html">Find Speakers</a></li>
+                        <li><a href="post-opportunity.html">Post Opportunity</a></li>
+                        <li><a href="my-opportunities.html">My Opportunities</a></li>
+                        <li><a href="saved-speakers.html">Saved Speakers</a></li>
+                    `;
+                } else {
+                    // Speaker navigation
+                    navLinks.innerHTML = `
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="members.html">Find Speakers</a></li>
+                        <li><a href="opportunities.html">Opportunities</a></li>
+                        <li><a href="bookings.html">My Bookings</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                    `;
+                }
+            } else {
+                // Show default logged out navigation
+                authButtons.classList.remove('hidden');
+                userMenu.classList.add('hidden');
+                
+                navLinks.innerHTML = `
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                `;
+            }
+        }
+
+        // Enhanced speaker loading function
+        async function loadFeaturedSpeakers() {
+            try {
+                const { data: speakers, error } = await window.covetalks.supabase
+                    .from('members')
+                    .select('*')
+                    .eq('member_type', 'Speaker')
+                    .order('average_rating', { ascending: false, nullsFirst: false })
+                    .limit(4);
+
+                if (error) throw error;
+
+                if (speakers && speakers.length > 0) {
+                    displayEnhancedSpeakers(speakers);
+                } else {
+                    displayEnhancedFallbackSpeakers();
+                }
+            } catch (error) {
+                console.error('Error loading speakers:', error);
+                displayEnhancedFallbackSpeakers();
+            }
+        }
+
+        // Enhanced speaker display function
+        function displayEnhancedSpeakers(speakers) {
+            const showcase = document.getElementById('speakersShowcase');
+            
+            showcase.innerHTML = speakers.map((speaker, index) => {
+                const initials = speaker.name ? 
+                    speaker.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                    '??';
+                
+                const imageContent = speaker.profile_image_url ? 
+                    `<img src="${speaker.profile_image_url}" alt="${speaker.name}" class="speaker-image">` :
+                    `<div class="speaker-initials-large">${initials}</div>`;
+                
+                const specialties = Array.isArray(speaker.specialties) ? speaker.specialties : [];
+                
+                // Determine badge type
+                let badgeHtml = '';
+                if (index === 0) {
+                    badgeHtml = '<div class="speaker-badge badge-featured">Featured</div>';
+                } else if (speaker.created_at && isNewSpeaker(speaker.created_at)) {
+                    badgeHtml = '<div class="speaker-badge badge-new">New</div>';
+                } else if (speaker.average_rating >= 4.5) {
+                    badgeHtml = '<div class="speaker-badge badge-verified">Top Rated</div>';
+                }
+                
+                // Generate star rating
+                const rating = speaker.average_rating || 4.5;
+                const starsHtml = generateStars(rating);
+                const reviewCount = speaker.total_reviews || Math.floor(Math.random() * 20) + 5;
+                
+                // Tagline - use bio or generate one
+                const tagline = speaker.bio ? 
+                    speaker.bio.substring(0, 80) + (speaker.bio.length > 80 ? '...' : '') :
+                    'Inspiring speaker ready to engage your audience';
+                
+                return `
+                    <div class="speaker-showcase-card" onclick="viewSpeaker('${speaker.id}')">
+                        <div class="speaker-image-container">
+                            ${imageContent}
+                            ${badgeHtml}
+                        </div>
+                        <div class="speaker-info">
+                            <h3 class="speaker-name">${speaker.name || 'Speaker'}</h3>
+                            <p class="speaker-tagline">${tagline}</p>
+                            <div class="speaker-location">${speaker.location || 'Available Worldwide'}</div>
+                            
+                            <div class="speaker-specialties">
+                                ${specialties.slice(0, 2).map(tag => 
+                                    `<span class="specialty-tag">${tag}</span>`
+                                ).join('')}
+                                ${specialties.length > 2 ? 
+                                    `<span class="more-tags">+${specialties.length - 2} more</span>` : 
+                                    ''}
+                            </div>
+                            
+                            <div class="speaker-rating">
+                                <div class="stars">${starsHtml}</div>
+                                <span class="rating-count">(${reviewCount})</span>
+                            </div>
+                        </div>
+                        <div class="speaker-footer">
+                            <div class="availability-status">
+                                <span class="status-dot"></span>
+                                <span>Available</span>
+                            </div>
+                            <button class="view-profile-btn" onclick="event.stopPropagation(); viewSpeaker('${speaker.id}')">
+                                View Profile
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Enhanced fallback speakers
+        function displayEnhancedFallbackSpeakers() {
+            const fallbackSpeakers = [
+                {
+                    id: 'sample1',
+                    name: 'Dr. Sarah Johnson',
+                    location: 'New York, NY',
+                    bio: 'Leadership Expert & Business Strategist with 15+ years helping Fortune 500 companies transform their culture',
+                    specialties: ['Leadership', 'Business Strategy', 'Team Building'],
+                    average_rating: 4.9,
+                    total_reviews: 47,
+                    created_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 'sample2',
+                    name: 'Marcus Chen',
+                    location: 'San Francisco, CA',
+                    bio: 'Tech Futurist & AI Specialist helping organizations navigate digital transformation',
+                    specialties: ['Artificial Intelligence', 'Digital Transformation', 'Innovation'],
+                    average_rating: 4.7,
+                    total_reviews: 32,
+                    created_at: new Date().toISOString()
+                },
+                {
+                    id: 'sample3',
+                    name: 'Elena Rodriguez',
+                    location: 'Chicago, IL',
+                    bio: 'Diversity & Inclusion Advocate creating more equitable workplaces',
+                    specialties: ['Workplace Diversity', 'Inclusive Leadership', 'Culture Change'],
+                    average_rating: 4.8,
+                    total_reviews: 28,
+                    created_at: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 'sample4',
+                    name: 'Dr. James Wilson',
+                    location: 'Seattle, WA',
+                    bio: 'Sustainability Expert & Environmental Scientist driving corporate climate action',
+                    specialties: ['Climate Action', 'Corporate Sustainability', 'Green Technology'],
+                    average_rating: 4.9,
+                    total_reviews: 41,
+                    created_at: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString()
+                }
+            ];
+            
+            displayEnhancedSpeakers(fallbackSpeakers);
+        }
+
+        // Helper function to generate star HTML
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            
+            let starsHtml = '';
+            for (let i = 0; i < fullStars; i++) {
+                starsHtml += '<span class="star">★</span>';
+            }
+            if (hasHalfStar) {
+                starsHtml += '<span class="star">★</span>';
+            }
+            for (let i = 0; i < emptyStars; i++) {
+                starsHtml += '<span class="star empty">☆</span>';
+            }
+            return starsHtml;
+        }
+
+        // Check if speaker is new (joined within last 30 days)
+        function isNewSpeaker(createdAt) {
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            return new Date(createdAt) > thirtyDaysAgo;
+        }
+
+        // View speaker profile
+        function viewSpeaker(speakerId) {
+            if (currentUser) {
+                window.location.href = `speaker-profile.html?id=${speakerId}`;
+            } else {
+                window.location.href = 'register.html';
+            }
+        }
 
         // Setup tabs functionality
         function setupTabs() {
@@ -1229,117 +1404,30 @@
             });
         }
 
-        // Load sample speakers for home page
-        function loadSampleSpeakers() {
-            const sampleSpeakers = [
-                { name: 'John Smith', specialty: 'Business Leadership', initials: 'JS' },
-                { name: 'Sarah Johnson', specialty: 'Technology Innovation', initials: 'SJ' },
-                { name: 'Dr. Mike Davis', specialty: 'Healthcare & Wellness', initials: 'MD' },
-                { name: 'Lisa Chen', specialty: 'Environmental Sustainability', initials: 'LC' }
-            ];
-
-            const speakersGrid = document.getElementById('speakersGrid');
-            speakersGrid.innerHTML = sampleSpeakers.map(speaker => `
-                <div class="speaker-card">
-                    <div class="speaker-avatar">${speaker.initials}</div>
-                    <h4>${speaker.name}</h4>
-                    <div class="speaker-specialty">${speaker.specialty}</div>
-                    <div class="premium-overlay">
-                        <p><strong>Premium Feature</strong></p>
-                        <p>Contact details available to registered members</p>
-                        <a href="pricing.html" class="btn btn-secondary-speaker" style="margin-top: 0.5rem;">Upgrade Now</a>
-                    </div>
-                </div>
-            `).join('');
+        // Toggle dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.classList.toggle('show');
         }
 
-        // Authentication functions
-        async function handleLogin(e) {
-            e.preventDefault();
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdownMenu');
+            const avatar = document.getElementById('userAvatar');
             
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            const errorDiv = document.getElementById('loginError');
+            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
 
-            try {
-                const response = await fetch(`${CONFIG.API_BASE}/auth/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const result = await response.json();
-
-                if (response.ok) {
-                    currentUser = result.user;
-                    localStorage.setItem('token', result.token);
-                    loginModal.style.display = 'none';
-                    updateAuthUI();
-                    showSuccess('Login successful!');
-                    // Redirect to members page
-                    window.location.href = 'members.html';
-                } else {
-                    errorDiv.textContent = result.message || 'Login failed';
-                }
-            } catch (error) {
-                errorDiv.textContent = 'Network error. Please try again.';
+        // Logout
+        async function logout() {
+            if (window.covetalks) {
+                await window.covetalks.logout();
             }
         }
 
-        function checkAuthStatus() {
-            const token = localStorage.getItem('token');
-            if (token) {
-                // Verify token with backend
-                fetch(`${CONFIG.API_BASE}/auth/verify`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.valid) {
-                        currentUser = result.user;
-                        updateAuthUI();
-                    } else {
-                        localStorage.removeItem('token');
-                    }
-                })
-                .catch(error => {
-                    console.error('Auth verification failed:', error);
-                    localStorage.removeItem('token');
-                });
-            }
-        }
-
-        function updateAuthUI() {
-            const loginBtn = document.getElementById('loginBtn');
-            if (currentUser) {
-                loginBtn.textContent = 'Dashboard';
-                loginBtn.onclick = () => window.location.href = 'members.html';
-            } else {
-                loginBtn.textContent = 'Login';
-                loginBtn.onclick = () => loginModal.style.display = 'block';
-            }
-        }
-
-        function logout() {
-            currentUser = null;
-            localStorage.removeItem('token');
-            updateAuthUI();
-        }
-
-        // Utility functions
-        function showError(message) {
-            alert(message);
-        }
-
-        function showSuccess(message) {
-            alert(message);
-        }
-
-        // Smooth scrolling for navigation links
+        // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -1352,182 +1440,13 @@
                 }
             });
         });
+
+        // Initialize on load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
     </script>
-    <script>
-        // ============================================
-        // NAVIGATION JAVASCRIPT
-        // ============================================
-        
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            updateNavAuth();
-            setActiveNavItem();
-        });
-        
-        // Update navigation based on auth status
-        function updateNavAuth() {
-            const token = localStorage.getItem('token');
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-            
-            if (token && user) {
-                // User is logged in - hide logged out nav
-                document.getElementById('navLoggedOut').style.display = 'none';
-                document.getElementById('mobileNavLoggedOut').style.display = 'none';
-                
-                // Show appropriate logged in navigation based on user type
-                if (user.type === 'Organization' || user.Member_Type === 'Organization') {
-                    // Organization navigation
-                    document.getElementById('navOrganization').style.display = 'flex';
-                    document.getElementById('navSpeaker').style.display = 'none';
-                    document.getElementById('mobileNavOrganization').style.display = 'block';
-                    document.getElementById('mobileNavSpeaker').style.display = 'none';
-                } else {
-                    // Speaker navigation (default)
-                    document.getElementById('navSpeaker').style.display = 'flex';
-                    document.getElementById('navOrganization').style.display = 'none';
-                    document.getElementById('mobileNavSpeaker').style.display = 'block';
-                    document.getElementById('mobileNavOrganization').style.display = 'none';
-                }
-                
-                // Show user menu
-                document.getElementById('userMenuDesktop').style.display = 'flex';
-                document.getElementById('authButtonsDesktop').style.display = 'none';
-                document.getElementById('mobileUserSection').style.display = 'block';
-                document.getElementById('mobileAuthButtons').style.display = 'none';
-                document.getElementById('mobileLogoutSection').style.display = 'block';
-                
-                // Update user info
-                const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
-                document.getElementById('userAvatar').textContent = initials;
-                document.getElementById('mobileUserAvatar').textContent = initials;
-                document.getElementById('mobileUserName').textContent = user.name || 'User';
-                document.getElementById('mobileUserType').textContent = user.type || user.Member_Type || 'Member';
-            } else {
-                // User is logged out - show logged out nav
-                document.getElementById('navLoggedOut').style.display = 'flex';
-                document.getElementById('mobileNavLoggedOut').style.display = 'block';
-                
-                // Hide all logged in navigation
-                document.getElementById('navSpeaker').style.display = 'none';
-                document.getElementById('navOrganization').style.display = 'none';
-                document.getElementById('mobileNavSpeaker').style.display = 'none';
-                document.getElementById('mobileNavOrganization').style.display = 'none';
-                
-                // Show auth buttons
-                if (document.getElementById('userMenuDesktop')) {
-                    document.getElementById('userMenuDesktop').style.display = 'none';
-                }
-                document.getElementById('authButtonsDesktop').style.display = 'flex';
-                
-                if (document.getElementById('mobileUserSection')) {
-                    document.getElementById('mobileUserSection').style.display = 'none';
-                }
-                document.getElementById('mobileAuthButtons').style.display = 'flex';
-                if (document.getElementById('mobileLogoutSection')) {
-                    document.getElementById('mobileLogoutSection').style.display = 'none';
-                }
-            }
-        }
-        
-        // Toggle mobile menu
-        function toggleMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            
-            hamburger.classList.toggle('active');
-            mobileMenu.classList.toggle('show');
-            overlay.classList.toggle('show');
-            
-            if (mobileMenu.classList.contains('show')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
-            }
-        }
-        
-        // Close mobile menu
-        function closeMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            
-            hamburger.classList.remove('active');
-            mobileMenu.classList.remove('show');
-            overlay.classList.remove('show');
-            document.body.style.overflow = '';
-        }
-        
-        // Toggle dropdown menu (desktop)
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
-        }
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (dropdown && avatar && !avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-        
-        // Set active navigation item based on current page
-        function setActiveNavItem() {
-            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-            
-            // Clear all active classes first
-            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            // Set active class on matching links
-            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
-                if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('active');
-                }
-            });
-        }
-        
-        // Logout function
-        function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            sessionStorage.removeItem('token');
-            sessionStorage.removeItem('user');
-            window.location.href = 'login.html';
-        }
-        
-        // Close mobile menu on window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                closeMobileMenu();
-            }
-        });
-        
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.mobile-nav-links a').forEach(link => {
-            link.addEventListener('click', function() {
-                closeMobileMenu();
-            });
-        });
-        </script>
-        <!-- Add before closing </body> tag on ALL pages -->
-<script src="/js/app.js"></script>
-<script src="/js/navigation.js"></script>
-<script>
-  // Initialize page-specific functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check auth and update navigation
-    updateNavigation();
-    
-    // Page-specific initialization
-    if (typeof initializePage === 'function') {
-      initializePage();
-    }
-  });
-</script>
 </body>
 </html>

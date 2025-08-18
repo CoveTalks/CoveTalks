@@ -1,18 +1,51 @@
 // File: netlify/functions/stripe-create-checkout.js
-// Working version with your Price IDs
+// Updated version for Supabase integration
 
-const { stripe, PRICE_IDS } = require('./utils/stripe');
-const { requireAuth } = require('./utils/auth');
-const { tables, updateRecord } = require('./utils/airtable');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { createClient } = require('@supabase/supabase-js');
+
+// Initialize Supabase client
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY // Use service role key for admin operations
+);
+
+// Price IDs from environment variables (stored in Netlify)
+const PRICE_IDS = {
+  // Monthly prices
+  'standard_monthly': process.env.STRIPE_PRICE_STANDARD_MONTHLY,
+  'plus_monthly': process.env.STRIPE_PRICE_PLUS_MONTHLY,
+  'premium_monthly': process.env.STRIPE_PRICE_PREMIUM_MONTHLY,
+  // Yearly prices
+  'standard_yearly': process.env.STRIPE_PRICE_STANDARD_YEARLY,
+  'plus_yearly': process.env.STRIPE_PRICE_PLUS_YEARLY,
+  'premium_yearly': process.env.STRIPE_PRICE_PREMIUM_YEARLY
+};
 
 exports.handler = async (event) => {
-  console.log('=== STRIPE CREATE CHECKOUT ===');
+  console.log('=== STRIPE CREATE CHECKOUT (SUPABASE) ===');
   
+  // Handle CORS
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS'
+      },
+      body: ''
+    };
+  }
+
   // Only allow POST
   if (event.httpMethod !== 'POST') {
     return { 
       statusCode: 405, 
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
       body: JSON.stringify({ error: 'Method Not Allowed' })
     };
   }
@@ -25,33 +58,31 @@ exports.handler = async (event) => {
   };
 
   try {
-    // Check Stripe configuration
-    if (!process.env.STRIPE_SECRET_KEY) {
-      console.error('❌ STRIPE_SECRET_KEY not configured');
-      return {
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({ 
-          success: false,
-          error: 'Payment system not configured',
-          debug: 'Missing STRIPE_SECRET_KEY in .env file'
-        })
-      };
-    }
-
-    // Verify authentication
-    const auth = await requireAuth(event);
-    if (auth.statusCode) {
-      console.log('❌ Authentication failed');
-      return { ...auth, headers };
-    }
-
-    console.log('✅ User authenticated:', auth.userId);
-
+    // Parse request body
     const body = JSON.parse(event.body);
     console.log('Request body:', body);
     
-    const { priceId, planType, billingPeriod } = body;
+    const { 
+      userId, 
+      userEmail, 
+      priceId, 
+      planType, 
+      billingPeriod, 
+      successUrl, 
+      cancelUrl 
+    } = body;
+
+    // Validate required fields
+    if (!userId || !userEmail || !priceId) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ 
+          success: false,
+          error: 'Missing required fields: userId, userEmail, and priceId are required'
+        })
+      };
+    }
 
     // Map the priceId string to actual Stripe price ID
     const actualPriceId = PRICE_IDS[priceId];
@@ -61,26 +92,28 @@ exports.handler = async (event) => {
       actual: actualPriceId
     });
 
-    // Check if we have a valid price ID
     if (!actualPriceId) {
-      console.error('❌ Invalid price ID:', priceId);
+      console.error('Invalid price ID:', priceId);
       return {
         statusCode: 400,
         headers,
         body: JSON.stringify({ 
           success: false,
-          error: 'Invalid subscription plan selected',
-          debug: `Invalid price ID: ${priceId}`
+          error: 'Invalid subscription plan selected'
         })
       };
     }
 
-    // Get user from Airtable
-    console.log('Fetching user from Airtable...');
-    const user = await tables.members.find(auth.userId);
+    // Get user from Supabase
+    console.log('Fetching user from Supabase...');
+    const { data: member, error: memberError } = await supabase
+      .from('members')
+      .select('*')
+      .eq('id', userId)
+      .single();
     
-    if (!user) {
-      console.error('❌ User not found in Airtable');
+    if (memberError || !member) {
+      console.error('User not found:', memberError);
       return {
         statusCode: 404,
         headers,
@@ -92,13 +125,13 @@ exports.handler = async (event) => {
     }
 
     console.log('User found:', {
-      name: user.fields.Name,
-      email: user.fields.Email,
-      type: user.fields.Member_Type
+      name: member.name,
+      email: member.email,
+      type: member.member_type
     });
 
     // Only speakers can subscribe
-    if (user.fields.Member_Type !== 'Speaker') {
+    if (member.member_type !== 'Speaker') {
       return {
         statusCode: 403,
         headers,
@@ -110,37 +143,41 @@ exports.handler = async (event) => {
     }
 
     // Create or get Stripe customer
-    let customerId = user.fields.Stripe_Customer_ID;
+    let customerId = member.stripe_customer_id;
     
     if (!customerId) {
       console.log('Creating new Stripe customer...');
       try {
         const customer = await stripe.customers.create({
-          email: user.fields.Email,
-          name: user.fields.Name,
-          phone: user.fields.Phone || undefined,
+          email: member.email,
+          name: member.name,
+          phone: member.phone || undefined,
           metadata: {
-            airtable_id: auth.userId,
-            member_type: user.fields.Member_Type
+            supabase_user_id: userId,
+            member_type: member.member_type
           }
         });
         
         customerId = customer.id;
-        console.log('✅ Stripe customer created:', customerId);
+        console.log('Stripe customer created:', customerId);
         
-        // Save Stripe customer ID to Airtable
-        await updateRecord(tables.members, auth.userId, {
-          Stripe_Customer_ID: customerId
-        });
+        // Save Stripe customer ID to Supabase
+        const { error: updateError } = await supabase
+          .from('members')
+          .update({ stripe_customer_id: customerId })
+          .eq('id', userId);
+        
+        if (updateError) {
+          console.error('Failed to update customer ID:', updateError);
+        }
       } catch (stripeError) {
-        console.error('❌ Failed to create Stripe customer:', stripeError);
+        console.error('Failed to create Stripe customer:', stripeError);
         return {
           statusCode: 500,
           headers,
           body: JSON.stringify({ 
             success: false,
-            error: 'Failed to create customer account',
-            debug: stripeError.message
+            error: 'Failed to create customer account'
           })
         };
       }
@@ -150,34 +187,29 @@ exports.handler = async (event) => {
 
     // Check for existing active subscription
     console.log('Checking for existing subscriptions...');
-    try {
-      const existingSubscriptions = await stripe.subscriptions.list({
-        customer: customerId,
-        status: 'active',
-        limit: 1
-      });
+    const { data: existingSubscriptions } = await supabase
+      .from('subscriptions')
+      .select('*')
+      .eq('member_id', userId)
+      .eq('status', 'Active');
 
-      if (existingSubscriptions.data.length > 0) {
-        console.log('⚠️ User already has active subscription');
-        return {
-          statusCode: 400,
-          headers,
-          body: JSON.stringify({ 
-            success: false,
-            error: 'You already have an active subscription. Please manage it from your billing page.',
-            hasSubscription: true
-          })
-        };
-      }
-    } catch (subCheckError) {
-      console.log('Could not check existing subscriptions:', subCheckError.message);
-      // Continue anyway - let Stripe handle it
+    if (existingSubscriptions && existingSubscriptions.length > 0) {
+      console.log('User already has active subscription');
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ 
+          success: false,
+          error: 'You already have an active subscription. Please manage it from your billing page.',
+          hasSubscription: true
+        })
+      };
     }
 
     // Create checkout session
     console.log('Creating Stripe checkout session...');
-    const successUrl = body.successUrl || `${process.env.SITE_URL || 'http://localhost:8888'}/dashboard.html?subscription=success`;
-    const cancelUrl = body.cancelUrl || `${process.env.SITE_URL || 'http://localhost:8888'}/pricing.html`;
+    const finalSuccessUrl = successUrl || `${process.env.SITE_URL || 'http://localhost:8888'}/dashboard.html?subscription=success`;
+    const finalCancelUrl = cancelUrl || `${process.env.SITE_URL || 'http://localhost:8888'}/pricing.html`;
 
     try {
       const session = await stripe.checkout.sessions.create({
@@ -188,20 +220,20 @@ exports.handler = async (event) => {
           quantity: 1
         }],
         mode: 'subscription',
-        success_url: successUrl,
-        cancel_url: cancelUrl,
+        success_url: finalSuccessUrl,
+        cancel_url: finalCancelUrl,
         allow_promotion_codes: true,
         billing_address_collection: 'auto',
         metadata: {
-          airtable_id: auth.userId,
+          supabase_user_id: userId,
           plan_type: planType,
           billing_period: billingPeriod
         }
       });
 
-      console.log('✅ Checkout session created!');
-      console.log('   Session ID:', session.id);
-      console.log('   Checkout URL:', session.url);
+      console.log('Checkout session created!');
+      console.log('Session ID:', session.id);
+      console.log('Checkout URL:', session.url);
 
       return {
         statusCode: 200,
@@ -214,22 +246,24 @@ exports.handler = async (event) => {
         })
       };
     } catch (sessionError) {
-      console.error('❌ Failed to create checkout session:', sessionError);
+      console.error('Failed to create checkout session:', sessionError);
       return {
         statusCode: 500,
         headers,
         body: JSON.stringify({ 
           success: false,
-          error: 'Failed to create checkout session',
-          debug: sessionError.message
+          error: 'Failed to create checkout session'
         })
       };
     }
   } catch (error) {
-    console.error('❌ Unexpected error:', error);
+    console.error('Unexpected error:', error);
     return {
       statusCode: 500,
-      headers,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
       body: JSON.stringify({ 
         success: false,
         error: 'An unexpected error occurred',
