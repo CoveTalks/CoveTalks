@@ -610,6 +610,21 @@
                 margin-bottom: 0.5rem;
             }
         }
+
+        .meta-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            /* Optional: add a white filter if your icons are dark and need to be white */
+            filter: brightness(0) invert(1);
+        }
+
+        /* If you want the icons to align better */
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -677,19 +692,20 @@
                     <span id="statusBadge" class="status-badge-large pending">PENDING</span>
                     <div class="application-meta">
                         <div class="meta-item">
-                            <span>📅</span>
+                            <img src="/Images/calendar_icon.png" alt="Date" class="meta-icon">
                             <span>Applied: <strong id="appliedDate">Loading...</strong></span>
                         </div>
                         <div class="meta-item">
-                            <span>🏢</span>
+                            <img src="/Images/building_icon.png" alt="Organization" class="meta-icon">
                             <span>Organization: <strong id="orgName">Loading...</strong></span>
                         </div>
                         <div class="meta-item">
-                            <span>📍</span>
+                            <img src="/Images/map_pin_icon.png" alt="Location" class="meta-icon">
                             <span>Location: <strong id="eventLocation">Loading...</strong></span>
                         </div>
                     </div>
                 </div>
+            </div>
 
                 <!-- Content Grid -->
                 <div class="content-grid">
