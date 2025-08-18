@@ -214,7 +214,7 @@
             background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
             color: white;
             padding: 3rem;
-            margin: 2rem ;
+            margin: 2rem 0;
             border-radius: 15px;
         }
 
@@ -294,17 +294,17 @@
             margin-bottom: 1rem;
         }
 
-        /* Timeline */
+        /* Timeline - FIXED ALIGNMENT */
         .timeline {
             position: relative;
-            padding-left: 40px;
+            padding-left: 50px;
         }
 
         .timeline::before {
             content: '';
             position: absolute;
-            left: 15px;
-            top: 0;
+            left: 19px;
+            top: 20px;
             bottom: 0;
             width: 2px;
             background: #e1e8ed;
@@ -321,15 +321,20 @@
 
         .timeline-marker {
             position: absolute;
-            left: -25px;
-            width: 30px;
-            height: 30px;
+            left: -31px;
+            top: 0;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: white;
-            border: 3px solid #155588;
+            border: 3px solid #e1e8ed;
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .timeline-marker.submitted {
+            border-color: #3498db;
         }
 
         .timeline-marker.pending {
@@ -344,15 +349,31 @@
             border-color: #dc3545;
         }
 
+        .timeline-marker.withdrawn {
+            border-color: #6c757d;
+        }
+
         .timeline-marker.current {
             background: #155588;
-            color: white;
+            border-color: #155588;
+        }
+
+        /* Timeline icon styling */
+        .timeline-marker img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+
+        .timeline-marker.current img {
+            filter: brightness(0) invert(1); /* Makes the icon white when current */
         }
 
         .timeline-content {
             background: #f8f9fa;
             padding: 1rem;
             border-radius: 10px;
+            margin-left: 10px;
         }
 
         .timeline-date {
@@ -588,19 +609,6 @@
             .detail-label {
                 margin-bottom: 0.5rem;
             }
-        }
-
-        .status-icon {
-            width: 20px;
-            height: 20px;
-            vertical-align: middle;
-            margin-right: 5px;
-        }
-
-        /* Optional: Add different sizes for different statuses */
-        .status-icon.status-accepted {
-            width: 22px;
-            height: 22px;
         }
     </style>
 </head>
@@ -1169,16 +1177,18 @@
             container.innerHTML = actionsHtml;
         }
 
-        // Get status icon
+        // Get status icon - Using images for all statuses
         function getStatusIcon(status) {
             const icons = {
-                'Submitted': '<img src="/Images/mail_icon.png" alt="Submitted" class="status-icon">',
-                'Pending': '<i class="fas fa-clock"></i>',
-                'Accepted': '<i class="fas fa-check-circle"></i>',
-                'Rejected': '<i class="fas fa-times-circle"></i>',
-                'Withdrawn': '<i class="fas fa-undo"></i>'
+                'Submitted': 'mail-icon.png',
+                'Pending': 'pending-icon.png', 
+                'Accepted': 'accepted-icon.png',
+                'Rejected': 'rejected-icon.png',
+                'Withdrawn': 'withdrawn-icon.png'
             };
-            return icons[status] || '<i class="fas fa-circle"></i>';
+            
+            const iconFile = icons[status] || 'default-icon.png';
+            return `<img src="/Images/${iconFile}" alt="${status}" onerror="this.style.display='none'">`;
         }
 
         // Get status title

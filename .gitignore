@@ -64,3 +64,4 @@ stripe-cli/
 # (Only commit config.example.js)
 /config.js
 /public/config.js
+/public\working_Notes_Covetalks.md
