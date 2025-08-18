@@ -52,12 +52,6 @@
             width: auto;
             display: block;
         }
-        
-        @media (max-width: 768px) {
-            .logo-img {
-                height: 50px;
-            }
-        }
 
         .nav-container {
             max-width: 1200px;
@@ -132,18 +126,83 @@
             color: white;
         }
 
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* User Menu Styles */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e1e8ed;
+            margin: 0;
+        }
+
         /* Main Content */
         .main-content {
             padding-top: 6rem;
             min-height: 100vh;
-            background: #f8f9fa;
+            background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
         }
 
         .page-header {
             background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
             color: white;
-            padding: 10rem 0;
+            padding: 8rem 0 4rem;
             text-align: center;
+            margin-bottom: -3rem;
         }
 
         .page-header h1 {
@@ -151,17 +210,29 @@
             margin-bottom: 1rem;
         }
 
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
         /* Search Section */
         .search-section {
-            padding: 3rem 0;
+            padding: 0 0 3rem;
         }
 
         .search-container {
             background: white;
             padding: 2rem;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+            position: relative;
+            top: -2rem;
+        }
+
+        .search-container h2 {
+            color: #155588;
+            margin-bottom: 1.5rem;
         }
 
         .search-filters {
@@ -179,6 +250,7 @@
         .filter-group label {
             margin-bottom: 0.5rem;
             font-weight: 500;
+            color: #555;
         }
 
         .filter-group input,
@@ -187,6 +259,7 @@
             border: 2px solid #e1e8ed;
             border-radius: 5px;
             transition: border-color 0.3s;
+            font-size: 0.95rem;
         }
 
         .filter-group input:focus,
@@ -200,147 +273,261 @@
             margin-top: 2rem;
         }
 
-        .results-info {
-            margin-bottom: 1rem;
-            color: #666;
-            font-size: 0.9rem;
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
         }
 
+        .results-info {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .results-count {
+            color: #155588;
+            font-weight: bold;
+        }
+
+        /* Enhanced Member Cards Grid */
         .results-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
         }
 
         .member-card {
             background: white;
             border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
             cursor: pointer;
         }
 
         .member-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
         }
 
-        .member-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .member-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
+        .member-image-container {
+            position: relative;
+            height: 200px;
             background: linear-gradient(135deg, #667eea, #1e93b7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin-right: 1rem;
             overflow: hidden;
         }
 
-        .member-avatar img {
+        .member-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .member-info h3 {
-            margin-bottom: 0.25rem;
-            color: #155588;
-        }
-
-        .member-type {
-            background: #155588;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            display: inline-block;
-        }
-
-        .member-type.organization {
-            background: #f2b236;
-        }
-
-        .member-details {
-            margin-bottom: 1rem;
-        }
-
-        .member-tags {
+        .member-initials-large {
+            width: 100%;
+            height: 100%;
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #155588, #1e93b7);
         }
 
-        .tag {
-            background: #e8f4fd;
-            color: #155588;
-            padding: 0.25rem 0.75rem;
+        .member-badge {
+            position: absolute;
+            top: 0.75rem;
+            left: 0.75rem;
+            padding: 0.35rem 0.75rem;
             border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .badge-speaker {
+            background: linear-gradient(135deg, #155588, #1e93b7);
+        }
+
+        .badge-organization {
+            background: linear-gradient(135deg, #f2b236, #ff8c42);
+        }
+
+        .badge-verified {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .badge-new {
+            background: linear-gradient(135deg, #00c9ff, #92fe9d);
+        }
+
+        .member-info {
+            padding: 1.25rem;
+        }
+
+        .member-name {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #155588;
+            margin-bottom: 0.35rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .member-tagline {
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+            min-height: 2.2rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .member-location {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            color: #999;
             font-size: 0.8rem;
+            margin-bottom: 0.75rem;
         }
 
-        .contact-info {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-        }
-
-        .contact-info p {
-            margin: 0.25rem 0;
+        .member-location::before {
+            content: "📍";
             font-size: 0.9rem;
         }
 
-        .contact-info a {
+        .member-specialties {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            margin-bottom: 0.75rem;
+            min-height: 2rem;
+        }
+
+        .specialty-tag {
+            background: #e8f4fd;
             color: #155588;
-            text-decoration: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            border: 1px solid rgba(21, 85, 136, 0.1);
+            transition: all 0.2s;
         }
 
-        .contact-info a:hover {
-            text-decoration: underline;
+        .specialty-tag:hover {
+            background: #155588;
+            color: white;
         }
 
-        .premium-blur {
-            filter: blur(3px);
-            pointer-events: none;
+        .more-tags {
+            background: #f0f0f0;
+            color: #666;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
         }
 
-        .upgrade-overlay {
-            position: relative;
-            text-align: center;
-            margin-top: -2rem;
-            z-index: 2;
+        .member-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin-bottom: 0.75rem;
         }
 
+        .stars {
+            display: flex;
+            gap: 0.1rem;
+        }
+
+        .star {
+            color: #f2b236;
+            font-size: 0.85rem;
+        }
+
+        .star.empty {
+            color: #ddd;
+        }
+
+        .rating-count {
+            color: #999;
+            font-size: 0.75rem;
+        }
+
+        .member-footer {
+            padding: 0.75rem 1.25rem;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .contact-status {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #4caf50;
+        }
+
+        .status-dot.locked {
+            background: #ff9800;
+        }
+
+        .view-profile-btn {
+            padding: 0.4rem 1rem;
+            background: #155588;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .view-profile-btn:hover {
+            background: #1e3d6f;
+            transform: translateY(-1px);
+        }
+
+        /* Auth Required Banner */
         .auth-required {
             text-align: center;
-            padding: 3rem;
-            background: white;
+            padding: 2rem;
+            background: linear-gradient(135deg, #fff4e6, #fff);
+            border: 2px solid #f2b236;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
         }
 
         .auth-required h3 {
-            color: #155588;
-            margin-bottom: 1rem;
+            color: #f2b236;
+            margin-bottom: 0.5rem;
         }
 
         .auth-required p {
             color: #666;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
+        /* Loading state */
         .loading {
             display: inline-block;
             width: 20px;
@@ -364,274 +551,140 @@
         /* Empty state */
         .empty-state {
             text-align: center;
-            padding: 3rem;
+            padding: 4rem;
             color: #666;
-        }
-
-        .empty-state img {
-            width: 200px;
-            opacity: 0.5;
-            margin-bottom: 1rem;
-        }
-
-        /* User menu styles */
-        .user-menu {
-            position: relative;
-        }
-
-        .user-dropdown {
-            position: relative;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 0.5rem;
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            grid-column: 1 / -1;
         }
 
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.75rem 1rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #e1e8ed;
-            margin: 0.5rem 0;
-        }
-
-        /* Mobile Navigation */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 35px;
-            height: 35px;
-            cursor: pointer;
-            z-index: 1002;
-            background: none;
-            border: none;
-            padding: 5px;
-        }
-
-        .hamburger span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background: #333;
-            margin: 3px 0;
-            transition: all 0.3s ease;
-            border-radius: 2px;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-
-        .mobile-menu-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .mobile-menu-overlay.show {
-            display: block;
-            opacity: 1;
-        }
-
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: 300px;
-            height: 100vh;
-            background: white;
-            z-index: 1001;
-            transition: right 0.3s ease;
-            overflow-y: auto;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-        }
-
-        .mobile-menu.show {
-            right: 0;
-        }
-
-        .mobile-menu-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e1e8ed;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .mobile-menu-close {
-            width: 30px;
-            height: 30px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: #666;
-        }
-
-        .mobile-nav-links {
-            list-style: none;
-            padding: 1rem 0;
-        }
-
-        .mobile-nav-links li {
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .mobile-nav-links a {
-            display: block;
-            padding: 1rem 1.5rem;
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .mobile-nav-links a:hover {
-            background: #f8f9fa;
+        .empty-state h3 {
             color: #155588;
-            padding-left: 2rem;
-        }
-
-        .mobile-nav-links a.active {
-            color: #155588;
-            background: #e8f4fd;
-        }
-
-        .mobile-user-section {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e1e8ed;
-            background: #f8f9fa;
-        }
-
-        .mobile-user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
             margin-bottom: 1rem;
-        }
-
-        .mobile-user-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        .mobile-user-details h3 {
-            margin: 0;
-            color: #333;
-        }
-
-        .mobile-user-details p {
-            margin: 0;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .mobile-auth-buttons {
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .mobile-auth-buttons .btn {
-            width: 100%;
-            text-align: center;
         }
 
         /* Responsive Design */
+        @media (max-width: 1200px) {
+            .results-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.25rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.25rem;
+            }
+            
+            .member-image-container {
+                height: 180px;
+            }
+            
+            .member-initials-large {
+                font-size: 2.5rem;
+            }
+        }
+
         @media (max-width: 768px) {
             .nav-links {
-                display: none !important;
-            }
-            
-            .auth-buttons.desktop-only {
-                display: none !important;
-            }
-            
-            .hamburger {
-                display: flex;
+                display: none;
             }
 
             .search-filters {
                 grid-template-columns: 1fr;
             }
 
-            .results-grid {
-                grid-template-columns: 1fr;
-            }
-
             .page-header h1 {
                 font-size: 2rem;
             }
+
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .member-image-container {
+                height: 160px;
+            }
+
+            .member-info {
+                padding: 1rem;
+            }
+
+            .member-name {
+                font-size: 1.1rem;
+            }
+
+            .member-footer {
+                padding: 0.75rem 1rem;
+            }
+
+            .results-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: start;
+            }
+
+            .logo-img {
+                height: 50px;
+            }
         }
 
-        @media (max-width: 480px) {
-            .mobile-menu {
-                width: 85vw;
-                right: -85vw;
+        @media (max-width: 576px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+
+            .member-image-container {
+                height: 200px;
+            }
+
+            .member-initials-large {
+                font-size: 3rem;
+            }
+
+            .member-info {
+                padding: 1.25rem;
+            }
+
+            .member-name {
+                font-size: 1.25rem;
+            }
+
+            .member-tagline {
+                font-size: 0.9rem;
+            }
+
+            .member-location {
+                font-size: 0.85rem;
+            }
+
+            .specialty-tag,
+            .more-tags {
+                font-size: 0.75rem;
+                padding: 0.3rem 0.6rem;
+            }
+
+            .member-footer {
+                padding: 1rem 1.25rem;
+            }
+
+            .view-profile-btn {
+                padding: 0.5rem 1.2rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .page-header {
+                padding: 6rem 0 3rem;
+            }
+
+            .member-image-container {
+                height: 180px;
             }
         }
     </style>
@@ -641,147 +694,48 @@
     <header>
         <div class="nav-container">
             <nav>
-                <!-- Logo -->
                 <a href="index.html" class="logo">
-                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
                 </a>
                 
-                <!-- Desktop Navigation -->
-                <!-- Logged Out Navigation -->
-                <ul class="nav-links nav-logged-out" id="navLoggedOut">
+                <!-- Navigation links will be dynamically inserted here -->
+                <ul class="nav-links" id="navLinks">
+                    <!-- Default logged out navigation -->
                     <li><a href="index.html">Home</a></li>
                     <li><a href="members.html" class="active">Find Speakers</a></li>
                     <li><a href="pricing.html">Pricing</a></li>
                     <li><a href="register.html">Register</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                
-                <!-- Logged In Navigation (Speakers) -->
-                <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html" class="active">Find Speakers</a></li>
-                    <li><a href="opportunities.html">Opportunities</a></li>
-                    <li><a href="bookings.html">My Bookings</a></li>
-                    <li><a href="profile.html">Profile</a></li>
-                </ul>
-                
-                <!-- Logged In Navigation (Organizations) -->
-                <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
-                    <li><a href="organization-dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html" class="active">Find Speakers</a></li>
-                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                    <li><a href="my-opportunities.html">My Opportunities</a></li>
-                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                </ul>
     
-                <!-- Right Side Navigation -->
                 <div class="nav-right">
-                    <!-- For Logged In Users -->
-                    <div class="user-menu" id="userMenuDesktop" style="display: none;">
-                        <div class="user-dropdown">
-                            <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
-                            <div class="dropdown-menu" id="dropdownMenu">
-                                <a href="profile-edit.html">Edit Profile</a>
-                                <a href="settings.html">Settings</a>
-                                <a href="billing.html">Billing</a>
-                                <div class="dropdown-divider"></div>
-                                <a href="#" onclick="logout()">Logout</a>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <!-- For Logged Out Users -->
-                    <div class="auth-buttons desktop-only" id="authButtonsDesktop">
+                    <!-- Auth buttons (shown when logged out) -->
+                    <div class="auth-buttons" id="authButtons">
                         <a href="register.html" class="btn btn-secondary">Join</a>
                         <a href="login.html" class="btn btn-primary">Login</a>
                     </div>
-    
-                    <!-- Hamburger Menu Button -->
-                    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
+                    
+                    <!-- User menu (shown when logged in) -->
+                    <div class="user-menu hidden" id="userMenu">
+                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="inbox.html">Inbox</a>
+                            <a href="settings.html">Settings</a>
+                            <a href="billing.html">Billing</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" onclick="logout(); return false;">Logout</a>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </div>
     </header>
 
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
-
-    <!-- Mobile Menu Panel -->
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-header">
-            <a href="index.html" class="logo">
-                <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
-            </a>
-            <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
-        </div>
-
-        <!-- Mobile User Section (for logged in users) -->
-        <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
-            <div class="mobile-user-info">
-                <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
-                <div class="mobile-user-details">
-                    <h3 id="mobileUserName">John Doe</h3>
-                    <p id="mobileUserType">Speaker - Plus Plan</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Navigation Links -->
-        <!-- Logged Out Mobile Navigation -->
-        <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="members.html" class="active">Find Speakers</a></li>
-            <li><a href="pricing.html">Pricing</a></li>
-            <li><a href="register.html">Register</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="help.html">Help Center</a></li>
-        </ul>
-        
-        <!-- Logged In Mobile Navigation (Speakers) -->
-        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
-            <li><a href="dashboard.html">Dashboard</a></li>
-            <li><a href="members.html" class="active">Find Speakers</a></li>
-            <li><a href="opportunities.html">Opportunities</a></li>
-            <li><a href="bookings.html">My Bookings</a></li>
-            <li><a href="profile.html">Profile</a></li>
-            <li><a href="settings.html">Settings</a></li>
-            <li><a href="billing.html">Billing</a></li>
-            <li><a href="help.html">Help & Support</a></li>
-        </ul>
-        
-        <!-- Logged In Mobile Navigation (Organizations) -->
-        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
-            <li><a href="organization-dashboard.html">Dashboard</a></li>
-            <li><a href="members.html" class="active">Find Speakers</a></li>
-            <li><a href="post-opportunity.html">Post Opportunity</a></li>
-            <li><a href="my-opportunities.html">My Opportunities</a></li>
-            <li><a href="saved-speakers.html">Saved Speakers</a></li>
-            <li><a href="settings.html">Settings</a></li>
-            <li><a href="team.html">Team Members</a></li>
-            <li><a href="help.html">Help & Support</a></li>
-        </ul>
-
-        <!-- Mobile Auth Buttons (for logged out users) -->
-        <div class="mobile-auth-buttons" id="mobileAuthButtons">
-            <a href="register.html" class="btn btn-secondary">Join Community</a>
-            <a href="login.html" class="btn btn-primary">Login</a>
-        </div>
-
-        <!-- Mobile Logout Button (for logged in users) -->
-        <div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
-            <button class="btn btn-primary" onclick="logout()">Logout</button>
-        </div>
-    </div>
-
     <!-- Page Header -->
     <div class="page-header">
         <div class="container">
             <h1>Member Directory</h1>
-            <p>Find speakers and organizations in our community</p>
+            <p>Connect with expert speakers and organizations in our community</p>
         </div>
     </div>
 
@@ -800,9 +754,9 @@
                         <div class="filter-group">
                             <label for="typeFilter">Type</label>
                             <select id="typeFilter">
-                                <option value="">All</option>
-                                <option value="Speaker">Speakers</option>
-                                <option value="Organization">Organizations</option>
+                                <option value="">All Members</option>
+                                <option value="Speaker">Speakers Only</option>
+                                <option value="Organization">Organizations Only</option>
                             </select>
                         </div>
                         <div class="filter-group">
@@ -815,113 +769,253 @@
                         </div>
                     </div>
                     
-                    <button id="searchBtn" class="btn btn-primary">
-                        <span id="searchBtnText">Search</span>
-                        <span id="searchLoader" class="loading hidden"></span>
-                    </button>
+                    <div style="display: flex; gap: 1rem;">
+                        <button id="searchBtn" class="btn btn-primary">
+                            <span id="searchBtnText">Search</span>
+                            <span id="searchLoader" class="loading hidden"></span>
+                        </button>
+                        <button id="clearBtn" class="btn btn-secondary" onclick="clearFilters()">
+                            Clear Filters
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Results Section -->
                 <div class="results-section">
+                    <!-- Auth Required Message (Show when not logged in) -->
                     <div id="authRequired" class="auth-required hidden">
-                        <h3>Member Access Required</h3>
-                        <p>Please log in or register to view full contact information.</p>
-                        <div style="margin-top: 1.5rem;">
+                        <h3>🔒 Login to View Contact Information</h3>
+                        <p>Join our community to connect with speakers and organizations</p>
+                        <div style="display: flex; gap: 1rem; justify-content: center;">
                             <a href="login.html" class="btn btn-primary">Login</a>
                             <a href="register.html" class="btn btn-secondary">Register Free</a>
                         </div>
                     </div>
 
-                    <div id="resultsInfo" class="results-info hidden">
-                        Showing <span id="resultsCount">0</span> members
+                    <div class="results-header">
+                        <div id="resultsInfo" class="results-info hidden">
+                            Showing <span id="resultsCount" class="results-count">0</span> members
+                        </div>
                     </div>
 
                     <div id="searchResults" class="results-grid">
                         <!-- Results will be loaded here -->
-                    </div>
-
-                    <div id="emptyState" class="empty-state hidden">
-                        <h3>No members found</h3>
-                        <p>Try adjusting your search criteria or browse all members.</p>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Include the API client and navigation -->
-    <script src="/js/app.js"></script>
-    <script src="/js/navigation.js"></script>
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load config and Supabase client -->
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
     
     <script>
         // Page state
         let currentUser = null;
         let isAuthenticated = false;
         let allMembers = [];
-        let filteredMembers = [];
+        let initAttempts = 0;
+        const MAX_INIT_ATTEMPTS = 10;
 
         // DOM Elements
-        const searchBtn = document.getElementById('searchBtn');
-        const searchResults = document.getElementById('searchResults');
-        const authRequired = document.getElementById('authRequired');
-        const resultsInfo = document.getElementById('resultsInfo');
-        const resultsCount = document.getElementById('resultsCount');
-        const emptyState = document.getElementById('emptyState');
+        let searchBtn, searchResults, authRequired, resultsInfo, resultsCount;
 
-        // Initialize page
-        function initializePage() {
-            // Set auth status
-            currentUser = api.getCurrentUser();
-            isAuthenticated = api.isAuthenticated();
+        // Wait for Supabase client to be ready
+        function waitForSupabase(callback) {
+            initAttempts++;
             
-            // Update UI based on auth
-            if (isAuthenticated) {
-                authRequired.classList.add('hidden');
+            if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                callback();
+            } else if (initAttempts < MAX_INIT_ATTEMPTS) {
+                setTimeout(() => waitForSupabase(callback), 500);
             } else {
-                authRequired.classList.remove('hidden');
+                console.error('[Members] Failed to load Supabase client');
+                showError('Failed to initialize. Please refresh the page.');
             }
-            
-            // Load members
-            loadMembers();
         }
 
-        // Event Listeners
-        searchBtn.addEventListener('click', performSearch);
-        
-        // Allow enter key to trigger search
-        document.querySelectorAll('.filter-group input').forEach(input => {
-            input.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    performSearch();
+        // Update navigation based on user type
+        function updateNavigation(user) {
+            const navLinks = document.getElementById('navLinks');
+            const authButtons = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userAvatar = document.getElementById('userAvatar');
+            
+            if (user) {
+                // Hide auth buttons, show user menu
+                authButtons.classList.add('hidden');
+                userMenu.classList.remove('hidden');
+                
+                // Update avatar with user initials
+                const initials = user.name ? 
+                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                    'U';
+                userAvatar.textContent = initials;
+                
+                // Update navigation links based on user type
+                if (user.member_type === 'Organization') {
+                    navLinks.innerHTML = `
+                        <li><a href="organization-dashboard.html">Dashboard</a></li>
+                        <li><a href="members.html" class="active">Find Speakers</a></li>
+                        <li><a href="post-opportunity.html">Post Opportunity</a></li>
+                        <li><a href="my-opportunities.html">My Opportunities</a></li>
+                        <li><a href="saved-speakers.html">Saved Speakers</a></li>
+                    `;
+                } else {
+                    // Speaker navigation
+                    navLinks.innerHTML = `
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="members.html" class="active">Find Speakers</a></li>
+                        <li><a href="opportunities.html">Opportunities</a></li>
+                        <li><a href="bookings.html">My Bookings</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                    `;
                 }
-            });
+            } else {
+                // Show default logged out navigation
+                authButtons.classList.remove('hidden');
+                userMenu.classList.add('hidden');
+                
+                navLinks.innerHTML = `
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="members.html" class="active">Find Speakers</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                `;
+            }
+        }
+
+        // Helper function to generate star HTML
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            
+            let starsHtml = '';
+            for (let i = 0; i < fullStars; i++) {
+                starsHtml += '<span class="star">★</span>';
+            }
+            if (hasHalfStar) {
+                starsHtml += '<span class="star">★</span>';
+            }
+            for (let i = 0; i < emptyStars; i++) {
+                starsHtml += '<span class="star empty">☆</span>';
+            }
+            return starsHtml;
+        }
+
+        // Check if member is new (joined within last 30 days)
+        function isNewMember(createdAt) {
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            return new Date(createdAt) > thirtyDaysAgo;
+        }
+
+        // Toggle dropdown menu
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdownMenu');
+            const avatar = document.getElementById('userAvatar');
+            
+            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
         });
 
-        // Load members from backend
-        async function loadMembers() {
-            searchResults.innerHTML = '<div style="text-align: center; padding: 2rem;"><span class="loading"></span> Loading members...</div>';
+        // Initialize page
+        async function initializePage() {
+            // Get DOM elements
+            searchBtn = document.getElementById('searchBtn');
+            searchResults = document.getElementById('searchResults');
+            authRequired = document.getElementById('authRequired');
+            resultsInfo = document.getElementById('resultsInfo');
+            resultsCount = document.getElementById('resultsCount');
             
-            try {
-                const params = new URLSearchParams();
-                const headers = {};
-                
-                if (isAuthenticated) {
-                    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-                    if (token) {
-                        headers['Authorization'] = `Bearer ${token}`;
+            // Show initial loading state
+            searchResults.innerHTML = '<div class="empty-state"><span class="loading"></span> Loading members...</div>';
+            
+            // Wait for Supabase client
+            waitForSupabase(async () => {
+                try {
+                    // Check authentication status
+                    const session = await window.covetalks.checkAuth();
+                    if (session) {
+                        isAuthenticated = true;
+                        currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                        authRequired.classList.add('hidden');
+                        
+                        // Update navigation with user info
+                        updateNavigation(currentUser);
+                    } else {
+                        isAuthenticated = false;
+                        authRequired.classList.remove('hidden');
+                        updateNavigation(null);
                     }
+                } catch (error) {
+                    console.error('[Members] Auth check error:', error);
+                    isAuthenticated = false;
+                    authRequired.classList.remove('hidden');
+                    updateNavigation(null);
                 }
                 
-                const membersData = await api.getMembers();
+                // Load all members
+                await loadMembers();
                 
-                if (membersData && membersData.members) {
-                    allMembers = membersData.members;
-                    displayResults(membersData.members, membersData.isAuthenticated);
-                } else {
+                // Set up event listeners
+                setupEventListeners();
+            });
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            if (searchBtn) {
+                searchBtn.addEventListener('click', performSearch);
+            }
+            
+            // Allow enter key to trigger search
+            document.querySelectorAll('.filter-group input').forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performSearch();
+                    }
+                });
+            });
+        }
+
+        // Load members from Supabase
+        async function loadMembers() {
+            try {
+                // Query Supabase for all active members
+                const { data: members, error, count } = await window.covetalks.supabase
+                    .from('members')
+                    .select('*', { count: 'exact' })
+                    .order('created_at', { ascending: false });
+                
+                if (error) {
+                    console.error('[Members] Supabase error:', error);
                     displaySampleMembers();
+                    return;
+                }
+                
+                allMembers = members || [];
+                
+                if (allMembers.length === 0) {
+                    displaySampleMembers();
+                } else {
+                    displayResults(allMembers);
                 }
             } catch (error) {
-                console.error('Error loading members:', error);
+                console.error('[Members] Unexpected error:', error);
                 displaySampleMembers();
             }
         }
@@ -931,55 +1025,90 @@
             const sampleMembers = [
                 {
                     id: 'sample1',
-                    name: 'Sarah Johnson',
-                    memberType: 'Speaker',
-                    location: 'Phoenix, AZ',
-                    bio: 'Leadership coach and motivational speaker with 10+ years of experience...',
-                    specialty: ['Leadership', 'Team Building', 'Motivation'],
-                    email: 'contact@example.com',
-                    phone: '555-0100'
+                    name: 'Dr. Sarah Johnson',
+                    member_type: 'Speaker',
+                    location: 'New York, NY',
+                    bio: 'Leadership Expert & Business Strategist with 15+ years helping Fortune 500 companies transform their culture',
+                    specialties: ['Leadership', 'Business Strategy', 'Team Building'],
+                    email: 'sarah@example.com',
+                    phone: '555-0100',
+                    average_rating: 4.9,
+                    total_reviews: 47,
+                    created_at: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString()
                 },
                 {
                     id: 'sample2',
                     name: 'Tech Innovators Inc.',
-                    memberType: 'Organization',
+                    member_type: 'Organization',
                     location: 'San Francisco, CA',
-                    bio: 'Leading technology conference organizer seeking expert speakers...',
-                    specialty: ['Technology', 'Innovation', 'AI'],
-                    email: 'events@example.com',
-                    phone: '555-0200'
+                    bio: 'Leading technology conference organizer hosting 50+ events annually',
+                    specialties: ['Technology', 'Innovation', 'AI'],
+                    email: 'events@techinnovators.com',
+                    phone: '555-0200',
+                    created_at: new Date().toISOString()
+                },
+                {
+                    id: 'sample3',
+                    name: 'Michael Chen',
+                    member_type: 'Speaker',
+                    location: 'Austin, TX',
+                    bio: 'Technology expert specializing in AI and machine learning implementation strategies',
+                    specialties: ['AI', 'Machine Learning', 'Tech Strategy'],
+                    email: 'mchen@example.com',
+                    phone: '555-0300',
+                    average_rating: 4.7,
+                    total_reviews: 32,
+                    created_at: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString()
                 }
             ];
             
-            displayResults(sampleMembers, false);
+            allMembers = sampleMembers;
+            displayResults(sampleMembers);
         }
 
         // Perform search with filters
         async function performSearch() {
-            const searchTerm = document.getElementById('searchTerm').value.trim();
+            const searchTerm = document.getElementById('searchTerm').value.trim().toLowerCase();
             const typeFilter = document.getElementById('typeFilter').value;
-            const locationFilter = document.getElementById('locationFilter').value.trim();
-            const specialtyFilter = document.getElementById('specialtyFilter').value.trim();
+            const locationFilter = document.getElementById('locationFilter').value.trim().toLowerCase();
+            const specialtyFilter = document.getElementById('specialtyFilter').value.trim().toLowerCase();
 
             document.getElementById('searchBtnText').textContent = 'Searching...';
             document.getElementById('searchLoader').classList.remove('hidden');
             searchBtn.disabled = true;
 
             try {
-                const filters = {};
-                if (searchTerm) filters.search = searchTerm;
-                if (typeFilter) filters.type = typeFilter;
-                if (locationFilter) filters.location = locationFilter;
-                if (specialtyFilter) filters.specialty = specialtyFilter;
+                let filteredResults = allMembers;
                 
-                const data = await api.getMembers(filters);
-                
-                if (data && data.members) {
-                    displayResults(data.members, data.isAuthenticated);
+                // Apply filters
+                if (typeFilter) {
+                    filteredResults = filteredResults.filter(m => m.member_type === typeFilter);
                 }
+                
+                if (searchTerm) {
+                    filteredResults = filteredResults.filter(member => {
+                        const nameMatch = member.name?.toLowerCase().includes(searchTerm);
+                        const bioMatch = member.bio?.toLowerCase().includes(searchTerm);
+                        return nameMatch || bioMatch;
+                    });
+                }
+                
+                if (locationFilter) {
+                    filteredResults = filteredResults.filter(m => 
+                        m.location?.toLowerCase().includes(locationFilter));
+                }
+                
+                if (specialtyFilter) {
+                    filteredResults = filteredResults.filter(member => {
+                        const specialties = Array.isArray(member.specialties) ? 
+                            member.specialties : [];
+                        return specialties.some(s => s.toLowerCase().includes(specialtyFilter));
+                    });
+                }
+                
+                displayResults(filteredResults);
             } catch (error) {
-                console.error('Search error:', error);
-                alert('Search failed. Please try again.');
+                console.error('[Members] Search error:', error);
             } finally {
                 document.getElementById('searchBtnText').textContent = 'Search';
                 document.getElementById('searchLoader').classList.add('hidden');
@@ -987,76 +1116,113 @@
             }
         }
 
-        // Display results
-        function displayResults(members, showFullInfo = false) {
+        // Clear filters
+        function clearFilters() {
+            document.getElementById('searchTerm').value = '';
+            document.getElementById('typeFilter').value = '';
+            document.getElementById('locationFilter').value = '';
+            document.getElementById('specialtyFilter').value = '';
+            loadMembers();
+        }
+
+        // Display results with enhanced card styling
+        function displayResults(members) {
             resultsCount.textContent = members.length;
             resultsInfo.classList.remove('hidden');
             
             if (members.length === 0) {
-                searchResults.innerHTML = '';
-                emptyState.classList.remove('hidden');
+                searchResults.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No members found</h3>
+                        <p>Try adjusting your search criteria or browse all members.</p>
+                        <div style="margin-top: 1rem;">
+                            <button class="btn btn-secondary" onclick="clearFilters()">Clear Filters & Show All</button>
+                        </div>
+                    </div>
+                `;
                 return;
             }
-            
-            emptyState.classList.add('hidden');
             
             searchResults.innerHTML = members.map(member => {
                 const initials = member.name ? 
                     member.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
                     '??';
                 
-                const tags = Array.isArray(member.specialty) ? 
-                    member.specialty : 
-                    (member.specialty ? member.specialty.split(',').map(t => t.trim()) : []);
+                const imageContent = member.profile_image_url ? 
+                    `<img src="${member.profile_image_url}" alt="${member.name}" class="member-image">` :
+                    `<div class="member-initials-large">${initials}</div>`;
                 
-                const avatarContent = member.profileImage ? 
-                    `<img src="${member.profileImage}" alt="${member.name}">` :
-                    initials;
+                const specialties = Array.isArray(member.specialties) ? member.specialties : [];
                 
-                const typeClass = member.memberType === 'Organization' ? 'organization' : '';
+                // Determine badge type
+                let badgeHtml = '';
+                if (member.member_type === 'Organization') {
+                    badgeHtml = '<div class="member-badge badge-organization">Organization</div>';
+                } else {
+                    badgeHtml = '<div class="member-badge badge-speaker">Speaker</div>';
+                }
                 
-                const contactInfo = showFullInfo && isAuthenticated ? 
-                    `<div class="contact-info">
-                        ${member.email ? `<p><strong>Email:</strong> <a href="mailto:${member.email}">${member.email}</a></p>` : ''}
-                        ${member.phone ? `<p><strong>Phone:</strong> <a href="tel:${member.phone}">${member.phone}</a></p>` : ''}
-                        ${member.website && member.website !== 'Login to view' ? 
-                            `<p><strong>Website:</strong> <a href="${member.website}" target="_blank">Visit Site</a></p>` : ''}
-                    </div>` :
-                    `<div class="contact-info premium-blur">
-                        <p><strong>Email:</strong> ${member.email || '••••••@email.com'}</p>
-                        <p><strong>Phone:</strong> ${member.phone || '•••-•••-••••'}</p>
-                    </div>
-                    ${!isAuthenticated ? `
-                    <div class="upgrade-overlay">
-                        <a href="login.html" class="btn btn-primary">
-                            Login to View Contact Info
-                        </a>
-                    </div>` : ''}`;
-
+                // Add additional badges
+                if (member.created_at && isNewMember(member.created_at)) {
+                    badgeHtml = '<div class="member-badge badge-new">New</div>';
+                } else if (member.average_rating >= 4.5) {
+                    badgeHtml = '<div class="member-badge badge-verified">Top Rated</div>';
+                }
+                
+                // Generate star rating for speakers
+                let ratingHtml = '';
+                if (member.member_type === 'Speaker' && member.average_rating) {
+                    const starsHtml = generateStars(member.average_rating);
+                    const reviewCount = member.total_reviews || 0;
+                    ratingHtml = `
+                        <div class="member-rating">
+                            <div class="stars">${starsHtml}</div>
+                            <span class="rating-count">(${reviewCount})</span>
+                        </div>
+                    `;
+                }
+                
+                // Tagline - use bio or generate one
+                const tagline = member.bio ? 
+                    member.bio.substring(0, 80) + (member.bio.length > 80 ? '...' : '') :
+                    member.member_type === 'Organization' ? 
+                        'Connect with speakers for your events' : 
+                        'Professional speaker ready to inspire';
+                
+                // Contact status
+                const contactStatus = isAuthenticated ? 
+                    '<span class="status-dot"></span><span>Contact Available</span>' :
+                    '<span class="status-dot locked"></span><span>Login Required</span>';
+                
                 return `
-                    <div class="member-card" onclick="viewProfile('${member.id}')">
-                        <div class="member-header">
-                            <div class="member-avatar">
-                                ${avatarContent}
-                            </div>
-                            <div class="member-info">
-                                <h3>${member.name || 'Unknown'}</h3>
-                                <span class="member-type ${typeClass}">${member.memberType || 'Member'}</span>
-                            </div>
+                    <div class="member-card" onclick="viewMember('${member.id}')">
+                        <div class="member-image-container">
+                            ${imageContent}
+                            ${badgeHtml}
                         </div>
-                        <div class="member-details">
-                            ${member.location ? `<p><strong>Location:</strong> ${member.location}</p>` : ''}
-                            ${member.bio ? `<p>${member.bio.substring(0, 150)}${member.bio.length > 150 ? '...' : ''}</p>` : ''}
+                        <div class="member-info">
+                            <h3 class="member-name">${member.name || 'Member'}</h3>
+                            <p class="member-tagline">${tagline}</p>
+                            <div class="member-location">${member.location || 'Location not specified'}</div>
+                            
+                            ${specialties.length > 0 ? `
+                            <div class="member-specialties">
+                                ${specialties.slice(0, 2).map(tag => 
+                                    `<span class="specialty-tag">${tag}</span>`
+                                ).join('')}
+                                ${specialties.length > 2 ? 
+                                    `<span class="more-tags">+${specialties.length - 2} more</span>` : 
+                                    ''}
+                            </div>` : '<div class="member-specialties"></div>'}
+                            
+                            ${ratingHtml}
                         </div>
-                        ${tags.length > 0 ? `
-                        <div class="member-tags">
-                            ${tags.slice(0, 5).map(tag => `<span class="tag">${tag}</span>`).join('')}
-                            ${tags.length > 5 ? `<span class="tag">+${tags.length - 5} more</span>` : ''}
-                        </div>` : ''}
-                        ${contactInfo}
-                        <div style="text-align: center; margin-top: 1rem;">
-                            <button class="btn btn-secondary" onclick="event.stopPropagation(); viewProfile('${member.id}')">
-                                View Full Profile
+                        <div class="member-footer">
+                            <div class="contact-status">
+                                ${contactStatus}
+                            </div>
+                            <button class="view-profile-btn" onclick="event.stopPropagation(); viewMember('${member.id}')">
+                                View Profile
                             </button>
                         </div>
                     </div>
@@ -1064,89 +1230,38 @@
             }).join('');
         }
 
-        // View profile function
-        async function viewProfile(memberId) {
-            if (!memberId || memberId === 'undefined') {
-                alert('Profile not available');
-                return;
-            }
-            
-            window.location.href = `profile.html?id=${encodeURIComponent(memberId)}`;
-        }
-
-        // Mobile menu functions
-        function toggleMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            
-            hamburger.classList.toggle('active');
-            mobileMenu.classList.toggle('show');
-            overlay.classList.toggle('show');
-            
-            if (mobileMenu.classList.contains('show')) {
-                document.body.style.overflow = 'hidden';
+        // View member profile
+        function viewMember(memberId) {
+            if (isAuthenticated) {
+                window.location.href = `profile.html?id=${memberId}`;
             } else {
-                document.body.style.overflow = '';
+                window.location.href = 'register.html';
             }
         }
-        
-        function closeMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            
-            hamburger.classList.remove('active');
-            mobileMenu.classList.remove('show');
-            overlay.classList.remove('show');
-            document.body.style.overflow = '';
-        }
-        
-        // Toggle dropdown menu
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
-        }
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (dropdown && avatar && !avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-        
-        // Logout function
-        function logout() {
-            api.logout();
-        }
-        
-        // Close mobile menu on window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                closeMobileMenu();
-            }
-        });
 
-        // Standard initialization
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof api === 'undefined') {
-                console.error('API client not loaded');
-                return;
+        // Show error message
+        function showError(message) {
+            searchResults.innerHTML = `
+                <div class="empty-state">
+                    <h3 style="color: #dc2626;">Error</h3>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+
+        // Logout function
+        async function logout() {
+            if (window.covetalks) {
+                await window.covetalks.logout();
             }
-            
-            // Update navigation UI
-            if (typeof updateNavigation === 'function') {
-                updateNavigation();
-            }
-            
-            // Initialize page (no auth required for members page)
-            if (typeof initializePage === 'function') {
-                initializePage();
-            }
-        });
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
     </script>
 </body>
 </html>

@@ -57,12 +57,6 @@
             width: auto;
             display: block;
         }
-        
-        @media (max-width: 768px) {
-            .logo-img {
-                height: 50px;
-            }
-        }
 
         .nav-container {
             max-width: 1200px;
@@ -258,7 +252,7 @@
             position: relative;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             background: #1e3d6f;
             transform: translateY(-2px);
         }
@@ -267,16 +261,6 @@
             opacity: 0.7;
             cursor: not-allowed;
             transform: none;
-        }
-
-        .btn-primary-nav {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-primary-nav:hover {
-            background: #1e3d6f;
-            transform: translateY(-2px);
         }
 
         .btn-secondary {
@@ -304,24 +288,6 @@
 
         .signup-prompt a:hover {
             text-decoration: underline;
-        }
-
-        /* Performance Indicator */
-        .performance-indicator {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 0.85em;
-            z-index: 1000;
-        }
-
-        .performance-indicator.show {
-            display: block;
         }
 
         /* Info Section Content */
@@ -410,176 +376,10 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Hamburger Menu */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 35px;
-            height: 35px;
-            cursor: pointer;
-            z-index: 1002;
-            background: none;
-            border: none;
-            padding: 5px;
-        }
-
-        .hamburger span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background: #333;
-            margin: 3px 0;
-            transition: all 0.3s ease;
-            border-radius: 2px;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-
-        /* Mobile Menu Overlay */
-        .mobile-menu-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .mobile-menu-overlay.show {
-            display: block;
-            opacity: 1;
-        }
-
-        /* Mobile Menu Panel */
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: 300px;
-            height: 100vh;
-            background: white;
-            z-index: 1001;
-            transition: right 0.3s ease;
-            overflow-y: auto;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-        }
-
-        .mobile-menu.show {
-            right: 0;
-        }
-
-        .mobile-menu-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e1e8ed;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .mobile-menu-close {
-            width: 30px;
-            height: 30px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: #666;
-        }
-
-        .mobile-nav-links {
-            list-style: none;
-            padding: 1rem 0;
-        }
-
-        .mobile-nav-links li {
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .mobile-nav-links a {
-            display: block;
-            padding: 1rem 1.5rem;
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .mobile-nav-links a:hover {
-            background: #f8f9fa;
-            color: #155588;
-            padding-left: 2rem;
-        }
-
-        .mobile-nav-links a.active {
-            color: #155588;
-            background: #e8f4fd;
-        }
-
-        .mobile-auth-buttons {
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .mobile-auth-buttons .btn {
-            width: 100%;
-            text-align: center;
-        }
-
-        /* Fast Login Badge */
-        .fast-login-badge {
-            position: absolute;
-            top: -10px;
-            right: 20px;
-            background: #28a745;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.75em;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
-                display: none !important;
-            }
-            
-            .auth-buttons.desktop-only {
-                display: none !important;
-            }
-            
-            .hamburger {
-                display: flex;
-            }
-            
-            header {
-                padding: 0.75rem 0;
-            }
-            
-            body {
-                padding-top: 60px;
+                display: none;
             }
 
             .login-box {
@@ -590,12 +390,9 @@
             .login-info-section {
                 display: none;
             }
-        }
 
-        @media (max-width: 480px) {
-            .mobile-menu {
-                width: 85vw;
-                right: -85vw;
+            .logo-img {
+                height: 50px;
             }
         }
 
@@ -609,14 +406,20 @@
             bottom: 0;
             background: rgba(0,0,0,0.5);
             z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #forgotModal.show {
+            display: flex;
         }
 
         .modal-content {
             background: white;
             max-width: 400px;
-            margin: 10% auto;
             padding: 2rem;
             border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
         .modal-content h3 {
@@ -635,26 +438,20 @@
             border: none;
             color: #666;
             cursor: pointer;
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <!-- Performance Indicator -->
-    <div id="performanceIndicator" class="performance-indicator">
-        Login time: <span id="perfTime">--</span>ms
-    </div>
-
     <!-- Header -->
     <header>
         <div class="nav-container">
             <nav>
-                <!-- Logo -->
                 <a href="index.html" class="logo">
-                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
                 </a>
                 
-                <!-- Desktop Navigation -->
-                <ul class="nav-links" id="navLinks">
+                <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="members.html">Find Speakers</a></li>
                     <li><a href="pricing.html">Pricing</a></li>
@@ -662,52 +459,15 @@
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
     
-                <!-- Right Side Navigation -->
                 <div class="nav-right">
-                    <div class="auth-buttons desktop-only">
+                    <div class="auth-buttons">
                         <a href="register.html" class="btn btn-secondary">Join</a>
-                        <a href="login.html" class="btn btn-primary-nav">Login</a>
+                        <a href="login.html" class="btn btn-primary" style="padding: 0.75rem 1.5rem;">Login</a>
                     </div>
-    
-                    <!-- Hamburger Menu Button -->
-                    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
                 </div>
             </nav>
         </div>
     </header>
-
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
-
-    <!-- Mobile Menu Panel -->
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-header">
-            <a href="index.html" class="logo">
-                <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
-            </a>
-            <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
-        </div>
-
-        <!-- Mobile Navigation Links -->
-        <ul class="mobile-nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="members.html">Find Speakers</a></li>
-            <li><a href="pricing.html">Pricing</a></li>
-            <li><a href="register.html">Register</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="help.html">Help Center</a></li>
-        </ul>
-
-        <!-- Mobile Auth Buttons -->
-        <div class="mobile-auth-buttons">
-            <a href="register.html" class="btn btn-secondary">Join Community</a>
-            <a href="login.html" class="btn btn-primary">Login</a>
-        </div>
-    </div>
 
     <!-- Login Container -->
     <div class="login-container">
@@ -717,12 +477,11 @@
                 <div class="form-header">
                     <h2>Welcome Back</h2>
                     <p>Login to access your account</p>
-                    <span class="fast-login-badge">⚡ Fast Login</span>
                 </div>
 
                 <!-- Tabs -->
                 <div class="form-tabs">
-                    <button class="tab-btn active" onclick="switchTab('Speaker')">Member Login</button>
+                    <button class="tab-btn active" onclick="switchTab('Member')">Member Login</button>
                     <button class="tab-btn" onclick="switchTab('Organization')">Organization Login</button>
                 </div>
 
@@ -765,25 +524,25 @@
             <div class="login-info-section">
                 <div class="info-icon">🚀</div>
                 <div class="info-content">
-                    <h3>Lightning Fast Login</h3>
-                    <p>Experience our new smart login system - get to your dashboard in seconds, not minutes!</p>
+                    <h3>Welcome to CoveTalks</h3>
+                    <p>Connect with expert speakers and organizations worldwide</p>
                     
                     <div class="feature-list">
                         <div class="feature-item">
-                            <div class="feature-icon">⚡</div>
-                            <span>2-4 second login time</span>
+                            <div class="feature-icon">✓</div>
+                            <span>Access speaker database</span>
                         </div>
                         <div class="feature-item">
-                            <div class="feature-icon">🎯</div>
-                            <span>Smart data loading</span>
+                            <div class="feature-icon">✓</div>
+                            <span>Post speaking opportunities</span>
                         </div>
                         <div class="feature-item">
-                            <div class="feature-icon">📊</div>
-                            <span>Instant dashboard access</span>
+                            <div class="feature-icon">✓</div>
+                            <span>Manage bookings</span>
                         </div>
                         <div class="feature-item">
-                            <div class="feature-icon">🔄</div>
-                            <span>Progressive enhancement</span>
+                            <div class="feature-icon">✓</div>
+                            <span>Build your reputation</span>
                         </div>
                     </div>
                 </div>
@@ -806,99 +565,62 @@
         </div>
     </div>
 
-    <!-- Include the Smart API client -->
-    <script src="/js/app.js"></script>
+    <!-- Load Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
     
     <script>
         // Page state
-        let currentTab = 'Speaker';
+        let currentTab = 'Member';
 
-        // Initialize page
-        function initializePage() {
-            console.log('[Login] Initializing smart login page');
+        // Wait for Supabase client
+        function waitForSupabase(callback) {
+            let attempts = 0;
+            const maxAttempts = 10;
             
-            // Check for redirect from registration
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('registered') === 'true') {
-                showMessage('success', 'Registration successful! Please login to continue.');
-            }
+            const checkClient = () => {
+                attempts++;
+                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                    callback();
+                } else if (attempts < maxAttempts) {
+                    setTimeout(checkClient, 500);
+                } else {
+                    console.error('Failed to load Supabase client');
+                    showMessage('error', 'Application failed to load. Please refresh the page.');
+                }
+            };
             
-            // Set active nav item
-            setActiveNavItem();
-            
-            // Show performance indicator in debug mode
-            if (window.location.hostname === 'localhost') {
-                document.getElementById('performanceIndicator').classList.add('show');
-            }
-            
-            console.log('[Login] Page initialization complete');
+            checkClient();
         }
 
-        // Check if already logged in and redirect
+        // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('[Login] DOM loaded, checking authentication state');
-            
-            // Wait for API to be ready
-            if (typeof api === 'undefined') {
-                console.error('[Login] API client not loaded. Make sure /js/app.js exists.');
-                showMessage('error', 'Application failed to load. Please refresh the page.');
-                return;
-            }
-            
-            // Set destination based on where user wants to go
-            const redirectUrl = sessionStorage.getItem('redirectUrl');
-            if (redirectUrl) {
-                console.log('[Login] Detected redirect URL:', redirectUrl);
-                
-                // Set destination hint for smart loading
-                if (redirectUrl.includes('dashboard')) {
-                    api.setDestination('dashboard');
-                } else if (redirectUrl.includes('profile')) {
-                    api.setDestination('profile');
-                } else if (redirectUrl.includes('billing')) {
-                    api.setDestination('billing');
-                } else if (redirectUrl.includes('opportunities')) {
-                    api.setDestination('opportunities');
-                }
-            }
-            
-            // Small delay to ensure everything is ready
-            setTimeout(() => {
-                // Check if user is already logged in
-                if (api.isAuthenticated()) {
-                    console.log('[Login] User already authenticated, redirecting');
-                    const user = api.getCurrentUser();
-                    if (user) {
-                        // Redirect to appropriate dashboard
-                        if (typeof handlePostLoginRedirect === 'function') {
-                            handlePostLoginRedirect(user);
-                        } else {
-                            // Fallback redirect
-                            const userType = user.memberType || user.Member_Type;
-                            if (userType === 'Organization') {
-                                window.location.href = '/organization-dashboard.html';
-                            } else {
-                                window.location.href = '/dashboard.html';
-                            }
-                        }
-                        return;
+            waitForSupabase(async () => {
+                // Check if already logged in
+                const session = await window.covetalks.checkAuth();
+                if (session) {
+                    // Already logged in, redirect to dashboard
+                    const member = await window.covetalks.getMemberProfile(session.user.id);
+                    if (member) {
+                        redirectToDashboard(member);
                     }
                 }
                 
-                // Initialize page if not logged in
-                initializePage();
-            }, 200);
+                // Check for registration success message
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('registered') === 'true') {
+                    showMessage('success', 'Registration successful! Please login to continue.');
+                }
+            });
         });
 
-        // Smart Login Form Submission
+        // Login Form Submission
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            console.log('[Login] Form submitted - using SMART login');
-            
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-            const remember = document.getElementById('remember').checked;
             const loginButton = document.getElementById('loginButton');
             
             // Validate inputs
@@ -907,63 +629,31 @@
                 return;
             }
             
-            console.log('[Login] Attempting smart login for:', email);
-            
             // Show loading state
             loginButton.disabled = true;
             document.getElementById('loginText').style.display = 'none';
             document.getElementById('loginLoader').style.display = 'inline-block';
             
-            // Track performance
-            const startTime = performance.now();
-            
             try {
-                // Use the SMART API client to login
-                const result = await api.login(email, password, remember);
+                // Use Supabase client to login
+                const result = await window.covetalks.login(email, password);
                 
-                const endTime = performance.now();
-                const loginTime = Math.round(endTime - startTime);
-                
-                console.log('[Login] Smart login completed in', loginTime, 'ms');
-                
-                // Update performance indicator
-                document.getElementById('perfTime').textContent = loginTime;
-                
-                if (result.success && result.user) {
-                    showMessage('success', `Login successful! (${loginTime}ms) Redirecting...`);
+                if (result && result.user) {
+                    showMessage('success', 'Login successful! Redirecting...');
                     
-                    console.log('[Login] Login successful, deferred items:', result.deferred);
+                    // Get member profile
+                    const member = result.member || await window.covetalks.getMemberProfile(result.user.id);
                     
-                    // Short delay to show success message, then redirect
+                    // Redirect after short delay
                     setTimeout(() => {
-                        const redirectUrl = sessionStorage.getItem('redirectUrl');
-                        console.log('[Login] Redirect URL from session:', redirectUrl);
-                        
-                        if (redirectUrl && !redirectUrl.includes('login.html') && !redirectUrl.includes('register.html')) {
-                            console.log('[Login] Using saved redirect URL');
-                            sessionStorage.removeItem('redirectUrl');
-                            window.location.href = redirectUrl;
-                        } else {
-                            // Default redirect based on user type
-                            const userType = result.user.memberType || result.user.Member_Type;
-                            console.log('[Login] Using default redirect for user type:', userType);
-                            
-                            if (userType === 'Organization') {
-                                window.location.href = '/organization-dashboard.html';
-                            } else {
-                                window.location.href = '/dashboard.html';
-                            }
-                        }
+                        redirectToDashboard(member);
                     }, 1000);
                 } else {
-                    throw new Error(result.error || 'Login failed - no user data received');
+                    throw new Error('Login failed - no user data received');
                 }
             } catch (error) {
-                console.error('[Login] Login error:', error);
+                console.error('Login error:', error);
                 showMessage('error', error.message || 'Invalid email or password. Please try again.');
-                
-                // Update performance indicator with error
-                document.getElementById('perfTime').textContent = 'Error';
             } finally {
                 // Reset button state
                 loginButton.disabled = false;
@@ -971,6 +661,15 @@
                 document.getElementById('loginLoader').style.display = 'none';
             }
         });
+
+        // Redirect to appropriate dashboard
+        function redirectToDashboard(member) {
+            if (member.member_type === 'Organization') {
+                window.location.href = 'organization-dashboard.html';
+            } else {
+                window.location.href = 'dashboard.html';
+            }
+        }
 
         // Switch tabs
         function switchTab(tab) {
@@ -983,12 +682,8 @@
             const header = document.querySelector('.form-header h2');
             if (tab === 'Organization') {
                 header.textContent = 'Organization Login';
-                // Set destination hint for organizations
-                api.setDestination('org-dashboard');
             } else {
                 header.textContent = 'Welcome Back';
-                // Set destination hint for speakers
-                api.setDestination('dashboard');
             }
         }
 
@@ -1004,11 +699,9 @@
             if (type === 'error') {
                 errorDiv.textContent = message;
                 errorDiv.classList.add('show');
-                console.log('[Login] Error message:', message);
             } else {
                 successDiv.textContent = message;
                 successDiv.classList.add('show');
-                console.log('[Login] Success message:', message);
             }
             
             // Auto-hide after 5 seconds
@@ -1020,83 +713,50 @@
 
         // Forgot password
         function showForgotPassword() {
-            document.getElementById('forgotModal').style.display = 'block';
+            document.getElementById('forgotModal').classList.add('show');
         }
 
         function closeForgotPassword() {
-            document.getElementById('forgotModal').style.display = 'none';
+            document.getElementById('forgotModal').classList.remove('show');
             document.getElementById('resetEmail').value = '';
         }
 
         // Forgot password form submission
         document.getElementById('forgotForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const email = document.getElementById('resetEmail').value;
+            const email = document.getElementById('resetEmail').value.trim();
             
-            // For MVP, just show a success message
-            showMessage('success', 'If an account exists with this email, you will receive password reset instructions.');
-            closeForgotPassword();
-            
-            // TODO: Implement actual password reset functionality
-        });
-
-        // Set active navigation item
-        function setActiveNavItem() {
-            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-            
-            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('active');
-                }
-            });
-        }
-
-        // Mobile menu functions
-        function toggleMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            
-            hamburger.classList.toggle('active');
-            mobileMenu.classList.toggle('show');
-            overlay.classList.toggle('show');
-            
-            if (mobileMenu.classList.contains('show')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
+            if (!email) {
+                alert('Please enter your email address');
+                return;
             }
-        }
-
-        function closeMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
             
-            hamburger.classList.remove('active');
-            mobileMenu.classList.remove('show');
-            overlay.classList.remove('show');
-            document.body.style.overflow = '';
-        }
-
-        // Close mobile menu on window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                closeMobileMenu();
+            try {
+                // Use Supabase password reset
+                const { error } = await window.covetalks.supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: `${window.location.origin}/reset-password.html`,
+                });
+                
+                if (error) throw error;
+                
+                showMessage('success', 'If an account exists with this email, you will receive password reset instructions.');
+                closeForgotPassword();
+            } catch (error) {
+                console.error('Password reset error:', error);
+                showMessage('error', 'Failed to send reset email. Please try again.');
             }
         });
 
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.mobile-nav-links a').forEach(link => {
-            link.addEventListener('click', function() {
-                closeMobileMenu();
-            });
-        });
-
-        // Close forgot password modal on escape key
+        // Close modal on escape key
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && document.getElementById('forgotModal').style.display === 'block') {
+            if (e.key === 'Escape' && document.getElementById('forgotModal').classList.contains('show')) {
+                closeForgotPassword();
+            }
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('forgotModal').addEventListener('click', function(e) {
+            if (e.target === this) {
                 closeForgotPassword();
             }
         });

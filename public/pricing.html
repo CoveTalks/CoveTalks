@@ -54,11 +54,11 @@
             width: auto;
             display: block;
         }
-        
-        @media (max-width: 768px) {
-            .logo-img {
-                height: 50px;
-            }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
         .nav-links {
@@ -76,6 +76,18 @@
 
         .nav-links a:hover {
             color: #155588;
+        }
+
+        .nav-links a.active {
+            color: #155588;
+            border-bottom: 2px solid #155588;
+            padding-bottom: 2px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .auth-buttons {
@@ -100,9 +112,15 @@
             color: white;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             background: #1e3d6f;
             transform: translateY(-2px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .btn-secondary {
@@ -412,7 +430,81 @@
             color: #bdc3c7;
         }
 
-        /* Responsive Design */
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #155588;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e1e8ed;
+            margin: 0.5rem 0;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -438,245 +530,11 @@
             .price {
                 font-size: 3rem;
             }
+
+            .logo-img {
+                height: 50px;
+            }
         }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #155588;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .hidden {
-            display: none;
-        }
-
-/* Mobile Navigation Styles */
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-/* Hamburger Menu */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-    z-index: 1002;
-    background: none;
-    border: none;
-    padding: 5px;
-}
-
-.hamburger span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background: #333;
-    margin: 3px 0;
-    transition: all 0.3s ease;
-    border-radius: 2px;
-}
-
-.hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
-
-.hamburger.active span:nth-child(2) {
-    opacity: 0;
-}
-
-.hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -6px);
-}
-
-/* Mobile Menu Overlay */
-.mobile-menu-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.mobile-menu-overlay.show {
-    display: block;
-    opacity: 1;
-}
-
-/* Mobile Menu Panel */
-.mobile-menu {
-    position: fixed;
-    top: 0;
-    right: -320px;
-    width: 300px;
-    height: 100vh;
-    background: white;
-    z-index: 1001;
-    transition: right 0.3s ease;
-    overflow-y: auto;
-    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-}
-
-.mobile-menu.show {
-    right: 0;
-}
-
-.mobile-menu-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.mobile-menu-close {
-    width: 30px;
-    height: 30px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #666;
-}
-
-.mobile-nav-links {
-    list-style: none;
-    padding: 1rem 0;
-}
-
-.mobile-nav-links li {
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.mobile-nav-links a {
-    display: block;
-    padding: 1rem 1.5rem;
-    color: #333;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s;
-}
-
-.mobile-nav-links a:hover {
-    background: #f8f9fa;
-    color: #155588;
-    padding-left: 2rem;
-}
-
-.mobile-nav-links a.active {
-    color: #155588;
-    background: #e8f4fd;
-}
-
-.mobile-user-section {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    background: #f8f9fa;
-}
-
-.mobile-user-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.mobile-user-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #1e93b7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-}
-
-.mobile-user-details h3 {
-    margin: 0;
-    color: #333;
-}
-
-.mobile-user-details p {
-    margin: 0;
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.mobile-auth-buttons {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.mobile-auth-buttons .btn {
-    width: 100%;
-    text-align: center;
-}
-
-/* Responsive Breakpoints */
-@media (max-width: 768px) {
-    .nav-links {
-        display: none !important;
-    }
-    
-    .auth-buttons.desktop-only {
-        display: none !important;
-    }
-    
-    .hamburger {
-        display: flex;
-    }
-    
-    header {
-        padding: 0.75rem 0;
-    }
-    
-    .logo {
-        font-size: 1.5rem;
-    }
-
-    body {
-        padding-top: 60px;
-    }
-}
-
-@media (max-width: 480px) {
-    .mobile-menu {
-        width: 85vw;
-        right: -85vw;
-    }
-}
     </style>
 </head>
 <body>
@@ -684,143 +542,46 @@
     <header>
         <div class="nav-container">
             <nav>
-                <!-- Logo -->
-                <a href="index.html" class="logo"><img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img"></a>
+                <a href="index.html" class="logo">
+                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                </a>
                 
-                <!-- Desktop Navigation -->
-                <!-- Logged Out Navigation -->
-                <ul class="nav-links nav-logged-out" id="navLoggedOut">
+                <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="pricing.html" class="active">Pricing</a></li>
                     <li><a href="register.html">Register</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                
-                <!-- Logged In Navigation (Speakers) -->
-                <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="opportunities.html">Opportunities</a></li>
-                    <li><a href="bookings.html">My Bookings</a></li>
-                    <li><a href="profile.html">Profile</a></li>
-                </ul>
-                
-                <!-- Logged In Navigation (Organizations) -->
-                <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
-                    <li><a href="organization-dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                    <li><a href="my-opportunities.html">My Opportunities</a></li>
-                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                </ul>
     
-                <!-- Right Side Navigation -->
                 <div class="nav-right">
-                    <!-- For Logged In Users -->
-                    <div class="user-menu" id="userMenuDesktop" style="display: none;">
-                        <div class="user-dropdown">
-                            <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
-                            <div class="dropdown-menu" id="dropdownMenu">
-                                <a href="profile-edit.html">Edit Profile</a>
-                                <a href="settings.html">Settings</a>
-                                <a href="billing.html">Billing</a>
-                                <div class="dropdown-divider"></div>
-                                <a href="#" onclick="logout()">Logout</a>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <!-- For Logged Out Users -->
-                    <div class="auth-buttons desktop-only" id="authButtonsDesktop">
+                    <!-- Auth buttons or user menu will be inserted here -->
+                    <div class="auth-buttons" id="authButtons">
                         <a href="register.html" class="btn btn-secondary">Join</a>
                         <a href="login.html" class="btn btn-primary">Login</a>
                     </div>
-    
-                    <!-- Hamburger Menu Button -->
-                    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
+                    
+                    <div class="user-menu hidden" id="userMenu">
+                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">JD</div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="inbox.html">Inbox</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="settings.html">Settings</a>
+                            <a href="billing.html">Billing</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" onclick="logout(); return false;">Logout</a>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </div>
     </header>
 
-    <!-- Mobile Menu Overlay -->
-<div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
-
-<!-- Mobile Menu Panel -->
-<div class="mobile-menu" id="mobileMenu">
-    <div class="mobile-menu-header">
-        <a href="index.html" class="logo"><img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img"></a>
-        <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
-    </div>
-
-    <!-- Mobile User Section (for logged in users) -->
-    <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
-        <div class="mobile-user-info">
-            <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
-            <div class="mobile-user-details">
-                <h3 id="mobileUserName">John Doe</h3>
-                <p id="mobileUserType">Speaker - Plus Plan</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mobile Navigation Links -->
-    <!-- Logged Out Mobile Navigation -->
-    <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="pricing.html">Pricing</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="help.html">Help Center</a></li>
-    </ul>
-    
-    <!-- Logged In Mobile Navigation (Speakers) -->
-    <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="opportunities.html">Opportunities</a></li>
-        <li><a href="bookings.html">My Bookings</a></li>
-        <li><a href="profile.html">Profile</a></li>
-        <li><a href="settings.html">Settings</a></li>
-        <li><a href="billing.html">Billing</a></li>
-        <li><a href="help.html">Help & Support</a></li>
-    </ul>
-    
-    <!-- Logged In Mobile Navigation (Organizations) -->
-    <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
-        <li><a href="organization-dashboard.html">Dashboard</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="post-opportunity.html">Post Opportunity</a></li>
-        <li><a href="my-opportunities.html">My Opportunities</a></li>
-        <li><a href="saved-speakers.html">Saved Speakers</a></li>
-        <li><a href="settings.html">Settings</a></li>
-        <li><a href="team.html">Team Members</a></li>
-        <li><a href="help.html">Help & Support</a></li>
-    </ul>
-
-    <!-- Mobile Auth Buttons (for logged out users) -->
-    <div class="mobile-auth-buttons" id="mobileAuthButtons">
-        <a href="register.html" class="btn btn-secondary">Join Community</a>
-        <a href="login.html" class="btn btn-primary">Login</a>
-    </div>
-
-    <!-- Mobile Logout Button (for logged in users) -->
-    <div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
-        <button class="btn btn-primary" onclick="logout()">Logout</button>
-    </div>
-</div>
-
     <!-- Page Header -->
     <div class="page-header">
         <div class="container">
             <h1>PRICING</h1>
-            <p>Join the worlds largest network of "no-fee" speakers for a low monthly cost. COVETALKS speakers can search for opportunities posted by organizations or be contacted directly to share their knowledge and expertise.</p>
+            <p>Join the world's largest network of "no-fee" speakers for a low monthly cost</p>
         </div>
     </div>
 
@@ -830,8 +591,8 @@
             <!-- Pricing Toggle -->
             <div class="pricing-toggle">
                 <div class="toggle-container">
-                    <div class="toggle-option active" data-period="monthly">Monthly</div>
-                    <div class="toggle-option" data-period="yearly">Yearly (Save 25%)</div>
+                    <div class="toggle-option active" data-period="monthly" onclick="togglePeriod('monthly')">Monthly</div>
+                    <div class="toggle-option" data-period="yearly" onclick="togglePeriod('yearly')">Yearly (Save 25%)</div>
                 </div>
             </div>
 
@@ -856,10 +617,10 @@
                             <li>1 on 1 coaching (one session)</li>
                         </ul>
                         <div class="cta-buttons">
-                            <button class="btn btn-primary btn-large" onclick="checkout('standard', 'monthly')">
+                            <button class="btn btn-primary btn-large monthly-btn" onclick="selectPlan('standard', 'monthly')">
                                 Start Monthly Plan
                             </button>
-                            <button class="btn btn-secondary btn-large yearly-btn hidden" onclick="checkout('standard', 'yearly')">
+                            <button class="btn btn-primary btn-large yearly-btn hidden" onclick="selectPlan('standard', 'yearly')">
                                 Start Yearly Plan
                             </button>
                         </div>
@@ -885,10 +646,10 @@
                             <li>One additional coaching session</li>
                         </ul>
                         <div class="cta-buttons">
-                            <button class="btn btn-primary btn-large" onclick="checkout('plus', 'monthly')">
+                            <button class="btn btn-primary btn-large monthly-btn" onclick="selectPlan('plus', 'monthly')">
                                 Start Monthly Plan
                             </button>
-                            <button class="btn btn-secondary btn-large yearly-btn hidden" onclick="checkout('plus', 'yearly')">
+                            <button class="btn btn-primary btn-large yearly-btn hidden" onclick="selectPlan('plus', 'yearly')">
                                 Start Yearly Plan
                             </button>
                         </div>
@@ -914,10 +675,10 @@
                             <li>Premium only speaking opportunities</li>
                         </ul>
                         <div class="cta-buttons">
-                            <button class="btn btn-primary btn-large" onclick="checkout('premium', 'monthly')">
+                            <button class="btn btn-primary btn-large monthly-btn" onclick="selectPlan('premium', 'monthly')">
                                 Start Monthly Plan
                             </button>
-                            <button class="btn btn-secondary btn-large yearly-btn hidden" onclick="checkout('premium', 'yearly')">
+                            <button class="btn btn-primary btn-large yearly-btn hidden" onclick="selectPlan('premium', 'yearly')">
                                 Start Yearly Plan
                             </button>
                         </div>
@@ -971,26 +732,6 @@
                             <p>Yes, you can cancel your subscription at any time. Your access will continue until the end of your current billing period.</p>
                         </div>
                     </div>
-
-                    <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFAQ(this)">
-                            <span>Do speakers really speak for free?</span>
-                            <span>+</span>
-                        </div>
-                        <div class="faq-answer">
-                            <p>Yes! Our speakers volunteer their time to share their expertise. They benefit from networking opportunities, building their reputation, and giving back to their communities.</p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFAQ(this)">
-                            <span>How quickly can I find a speaker?</span>
-                            <span>+</span>
-                        </div>
-                        <div class="faq-answer">
-                            <p>Most organizations find suitable speakers within 24-48 hours. Our database is searchable by location, expertise, and availability to help you find the perfect match quickly.</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1032,122 +773,102 @@
         </div>
     </footer>
 
+    <!-- Load Supabase and Stripe -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    
     <script>
-        // Configuration
-        const CONFIG = {
-            API_BASE: window.location.hostname === 'localhost' 
-                ? 'http://localhost:8888/.netlify/functions'
-                : '/.netlify/functions'
-        };
-    
-        // Your live Stripe key
+        // Initialize Stripe
         const stripe = Stripe('pk_live_51RrABe1Fvl67fP5VrtH3hkNvl4chaiFtlskEMSHJIw6M1tAHdcgZ21pgup7DCEajjyQFUDM1jnIE7W1KrGBDjieV002ztaIRXk');
-    
+        
         // Current billing period
         let currentPeriod = 'monthly';
-    
-        // Make checkout function globally accessible for onclick handlers
-        window.checkout = async function(plan, period) {
-            console.log('Starting checkout:', { plan, period });
+        let currentUser = null;
+
+        // Wait for Supabase client
+        function waitForSupabase(callback) {
+            let attempts = 0;
+            const maxAttempts = 10;
             
-            // Check if user is logged in
-            const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-            if (!token) {
-                alert('Please login to continue with subscription');
-                window.location.href = 'login.html';
-                return;
-            }
-    
-            // Get the button that was clicked
-            const button = event.target;
-            const originalText = button.textContent;
-            
-            try {
-                // Show loading state
-                button.disabled = true;
-                button.textContent = 'Processing...';
-                
-                // Format data for backend
-                const planType = plan.charAt(0).toUpperCase() + plan.slice(1);
-                const billingPeriod = (period || currentPeriod);
-                const priceKey = `${plan}_${billingPeriod}`;
-                
-                console.log('Calling stripe-create-checkout with:', {
-                    priceId: priceKey,
-                    planType: planType,
-                    billingPeriod: billingPeriod
-                });
-                
-                // Call the endpoint
-                const response = await fetch(`${CONFIG.API_BASE}/stripe-create-checkout`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        priceId: priceKey,
-                        planType: planType,
-                        billingPeriod: billingPeriod.charAt(0).toUpperCase() + billingPeriod.slice(1),
-                        successUrl: `${window.location.origin}/dashboard.html?subscription=success`,
-                        cancelUrl: `${window.location.origin}/pricing.html`
-                    })
-                });
-    
-                const result = await response.json();
-                console.log('Checkout response:', result);
-                
-                if (result.success && result.url) {
-                    // Redirect to Stripe Checkout
-                    window.location.href = result.url;
+            const checkClient = () => {
+                attempts++;
+                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                    callback();
+                } else if (attempts < maxAttempts) {
+                    setTimeout(checkClient, 500);
                 } else {
-                    throw new Error(result.error || result.message || 'Failed to create checkout session');
+                    console.error('Failed to load Supabase client');
                 }
-            } catch (error) {
-                console.error('Checkout error:', error);
-                alert(error.message || 'Payment setup failed. Please try again.');
-                // Reset button
-                button.disabled = false;
-                button.textContent = originalText;
+            };
+            
+            checkClient();
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            waitForSupabase(async () => {
+                await checkAuthStatus();
+            });
+        });
+
+        // Check authentication status
+        async function checkAuthStatus() {
+            const session = await window.covetalks.checkAuth();
+            
+            if (session) {
+                currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                
+                if (currentUser) {
+                    // Show user menu
+                    document.getElementById('authButtons').classList.add('hidden');
+                    document.getElementById('userMenu').classList.remove('hidden');
+                    
+                    // Update avatar
+                    const initials = currentUser.name ? 
+                        currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                        'U';
+                    document.getElementById('userAvatar').textContent = initials;
+                    
+                    // If organization, show special message
+                    if (currentUser.member_type === 'Organization') {
+                        const pricingSection = document.querySelector('.pricing-section');
+                        pricingSection.innerHTML = `
+                            <div style="text-align: center; padding: 3rem;">
+                                <h2>Welcome ${currentUser.name}!</h2>
+                                <p style="font-size: 1.2rem; margin: 2rem 0;">As an organization, you have free access to CoveTalks.</p>
+                                <a href="organization-dashboard.html" class="btn btn-primary btn-large">Go to Dashboard</a>
+                            </div>
+                        `;
+                    }
+                }
             }
         }
-    
-        // Make toggleFAQ globally accessible
-        window.toggleFAQ = function(element) {
-            const answer = element.nextElementSibling;
-            const icon = element.querySelector('span:last-child');
-            answer.classList.toggle('active');
-            icon.textContent = answer.classList.contains('active') ? '−' : '+';
-        }
-    
-        // DOM Ready
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuthStatus();
-            setupPricingToggle();
-        });
-    
-        // Setup pricing toggle
-        function setupPricingToggle() {
-            const toggleOptions = document.querySelectorAll('.toggle-option');
+
+        // Toggle billing period
+        function togglePeriod(period) {
+            currentPeriod = period;
             
-            toggleOptions.forEach(option => {
-                option.addEventListener('click', () => {
-                    toggleOptions.forEach(opt => opt.classList.remove('active'));
-                    option.classList.add('active');
-                    currentPeriod = option.dataset.period;
-                    updatePricingDisplay();
-                });
+            // Update toggle UI
+            document.querySelectorAll('.toggle-option').forEach(opt => {
+                opt.classList.remove('active');
+                if (opt.dataset.period === period) {
+                    opt.classList.add('active');
+                }
             });
+            
+            // Update pricing display
+            updatePricingDisplay();
         }
-    
+
         // Update pricing display
         function updatePricingDisplay() {
             const prices = document.querySelectorAll('.price');
             const yearlyNotes = document.querySelectorAll('.yearly-note');
             const yearlyBtns = document.querySelectorAll('.yearly-btn');
-            const monthlyBtns = document.querySelectorAll('.btn-large:not(.yearly-btn)');
+            const monthlyBtns = document.querySelectorAll('.monthly-btn');
             const periodElements = document.querySelectorAll('.price-period');
-    
+
             prices.forEach(price => {
                 const monthlyPrice = price.dataset.monthly;
                 const yearlyPrice = price.dataset.yearly;
@@ -1158,240 +879,71 @@
                     price.textContent = `$${monthlyPrice}`;
                 }
             });
-    
+
             periodElements.forEach(period => {
                 period.textContent = currentPeriod === 'yearly' ? 'per year' : 'per month';
             });
-    
-            yearlyNotes.forEach(note => {
-                if (currentPeriod === 'yearly') {
-                    note.classList.remove('hidden');
-                } else {
-                    note.classList.add('hidden');
-                }
-            });
-    
-            // Show/hide the appropriate buttons
+
+            // Show/hide appropriate elements
             if (currentPeriod === 'yearly') {
+                yearlyNotes.forEach(note => note.classList.remove('hidden'));
                 yearlyBtns.forEach(btn => btn.classList.remove('hidden'));
-                monthlyBtns.forEach(btn => {
-                    if (!btn.classList.contains('yearly-btn')) {
-                        btn.classList.add('hidden');
-                    }
-                });
+                monthlyBtns.forEach(btn => btn.classList.add('hidden'));
             } else {
+                yearlyNotes.forEach(note => note.classList.add('hidden'));
                 yearlyBtns.forEach(btn => btn.classList.add('hidden'));
-                monthlyBtns.forEach(btn => {
-                    if (!btn.classList.contains('yearly-btn')) {
-                        btn.classList.remove('hidden');
-                    }
-                });
+                monthlyBtns.forEach(btn => btn.classList.remove('hidden'));
             }
         }
-    
-        // Check authentication status
-        function checkAuthStatus() {
-            const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-            const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user') || '{}');
-            
-            if (token && user) {
-                console.log('User logged in:', user.name);
-                
-                // If it's an organization, show a message
-                if (user.memberType === 'Organization') {
-                    const pricingSection = document.querySelector('.pricing-section');
-                    if (pricingSection) {
-                        pricingSection.innerHTML = `
-                            <div style="text-align: center; padding: 3rem;">
-                                <h2>Welcome ${user.name}!</h2>
-                                <p style="font-size: 1.2rem; margin: 2rem 0;">As an organization, you have free access to CoveTalks.</p>
-                                <a href="organization-dashboard.html" class="btn btn-primary btn-large">Go to Dashboard</a>
-                            </div>
-                        `;
-                    }
-                }
+
+        // Select a plan
+        async function selectPlan(plan, period) {
+            // Check if user is logged in
+            if (!currentUser) {
+                // Save selected plan and redirect to login
+                sessionStorage.setItem('selectedPlan', JSON.stringify({ plan, period }));
+                alert('Please login or register to continue with subscription');
+                window.location.href = 'login.html';
+                return;
             }
-        }
-    
-        // Debug info on load
-        console.log('Pricing page loaded');
-        console.log('API_BASE:', CONFIG.API_BASE);
-        console.log('Auth token exists:', !!localStorage.getItem('authToken'));
-    </script>
-        // ============================================
-        // NAVIGATION JAVASCRIPT
-        // ============================================
-        
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            updateNavAuth();
-            setActiveNavItem();
-        });
-        
-        // Update navigation based on auth status
-        function updateNavAuth() {
-            const token = localStorage.getItem('token');
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
             
-            if (token && user) {
-                // User is logged in - hide logged out nav
-                document.getElementById('navLoggedOut').style.display = 'none';
-                document.getElementById('mobileNavLoggedOut').style.display = 'none';
-                
-                // Show appropriate logged in navigation based on user type
-                if (user.type === 'Organization' || user.Member_Type === 'Organization') {
-                    // Organization navigation
-                    document.getElementById('navOrganization').style.display = 'flex';
-                    document.getElementById('navSpeaker').style.display = 'none';
-                    document.getElementById('mobileNavOrganization').style.display = 'block';
-                    document.getElementById('mobileNavSpeaker').style.display = 'none';
-                } else {
-                    // Speaker navigation (default)
-                    document.getElementById('navSpeaker').style.display = 'flex';
-                    document.getElementById('navOrganization').style.display = 'none';
-                    document.getElementById('mobileNavSpeaker').style.display = 'block';
-                    document.getElementById('mobileNavOrganization').style.display = 'none';
-                }
-                
-                // Show user menu
-                document.getElementById('userMenuDesktop').style.display = 'flex';
-                document.getElementById('authButtonsDesktop').style.display = 'none';
-                document.getElementById('mobileUserSection').style.display = 'block';
-                document.getElementById('mobileAuthButtons').style.display = 'none';
-                document.getElementById('mobileLogoutSection').style.display = 'block';
-                
-                // Update user info
-                const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
-                document.getElementById('userAvatar').textContent = initials;
-                document.getElementById('mobileUserAvatar').textContent = initials;
-                document.getElementById('mobileUserName').textContent = user.name || 'User';
-                document.getElementById('mobileUserType').textContent = user.type || user.Member_Type || 'Member';
-            } else {
-                // User is logged out - show logged out nav
-                document.getElementById('navLoggedOut').style.display = 'flex';
-                document.getElementById('mobileNavLoggedOut').style.display = 'block';
-                
-                // Hide all logged in navigation
-                document.getElementById('navSpeaker').style.display = 'none';
-                document.getElementById('navOrganization').style.display = 'none';
-                document.getElementById('mobileNavSpeaker').style.display = 'none';
-                document.getElementById('mobileNavOrganization').style.display = 'none';
-                
-                // Show auth buttons
-                if (document.getElementById('userMenuDesktop')) {
-                    document.getElementById('userMenuDesktop').style.display = 'none';
-                }
-                document.getElementById('authButtonsDesktop').style.display = 'flex';
-                
-                if (document.getElementById('mobileUserSection')) {
-                    document.getElementById('mobileUserSection').style.display = 'none';
-                }
-                document.getElementById('mobileAuthButtons').style.display = 'flex';
-                if (document.getElementById('mobileLogoutSection')) {
-                    document.getElementById('mobileLogoutSection').style.display = 'none';
-                }
-            }
-        }
-        
-        // Toggle mobile menu
-        function toggleMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
+            // For now, just show an alert
+            // In production, this would integrate with Stripe and create a subscription
+            alert(`Selected: ${plan} plan (${period})\n\nStripe integration would handle checkout here.`);
             
-            hamburger.classList.toggle('active');
-            mobileMenu.classList.toggle('show');
-            overlay.classList.toggle('show');
-            
-            if (mobileMenu.classList.contains('show')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
-            }
+            // You would typically:
+            // 1. Call a serverless function to create a Stripe checkout session
+            // 2. Redirect to Stripe Checkout
+            // 3. Handle success/cancel callbacks
         }
-        
-        // Close mobile menu
-        function closeMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            
-            hamburger.classList.remove('active');
-            mobileMenu.classList.remove('show');
-            overlay.classList.remove('show');
-            document.body.style.overflow = '';
+
+        // Toggle FAQ
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('span:last-child');
+            answer.classList.toggle('active');
+            icon.textContent = answer.classList.contains('active') ? '−' : '+';
         }
-        
-        // Toggle dropdown menu (desktop)
+
+        // Toggle dropdown menu
         function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
+            document.getElementById('dropdownMenu').classList.toggle('show');
         }
-        
+
         // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {
             const dropdown = document.getElementById('dropdownMenu');
             const avatar = document.getElementById('userAvatar');
             
-            if (dropdown && avatar && !avatar.contains(event.target) && !dropdown.contains(event.target)) {
+            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
                 dropdown.classList.remove('show');
             }
         });
-        
-        // Set active navigation item based on current page
-        function setActiveNavItem() {
-            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-            
-            // Clear all active classes first
-            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            // Set active class on matching links
-            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
-                if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('active');
-                }
-            });
+
+        // Logout
+        async function logout() {
+            await window.covetalks.logout();
         }
-        
-        // Logout function
-        function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            sessionStorage.removeItem('token');
-            sessionStorage.removeItem('user');
-            window.location.href = 'login.html';
-        }
-        
-        // Close mobile menu on window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                closeMobileMenu();
-            }
-        });
-        
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.mobile-nav-links a').forEach(link => {
-            link.addEventListener('click', function() {
-                closeMobileMenu();
-            });
-        });
-        </script>
-        <!-- Add before closing </body> tag on ALL pages -->
-<script src="/js/app.js"></script>
-<script src="/js/navigation.js"></script>
-<script>
-  // Initialize page-specific functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check auth and update navigation
-    updateNavigation();
-    
-    // Page-specific initialization
-    if (typeof initializePage === 'function') {
-      initializePage();
-    }
-  });
-</script>
+    </script>
 </body>
 </html>

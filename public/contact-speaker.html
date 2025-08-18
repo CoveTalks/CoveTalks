@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Speaker - CoveTalks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: white;
+            color: #333;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .logo-img {
+            height: 70px;
+            width: auto;
+            display: block;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #155588;
+        }
+
+        .nav-links a.active {
+            color: #155588;
+            border-bottom: 2px solid #155588;
+            padding-bottom: 2px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #155588;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e3d6f;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #155588;
+            border: 2px solid #155588;
+        }
+
+        .btn-secondary:hover {
+            background: #155588;
+            color: white;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e1e8ed;
+            margin: 0;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 6rem;
+            padding-bottom: 3rem;
+            min-height: 100vh;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            color: #155588;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .card h3 {
+            color: #155588;
+            margin-bottom: 1rem;
+        }
+
+        /* Speaker Profile Card */
+        .speaker-profile {
+            text-align: center;
+        }
+
+        .speaker-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0 auto 1.5rem;
+            overflow: hidden;
+        }
+
+        .speaker-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .speaker-name {
+            font-size: 1.5rem;
+            color: #155588;
+            margin-bottom: 0.5rem;
+        }
+
+        .speaker-location {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .speaker-rating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stars {
+            color: #ffc107;
+            font-size: 1.2rem;
+        }
+
+        .speaker-bio {
+            text-align: left;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .speaker-specialties {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .specialty-tag {
+            background: #e8f4fd;
+            color: #155588;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+        }
+
+        .profile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        /* Contact Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #155588;
+        }
+
+        .form-group textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .form-help {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        /* Message Templates */
+        .template-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .template-btn {
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border: 1px solid #e1e8ed;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .template-btn:hover {
+            background: #e8f4fd;
+            border-color: #155588;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .char-count {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: #d4edda;
+            color: #27ae60;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .success-message h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Error Message */
+        .error-message {
+            background: #f8d7da;
+            color: #dc3545;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: #e8f4fd;
+            border-left: 4px solid #155588;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-box h4 {
+            color: #155588;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box ul {
+            margin-left: 1.5rem;
+            color: #666;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #155588;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #666;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .speaker-profile {
+                margin-bottom: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .template-buttons {
+                flex-direction: column;
+            }
+
+            .template-btn {
+                width: 100%;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="nav-container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
+                </a>
+                
+                <!-- Navigation links will be dynamically updated -->
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+    
+                <div class="nav-right">
+                    <!-- Auth buttons (shown when logged out) -->
+                    <div class="auth-buttons" id="authButtons">
+                        <a href="register.html" class="btn btn-secondary">Join</a>
+                        <a href="login.html" class="btn btn-primary">Login</a>
+                    </div>
+                    
+                    <!-- User menu (shown when logged in) -->
+                    <div class="user-menu hidden" id="userMenu">
+                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="inbox.html">Inbox</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="settings.html">Settings</a>
+                            <a href="billing.html">Billing</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" onclick="logout(); return false;">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>Contact Speaker</h1>
+                <p>Send a message to connect with this speaker</p>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="loading">
+                <div class="loading-spinner"></div>
+                Loading speaker information...
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="card hidden">
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <h3>Unable to Load Speaker</h3>
+                    <p id="errorMessage">The speaker could not be found or you don't have permission to contact them.</p>
+                    <a href="members.html" class="btn btn-primary" style="margin-top: 1rem;">
+                        Browse Speakers
+                    </a>
+                </div>
+            </div>
+
+            <!-- Success State -->
+            <div id="successState" class="card hidden">
+                <div class="success-message">
+                    <h3>✅ Message Sent Successfully!</h3>
+                    <p>Your message has been delivered to the speaker.</p>
+                </div>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <a href="members.html" class="btn btn-secondary" style="margin-right: 1rem;">
+                        Browse More Speakers
+                    </a>
+                    <a href="dashboard.html" class="btn btn-primary">
+                        Back to Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <!-- Contact Form Content -->
+            <div id="contactContent" class="content-grid hidden">
+                <!-- Left Column - Speaker Profile -->
+                <div>
+                    <div class="card speaker-profile">
+                        <div class="speaker-avatar" id="speakerAvatar">
+                            ??
+                        </div>
+                        <h2 class="speaker-name" id="speakerName">Loading...</h2>
+                        <div class="speaker-location" id="speakerLocation">Location</div>
+                        <div class="speaker-rating" id="speakerRating">
+                            <!-- Rating will be inserted here -->
+                        </div>
+                        <div class="speaker-bio" id="speakerBio">
+                            Loading speaker information...
+                        </div>
+                        <div class="speaker-specialties" id="speakerSpecialties">
+                            <!-- Specialties will be inserted here -->
+                        </div>
+                        <div class="profile-actions">
+                            <a id="viewProfileBtn" href="#" class="btn btn-secondary">
+                                View Full Profile
+                            </a>
+                            <button id="saveBtn" onclick="saveSpeaker()" class="btn btn-primary hidden">
+                                ⭐ Save Speaker
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Contact Form -->
+                <div>
+                    <div class="card">
+                        <h2>Send Message</h2>
+                        
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="senderInfo">
+                                    Your Information <span class="required">*</span>
+                                </label>
+                                <input type="text" id="senderInfo" readonly>
+                                <p class="form-help">This is how you'll be identified to the speaker</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contactSubject">
+                                    Subject <span class="required">*</span>
+                                </label>
+                                <input type="text" id="contactSubject" required 
+                                       placeholder="e.g., Speaking opportunity at Annual Conference">
+                                <p class="form-help">Be specific about your inquiry</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contactOpportunity">
+                                    Related Opportunity (Optional)
+                                </label>
+                                <select id="contactOpportunity">
+                                    <option value="">Select an opportunity...</option>
+                                </select>
+                                <p class="form-help">Link this message to a specific speaking opportunity</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contactMessage">
+                                    Message <span class="required">*</span>
+                                </label>
+                                <div class="template-buttons">
+                                    <button type="button" class="template-btn" onclick="useTemplate('invitation')">
+                                        📋 Speaking Invitation
+                                    </button>
+                                    <button type="button" class="template-btn" onclick="useTemplate('inquiry')">
+                                        ❓ General Inquiry
+                                    </button>
+                                    <button type="button" class="template-btn" onclick="useTemplate('followup')">
+                                        🔄 Follow-up
+                                    </button>
+                                </div>
+                                <textarea id="contactMessage" required 
+                                          placeholder="Hello [Speaker Name],&#10;&#10;I'm reaching out regarding..."
+                                          onkeyup="updateCharCount()"></textarea>
+                                <p class="form-help">Include event details, dates, audience, and compensation if applicable</p>
+                            </div>
+
+                            <div class="info-box">
+                                <h4>Tips for a Great Message:</h4>
+                                <ul>
+                                    <li>Be specific about your event or inquiry</li>
+                                    <li>Include relevant dates and location</li>
+                                    <li>Mention the audience size and type</li>
+                                    <li>Be clear about compensation and benefits</li>
+                                    <li>Keep it professional but friendly</li>
+                                </ul>
+                            </div>
+
+                            <div class="form-actions">
+                                <span class="char-count" id="charCount">0 / 2000 characters</span>
+                                <div>
+                                    <button type="button" onclick="cancelMessage()" class="btn btn-secondary">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" class="btn btn-primary" id="sendBtn">
+                                        Send Message
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load config and Supabase client -->
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    
+    <script>
+        // Page state
+        let currentUser = null;
+        let speakerData = null;
+        let speakerId = null;
+        let myOpportunities = [];
+        let isSpeakerSaved = false;
+
+        // Get speaker ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        speakerId = urlParams.get('id');
+
+        // Message templates
+        const templates = {
+            invitation: `Dear [Speaker Name],
+
+I hope this message finds you well. I'm writing to invite you to speak at our upcoming [Event Name] on [Date].
+
+Event Details:
+- Date: [Event Date]
+- Location: [Venue/City or Virtual]
+- Audience: [Audience Size and Type]
+- Duration: [Speaking Time]
+- Topic: [Requested Topic]
+
+We believe your expertise in [Specialty] would be invaluable to our audience. We are offering [Compensation Details] for this engagement.
+
+I would love to discuss this opportunity further at your convenience. Please let me know if you're interested and available.
+
+Best regards,
+[Your Name]`,
+            
+            inquiry: `Hello [Speaker Name],
+
+I came across your profile and was impressed by your expertise in [Specialty]. I'm exploring potential speakers for [Event/Purpose] and would love to learn more about your availability and requirements.
+
+Could we schedule a brief call to discuss potential collaboration opportunities?
+
+Thank you for your time.
+
+Best regards,
+[Your Name]`,
+            
+            followup: `Hi [Speaker Name],
+
+I wanted to follow up on my previous message regarding [Topic/Event]. I understand you may be busy, but I wanted to reiterate our interest in having you speak at our event.
+
+Please let me know if you need any additional information or if you'd like to discuss this opportunity.
+
+Looking forward to hearing from you.
+
+Best regards,
+[Your Name]`
+        };
+
+        // Wait for Supabase client
+        function waitForSupabase(callback) {
+            let attempts = 0;
+            const maxAttempts = 10;
+            
+            function check() {
+                attempts++;
+                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                    callback();
+                } else if (attempts < maxAttempts) {
+                    setTimeout(check, 500);
+                } else {
+                    showError('Failed to initialize. Please refresh the page.');
+                }
+            }
+            check();
+        }
+
+        // Initialize page
+        async function initializePage() {
+            waitForSupabase(async () => {
+                try {
+                    // Check if speaker ID provided
+                    if (!speakerId) {
+                        showError('No speaker ID provided');
+                        return;
+                    }
+
+                    // Check authentication
+                    const session = await window.covetalks.checkAuth();
+                    if (!session) {
+                        // Redirect to login with return URL
+                        window.location.href = `/login.html?redirect=${encodeURIComponent(window.location.href)}`;
+                        return;
+                    }
+
+                    // Get current user
+                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                    updateNavigation(currentUser);
+                    
+                    // Set sender info
+                    document.getElementById('senderInfo').value = 
+                        `${currentUser.name} (${currentUser.email})`;
+
+                    // Load speaker information
+                    await loadSpeakerInfo();
+
+                    // Load opportunities if organization
+                    if (currentUser.member_type === 'Organization') {
+                        await loadOpportunities();
+                        await checkIfSpeakerSaved();
+                    }
+
+                    // Show content
+                    document.getElementById('loadingState').classList.add('hidden');
+                    document.getElementById('contactContent').classList.remove('hidden');
+
+                } catch (error) {
+                    console.error('Initialization error:', error);
+                    showError('Failed to load contact form');
+                }
+            });
+        }
+
+        // Update navigation
+        function updateNavigation(user) {
+            const navLinks = document.getElementById('navLinks');
+            const authButtons = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userAvatar = document.getElementById('userAvatar');
+            
+            if (user) {
+                authButtons.classList.add('hidden');
+                userMenu.classList.remove('hidden');
+                
+                const initials = user.name ? 
+                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                    'U';
+                userAvatar.textContent = initials;
+                
+                if (user.member_type === 'Organization') {
+                    navLinks.innerHTML = `
+                        <li><a href="organization-dashboard.html">Dashboard</a></li>
+                        <li><a href="members.html">Find Speakers</a></li>
+                        <li><a href="post-opportunity.html">Post Opportunity</a></li>
+                        <li><a href="my-opportunities.html">My Opportunities</a></li>
+                        <li><a href="saved-speakers.html">Saved Speakers</a></li>
+                    `;
+                } else {
+                    navLinks.innerHTML = `
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="members.html">Find Speakers</a></li>
+                        <li><a href="opportunities.html">Opportunities</a></li>
+                        <li><a href="bookings.html">My Bookings</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                    `;
+                }
+            }
+        }
+
+        // Load speaker information
+        async function loadSpeakerInfo() {
+            try {
+                speakerData = await window.covetalks.getMemberProfile(speakerId);
+                
+              if (!speakerData) {
+                    showError('Speaker not found');
+                    return;
+                }
+
+                // Display speaker info
+                displaySpeakerInfo();
+
+            } catch (error) {
+                console.error('Error loading speaker:', error);
+                showError('Failed to load speaker information');
+            }
+        }
+
+        // Display speaker information
+        function displaySpeakerInfo() {
+            // Avatar
+            const initials = speakerData.name ? 
+                speakerData.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                '??';
+            
+            const avatarEl = document.getElementById('speakerAvatar');
+            if (speakerData.profile_image_url) {
+                avatarEl.innerHTML = `<img src="${speakerData.profile_image_url}" alt="${speakerData.name}">`;
+            } else {
+                avatarEl.textContent = initials;
+            }
+
+            // Basic info
+            document.getElementById('speakerName').textContent = speakerData.name || 'Unknown Speaker';
+            document.getElementById('speakerLocation').textContent = speakerData.location || 'Location not specified';
+
+            // Rating
+            const ratingEl = document.getElementById('speakerRating');
+            if (speakerData.average_rating && speakerData.average_rating > 0) {
+                const rating = speakerData.average_rating;
+                const stars = '⭐'.repeat(Math.floor(rating)) + '☆'.repeat(5 - Math.floor(rating));
+                ratingEl.innerHTML = `
+                    <span class="stars">${stars}</span>
+                    <span>${rating.toFixed(1)} (${speakerData.total_reviews || 0} reviews)</span>
+                `;
+            } else {
+                ratingEl.innerHTML = '<span style="color: #999;">No ratings yet</span>';
+            }
+
+            // Bio
+            document.getElementById('speakerBio').textContent = 
+                speakerData.bio || 'No bio available';
+
+            // Specialties
+            const specialtiesEl = document.getElementById('speakerSpecialties');
+            const specialties = speakerData.specialties || [];
+            if (specialties.length > 0) {
+                specialtiesEl.innerHTML = specialties.map(s => 
+                    `<span class="specialty-tag">${s}</span>`
+                ).join('');
+            } else {
+                specialtiesEl.innerHTML = '<span style="color: #999;">No specialties listed</span>';
+            }
+
+            // View profile button
+            document.getElementById('viewProfileBtn').href = `speaker-profile.html?id=${speakerId}`;
+        }
+
+        // Load opportunities
+        async function loadOpportunities() {
+            try {
+                myOpportunities = await window.covetalks.getMyOpportunities('Open');
+                
+                const select = document.getElementById('contactOpportunity');
+                select.innerHTML = '<option value="">Select an opportunity...</option>' +
+                    myOpportunities.map(opp => 
+                        `<option value="${opp.id}">${opp.title} - ${formatDate(opp.event_date)}</option>`
+                    ).join('');
+                    
+            } catch (error) {
+                console.error('Error loading opportunities:', error);
+            }
+        }
+
+        // Check if speaker is saved
+        async function checkIfSpeakerSaved() {
+            try {
+                isSpeakerSaved = await window.covetalks.checkIfSpeakerSaved(speakerId);
+                
+                const saveBtn = document.getElementById('saveBtn');
+                if (!isSpeakerSaved) {
+                    saveBtn.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error checking saved status:', error);
+            }
+        }
+
+        // Save speaker
+        async function saveSpeaker() {
+            try {
+                await window.covetalks.saveSpeaker(speakerId, '');
+                
+                const saveBtn = document.getElementById('saveBtn');
+                saveBtn.textContent = '✅ Speaker Saved';
+                saveBtn.disabled = true;
+                
+                isSpeakerSaved = true;
+                
+            } catch (error) {
+                console.error('Error saving speaker:', error);
+                alert('Failed to save speaker. Please try again.');
+            }
+        }
+
+        // Use message template
+        function useTemplate(templateName) {
+            const template = templates[templateName];
+            const message = document.getElementById('contactMessage');
+            
+            // Replace placeholders with actual data
+            let personalizedTemplate = template
+                .replace('[Speaker Name]', speakerData.name || 'Speaker')
+                .replace('[Your Name]', currentUser.name || 'Your Name')
+                .replace('[Specialty]', speakerData.specialties?.[0] || 'your area of expertise');
+            
+            message.value = personalizedTemplate;
+            updateCharCount();
+        }
+
+        // Update character count
+        function updateCharCount() {
+            const message = document.getElementById('contactMessage');
+            const charCount = document.getElementById('charCount');
+            const count = message.value.length;
+            
+            charCount.textContent = `${count} / 2000 characters`;
+            
+            if (count > 2000) {
+                charCount.style.color = '#dc3545';
+                message.value = message.value.substring(0, 2000);
+            } else {
+                charCount.style.color = '#666';
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const subject = document.getElementById('contactSubject').value;
+            const message = document.getElementById('contactMessage').value;
+            const opportunityId = document.getElementById('contactOpportunity').value || null;
+            
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Sending...';
+            
+            try {
+                await window.covetalks.sendMessage(speakerId, subject, message, opportunityId);
+                
+                // Show success message
+                document.getElementById('contactContent').classList.add('hidden');
+                document.getElementById('successState').classList.remove('hidden');
+                
+            } catch (error) {
+                console.error('Error sending message:', error);
+                alert('Failed to send message. Please try again.');
+                
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send Message';
+            }
+        });
+
+        // Cancel message
+        function cancelMessage() {
+            if (confirm('Are you sure you want to cancel? Your message will not be saved.')) {
+                window.history.back();
+            }
+        }
+
+        // Show error
+        function showError(message) {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('contactContent').classList.add('hidden');
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorState').classList.remove('hidden');
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return 'Date TBD';
+            return new Date(dateString).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
+        // Toggle dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdownMenu');
+            const avatar = document.getElementById('userAvatar');
+            
+            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Logout
+        async function logout() {
+            if (window.covetalks) {
+                await window.covetalks.logout();
+            }
+        }
+
+        // Initialize on load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
+    </script>
+</body>
+</html>

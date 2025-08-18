@@ -36,6 +36,64 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .logo-img {
+            height: 70px;
+            width: auto;
+            display: block;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #f2b236;
+        }
+
+        .nav-links a.active {
+            color: #f2b236;
+            border-bottom: 2px solid #f2b236;
+            padding-bottom: 2px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
         .btn {
             padding: 0.75rem 1.5rem;
             border: none;
@@ -72,6 +130,71 @@
         .btn-danger {
             background: #e74c3c;
             color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #f2b236;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e1e8ed;
+            margin: 0;
         }
 
         /* Page Header - Green Theme */
@@ -296,13 +419,6 @@
             min-width: 150px;
         }
 
-        /* Date & Time Picker */
-        .datetime-group {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 1rem;
-        }
-
         /* Preview Card */
         .preview-card {
             background: #f8f9fa;
@@ -343,7 +459,7 @@
         /* Success Message */
         .success-banner {
             background: #d4edda;
-            color: #f2b236;
+            color: #27ae60;
             padding: 1rem;
             border-radius: 10px;
             margin-bottom: 1rem;
@@ -431,17 +547,21 @@
             100% { transform: rotate(360deg); }
         }
 
+        .hidden {
+            display: none;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
             .page-header h1 {
                 font-size: 2rem;
             }
 
             .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .datetime-group {
                 grid-template-columns: 1fr;
             }
 
@@ -462,365 +582,49 @@
                 flex: 1;
             }
         }
-        /* Mobile Navigation Styles */
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-/* Hamburger Menu */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-    z-index: 1002;
-    background: none;
-    border: none;
-    padding: 5px;
-}
-
-.hamburger span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background: #333;
-    margin: 3px 0;
-    transition: all 0.3s ease;
-    border-radius: 2px;
-}
-
-.hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
-
-.hamburger.active span:nth-child(2) {
-    opacity: 0;
-}
-
-.hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -6px);
-}
-
-/* Mobile Menu Overlay */
-.mobile-menu-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.mobile-menu-overlay.show {
-    display: block;
-    opacity: 1;
-}
-
-/* Mobile Menu Panel */
-.mobile-menu {
-    position: fixed;
-    top: 0;
-    right: -320px;
-    width: 300px;
-    height: 100vh;
-    background: white;
-    z-index: 1001;
-    transition: right 0.3s ease;
-    overflow-y: auto;
-    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-}
-
-.mobile-menu.show {
-    right: 0;
-}
-
-.mobile-menu-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.mobile-menu-close {
-    width: 30px;
-    height: 30px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #666;
-}
-
-.mobile-nav-links {
-    list-style: none;
-    padding: 1rem 0;
-}
-
-.mobile-nav-links li {
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.mobile-nav-links a {
-    display: block;
-    padding: 1rem 1.5rem;
-    color: #333;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s;
-}
-
-.mobile-nav-links a:hover {
-    background: #f8f9fa;
-    color: #155588;
-    padding-left: 2rem;
-}
-
-.mobile-nav-links a.active {
-    color: #155588;
-    background: #e8f4fd;
-}
-
-.mobile-user-section {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    background: #f8f9fa;
-}
-
-.mobile-user-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.mobile-user-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #1e93b7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-}
-
-.mobile-user-details h3 {
-    margin: 0;
-    color: #333;
-}
-
-.mobile-user-details p {
-    margin: 0;
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.mobile-auth-buttons {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.mobile-auth-buttons .btn {
-    width: 100%;
-    text-align: center;
-}
-
-/* Responsive Breakpoints */
-@media (max-width: 768px) {
-    .nav-links {
-        display: none !important;
-    }
-    
-    .auth-buttons.desktop-only {
-        display: none !important;
-    }
-    
-    .hamburger {
-        display: flex;
-    }
-    
-    header {
-        padding: 0.75rem 0;
-    }
-    
-    .logo {
-        font-size: 1.5rem;
-    }
-
-    body {
-        padding-top: 60px;
-    }
-}
-
-@media (max-width: 480px) {
-    .mobile-menu {
-        width: 85vw;
-        right: -85vw;
-    }
-}
     </style>
 </head>
 <body class="organization-theme">
+    <!-- Header -->
     <header>
         <div class="nav-container">
             <nav>
-                <!-- Logo -->
                 <a href="index.html" class="logo">
-                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
                 </a>
                 
-                <!-- Desktop Navigation -->
-                <!-- Logged Out Navigation -->
-                <ul class="nav-links nav-logged-out" id="navLoggedOut">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
-                
-                <!-- Logged In Navigation (Speakers) -->
-                <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="opportunities.html">Opportunities</a></li>
-                    <li><a href="bookings.html">My Bookings</a></li>
-                    <li><a href="profile.html">Profile</a></li>
-                </ul>
-                
-                <!-- Logged In Navigation (Organizations) -->
-                <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
+                <!-- Navigation links will be dynamically inserted here -->
+                <ul class="nav-links" id="navLinks">
                     <li><a href="organization-dashboard.html">Dashboard</a></li>
                     <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
+                    <li><a href="post-opportunity.html" class="active">Post Opportunity</a></li>
                     <li><a href="my-opportunities.html">My Opportunities</a></li>
                     <li><a href="saved-speakers.html">Saved Speakers</a></li>
                 </ul>
-        
-                <!-- Right Side Navigation -->
+    
                 <div class="nav-right">
-                    <!-- For Logged In Users -->
-                    <div class="user-menu" id="userMenuDesktop" style="display: none;">
-                        <div class="user-dropdown">
-                            <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
-                            <div class="dropdown-menu" id="dropdownMenu">
-                                <a href="profile-edit.html">Edit Profile</a>
-                                <a href="settings.html">Settings</a>
-                                <a href="billing.html">Billing</a>
-                                <div class="dropdown-divider"></div>
-                                <a href="#" onclick="logout()">Logout</a>
-                            </div>
-                        </div>
-                    </div>
-        
-                    <!-- For Logged Out Users -->
-                    <div class="auth-buttons desktop-only" id="authButtonsDesktop">
+                    <!-- Auth buttons (shown when logged out) -->
+                    <div class="auth-buttons hidden" id="authButtons">
                         <a href="register.html" class="btn btn-secondary">Join</a>
                         <a href="login.html" class="btn btn-primary">Login</a>
                     </div>
-        
-                    <!-- Hamburger Menu Button -->
-                    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
+                    
+                    <!-- User menu (shown when logged in) -->
+                    <div class="user-menu" id="userMenu">
+                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">O</div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="inbox.html">Inbox</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="settings.html">Settings</a>
+                            <a href="billing.html">Billing</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" onclick="logout(); return false;">Logout</a>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </div>
-        </header>
-        
-        <!-- Mobile Menu Overlay -->
-        <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
-        
-        <!-- Mobile Menu Panel -->
-        <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-header">
-        <a href="index.html" class="logo">
-            <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
-        </a>
-        <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
-        </div>
-        
-        <!-- Mobile User Section (for logged in users) -->
-        <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
-        <div class="mobile-user-info">
-            <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
-            <div class="mobile-user-details">
-                <h3 id="mobileUserName">John Doe</h3>
-                <p id="mobileUserType">Speaker - Plus Plan</p>
-            </div>
-        </div>
-        </div>
-        
-        <!-- Mobile Navigation Links -->
-        <!-- Logged Out Mobile Navigation -->
-        <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="pricing.html">Pricing</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="help.html">Help Center</a></li>
-        </ul>
-        
-        <!-- Logged In Mobile Navigation (Speakers) -->
-        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="opportunities.html">Opportunities</a></li>
-        <li><a href="bookings.html">My Bookings</a></li>
-        <li><a href="profile.html">Profile</a></li>
-        <li><a href="settings.html">Settings</a></li>
-        <li><a href="billing.html">Billing</a></li>
-        <li><a href="help.html">Help & Support</a></li>
-        </ul>
-        
-        <!-- Logged In Mobile Navigation (Organizations) -->
-        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
-        <li><a href="organization-dashboard.html">Dashboard</a></li>
-        <li><a href="members.html">Find Speakers</a></li>
-        <li><a href="post-opportunity.html">Post Opportunity</a></li>
-        <li><a href="my-opportunities.html">My Opportunities</a></li>
-        <li><a href="saved-speakers.html">Saved Speakers</a></li>
-        <li><a href="settings.html">Settings</a></li>
-        <li><a href="team.html">Team Members</a></li>
-        <li><a href="help.html">Help & Support</a></li>
-        </ul>
-        
-        <!-- Mobile Auth Buttons (for logged out users) -->
-        <div class="mobile-auth-buttons" id="mobileAuthButtons">
-        <a href="register.html" class="btn btn-secondary">Join Community</a>
-        <a href="login.html" class="btn btn-primary">Login</a>
-        </div>
-        
-        <!-- Mobile Logout Button (for logged in users) -->
-        <div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
-        <button class="btn btn-primary" onclick="logout()">Logout</button>
-        </div>
-        </div>
+    </header>
 
     <!-- Page Header -->
     <div class="page-header">
@@ -880,15 +684,15 @@
                         <h2>Event Details</h2>
                         
                         <div class="form-group">
-                            <label for="eventTitle">Event Title <span class="required">*</span></label>
-                            <input type="text" id="eventTitle" name="eventTitle" required 
+                            <label for="title">Event Title <span class="required">*</span></label>
+                            <input type="text" id="title" name="title" required 
                                    placeholder="e.g., Annual Business Summit 2024">
                             <div class="help-text">Choose a clear, descriptive title that speakers will understand</div>
                         </div>
                         
                         <div class="form-group">
-                            <label for="speakerRole">Speaker Role <span class="required">*</span></label>
-                            <select id="speakerRole" name="speakerRole" required>
+                            <label for="speaker_type">Speaker Role <span class="required">*</span></label>
+                            <select id="speaker_type" name="speaker_type" required>
                                 <option value="">Select a role</option>
                                 <option value="Keynote Speaker">Keynote Speaker</option>
                                 <option value="Workshop Facilitator">Workshop Facilitator</option>
@@ -901,43 +705,43 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="eventDescription">Event Description <span class="required">*</span></label>
-                            <textarea id="eventDescription" name="eventDescription" required 
+                            <label for="description">Event Description <span class="required">*</span></label>
+                            <textarea id="description" name="description" required 
                                       placeholder="Describe your event, its purpose, and what you're looking for in a speaker..."></textarea>
                             <div class="char-counter" id="descCounter">0 / 500 characters</div>
                         </div>
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="eventDate">Event Date <span class="required">*</span></label>
-                                <input type="date" id="eventDate" name="eventDate" required>
+                                <label for="event_date">Event Date <span class="required">*</span></label>
+                                <input type="date" id="event_date" name="event_date" required>
                             </div>
                             
                             <div class="form-group">
-                                <label for="eventTime">Event Time <span class="required">*</span></label>
-                                <input type="time" id="eventTime" name="eventTime" required>
+                                <label for="event_time">Event Time <span class="required">*</span></label>
+                                <input type="time" id="event_time" name="event_time" required>
                             </div>
                         </div>
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="duration">Speaking Duration <span class="required">*</span></label>
-                                <select id="duration" name="duration" required>
+                                <label for="duration">Speaking Duration</label>
+                                <select id="duration" name="duration">
                                     <option value="">Select duration</option>
-                                    <option value="15 minutes">15 minutes</option>
-                                    <option value="30 minutes">30 minutes</option>
-                                    <option value="45 minutes">45 minutes</option>
-                                    <option value="1 hour">1 hour</option>
-                                    <option value="90 minutes">90 minutes</option>
-                                    <option value="2 hours">2 hours</option>
-                                    <option value="Half day">Half day (3-4 hours)</option>
-                                    <option value="Full day">Full day (6-8 hours)</option>
+                                    <option value="0.25">15 minutes</option>
+                                    <option value="0.5">30 minutes</option>
+                                    <option value="0.75">45 minutes</option>
+                                    <option value="1">1 hour</option>
+                                    <option value="1.5">90 minutes</option>
+                                    <option value="2">2 hours</option>
+                                    <option value="4">Half day (3-4 hours)</option>
+                                    <option value="8">Full day (6-8 hours)</option>
                                 </select>
                             </div>
                             
                             <div class="form-group">
-                                <label for="eventFormat">Event Format <span class="required">*</span></label>
-                                <select id="eventFormat" name="eventFormat" required>
+                                <label for="event_format">Event Format <span class="required">*</span></label>
+                                <select id="event_format" name="event_format" required>
                                     <option value="">Select format</option>
                                     <option value="In-Person">In-Person</option>
                                     <option value="Virtual">Virtual/Online</option>
@@ -947,8 +751,8 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="eventLocation">Event Location <span class="required">*</span></label>
-                            <input type="text" id="eventLocation" name="eventLocation" required 
+                            <label for="location">Event Location <span class="required">*</span></label>
+                            <input type="text" id="location" name="location" required 
                                    placeholder="e.g., Phoenix Convention Center, Phoenix, AZ or Virtual">
                         </div>
                         
@@ -964,21 +768,14 @@
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="audienceSize">Expected Audience Size <span class="required">*</span></label>
-                                <select id="audienceSize" name="audienceSize" required>
-                                    <option value="">Select size</option>
-                                    <option value="< 25">Less than 25</option>
-                                    <option value="25-50">25-50</option>
-                                    <option value="50-100">50-100</option>
-                                    <option value="100-250">100-250</option>
-                                    <option value="250-500">250-500</option>
-                                    <option value="500+">500+</option>
-                                </select>
+                                <label for="audience_size">Expected Audience Size</label>
+                                <input type="number" id="audience_size" name="audience_size" 
+                                       placeholder="e.g., 100">
                             </div>
                             
                             <div class="form-group">
-                                <label for="audienceType">Audience Type <span class="required">*</span></label>
-                                <input type="text" id="audienceType" name="audienceType" required 
+                                <label for="audience_type">Audience Type</label>
+                                <input type="text" id="audience_type" name="audience_type" 
                                        placeholder="e.g., Business executives, Students, Healthcare professionals">
                             </div>
                         </div>
@@ -993,37 +790,68 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="speakerRequirements">Specific Speaker Requirements</label>
-                            <textarea id="speakerRequirements" name="speakerRequirements" 
+                            <label for="requirements">Specific Speaker Requirements</label>
+                            <textarea id="requirements" name="requirements" 
                                       placeholder="Any specific expertise, experience, or qualifications needed?"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="experience_level">Preferred Experience Level</label>
+                            <select id="experience_level" name="experience_level">
+                                <option value="">Any experience level</option>
+                                <option value="Beginner">Beginner (1-2 years)</option>
+                                <option value="Intermediate">Intermediate (3-5 years)</option>
+                                <option value="Experienced">Experienced (5+ years)</option>
+                                <option value="Expert">Expert (10+ years)</option>
+                            </select>
                         </div>
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="compensation">Compensation</label>
-                                <select id="compensation" name="compensation">
-                                    <option value="Volunteer">Volunteer (No payment)</option>
-                                    <option value="Honorarium">Honorarium Provided</option>
-                                    <option value="Paid">Paid Speaking Fee</option>
+                                <label for="compensation_amount">Speaking Fee ($)</label>
+                                <input type="number" id="compensation_amount" name="compensation_amount" 
+                                       placeholder="0 for volunteer" min="0" step="100">
+                                <div class="help-text">Leave as 0 for volunteer opportunities</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="compensation_type">Compensation Type</label>
+                                <select id="compensation_type" name="compensation_type">
+                                    <option value="None">Volunteer (No payment)</option>
+                                    <option value="Fixed">Fixed Fee</option>
+                                    <option value="Hourly">Hourly Rate</option>
                                     <option value="Negotiable">Negotiable</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="travel_covered">Travel Covered?</label>
+                                <select id="travel_covered" name="travel_covered">
+                                    <option value="false">No</option>
+                                    <option value="true">Yes</option>
                                 </select>
                             </div>
                             
                             <div class="form-group">
-                                <label for="travelCoverage">Travel/Expenses</label>
-                                <select id="travelCoverage" name="travelCoverage">
-                                    <option value="Not Covered">Not Covered</option>
-                                    <option value="Local Travel">Local Travel Covered</option>
-                                    <option value="Full Travel">Full Travel & Accommodation</option>
-                                    <option value="Negotiable">Negotiable</option>
-                                    <option value="N/A">N/A (Virtual Event)</option>
+                                <label for="accommodation_covered">Accommodation Covered?</label>
+                                <select id="accommodation_covered" name="accommodation_covered">
+                                    <option value="false">No</option>
+                                    <option value="true">Yes</option>
                                 </select>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label for="additional_benefits">Additional Benefits</label>
+                            <textarea id="additional_benefits" name="additional_benefits" 
+                                      placeholder="e.g., Meals provided, networking opportunities, recording rights, etc."></textarea>
+                        </div>
                         
                         <div class="form-group">
-                            <label for="applicationDeadline">Application Deadline <span class="required">*</span></label>
-                            <input type="date" id="applicationDeadline" name="applicationDeadline" required>
+                            <label for="application_deadline">Application Deadline <span class="required">*</span></label>
+                            <input type="date" id="application_deadline" name="application_deadline" required>
                             <div class="help-text">Give speakers at least 1-2 weeks to apply</div>
                         </div>
                         
@@ -1052,22 +880,9 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="additionalNotes">Additional Notes for Applicants (Optional)</label>
-                            <textarea id="additionalNotes" name="additionalNotes" 
-                                      placeholder="Any other information speakers should know?"></textarea>
-                        </div>
-                        
-                        <div class="form-group">
                             <label>
                                 <input type="checkbox" id="agreeTerms" required>
                                 I agree to the <a href="terms.html" target="_blank">Terms of Service</a> and confirm that this is a legitimate speaking opportunity
-                            </label>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>
-                                <input type="checkbox" id="emailNotifications" checked>
-                                Send me email notifications when speakers apply
                             </label>
                         </div>
                         
@@ -1075,7 +890,7 @@
                             <button type="button" class="btn btn-secondary" onclick="previousStep(2)">← Previous</button>
                             <div class="action-group">
                                 <button type="button" class="btn btn-secondary" onclick="saveDraft()">Save as Draft</button>
-                                <button type="submit" class="btn btn-primary">Post Opportunity</button>
+                                <button type="submit" class="btn btn-primary" id="submitBtn">Post Opportunity</button>
                             </div>
                         </div>
                     </div>
@@ -1089,29 +904,155 @@
         <div class="loading-spinner"></div>
     </div>
 
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load config and Supabase client -->
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    
     <script>
-        // Configuration
-        const CONFIG = {
-            API_BASE: window.location.hostname === 'localhost' ? 
-                'http://localhost:3001' : '/.netlify/functions/api'
-        };
-
+        // Page state
+        let currentUser = null;
+        let organizationData = null;
         let currentStep = 1;
         let topics = [];
+        let initAttempts = 0;
+        const MAX_INIT_ATTEMPTS = 10;
 
-        // Check authentication
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuth();
-            setupEventListeners();
-            loadDraft();
-        });
-
-        function checkAuth() {
-            const token = localStorage.getItem('token');
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
+        // Wait for Supabase client to be ready
+        function waitForSupabase(callback) {
+            initAttempts++;
             
-            if (!token || user.type !== 'Organization') {
-                window.location.href = 'login.html';
+            if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                callback();
+            } else if (initAttempts < MAX_INIT_ATTEMPTS) {
+                setTimeout(() => waitForSupabase(callback), 500);
+            } else {
+                console.error('[Post Opportunity] Failed to load Supabase client');
+                showError('Failed to initialize. Please refresh the page.');
+            }
+        }
+
+        // Update navigation based on organization (FIXED VERSION)
+        function updateNavigation(user) {
+            const navLinks = document.getElementById('navLinks');
+            const authButtons = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userAvatar = document.getElementById('userAvatar');
+            
+            // We've already verified this is an organization user, so just update the UI
+            console.log('[Post Opportunity] Updating navigation for organization user');
+            
+            // Hide auth buttons, show user menu
+            authButtons.classList.add('hidden');
+            userMenu.classList.remove('hidden');
+            
+            // Update avatar with organization initials
+            const initials = user.name ? 
+                user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                'O';
+            userAvatar.textContent = initials;
+            
+            // Update navigation for organization
+            navLinks.innerHTML = `
+                <li><a href="organization-dashboard.html">Dashboard</a></li>
+                <li><a href="members.html">Find Speakers</a></li>
+                <li><a href="post-opportunity.html" class="active">Post Opportunity</a></li>
+                <li><a href="my-opportunities.html">My Opportunities</a></li>
+                <li><a href="saved-speakers.html">Saved Speakers</a></li>
+            `;
+        }
+
+        // Initialize page (FIXED VERSION)
+        async function initializePage() {
+            waitForSupabase(async () => {
+                try {
+                    console.log('[Post Opportunity] Starting initialization...');
+                    
+                    // Check authentication
+                    const session = await window.covetalks.checkAuth();
+                    console.log('[Post Opportunity] Session exists:', !!session);
+                    
+                    if (!session) {
+                        console.log('[Post Opportunity] No session, redirecting to login');
+                        window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.href);
+                        return;
+                    }
+
+                    // Get member profile
+                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                    console.log('[Post Opportunity] Current user loaded:', currentUser);
+                    
+                    // Verify user exists
+                    if (!currentUser) {
+                        console.error('[Post Opportunity] No user profile found');
+                        alert('User profile not found. Please try logging in again.');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    
+                    // Verify user is an organization
+                    console.log('[Post Opportunity] User member_type:', currentUser.member_type);
+                    if (currentUser.member_type !== 'Organization') {
+                        console.error('[Post Opportunity] User is not an organization, type is:', currentUser.member_type);
+                        alert('Only organizations can post opportunities');
+                        // Redirect to appropriate dashboard based on actual type
+                        window.location.href = currentUser.member_type === 'Speaker' ? 'dashboard.html' : 'organization-dashboard.html';
+                        return;
+                    }
+
+                    console.log('[Post Opportunity] User verified as organization, continuing...');
+                    
+                    // Get organization details
+                    await loadOrganizationData();
+                    
+                    // Update navigation
+                    updateNavigation(currentUser);
+                    
+                    // Setup event listeners
+                    setupEventListeners();
+                    
+                    // Load any saved draft
+                    loadDraft();
+                    
+                    console.log('[Post Opportunity] Initialization complete');
+
+                } catch (error) {
+                    console.error('[Post Opportunity] Initialization error:', error);
+                    showError('Failed to initialize. Please try again.');
+                }
+            });
+        }
+
+        // Load organization data
+        async function loadOrganizationData() {
+            try {
+                console.log('[Post Opportunity] Loading organization data for user:', currentUser.id);
+                
+                const { data, error } = await window.covetalks.supabase
+                    .from('organization_members')
+                    .select(`
+                        organization_id,
+                        organizations (*)
+                    `)
+                    .eq('member_id', currentUser.id)
+                    .single();
+
+                if (error) {
+                    console.error('[Post Opportunity] Error loading organization:', error);
+                    throw error;
+                }
+                
+                if (data && data.organizations) {
+                    organizationData = data.organizations;
+                    console.log('[Post Opportunity] Organization loaded:', organizationData);
+                } else {
+                    console.warn('[Post Opportunity] No organization found for user');
+                }
+            } catch (error) {
+                console.error('[Post Opportunity] Failed to load organization:', error);
+                // Don't throw - organization might not be created yet
             }
         }
 
@@ -1121,7 +1062,7 @@
             document.getElementById('opportunityForm').addEventListener('submit', handleSubmit);
             
             // Character counter
-            document.getElementById('eventDescription').addEventListener('input', updateCharCounter);
+            document.getElementById('description').addEventListener('input', updateCharCounter);
             
             // Topic input
             document.getElementById('topicInput').addEventListener('keypress', function(e) {
@@ -1131,15 +1072,26 @@
                 }
             });
             
-            // Set minimum date for deadline
+            // Set minimum dates
             const today = new Date().toISOString().split('T')[0];
-            document.getElementById('eventDate').setAttribute('min', today);
-            document.getElementById('applicationDeadline').setAttribute('min', today);
+            document.getElementById('event_date').setAttribute('min', today);
+            document.getElementById('application_deadline').setAttribute('min', today);
+            
+            // Update compensation type when amount changes
+            document.getElementById('compensation_amount').addEventListener('input', function() {
+                const amount = parseFloat(this.value) || 0;
+                const typeSelect = document.getElementById('compensation_type');
+                if (amount > 0 && typeSelect.value === 'None') {
+                    typeSelect.value = 'Fixed';
+                } else if (amount === 0) {
+                    typeSelect.value = 'None';
+                }
+            });
         }
 
         // Character counter
         function updateCharCounter() {
-            const textarea = document.getElementById('eventDescription');
+            const textarea = document.getElementById('description');
             const counter = document.getElementById('descCounter');
             const length = textarea.value.length;
             const max = 500;
@@ -1262,22 +1214,30 @@
             const preview = document.getElementById('previewContent');
             const formData = new FormData(document.getElementById('opportunityForm'));
             
+            const eventDate = formData.get('event_date');
+            const eventTime = formData.get('event_time');
+            const compensation = parseFloat(formData.get('compensation_amount')) || 0;
+            const travel = formData.get('travel_covered') === 'true';
+            const accommodation = formData.get('accommodation_covered') === 'true';
+            
             preview.innerHTML = `
-                <h3>${formData.get('eventTitle')}</h3>
-                <p><strong>Role:</strong> ${formData.get('speakerRole')}</p>
-                <p><strong>Date:</strong> ${formData.get('eventDate')} at ${formData.get('eventTime')}</p>
-                <p><strong>Location:</strong> ${formData.get('eventLocation')}</p>
-                <p><strong>Duration:</strong> ${formData.get('duration')}</p>
-                <p><strong>Format:</strong> ${formData.get('eventFormat')}</p>
-                <p><strong>Audience:</strong> ${formData.get('audienceSize')} ${formData.get('audienceType')}</p>
-                <p><strong>Compensation:</strong> ${formData.get('compensation')}</p>
-                <p><strong>Travel:</strong> ${formData.get('travelCoverage')}</p>
-                <p><strong>Description:</strong><br>${formData.get('eventDescription')}</p>
+                <h3>${formData.get('title') || 'Untitled'}</h3>
+                <p><strong>Role:</strong> ${formData.get('speaker_type') || 'Not specified'}</p>
+                <p><strong>Date:</strong> ${eventDate ? new Date(eventDate).toLocaleDateString() : 'TBD'} at ${eventTime || 'TBD'}</p>
+                <p><strong>Location:</strong> ${formData.get('location') || 'TBD'}</p>
+                <p><strong>Duration:</strong> ${formData.get('duration') ? formData.get('duration') + ' hours' : 'TBD'}</p>
+                <p><strong>Format:</strong> ${formData.get('event_format') || 'TBD'}</p>
+                <p><strong>Audience:</strong> ${formData.get('audience_size') || 'TBD'} ${formData.get('audience_type') || ''}</p>
+                <p><strong>Compensation:</strong> ${compensation > 0 ? '$' + compensation : 'Volunteer'}</p>
+                <p><strong>Travel:</strong> ${travel ? 'Covered' : 'Not covered'}</p>
+                <p><strong>Accommodation:</strong> ${accommodation ? 'Covered' : 'Not covered'}</p>
+                <p><strong>Description:</strong><br>${formData.get('description') || ''}</p>
                 ${topics.length > 0 ? `<p><strong>Topics:</strong> ${topics.join(', ')}</p>` : ''}
+                <p><strong>Application Deadline:</strong> ${formData.get('application_deadline') ? new Date(formData.get('application_deadline')).toLocaleDateString() : 'TBD'}</p>
             `;
         }
 
-        // Form submission
+        // Form submission - FIXED to match actual database columns
         async function handleSubmit(e) {
             e.preventDefault();
             
@@ -1290,34 +1250,81 @@
                 return;
             }
             
-            const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData);
-            data.topics = topics;
-            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
             showLoading(true);
             
             try {
-                const token = localStorage.getItem('token');
-                const response = await fetch(`${CONFIG.API_BASE}/opportunities`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
+                const formData = new FormData(e.target);
                 
-                if (response.ok) {
-                    showSuccess('Your opportunity has been posted successfully!');
-                    setTimeout(() => {
-                        window.location.href = 'my-opportunities.html';
-                    }, 2000);
-                } else {
-                    showError('Failed to post opportunity. Please try again.');
+                // Map experience level text to years (integer)
+                let experienceYears = null;
+                const expLevel = formData.get('experience_level');
+                if (expLevel === 'Beginner') experienceYears = 1;
+                else if (expLevel === 'Intermediate') experienceYears = 3;
+                else if (expLevel === 'Experienced') experienceYears = 5;
+                else if (expLevel === 'Expert') experienceYears = 10;
+                
+                // Prepare opportunity data - MATCHING ACTUAL DATABASE COLUMNS
+                const opportunityData = {
+                    title: formData.get('title'),
+                    description: formData.get('description'),
+                    speaker_type: formData.get('speaker_type'),
+                    event_date: formData.get('event_date'),  // Keep as date only
+                    event_time: formData.get('event_time') || null,  // Separate time field
+                    location: formData.get('location'),
+                    venue_name: null,  // You can add this to the form if needed
+                    event_format: formData.get('event_format'),
+                    duration_hours: parseFloat(formData.get('duration')) || null,  // Changed from 'duration' to 'duration_hours'
+                    audience_size: parseInt(formData.get('audience_size')) || null,
+                    audience_type: formData.get('audience_type') || null,
+                    topics: topics,
+                    required_specialties: formData.get('requirements') ? [formData.get('requirements')] : [],  // Changed to array
+                    preferred_experience_years: experienceYears,  // Changed from experience_level (text) to years (integer)
+                    compensation_amount: parseFloat(formData.get('compensation_amount')) || 0,
+                    compensation_type: formData.get('compensation_type') || 'None',
+                    travel_covered: formData.get('travel_covered') === 'true',
+                    accommodation_covered: formData.get('accommodation_covered') === 'true',
+                    additional_benefits: formData.get('additional_benefits') || null,
+                    additional_terms: null,  // You can add this field to the form if needed
+                    application_deadline: formData.get('application_deadline'),
+                    status: 'Open',
+                    posted_by: currentUser.id,
+                    organization_id: organizationData ? organizationData.id : null,
+                    application_count: 0,
+                    view_count: 0
+                };
+
+                console.log('[Post Opportunity] Submitting opportunity:', opportunityData);
+
+                // Post opportunity to Supabase
+                const { data, error } = await window.covetalks.supabase
+                    .from('speaking_opportunities')
+                    .insert(opportunityData)
+                    .select()
+                    .single();
+
+                if (error) {
+                    console.error('[Post Opportunity] Submit error:', error);
+                    throw error;
                 }
+
+                console.log('[Post Opportunity] Opportunity posted successfully:', data);
+
+                // Clear draft
+                localStorage.removeItem('opportunityDraft');
+                
+                showSuccess('Your opportunity has been posted successfully!');
+                
+                // Redirect to opportunity details or management page
+                setTimeout(() => {
+                    window.location.href = `opportunity-details.html?id=${data.id}`;
+                }, 2000);
+                
             } catch (error) {
-                console.error('Error posting opportunity:', error);
-                showError('An error occurred. Please try again.');
+                console.error('[Post Opportunity] Submit error:', error);
+                showError(error.message || 'Failed to post opportunity. Please try again.');
+                submitBtn.disabled = false;
             } finally {
                 showLoading(false);
             }
@@ -1337,17 +1344,21 @@
         function loadDraft() {
             const draft = localStorage.getItem('opportunityDraft');
             if (draft) {
-                const data = JSON.parse(draft);
-                Object.keys(data).forEach(key => {
-                    const field = document.getElementById(key);
-                    if (field && key !== 'topics') {
-                        field.value = data[key];
+                try {
+                    const data = JSON.parse(draft);
+                    Object.keys(data).forEach(key => {
+                        const field = document.getElementById(key);
+                        if (field && key !== 'topics') {
+                            field.value = data[key];
+                        }
+                    });
+                    
+                    if (data.topics) {
+                        topics = data.topics;
+                        renderTopics();
                     }
-                });
-                
-                if (data.topics) {
-                    topics = data.topics;
-                    renderTopics();
+                } catch (error) {
+                    console.error('[Post Opportunity] Error loading draft:', error);
                 }
             }
         }
@@ -1370,47 +1381,36 @@
         function showLoading(show) {
             document.getElementById('loadingOverlay').classList.toggle('show', show);
         }
-    </script>
-    <!-- Add before closing </body> tag on ALL pages -->
-<script src="/js/app.js"></script>
-<script src="/js/navigation.js"></script>
-<script>
-  // Initialize page-specific functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check auth and update navigation
-    updateNavigation();
-    
-    // Page-specific initialization
-    if (typeof initializePage === 'function') {
-      initializePage();
-    }
-  });
-</script>
-// Add to dashboard.html, bookings.html, settings.html, etc.
-<script>
-function initializePage() {
-  // Check authentication first
-  if (!requireAuth()) return;
-  
-  // Load page-specific data
-  loadDashboardData();
-}
 
-async function loadDashboardData() {
-  try {
-    // TODO: Connect to Airtable via API
-    // const profile = await api.getProfile();
-    // const bookings = await api.getBookings();
-    
-    // Placeholder for now
-    console.log('Loading dashboard data...');
-    
-    // Update UI with data
-    // updateDashboardUI(profile, bookings);
-  } catch (error) {
-    console.error('Failed to load dashboard:', error);
-  }
-}
-</script>
+        // Toggle dropdown menu
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdownMenu');
+            const avatar = document.getElementById('userAvatar');
+            
+            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Logout function
+        async function logout() {
+            if (window.covetalks) {
+                await window.covetalks.logout();
+            }
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
+    </script>
 </body>
 </html>

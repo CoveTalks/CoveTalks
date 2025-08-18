@@ -1,14 +1,39 @@
 // File: netlify/functions/stripe-portal.js
-const { stripe } = require('./utils/stripe');
-const { requireAuth } = require('./utils/auth');
-const { tables } = require('./utils/airtable');
+// Stripe Customer Portal for subscription management - Supabase version
+
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { createClient } = require('@supabase/supabase-js');
+
+// Initialize Supabase client
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 
 exports.handler = async (event) => {
+  console.log('=== STRIPE PORTAL (SUPABASE) ===');
+  
+  // Handle CORS
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS'
+      },
+      body: ''
+    };
+  }
+
   // Only allow POST
   if (event.httpMethod !== 'POST') {
     return { 
       statusCode: 405, 
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
       body: JSON.stringify({ error: 'Method Not Allowed' })
     };
   }
@@ -20,19 +45,33 @@ exports.handler = async (event) => {
     'Access-Control-Allow-Headers': 'Content-Type, Authorization'
   };
 
-  // Verify authentication
-  const auth = await requireAuth(event);
-  if (auth.statusCode) {
-    return { ...auth, headers };
-  }
-
   try {
-    const { returnUrl } = JSON.parse(event.body) || {};
+    // Parse request body
+    const body = JSON.parse(event.body);
+    const { userId, returnUrl } = body;
     
-    // Get user's Stripe customer ID
-    const user = await tables.members.find(auth.userId);
+    if (!userId) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ 
+          success: false,
+          error: 'User ID is required' 
+        })
+      };
+    }
     
-    if (!user) {
+    console.log('Creating portal session for user:', userId);
+    
+    // Get user's Stripe customer ID from Supabase
+    const { data: user, error: userError } = await supabase
+      .from('members')
+      .select('*')
+      .eq('id', userId)
+      .single();
+    
+    if (userError || !user) {
+      console.error('User not found:', userError);
       return {
         statusCode: 404,
         headers,
@@ -44,7 +83,7 @@ exports.handler = async (event) => {
     }
 
     // Check if user is a speaker (only speakers have billing)
-    if (user.fields.Member_Type !== 'Speaker') {
+    if (user.member_type !== 'Speaker') {
       return {
         statusCode: 403,
         headers,
@@ -55,7 +94,7 @@ exports.handler = async (event) => {
       };
     }
 
-    const customerId = user.fields.Stripe_Customer_ID;
+    const customerId = user.stripe_customer_id;
 
     if (!customerId) {
       return {
@@ -64,7 +103,7 @@ exports.handler = async (event) => {
         body: JSON.stringify({ 
           success: false,
           error: 'No billing account found. Please subscribe to a plan first.',
-          redirectUrl: `${process.env.SITE_URL}/pricing.html`
+          redirectUrl: `${process.env.SITE_URL || 'http://localhost:8888'}/pricing.html`
         })
       };
     }
@@ -75,9 +114,10 @@ exports.handler = async (event) => {
     } catch (error) {
       if (error.code === 'resource_missing') {
         // Customer doesn't exist in Stripe, clear the invalid ID
-        await tables.members.update(auth.userId, {
-          Stripe_Customer_ID: null
-        });
+        await supabase
+          .from('members')
+          .update({ stripe_customer_id: null })
+          .eq('id', userId);
         
         return {
           statusCode: 404,
@@ -85,7 +125,7 @@ exports.handler = async (event) => {
           body: JSON.stringify({ 
             success: false,
             error: 'Billing account not found. Please subscribe to a plan.',
-            redirectUrl: `${process.env.SITE_URL}/pricing.html`
+            redirectUrl: `${process.env.SITE_URL || 'http://localhost:8888'}/pricing.html`
           })
         };
       }
@@ -93,13 +133,15 @@ exports.handler = async (event) => {
     }
 
     // Define return URL
-    const finalReturnUrl = returnUrl || `${process.env.SITE_URL}/billing.html`;
+    const finalReturnUrl = returnUrl || `${process.env.SITE_URL || 'http://localhost:8888'}/billing.html`;
 
     // Create portal session
     const session = await stripe.billingPortal.sessions.create({
       customer: customerId,
       return_url: finalReturnUrl
     });
+
+    console.log('Portal session created:', session.id);
 
     // Get current subscription status
     let subscriptionInfo = null;
@@ -119,19 +161,26 @@ exports.handler = async (event) => {
           trialEnd: sub.trial_end ? new Date(sub.trial_end * 1000).toISOString() : null
         };
         
-        // Update Airtable subscription status if needed
-        const airtableSubscription = await tables.subscriptions.select({
-          filterByFormula: `{Stripe_Subscription_ID} = '${sub.id}'`,
-          maxRecords: 1
-        }).firstPage();
+        // Update Supabase subscription status if needed
+        const { data: existingSubscription } = await supabase
+          .from('subscriptions')
+          .select('*')
+          .eq('stripe_subscription_id', sub.id)
+          .single();
         
-        if (airtableSubscription.length > 0 && airtableSubscription[0].fields.Status !== sub.status) {
-          await tables.subscriptions.update(airtableSubscription[0].id, {
-            Status: sub.status === 'active' ? 'Active' : 
-                   sub.status === 'past_due' ? 'Past_Due' : 
-                   sub.status === 'canceled' ? 'Cancelled' : 
-                   sub.status
-          });
+        if (existingSubscription) {
+          // Map Stripe status to database status
+          let dbStatus = 'Active';
+          if (sub.status === 'past_due') dbStatus = 'Past_Due';
+          else if (sub.status === 'canceled') dbStatus = 'Cancelled';
+          else if (sub.status === 'unpaid') dbStatus = 'Past_Due';
+          
+          if (existingSubscription.status !== dbStatus) {
+            await supabase
+              .from('subscriptions')
+              .update({ status: dbStatus })
+              .eq('id', existingSubscription.id);
+          }
         }
       }
     } catch (subError) {
@@ -152,7 +201,10 @@ exports.handler = async (event) => {
     console.error('Portal session error:', error);
     return {
       statusCode: 500,
-      headers,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
       body: JSON.stringify({ 
         success: false,
         error: 'Failed to create billing portal session',

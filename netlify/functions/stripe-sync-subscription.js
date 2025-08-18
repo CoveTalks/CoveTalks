@@ -1,12 +1,17 @@
 // File: netlify/functions/stripe-sync-subscription.js
-// Manual sync function to ensure subscription data is in Airtable
+// Manual sync function to ensure subscription data is in Supabase
 
-const { stripe } = require('./utils/stripe');
-const { tables, createRecord, updateRecord } = require('./utils/airtable');
-const { requireAuth } = require('./utils/auth');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { createClient } = require('@supabase/supabase-js');
+
+// Initialize Supabase client
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 
 exports.handler = async (event) => {
-  console.log('=== STRIPE SYNC SUBSCRIPTION ===');
+  console.log('=== STRIPE SYNC SUBSCRIPTION (SUPABASE) ===');
   
   // Handle CORS
   if (event.httpMethod === 'OPTIONS') {
@@ -25,7 +30,10 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { 
       statusCode: 405, 
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
       body: JSON.stringify({ error: 'Method Not Allowed' })
     };
   }
@@ -37,18 +45,32 @@ exports.handler = async (event) => {
     'Access-Control-Allow-Headers': 'Content-Type, Authorization'
   };
 
-  // Verify authentication
-  const auth = await requireAuth(event);
-  if (auth.statusCode) {
-    return { ...auth, headers };
-  }
-
   try {
-    console.log('User ID:', auth.userId);
+    const body = JSON.parse(event.body);
+    const { userId } = body;
     
-    // Get user from Airtable
-    const member = await tables.members.find(auth.userId);
-    if (!member) {
+    if (!userId) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ 
+          success: false,
+          error: 'User ID is required' 
+        })
+      };
+    }
+    
+    console.log('Syncing subscriptions for user:', userId);
+    
+    // Get user from Supabase
+    const { data: member, error: memberError } = await supabase
+      .from('members')
+      .select('*')
+      .eq('id', userId)
+      .single();
+      
+    if (memberError || !member) {
+      console.error('User not found:', memberError);
       return {
         statusCode: 404,
         headers,
@@ -59,7 +81,7 @@ exports.handler = async (event) => {
       };
     }
 
-    const customerId = member.fields.Stripe_Customer_ID;
+    const customerId = member.stripe_customer_id;
     if (!customerId) {
       console.log('No Stripe customer ID found for user');
       return {
@@ -96,97 +118,121 @@ exports.handler = async (event) => {
       console.log(`Processing subscription: ${subscription.id} (${subscription.status})`);
       
       try {
-        // Check if subscription exists in Airtable
-        const existingSubs = await tables.subscriptions.select({
-          filterByFormula: `{Stripe_Subscription_ID} = '${subscription.id}'`,
-          maxRecords: 1
-        }).firstPage();
+        // Check if subscription exists in Supabase
+        const { data: existingSubscription, error: fetchError } = await supabase
+          .from('subscriptions')
+          .select('*')
+          .eq('stripe_subscription_id', subscription.id)
+          .single();
 
         // Extract plan details
         const priceId = subscription.items.data[0].price.id;
         const amount = subscription.items.data[0].price.unit_amount / 100;
         const interval = subscription.items.data[0].price.recurring.interval;
         
-        // Determine plan type from price ID
+        // Determine plan type from price ID using environment variables
         let planType = 'Standard';
-        if (priceId.includes('price_1RtaID')) planType = 'Standard';
-        else if (priceId.includes('price_1RtaIp')) planType = 'Plus';
-        else if (priceId.includes('price_1RtaKG')) planType = 'Premium';
+        
+        // Check against actual price IDs from environment
+        if (priceId === process.env.STRIPE_PRICE_STANDARD_MONTHLY || 
+            priceId === process.env.STRIPE_PRICE_STANDARD_YEARLY) {
+          planType = 'Standard';
+        } else if (priceId === process.env.STRIPE_PRICE_PLUS_MONTHLY || 
+                   priceId === process.env.STRIPE_PRICE_PLUS_YEARLY) {
+          planType = 'Plus';
+        } else if (priceId === process.env.STRIPE_PRICE_PREMIUM_MONTHLY || 
+                   priceId === process.env.STRIPE_PRICE_PREMIUM_YEARLY) {
+          planType = 'Premium';
+        }
         
         const billingPeriod = interval === 'year' ? 'Yearly' : 'Monthly';
+        
+        // Map Stripe status to database status
+        let dbStatus = 'Active';
+        if (subscription.status === 'past_due') dbStatus = 'Past_Due';
+        else if (subscription.status === 'canceled') dbStatus = 'Cancelled';
+        else if (subscription.status === 'unpaid') dbStatus = 'Past_Due';
+        else if (subscription.status === 'incomplete') dbStatus = 'Incomplete';
+        else if (subscription.status === 'trialing') dbStatus = 'Trialing';
 
-        if (existingSubs.length === 0) {
+        if (!existingSubscription) {
           // Create new subscription record
           console.log('Creating new subscription record');
           
           const subscriptionData = {
-            Member_ID: [auth.userId],
-            Stripe_Subscription_ID: subscription.id,
-            Plan_Type: planType,
-            Billing_Period: billingPeriod,
-            Status: subscription.status === 'active' ? 'Active' : 
-                   subscription.status === 'past_due' ? 'Past_Due' : 
-                   subscription.status === 'canceled' ? 'Cancelled' : 
-                   'Other',
-            Start_Date: new Date(subscription.created * 1000).toISOString().split('T')[0],
-            Amount: amount,
-            Next_Billing_Date: subscription.current_period_end ? 
-              new Date(subscription.current_period_end * 1000).toISOString().split('T')[0] : null,
-            Payment_Method: subscription.default_payment_method || 'card'
+            member_id: userId,
+            stripe_subscription_id: subscription.id,
+            plan_type: planType,
+            billing_period: billingPeriod,
+            status: dbStatus,
+            amount: amount,
+            current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+            created_at: new Date(subscription.created * 1000).toISOString()
           };
 
           if (subscription.canceled_at) {
-            subscriptionData.End_Date = new Date(subscription.canceled_at * 1000).toISOString().split('T')[0];
+            subscriptionData.ended_at = new Date(subscription.canceled_at * 1000).toISOString();
           }
 
-          const newRecord = await createRecord(tables.subscriptions, subscriptionData);
-          results.created.push({
-            id: newRecord.id,
-            stripe_id: subscription.id,
-            status: subscription.status
-          });
+          const { data: newRecord, error: createError } = await supabase
+            .from('subscriptions')
+            .insert(subscriptionData)
+            .select()
+            .single();
+            
+          if (createError) {
+            console.error('Failed to create subscription:', createError);
+            results.errors.push({
+              stripe_id: subscription.id,
+              error: createError.message
+            });
+          } else {
+            results.created.push({
+              id: newRecord.id,
+              stripe_id: subscription.id,
+              status: subscription.status
+            });
 
-          // If this is the active subscription, also check for initial payment
-          if (subscription.status === 'active' && subscription.latest_invoice) {
-            await syncInvoicePayment(subscription.latest_invoice, newRecord.id, auth.userId);
+            // If this is the active subscription, also check for initial payment
+            if (subscription.status === 'active' && subscription.latest_invoice) {
+              await syncInvoicePayment(subscription.latest_invoice, newRecord.id, userId);
+            }
           }
         } else {
           // Update existing subscription record
           console.log('Updating existing subscription record');
-          const existingRecord = existingSubs[0];
           
           const updates = {
-            Status: subscription.status === 'active' ? 'Active' : 
-                   subscription.status === 'past_due' ? 'Past_Due' : 
-                   subscription.status === 'canceled' ? 'Cancelled' : 
-                   'Other',
-            Plan_Type: planType,
-            Billing_Period: billingPeriod,
-            Amount: amount
+            status: dbStatus,
+            plan_type: planType,
+            billing_period: billingPeriod,
+            amount: amount,
+            current_period_end: new Date(subscription.current_period_end * 1000).toISOString()
           };
 
-          if (subscription.current_period_end) {
-            updates.Next_Billing_Date = new Date(subscription.current_period_end * 1000).toISOString().split('T')[0];
+          if (subscription.canceled_at && !existingSubscription.ended_at) {
+            updates.ended_at = new Date(subscription.canceled_at * 1000).toISOString();
           }
 
-          if (subscription.canceled_at && !existingRecord.fields.End_Date) {
-            updates.End_Date = new Date(subscription.canceled_at * 1000).toISOString().split('T')[0];
+          const { error: updateError } = await supabase
+            .from('subscriptions')
+            .update(updates)
+            .eq('id', existingSubscription.id);
+            
+          if (updateError) {
+            console.error('Failed to update subscription:', updateError);
+            results.errors.push({
+              id: existingSubscription.id,
+              stripe_id: subscription.id,
+              error: updateError.message
+            });
+          } else {
+            results.updated.push({
+              id: existingSubscription.id,
+              stripe_id: subscription.id,
+              status: subscription.status
+            });
           }
-
-          await updateRecord(tables.subscriptions, existingRecord.id, updates);
-          results.updated.push({
-            id: existingRecord.id,
-            stripe_id: subscription.id,
-            status: subscription.status
-          });
-        }
-
-        // Update member status based on active subscription
-        if (subscription.status === 'active') {
-          await updateRecord(tables.members, auth.userId, {
-            Subscription_Status: 'Active',
-            Current_Plan: planType
-          });
         }
       } catch (error) {
         console.error(`Error processing subscription ${subscription.id}:`, error);
@@ -197,18 +243,12 @@ exports.handler = async (event) => {
       }
     }
 
-    // If no active subscriptions found, update member status
+    // Check if user has any active subscriptions
     const hasActiveSubscription = subscriptions.data.some(s => s.status === 'active');
-    if (!hasActiveSubscription) {
-      await updateRecord(tables.members, auth.userId, {
-        Subscription_Status: 'Inactive',
-        Current_Plan: null
-      });
-    }
-
+    
     // Sync recent payments
     if (customerId) {
-      await syncRecentPayments(customerId, auth.userId);
+      await syncRecentPayments(customerId, userId);
     }
 
     console.log('Sync complete:', results);
@@ -247,27 +287,34 @@ async function syncInvoicePayment(invoiceId, subscriptionRecordId, memberId) {
       await stripe.invoices.retrieve(invoiceId) : invoiceId;
     
     // Check if payment already exists
-    const existingPayments = await tables.payments.select({
-      filterByFormula: `{Stripe_Payment_Intent} = '${invoice.payment_intent}'`,
-      maxRecords: 1
-    }).firstPage();
+    const { data: existingPayment } = await supabase
+      .from('payments')
+      .select('*')
+      .eq('stripe_payment_intent_id', invoice.payment_intent)
+      .single();
 
-    if (existingPayments.length === 0 && invoice.status === 'paid') {
+    if (!existingPayment && invoice.status === 'paid') {
       // Create payment record
       const paymentData = {
-        Subscription_ID: [subscriptionRecordId],
-        Member_ID: [memberId],
-        Stripe_Payment_Intent: invoice.payment_intent,
-        Amount: invoice.amount_paid / 100,
-        Status: 'Succeeded',
-        Payment_Date: new Date(invoice.created * 1000).toISOString().split('T')[0],
-        Invoice_URL: invoice.hosted_invoice_url || '',
-        Invoice_Number: invoice.number || '',
-        Description: `Payment for invoice ${invoice.number || invoiceId}`
+        subscription_id: subscriptionRecordId,
+        member_id: memberId,
+        stripe_payment_intent_id: invoice.payment_intent,
+        amount: invoice.amount_paid / 100,
+        status: 'Succeeded',
+        receipt_url: invoice.hosted_invoice_url || null,
+        description: `Payment for invoice ${invoice.number || invoiceId}`,
+        created_at: new Date(invoice.created * 1000).toISOString()
       };
 
-      await createRecord(tables.payments, paymentData);
-      console.log('Payment record created for invoice:', invoiceId);
+      const { error: paymentError } = await supabase
+        .from('payments')
+        .insert(paymentData);
+        
+      if (paymentError) {
+        console.error('Failed to create payment record:', paymentError);
+      } else {
+        console.log('Payment record created for invoice:', invoiceId);
+      }
     }
   } catch (error) {
     console.error('Error syncing invoice payment:', error);
@@ -288,32 +335,39 @@ async function syncRecentPayments(customerId, memberId) {
     for (const charge of charges.data) {
       if (charge.status === 'succeeded' && charge.invoice) {
         // Check if payment exists
-        const existingPayments = await tables.payments.select({
-          filterByFormula: `OR({Stripe_Payment_Intent} = '${charge.payment_intent}', {Invoice_Number} = '${charge.invoice}')`,
-          maxRecords: 1
-        }).firstPage();
+        const { data: existingPayment } = await supabase
+          .from('payments')
+          .select('*')
+          .eq('stripe_payment_intent_id', charge.payment_intent)
+          .single();
 
-        if (existingPayments.length === 0) {
+        if (!existingPayment) {
           // Find the subscription record
-          const subscriptions = await tables.subscriptions.select({
-            filterByFormula: `{Member_ID} = '${memberId}'`,
-            sort: [{ field: 'Start_Date', direction: 'desc' }],
-            maxRecords: 1
-          }).firstPage();
+          const { data: subscriptions } = await supabase
+            .from('subscriptions')
+            .select('*')
+            .eq('member_id', memberId)
+            .order('created_at', { ascending: false })
+            .limit(1);
 
-          if (subscriptions.length > 0) {
+          if (subscriptions && subscriptions.length > 0) {
             const paymentData = {
-              Subscription_ID: [subscriptions[0].id],
-              Member_ID: [memberId],
-              Stripe_Payment_Intent: charge.payment_intent,
-              Amount: charge.amount / 100,
-              Status: 'Succeeded',
-              Payment_Date: new Date(charge.created * 1000).toISOString().split('T')[0],
-              Description: charge.description || 'Subscription payment'
+              subscription_id: subscriptions[0].id,
+              member_id: memberId,
+              stripe_payment_intent_id: charge.payment_intent,
+              amount: charge.amount / 100,
+              status: 'Succeeded',
+              description: charge.description || 'Subscription payment',
+              created_at: new Date(charge.created * 1000).toISOString()
             };
 
-            await createRecord(tables.payments, paymentData);
-            console.log('Payment record created for charge:', charge.id);
+            const { error: paymentError } = await supabase
+              .from('payments')
+              .insert(paymentData);
+              
+            if (!paymentError) {
+              console.log('Payment record created for charge:', charge.id);
+            }
           }
         }
       }

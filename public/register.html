@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - CoveTalks</title>
     <style>
-        /* Base styles same as other pages */
         * {
             margin: 0;
             padding: 0;
@@ -24,7 +23,7 @@
             padding: 0 20px;
         }
 
-        /* Header Styles */
+        /* Header */
         header {
             background: white;
             color: #333;
@@ -53,11 +52,11 @@
             width: auto;
             display: block;
         }
-        
-        @media (max-width: 768px) {
-            .logo-img {
-                height: 50px;
-            }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
         .nav-links {
@@ -75,6 +74,18 @@
 
         .nav-links a:hover {
             color: #155588;
+        }
+
+        .nav-links a.active {
+            color: #155588;
+            border-bottom: 2px solid #155588;
+            padding-bottom: 2px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .auth-buttons {
@@ -140,7 +151,7 @@
             margin-bottom: 1rem;
         }
 
-        /* Registration Options */
+        /* Registration Section */
         .registration-section {
             padding: 4rem 0;
         }
@@ -247,6 +258,9 @@
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             margin-top: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .form-group {
@@ -349,25 +363,7 @@
             color: #bdc3c7;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .registration-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .registration-card {
-                padding: 2rem;
-            }
-        }
-
+        /* Loading */
         .loading {
             display: inline-block;
             width: 20px;
@@ -376,6 +372,7 @@
             border-top: 3px solid #155588;
             border-radius: 50%;
             animation: spin 1s linear infinite;
+            margin-left: 0.5rem;
         }
 
         @keyframes spin {
@@ -387,7 +384,7 @@
             display: none;
         }
 
-        /* Password strength indicator */
+        /* Password strength */
         .password-strength {
             margin-top: 0.25rem;
             font-size: 0.875rem;
@@ -405,280 +402,31 @@
             color: #22c55e;
         }
 
-        /* Mobile Navigation Styles - keeping your existing styles */
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        /* Hamburger Menu */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 35px;
-            height: 35px;
-            cursor: pointer;
-            z-index: 1002;
-            background: none;
-            border: none;
-            padding: 5px;
-        }
-
-        .hamburger span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background: #333;
-            margin: 3px 0;
-            transition: all 0.3s ease;
-            border-radius: 2px;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-
-        /* Mobile Menu Overlay */
-        .mobile-menu-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .mobile-menu-overlay.show {
-            display: block;
-            opacity: 1;
-        }
-
-        /* Mobile Menu Panel */
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: 300px;
-            height: 100vh;
-            background: white;
-            z-index: 1001;
-            transition: right 0.3s ease;
-            overflow-y: auto;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-        }
-
-        .mobile-menu.show {
-            right: 0;
-        }
-
-        .mobile-menu-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e1e8ed;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .mobile-menu-close {
-            width: 30px;
-            height: 30px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: #666;
-        }
-
-        .mobile-nav-links {
-            list-style: none;
-            padding: 1rem 0;
-        }
-
-        .mobile-nav-links li {
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .mobile-nav-links a {
-            display: block;
-            padding: 1rem 1.5rem;
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .mobile-nav-links a:hover {
-            background: #f8f9fa;
-            color: #155588;
-            padding-left: 2rem;
-        }
-
-        .mobile-nav-links a.active {
-            color: #155588;
-            background: #e8f4fd;
-        }
-
-        .mobile-user-section {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e1e8ed;
-            background: #f8f9fa;
-        }
-
-        .mobile-user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .mobile-user-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        .mobile-user-details h3 {
-            margin: 0;
-            color: #333;
-        }
-
-        .mobile-user-details p {
-            margin: 0;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .mobile-auth-buttons {
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .mobile-auth-buttons .btn {
-            width: 100%;
-            text-align: center;
-        }
-
-        /* Responsive Breakpoints */
+        /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
-                display: none !important;
-            }
-            
-            .auth-buttons.desktop-only {
-                display: none !important;
-            }
-            
-            .hamburger {
-                display: flex;
-            }
-            
-            header {
-                padding: 0.75rem 0;
-            }
-            
-            .logo {
-                font-size: 1.5rem;
+                display: none;
             }
 
-            body {
-                padding-top: 60px;
+            .registration-grid {
+                grid-template-columns: 1fr;
             }
-        }
 
-        @media (max-width: 480px) {
-            .mobile-menu {
-                width: 85vw;
-                right: -85vw;
+            .form-row {
+                grid-template-columns: 1fr;
             }
-        }
 
-        /* User menu styles */
-        .user-menu {
-            position: relative;
-        }
+            .registration-card {
+                padding: 2rem;
+            }
 
-        .user-dropdown {
-            position: relative;
-        }
+            .logo-img {
+                height: 50px;
+            }
 
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 0.5rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.75rem 1rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #e1e8ed;
-            margin: 0.5rem 0;
+            .page-header h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
@@ -687,137 +435,27 @@
     <header>
         <div class="nav-container">
             <nav>
-                <!-- Logo -->
-                <a href="index.html" class="logo"><img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img"></a>
+                <a href="index.html" class="logo">
+                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                </a>
                 
-                <!-- Desktop Navigation -->
-                <!-- Logged Out Navigation -->
-                <ul class="nav-links nav-logged-out" id="navLoggedOut">
+                <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="members.html">Find Speakers</a></li>
                     <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="register.html">Register</a></li>
+                    <li><a href="register.html" class="active">Register</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                
-                <!-- Logged In Navigation (Speakers) -->
-                <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="opportunities.html">Opportunities</a></li>
-                    <li><a href="bookings.html">My Bookings</a></li>
-                    <li><a href="profile.html">Profile</a></li>
-                </ul>
-                
-                <!-- Logged In Navigation (Organizations) -->
-                <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
-                    <li><a href="organization-dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                    <li><a href="my-opportunities.html">My Opportunities</a></li>
-                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                </ul>
     
-                <!-- Right Side Navigation -->
                 <div class="nav-right">
-                    <!-- For Logged In Users -->
-                    <div class="user-menu" id="userMenuDesktop" style="display: none;">
-                        <div class="user-dropdown">
-                            <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
-                            <div class="dropdown-menu" id="dropdownMenu">
-                                <a href="profile-edit.html">Edit Profile</a>
-                                <a href="settings.html">Settings</a>
-                                <a href="billing.html">Billing</a>
-                                <div class="dropdown-divider"></div>
-                                <a href="#" onclick="logout()">Logout</a>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <!-- For Logged Out Users -->
-                    <div class="auth-buttons desktop-only" id="authButtonsDesktop">
+                    <div class="auth-buttons">
                         <a href="register.html" class="btn btn-secondary">Join</a>
                         <a href="login.html" class="btn btn-primary">Login</a>
                     </div>
-    
-                    <!-- Hamburger Menu Button -->
-                    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
                 </div>
             </nav>
         </div>
     </header>
-
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
-
-    <!-- Mobile Menu Panel -->
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-header">
-            <a href="index.html" class="logo"><img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img"></a>
-            <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
-        </div>
-
-        <!-- Mobile User Section (for logged in users) -->
-        <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
-            <div class="mobile-user-info">
-                <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
-                <div class="mobile-user-details">
-                    <h3 id="mobileUserName">John Doe</h3>
-                    <p id="mobileUserType">Speaker - Plus Plan</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Navigation Links -->
-        <!-- Logged Out Mobile Navigation -->
-        <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="members.html">Find Speakers</a></li>
-            <li><a href="pricing.html">Pricing</a></li>
-            <li><a href="register.html">Register</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="help.html">Help Center</a></li>
-        </ul>
-        
-        <!-- Logged In Mobile Navigation (Speakers) -->
-        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
-            <li><a href="dashboard.html">Dashboard</a></li>
-            <li><a href="members.html">Find Speakers</a></li>
-            <li><a href="opportunities.html">Opportunities</a></li>
-            <li><a href="bookings.html">My Bookings</a></li>
-            <li><a href="profile.html">Profile</a></li>
-            <li><a href="settings.html">Settings</a></li>
-            <li><a href="billing.html">Billing</a></li>
-            <li><a href="help.html">Help & Support</a></li>
-        </ul>
-        
-        <!-- Logged In Mobile Navigation (Organizations) -->
-        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
-            <li><a href="organization-dashboard.html">Dashboard</a></li>
-            <li><a href="members.html">Find Speakers</a></li>
-            <li><a href="post-opportunity.html">Post Opportunity</a></li>
-            <li><a href="my-opportunities.html">My Opportunities</a></li>
-            <li><a href="saved-speakers.html">Saved Speakers</a></li>
-            <li><a href="settings.html">Settings</a></li>
-            <li><a href="team.html">Team Members</a></li>
-            <li><a href="help.html">Help & Support</a></li>
-        </ul>
-
-        <!-- Mobile Auth Buttons (for logged out users) -->
-        <div class="mobile-auth-buttons" id="mobileAuthButtons">
-            <a href="register.html" class="btn btn-secondary">Join Community</a>
-            <a href="login.html" class="btn btn-primary">Login</a>
-        </div>
-
-        <!-- Mobile Logout Button (for logged in users) -->
-        <div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
-            <button class="btn btn-primary" onclick="logout()">Logout</button>
-        </div>
-    </div>
 
     <!-- Page Header -->
     <div class="page-header">
@@ -830,7 +468,6 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Registration Options -->
             <div class="registration-section">
                 <!-- Messages -->
                 <div id="errorMessage" class="message error-message"></div>
@@ -853,7 +490,7 @@
                         </ul>
                         <div class="price-display">Subscription Required</div>
                         <p class="price-note">Choose from Standard, Plus, or Premium plans</p>
-                        <button id="speakerRegisterBtn" class="btn btn-primary" onclick="showSpeakerForm()">
+                        <button class="btn btn-primary" onclick="showSpeakerForm()">
                             Register as Speaker
                         </button>
                     </div>
@@ -875,9 +512,8 @@
                         </ul>
                         <div class="price-display">FREE</div>
                         <p class="price-note">Always free for non-profits, schools, and organizations</p>
-                        <button id="orgRegisterBtn" class="btn btn-primary" onclick="showOrganizationForm()">
-                            <span id="orgRegisterText">Register Free</span>
-                            <span id="orgRegisterLoader" class="loading hidden"></span>
+                        <button class="btn btn-primary" onclick="showOrganizationForm()">
+                            Register Free
                         </button>
                     </div>
                 </div>
@@ -940,6 +576,12 @@
                             <span id="speakerSubmitText">Create Account & Continue to Pricing</span>
                             <span id="speakerSubmitLoader" class="loading hidden"></span>
                         </button>
+                        
+                        <div style="text-align: center; margin-top: 1rem;">
+                            <button type="button" onclick="hideAllForms()" style="background: none; border: none; color: #666; cursor: pointer; text-decoration: underline;">
+                                Back to options
+                            </button>
+                        </div>
                     </form>
                 </div>
 
@@ -958,10 +600,12 @@
                                 <select id="orgType" required>
                                     <option value="">Select Type</option>
                                     <option value="Non-Profit">Non-Profit</option>
-                                    <option value="School">School/Educational</option>
+                                    <option value="Educational">School/Educational</option>
                                     <option value="Religious">Religious/Church</option>
-                                    <option value="Youth Group">Youth Group</option>
-                                    <option value="Chamber">Chamber of Commerce</option>
+                                    <option value="Community">Community Group</option>
+                                    <option value="Corporate">Corporate</option>
+                                    <option value="Government">Government</option>
+                                    <option value="Healthcare">Healthcare</option>
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
@@ -1004,7 +648,7 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="orgWebsite">Website</label>
-                                <input type="url" id="orgWebsite" placeholder="https://">
+                                <input type="url" id="orgWebsite" placeholder="https://www.example.com">
                             </div>
                             <div class="form-group">
                                 <label for="orgLocation">Location (City, State/Country) *</label>
@@ -1026,6 +670,12 @@
                             <span id="orgSubmitText">Complete Free Registration</span>
                             <span id="orgSubmitLoader" class="loading hidden"></span>
                         </button>
+                        
+                        <div style="text-align: center; margin-top: 1rem;">
+                            <button type="button" onclick="hideAllForms()" style="background: none; border: none; color: #666; cursor: pointer; text-decoration: underline;">
+                                Back to options
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -1068,59 +718,70 @@
         </div>
     </footer>
 
-    <!-- Include the API client -->
-    <script src="/js/app.js"></script>
+    <!-- Load Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
     
     <script>
-        // ============================================
-        // BACKEND INTEGRATION FOR REGISTRATION
-        // ============================================
-        
-        // Configuration
-        const CONFIG = {
-            API_BASE: window.location.hostname === 'localhost' 
-                ? 'http://localhost:8888/.netlify/functions'
-                : '/.netlify/functions'
-        };
+        // Wait for Supabase client
+        function waitForSupabase(callback) {
+            let attempts = 0;
+            const maxAttempts = 10;
+            
+            const checkClient = () => {
+                attempts++;
+                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                    callback();
+                } else if (attempts < maxAttempts) {
+                    setTimeout(checkClient, 500);
+                } else {
+                    console.error('Failed to load Supabase client');
+                    showMessage('error', 'Application failed to load. Please refresh the page.');
+                }
+            };
+            
+            checkClient();
+        }
 
         // Check if already logged in
         document.addEventListener('DOMContentLoaded', function() {
-            checkAuthStatus();
-            updateNavAuth();
-            setActiveNavItem();
+            waitForSupabase(async () => {
+                const session = await window.covetalks.checkAuth();
+                if (session) {
+                    // Already logged in, redirect
+                    const member = await window.covetalks.getMemberProfile(session.user.id);
+                    if (member) {
+                        if (member.member_type === 'Organization') {
+                            window.location.href = 'organization-dashboard.html';
+                        } else {
+                            window.location.href = 'dashboard.html';
+                        }
+                    }
+                }
+            });
         });
 
-        // Check authentication status
-        function checkAuthStatus() {
-            const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-            const user = localStorage.getItem('user') || sessionStorage.getItem('user');
-            
-            if (token && user) {
-                // Already logged in, redirect to appropriate dashboard
-                const userData = JSON.parse(user);
-                if (userData.memberType === 'Organization') {
-                    window.location.href = 'organization-dashboard.html';
-                } else {
-                    window.location.href = 'dashboard.html';
-                }
-            }
-        }
-
-        // Show Speaker Form
+        // Show/Hide Forms
         function showSpeakerForm() {
             document.getElementById('speakerForm').classList.remove('hidden');
             document.getElementById('organizationForm').classList.add('hidden');
             document.getElementById('speakerForm').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Show Organization Form
         function showOrganizationForm() {
             document.getElementById('organizationForm').classList.remove('hidden');
             document.getElementById('speakerForm').classList.add('hidden');
             document.getElementById('organizationForm').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Speaker Registration Form Handler
+        function hideAllForms() {
+            document.getElementById('speakerForm').classList.add('hidden');
+            document.getElementById('organizationForm').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Speaker Registration
         document.getElementById('speakerRegForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -1134,74 +795,57 @@
             const bio = document.getElementById('speakerBio').value.trim();
             const topics = document.getElementById('speakerTopics').value.trim();
             
-            // Validate passwords match
+            // Validate passwords
             if (password !== confirmPassword) {
                 showMessage('error', 'Passwords do not match');
                 return;
             }
             
-            // Validate password strength
             if (password.length < 8) {
                 showMessage('error', 'Password must be at least 8 characters long');
                 return;
             }
             
-            // Show loading state
+            // Show loading
             const submitBtn = document.getElementById('speakerSubmitBtn');
             submitBtn.disabled = true;
-            document.getElementById('speakerSubmitText').style.display = 'none';
+            document.getElementById('speakerSubmitText').classList.add('hidden');
             document.getElementById('speakerSubmitLoader').classList.remove('hidden');
             
             try {
-                // Prepare data
-                const formData = {
-                    name: `${firstName} ${lastName}`,
+                // Register with Supabase
+                const result = await window.covetalks.signup({
                     email: email,
                     password: password,
+                    name: `${firstName} ${lastName}`,
                     memberType: 'Speaker',
-                    phone: phone || '',
-                    location: location || '',
-                    bio: bio || '',
-                    specialty: topics ? topics.split(',').map(t => t.trim()) : []
-                };
-                
-                // Call API
-                const response = await fetch(`${CONFIG.API_BASE}/auth-signup`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
+                    phone: phone,
+                    location: location,
+                    bio: bio,
+                    specialties: topics ? topics.split(',').map(t => t.trim()) : []
                 });
                 
-                const result = await response.json();
-                
-                if (response.ok && result.success) {
-                    // Store token and user data
-                    localStorage.setItem('authToken', result.token);
-                    localStorage.setItem('user', JSON.stringify(result.user));
-                    
+                if (result && result.user) {
                     showMessage('success', 'Account created successfully! Redirecting to pricing...');
                     
-                    // Redirect to pricing page for subscription selection
+                    // Auto-login and redirect to pricing
                     setTimeout(() => {
                         window.location.href = 'pricing.html';
                     }, 1500);
                 } else {
-                    throw new Error(result.error || 'Registration failed');
+                    throw new Error('Registration failed');
                 }
             } catch (error) {
                 console.error('Registration error:', error);
                 showMessage('error', error.message || 'Registration failed. Please try again.');
             } finally {
-                // Reset button state
                 submitBtn.disabled = false;
-                document.getElementById('speakerSubmitText').style.display = 'inline';
+                document.getElementById('speakerSubmitText').classList.remove('hidden');
                 document.getElementById('speakerSubmitLoader').classList.add('hidden');
             }
         });
 
-        // Organization Registration Form Handler
+        // Organization Registration
         document.getElementById('orgForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -1218,76 +862,58 @@
             const description = document.getElementById('orgDescription').value.trim();
             const speakingTopics = document.getElementById('speakingTopics').value.trim();
             
-            // Validate passwords match
+            // Validate passwords
             if (password !== confirmPassword) {
                 showMessage('error', 'Passwords do not match');
                 return;
             }
             
-            // Validate password strength
             if (password.length < 8) {
                 showMessage('error', 'Password must be at least 8 characters long');
                 return;
             }
             
-            // Show loading state
+            // Show loading
             const submitBtn = document.getElementById('orgSubmitBtn');
             submitBtn.disabled = true;
-            document.getElementById('orgSubmitText').style.display = 'none';
+            document.getElementById('orgSubmitText').classList.add('hidden');
             document.getElementById('orgSubmitLoader').classList.remove('hidden');
             
             try {
-                // Prepare data for Members table
-                const formData = {
-                    name: `${firstName} ${lastName}`,
+                // Register with Supabase
+                const result = await window.covetalks.signup({
                     email: email,
                     password: password,
+                    name: `${firstName} ${lastName}`,
                     memberType: 'Organization',
-                    phone: phone || '',
-                    location: location || '',
-                    bio: description || '',
-                    website: website || '',
-                    // Additional organization-specific data to be stored in Organizations table
+                    phone: phone,
+                    location: location,
+                    bio: description,
                     organizationData: {
                         Organization_Name: orgName,
                         Organization_Type: orgType,
-                        Contact_Name: `${firstName} ${lastName}`,
+                        website: website,
+                        description: description,
                         Speaking_Topics: speakingTopics ? speakingTopics.split(',').map(t => t.trim()) : []
                     }
-                };
-                
-                // Call API
-                const response = await fetch(`${CONFIG.API_BASE}/auth-signup`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
                 });
                 
-                const result = await response.json();
-                
-                if (response.ok && result.success) {
-                    // Store token and user data
-                    localStorage.setItem('authToken', result.token);
-                    localStorage.setItem('user', JSON.stringify(result.user));
-                    
+                if (result && result.user) {
                     showMessage('success', 'Organization registered successfully! Redirecting to dashboard...');
                     
-                    // Redirect to organization dashboard
+                    // Auto-login and redirect to organization dashboard
                     setTimeout(() => {
                         window.location.href = 'organization-dashboard.html';
                     }, 1500);
                 } else {
-                    throw new Error(result.error || 'Registration failed');
+                    throw new Error('Registration failed');
                 }
             } catch (error) {
                 console.error('Registration error:', error);
                 showMessage('error', error.message || 'Registration failed. Please try again.');
             } finally {
-                // Reset button state
                 submitBtn.disabled = false;
-                document.getElementById('orgSubmitText').style.display = 'inline';
+                document.getElementById('orgSubmitText').classList.remove('hidden');
                 document.getElementById('orgSubmitLoader').classList.add('hidden');
             }
         });
@@ -1318,7 +944,7 @@
             }
         }
 
-        // Add password strength checkers
+        // Add password strength listeners
         document.getElementById('speakerPassword').addEventListener('input', function() {
             checkPasswordStrength(this.value, 'speakerPasswordStrength');
         });
@@ -1346,7 +972,7 @@
             }
         });
 
-        // Show message function
+        // Show message
         function showMessage(type, message) {
             const errorDiv = document.getElementById('errorMessage');
             const successDiv = document.getElementById('successMessage');
@@ -1358,12 +984,10 @@
             if (type === 'error') {
                 errorDiv.textContent = message;
                 errorDiv.classList.add('show');
-                // Scroll to message
                 errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
             } else {
                 successDiv.textContent = message;
                 successDiv.classList.add('show');
-                // Scroll to message
                 successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
             
@@ -1373,175 +997,6 @@
                 successDiv.classList.remove('show');
             }, 5000);
         }
-
-        // ============================================
-        // NAVIGATION JAVASCRIPT (Your existing code)
-        // ============================================
-        
-        // Update navigation based on auth status
-        function updateNavAuth() {
-            const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-            const userStr = localStorage.getItem('user') || sessionStorage.getItem('user');
-            const user = userStr ? JSON.parse(userStr) : null;
-            
-            if (token && user) {
-                // User is logged in
-                document.getElementById('navLoggedOut').style.display = 'none';
-                document.getElementById('mobileNavLoggedOut').style.display = 'none';
-                
-                // Show appropriate logged in navigation
-                if (user.memberType === 'Organization') {
-                    document.getElementById('navOrganization').style.display = 'flex';
-                    document.getElementById('navSpeaker').style.display = 'none';
-                    document.getElementById('mobileNavOrganization').style.display = 'block';
-                    document.getElementById('mobileNavSpeaker').style.display = 'none';
-                } else {
-                    document.getElementById('navSpeaker').style.display = 'flex';
-                    document.getElementById('navOrganization').style.display = 'none';
-                    document.getElementById('mobileNavSpeaker').style.display = 'block';
-                    document.getElementById('mobileNavOrganization').style.display = 'none';
-                }
-                
-                // Show user menu
-                document.getElementById('userMenuDesktop').style.display = 'flex';
-                document.getElementById('authButtonsDesktop').style.display = 'none';
-                document.getElementById('mobileUserSection').style.display = 'block';
-                document.getElementById('mobileAuthButtons').style.display = 'none';
-                document.getElementById('mobileLogoutSection').style.display = 'block';
-                
-                // Update user info
-                const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 'U';
-                document.getElementById('userAvatar').textContent = initials;
-                document.getElementById('mobileUserAvatar').textContent = initials;
-                document.getElementById('mobileUserName').textContent = user.name || 'User';
-                document.getElementById('mobileUserType').textContent = user.memberType || 'Member';
-            } else {
-                // User is logged out
-                document.getElementById('navLoggedOut').style.display = 'flex';
-                document.getElementById('mobileNavLoggedOut').style.display = 'block';
-                
-                // Hide all logged in navigation
-                document.getElementById('navSpeaker').style.display = 'none';
-                document.getElementById('navOrganization').style.display = 'none';
-                document.getElementById('mobileNavSpeaker').style.display = 'none';
-                document.getElementById('mobileNavOrganization').style.display = 'none';
-                
-                // Show auth buttons
-                if (document.getElementById('userMenuDesktop')) {
-                    document.getElementById('userMenuDesktop').style.display = 'none';
-                }
-                document.getElementById('authButtonsDesktop').style.display = 'flex';
-                
-                if (document.getElementById('mobileUserSection')) {
-                    document.getElementById('mobileUserSection').style.display = 'none';
-                }
-                document.getElementById('mobileAuthButtons').style.display = 'flex';
-                if (document.getElementById('mobileLogoutSection')) {
-                    document.getElementById('mobileLogoutSection').style.display = 'none';
-                }
-            }
-        }
-        
-        // Toggle mobile menu
-        function toggleMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            
-            hamburger.classList.toggle('active');
-            mobileMenu.classList.toggle('show');
-            overlay.classList.toggle('show');
-            
-            if (mobileMenu.classList.contains('show')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
-            }
-        }
-        
-        // Close mobile menu
-        function closeMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            
-            hamburger.classList.remove('active');
-            mobileMenu.classList.remove('show');
-            overlay.classList.remove('show');
-            document.body.style.overflow = '';
-        }
-        
-        // Toggle dropdown menu
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
-        }
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (dropdown && avatar && !avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-        
-        // Set active navigation item
-        function setActiveNavItem() {
-            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-            
-            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('active');
-                }
-            });
-        }
-        
-        // Logout function
-        function logout() {
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('user');
-            sessionStorage.removeItem('authToken');
-            sessionStorage.removeItem('user');
-            
-            // If using the API client, call its logout method
-            if (typeof api !== 'undefined' && api.logout) {
-                api.logout();
-            } else {
-                window.location.href = 'login.html';
-            }
-        }
-        
-        // Close mobile menu on window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                closeMobileMenu();
-            }
-        });
-        
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.mobile-nav-links a').forEach(link => {
-            link.addEventListener('click', function() {
-                closeMobileMenu();
-            });
-        });
     </script>
-    <!-- Add before closing </body> tag on ALL pages -->
-<script src="/js/app.js"></script>
-<script src="/js/navigation.js"></script>
-<script>
-  // Initialize page-specific functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check auth and update navigation
-    updateNavigation();
-    
-    // Page-specific initialization
-    if (typeof initializePage === 'function') {
-      initializePage();
-    }
-  });
-</script>
 </body>
 </html>

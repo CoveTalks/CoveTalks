@@ -1,1535 +1,1145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Organization Dashboard - CoveTalks</title>
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization Dashboard - CoveTalks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        line-height: 1.6;
-        color: #333;
-        background: #f8f9fa;
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
 
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-    }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-    /* Reuse all header and common styles from speaker dashboard */
-    header {
-        background: white;
-        color: #333;
-        padding: 1rem 0;
-        position: fixed;
-        width: 100%;
-        top: 0;
-        z-index: 1000;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
+        /* Header Styles */
+        header {
+            background: white;
+            color: #333;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
 
-    nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .logo {
-        display: inline-flex;
-        align-items: center;
-        text-decoration: none;
-    }
-    
-    .logo-img {
-        height: 70px;
-        width: auto;
-        display: block;
-    }
-    
-    @media (max-width: 768px) {
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
         .logo-img {
-            height: 50px;
+            height: 70px;
+            width: auto;
+            display: block;
         }
-    }
 
-    .nav-links {
-        display: flex;
-        list-style: none;
-        gap: 2rem;
-    }
-
-    .nav-links a {
-        color: #333;
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.3s;
-    }
-
-    .nav-links a:hover {
-        color: #155588;
-    }
-
-    .nav-links a.active {
-        color: #155588;
-        border-bottom: 2px solid #155588;
-        padding-bottom: 2px;
-    }
-
-    .user-menu {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .org-badge {
-        background: #f2b236;
-        color: white;
-        padding: 0.25rem 0.75rem;
-        border-radius: 15px;
-        font-size: 0.8rem;
-        font-weight: bold;
-    }
-
-    .user-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: #f2b236;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .user-dropdown {
-        position: relative;
-    }
-
-    .dropdown-menu {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-        padding: 1rem 0;
-        min-width: 200px;
-        display: none;
-        margin-top: 0.5rem;
-    }
-
-    .dropdown-menu.show {
-        display: block;
-    }
-
-    .dropdown-menu a {
-        display: block;
-        padding: 0.5rem 1.5rem;
-        color: #333;
-        text-decoration: none;
-        transition: background 0.3s;
-    }
-
-    .dropdown-menu a:hover {
-        background: #f8f9fa;
-    }
-
-    .dropdown-divider {
-        border-top: 1px solid #e1e8ed;
-        margin: 0.5rem 0;
-    }
-
-    /* Dashboard Layout */
-    .dashboard-container {
-        padding-top: 6rem;
-        min-height: 100vh;
-    }
-
-    .dashboard-header {
-        background: linear-gradient(135deg, #f2b236 0%, #2ecc71 100%);
-        color: white;
-        padding: 2rem 0;
-        margin-bottom: 2rem;
-    }
-
-    .dashboard-header-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .welcome-section h1 {
-        font-size: 2rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .welcome-section p {
-        opacity: 0.9;
-    }
-
-    .header-actions {
-        display: flex;
-        gap: 1rem;
-    }
-
-    .btn {
-        padding: 0.75rem 1.5rem;
-        border: none;
-        border-radius: 25px;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-block;
-        transition: all 0.3s;
-        font-weight: 500;
-        text-align: center;
-    }
-
-    .btn-white {
-        background: white;
-        color: #f2b236;
-    }
-
-    .btn-white:hover {
-        background: #f8f9fa;
-        transform: translateY(-2px);
-    }
-
-    .btn-primary {
-        background: #f2b236;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background: #229954;
-        transform: translateY(-2px);
-    }
-
-    /* Stats Cards */
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .stat-card {
-        background: white;
-        padding: 1.5rem;
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .stat-icon {
-        width: 60px;
-        height: 60px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-    }
-
-    .stat-icon.green {
-        background: #d4edda;
-        color: #f2b236;
-    }
-
-    .stat-icon.blue {
-        background: #e8f4fd;
-        color: #155588;
-    }
-
-    .stat-icon.purple {
-        background: #f3e5f5;
-        color: #1e93b7;
-    }
-
-    .stat-icon.orange {
-        background: #fff3e0;
-        color: #f2b236;
-    }
-
-    .stat-content h3 {
-        font-size: 2rem;
-        color: #f2b236;
-        margin-bottom: 0.25rem;
-    }
-
-    .stat-content p {
-        color: #666;
-        font-size: 0.9rem;
-    }
-
-    /* Main Dashboard Content */
-    .dashboard-main {
-        display: grid;
-        grid-template-columns: 1fr 350px;
-        gap: 2rem;
-    }
-
-    .dashboard-content {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-
-    .dashboard-sidebar {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-
-    /* Dashboard Cards */
-    .dashboard-card {
-        background: white;
-        border-radius: 15px;
-        padding: 1.5rem;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    }
-
-    .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.5rem;
-        padding-bottom: 1rem;
-        border-bottom: 2px solid #f0f0f0;
-    }
-
-    .card-header h2 {
-        color: #f2b236;
-        font-size: 1.3rem;
-    }
-
-    .card-header a {
-        color: #f2b236;
-        text-decoration: none;
-        font-size: 0.9rem;
-    }
-
-    /* Opportunity Cards */
-    .opportunity-list {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .opportunity-card {
-        border: 2px solid #e1e8ed;
-        border-radius: 10px;
-        padding: 1rem;
-        transition: all 0.3s;
-    }
-
-    .opportunity-card:hover {
-        border-color: #f2b236;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-
-    .opportunity-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: start;
-        margin-bottom: 0.5rem;
-    }
-
-    .opportunity-title {
-        font-weight: bold;
-        color: #333;
-        margin-bottom: 0.25rem;
-    }
-
-    .opportunity-status {
-        padding: 0.25rem 0.75rem;
-        border-radius: 15px;
-        font-size: 0.8rem;
-        font-weight: bold;
-    }
-
-    .status-open {
-        background: #d4edda;
-        color: #f2b236;
-    }
-
-    .status-filled {
-        background: #e8f4fd;
-        color: #155588;
-    }
-
-    .status-draft {
-        background: #f8f9fa;
-        color: #666;
-    }
-
-    .opportunity-details {
-        color: #666;
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .opportunity-stats {
-        display: flex;
-        gap: 1.5rem;
-        padding-top: 0.5rem;
-        border-top: 1px solid #f0f0f0;
-        font-size: 0.9rem;
-    }
-
-    .opportunity-stat {
-        color: #666;
-    }
-
-    .opportunity-stat strong {
-        color: #333;
-    }
-
-    /* Speaker Applications */
-    .application-item {
-        display: flex;
-        gap: 1rem;
-        padding: 1rem;
-        background: #f8f9fa;
-        border-radius: 10px;
-        margin-bottom: 1rem;
-        transition: background 0.3s;
-    }
-
-    .application-item:hover {
-        background: #e9ecef;
-    }
-
-    .applicant-avatar {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #667eea, #1e93b7);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: bold;
-        flex-shrink: 0;
-    }
-
-    .application-content {
-        flex: 1;
-    }
-
-    .applicant-name {
-        font-weight: bold;
-        color: #333;
-        margin-bottom: 0.25rem;
-    }
-
-    .applicant-details {
-        color: #666;
-        font-size: 0.9rem;
-    }
-
-    .application-actions {
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .btn-small {
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
-    }
-
-    .btn-success {
-        background: #f2b236;
-        color: white;
-    }
-
-    .btn-danger {
-        background: #e74c3c;
-        color: white;
-    }
-
-    /* Free Badge */
-    .free-badge {
-        background: linear-gradient(135deg, #f2b236, #2ecc71);
-        color: white;
-        padding: 1.5rem;
-        border-radius: 15px;
-        text-align: center;
-        margin-bottom: 1rem;
-    }
-
-    .free-badge h3 {
-        font-size: 1.5rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .free-badge p {
-        opacity: 0.9;
-    }
-
-    /* Quick Actions */
-    .quick-actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-    }
-
-    .action-btn {
-        padding: 1rem;
-        background: #f8f9fa;
-        border: 2px solid #e1e8ed;
-        border-radius: 10px;
-        text-align: center;
-        color: #333;
-        text-decoration: none;
-        transition: all 0.3s;
-    }
-
-    .action-btn:hover {
-        background: white;
-        border-color: #f2b236;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-
-    .action-btn i {
-        display: block;
-        font-size: 1.5rem;
-        color: #f2b236;
-        margin-bottom: 0.5rem;
-    }
-
-    /* Responsive */
-    @media (max-width: 992px) {
-        .dashboard-main {
-            grid-template-columns: 1fr;
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
-    }
 
-    @media (max-width: 768px) {
         .nav-links {
-            display: none;
+            display: flex;
+            list-style: none;
+            gap: 2rem;
         }
 
-        .stats-grid {
-            grid-template-columns: 1fr;
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
         }
 
-        .dashboard-header-content {
-            flex-direction: column;
+        .nav-links a:hover {
+            color: #155588;
+        }
+
+        .nav-links a.active {
+            color: #155588;
+            border-bottom: 2px solid #155588;
+            padding-bottom: 2px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
             gap: 1rem;
         }
 
-        .quick-actions {
-            grid-template-columns: 1fr;
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-align: center;
         }
-    }
 
- /* Mobile Navigation Styles */
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
+        .btn-primary {
+            background: #155588;
+            color: white;
+        }
 
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
+        .btn-primary:hover {
+            background: #1e3d6f;
+            transform: translateY(-2px);
+        }
 
-/* Hamburger Menu */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-    z-index: 1002;
-    background: none;
-    border: none;
-    padding: 5px;
-}
+        .btn-secondary {
+            background: transparent;
+            color: #155588;
+            border: 2px solid #155588;
+        }
 
-.hamburger span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background: #333;
-    margin: 3px 0;
-    transition: all 0.3s ease;
-    border-radius: 2px;
-}
+        .btn-secondary:hover {
+            background: #155588;
+            color: white;
+        }
 
-.hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
 
-.hamburger.active span:nth-child(2) {
-    opacity: 0;
-}
+        .btn-success:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
 
-.hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -6px);
-}
+        /* User Menu */
+        .user-menu {
+            position: relative;
+        }
 
-/* Mobile Menu Overlay */
-.mobile-menu-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
 
-.mobile-menu-overlay.show {
-    display: block;
-    opacity: 1;
-}
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
 
-/* Mobile Menu Panel */
-.mobile-menu {
-    position: fixed;
-    top: 0;
-    right: -320px;
-    width: 300px;
-    height: 100vh;
-    background: white;
-    z-index: 1001;
-    transition: right 0.3s ease;
-    overflow-y: auto;
-    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-}
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
 
-.mobile-menu.show {
-    right: 0;
-}
+        .dropdown-menu.show {
+            display: block;
+        }
 
-.mobile-menu-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
 
-.mobile-menu-close {
-    width: 30px;
-    height: 30px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #666;
-}
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
 
-.mobile-nav-links {
-    list-style: none;
-    padding: 1rem 0;
-}
+        .dropdown-divider {
+            height: 1px;
+            background: #e1e8ed;
+            margin: 0;
+        }
 
-.mobile-nav-links li {
-    border-bottom: 1px solid #f0f0f0;
-}
+        /* Main Content */
+        .main-content {
+            padding-top: 6rem;
+            padding-bottom: 3rem;
+            min-height: 100vh;
+        }
 
-.mobile-nav-links a {
-    display: block;
-    padding: 1rem 1.5rem;
-    color: #333;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s;
-}
+        /* Dashboard Header */
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            border-radius: 15px;
+        }
 
-.mobile-nav-links a:hover {
-    background: #f8f9fa;
-    color: #155588;
-    padding-left: 2rem;
-}
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
 
-.mobile-nav-links a.active {
-    color: #155588;
-    background: #e8f4fd;
-}
+        .dashboard-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
 
-.mobile-user-section {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e1e8ed;
-    background: #f8f9fa;
-}
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
 
-.mobile-user-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
 
-.mobile-user-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #1e93b7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-}
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
 
-.mobile-user-details h3 {
-    margin: 0;
-    color: #333;
-}
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
 
-.mobile-user-details p {
-    margin: 0;
-    color: #666;
-    font-size: 0.9rem;
-}
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #155588;
+            margin-bottom: 0.25rem;
+        }
 
-.mobile-auth-buttons {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
 
-.mobile-auth-buttons .btn {
-    width: 100%;
-    text-align: center;
-}
+        .stat-change {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
 
-/* Responsive Breakpoints */
-@media (max-width: 768px) {
-    .nav-links {
-        display: none !important;
-    }
-    
-    .auth-buttons.desktop-only {
-        display: none !important;
-    }
-    
-    .hamburger {
-        display: flex;
-    }
-    
-    header {
-        padding: 0.75rem 0;
-    }
-    
-    .logo {
-        font-size: 1.5rem;
-    }
+        .stat-change.positive {
+            background: #d4edda;
+            color: #27ae60;
+        }
 
-    body {
-        padding-top: 60px;
-    }
-}
+        .stat-change.negative {
+            background: #f8d7da;
+            color: #dc3545;
+        }
 
-@media (max-width: 480px) {
-    .mobile-menu {
-        width: 85vw;
-        right: -85vw;
-    }
-}
+        /* Quick Actions */
+        .quick-actions {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
 
-/* Organization Green Theme Override */
-.organization-theme .user-avatar,
-.organization-theme .mobile-user-avatar {
-background: #f2b236;
-}
+        .quick-actions h2 {
+            color: #155588;
+            margin-bottom: 1.5rem;
+        }
 
-.organization-theme .nav-links a:hover,
-.organization-theme .mobile-nav-links a:hover {
-color: #f2b236;
-}
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
 
-.organization-theme .nav-links a.active,
-.organization-theme .mobile-nav-links a.active {
-color: #f2b236;
-border-bottom-color: #f2b236;
-background: #d4edda;
-}
+        .action-card {
+            padding: 1.5rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: #333;
+        }
 
-.organization-theme .btn-primary {
-background: #f2b236;
-}
+        .action-card:hover {
+            border-color: #155588;
+            background: #f8f9fa;
+            transform: translateY(-3px);
+        }
 
-.organization-theme .btn-primary:hover {
-background: #229954;
-}
+        .action-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
 
-.organization-theme .btn-secondary {
-color: #f2b236;
-border-color: #f2b236;
-}
+        .action-title {
+            font-weight: 600;
+            color: #155588;
+        }
 
-.organization-theme .btn-secondary:hover {
-background: #f2b236;
-}
+        /* Content Sections */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
 
-</style>
+        .section-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            color: #155588;
+        }
+
+        /* Recent Applications Table */
+        .applications-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .applications-table th {
+            text-align: left;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            color: #666;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-bottom: 2px solid #e1e8ed;
+        }
+
+        .applications-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .applications-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .applicant-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .applicant-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-badge.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-badge.accepted {
+            background: #d4edda;
+            color: #27ae60;
+        }
+
+        .status-badge.rejected {
+            background: #f8d7da;
+            color: #dc3545;
+        }
+
+        /* Opportunities List */
+        .opportunity-item {
+            padding: 1rem;
+            border-bottom: 1px solid #e1e8ed;
+            transition: background 0.2s;
+        }
+
+        .opportunity-item:hover {
+            background: #f8f9fa;
+        }
+
+        .opportunity-item:last-child {
+            border-bottom: none;
+        }
+
+        .opportunity-title {
+            font-weight: 600;
+            color: #155588;
+            margin-bottom: 0.25rem;
+        }
+
+        .opportunity-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .opportunity-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .opportunity-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Activity Feed */
+        .activity-item {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-text {
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        /* Empty States */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #155588;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
 </head>
-<body class="organization-theme">
-<!-- Header -->
-<header>
-    <div class="nav-container">
-        <nav>
-            <!-- Logo -->
-            <a href="index.html" class="logo"><img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img"></a>
-            
-            <!-- Desktop Navigation -->
-            <!-- Logged Out Navigation -->
-            <ul class="nav-links nav-logged-out" id="navLoggedOut">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="members.html">Find Speakers</a></li>
-                <li><a href="pricing.html">Pricing</a></li>
-                <li><a href="register.html">Register</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            
-            <!-- Logged In Navigation (Speakers) -->
-            <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
-                <li><a href="dashboard.html">Dashboard</a></li>
-                <li><a href="members.html">Find Speakers</a></li>
-                <li><a href="opportunities.html">Opportunities</a></li>
-                <li><a href="bookings.html">My Bookings</a></li>
-                <li><a href="profile.html">Profile</a></li>
-            </ul>
-            
-            <!-- Logged In Navigation (Organizations) -->
-            <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
-                <li><a href="organization-dashboard.html">Dashboard</a></li>
-                <li><a href="members.html">Find Speakers</a></li>
-                <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                <li><a href="my-opportunities.html">My Opportunities</a></li>
-                <li><a href="saved-speakers.html">Saved Speakers</a></li>
-            </ul>
-
-            <!-- Right Side Navigation -->
-            <div class="nav-right">
-                <!-- For Logged In Users -->
-                <div class="user-menu" id="userMenuDesktop" style="display: none;">
-                    <div class="user-dropdown">
-                        <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="nav-container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
+                </a>
+                
+                <!-- Navigation links for Organization -->
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="organization-dashboard.html" class="active">Dashboard</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
+                    <li><a href="my-opportunities.html">My Opportunities</a></li>
+                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
+                </ul>
+    
+                <div class="nav-right">
+                    <!-- User menu -->
+                    <div class="user-menu" id="userMenu">
+                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">O</div>
                         <div class="dropdown-menu" id="dropdownMenu">
-                            <a href="profile-edit.html">Edit Profile</a>
+                            <a href="inbox.html">Inbox</a>
+                            <div class="dropdown-divider"></div>
                             <a href="settings.html">Settings</a>
                             <a href="billing.html">Billing</a>
                             <div class="dropdown-divider"></div>
-                            <a href="#" onclick="logout()">Logout</a>
+                            <a href="#" onclick="logout(); return false;">Logout</a>
                         </div>
                     </div>
                 </div>
-
-                <!-- For Logged Out Users -->
-                <div class="auth-buttons desktop-only" id="authButtonsDesktop">
-                    <a href="register.html" class="btn btn-secondary">Join</a>
-                    <a href="login.html" class="btn btn-primary">Login</a>
-                </div>
-
-                <!-- Hamburger Menu Button -->
-                <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </nav>
-    </div>
-</header>
-
-<!-- Mobile Menu Overlay -->
-<div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
-
-<!-- Mobile Menu Panel -->
-<div class="mobile-menu" id="mobileMenu">
-<div class="mobile-menu-header">
-    <a href="index.html" class="logo"><img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img"></a>
-    <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
-</div>
-
-<!-- Mobile User Section (for logged in users) -->
-<div class="mobile-user-section" id="mobileUserSection" style="display: none;">
-    <div class="mobile-user-info">
-        <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
-        <div class="mobile-user-details">
-            <h3 id="mobileUserName">John Doe</h3>
-            <p id="mobileUserType">Speaker - Plus Plan</p>
+            </nav>
         </div>
-    </div>
-</div>
-
-<!-- Mobile Navigation Links -->
-<!-- Logged Out Mobile Navigation -->
-<ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="members.html">Find Speakers</a></li>
-    <li><a href="pricing.html">Pricing</a></li>
-    <li><a href="register.html">Register</a></li>
-    <li><a href="contact.html">Contact</a></li>
-    <li><a href="help.html">Help Center</a></li>
-</ul>
-
-<!-- Logged In Mobile Navigation (Speakers) -->
-<ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
-    <li><a href="dashboard.html">Dashboard</a></li>
-    <li><a href="members.html">Find Speakers</a></li>
-    <li><a href="opportunities.html">Opportunities</a></li>
-    <li><a href="bookings.html">My Bookings</a></li>
-    <li><a href="profile.html">Profile</a></li>
-    <li><a href="settings.html">Settings</a></li>
-    <li><a href="billing.html">Billing</a></li>
-    <li><a href="help.html">Help & Support</a></li>
-</ul>
-
-<!-- Logged In Mobile Navigation (Organizations) -->
-<ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
-    <li><a href="organization-dashboard.html">Dashboard</a></li>
-    <li><a href="members.html">Find Speakers</a></li>
-    <li><a href="post-opportunity.html">Post Opportunity</a></li>
-    <li><a href="my-opportunities.html">My Opportunities</a></li>
-    <li><a href="saved-speakers.html">Saved Speakers</a></li>
-    <li><a href="settings.html">Settings</a></li>
-    <li><a href="team.html">Team Members</a></li>
-    <li><a href="help.html">Help & Support</a></li>
-</ul>
-
-<!-- Mobile Auth Buttons (for logged out users) -->
-<div class="mobile-auth-buttons" id="mobileAuthButtons">
-    <a href="register.html" class="btn btn-secondary">Join Community</a>
-    <a href="login.html" class="btn btn-primary">Login</a>
-</div>
-
-<!-- Mobile Logout Button (for logged in users) -->
-<div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
-    <button class="btn btn-primary" onclick="logout()">Logout</button>
-</div>
-</div>
-
-<!-- Dashboard Container -->
-<div class="dashboard-container">
-    <!-- Dashboard Header -->
-    <div class="dashboard-header">
-        <div class="container">
-            <div class="dashboard-header-content">
-                <div class="welcome-section">
-                    <h1>Welcome back, <span id="orgName">Phoenix Chamber</span>!</h1>
-                    <p>Find the perfect speakers for your upcoming events - completely free.</p>
-                </div>
-                <div class="header-actions">
-                    <a href="post-opportunity.html" class="btn btn-white">Post New Opportunity</a>
-                    <a href="members.html" class="btn btn-white">Browse Speakers</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    </header>
 
     <!-- Main Content -->
-    <div class="container">
-        <!-- Stats Grid -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon green">📝</div>
-                <div class="stat-content">
-                    <h3 id="activeOpportunities">5</h3>
-                    <p>Active Opportunities</p>
-                </div>
+    <main class="main-content">
+        <div class="container">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <h1>Welcome back, <span id="orgName">Organization</span>!</h1>
+                <p>Manage your speaking opportunities and connect with speakers</p>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon blue">👥</div>
-                <div class="stat-content">
-                    <h3 id="totalApplications">48</h3>
-                    <p>Total Applications</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon purple">✅</div>
-                <div class="stat-content">
-                    <h3 id="bookedSpeakers">12</h3>
-                    <p>Booked Speakers</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon orange">⭐</div>
-                <div class="stat-content">
-                    <h3 id="savedSpeakers">27</h3>
-                    <p>Saved Speakers</p>
-                </div>
-            </div>
-        </div>
 
-        <!-- Dashboard Main Grid -->
-        <div class="dashboard-main">
-            <!-- Left Column -->
-            <div class="dashboard-content">
-                <!-- Active Opportunities -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h2>Your Active Opportunities</h2>
-                        <a href="my-opportunities.html">Manage All</a>
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📢</div>
+                    <div class="stat-value" id="activeOpportunities">0</div>
+                    <div class="stat-label">Active Opportunities</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📝</div>
+                    <div class="stat-value" id="totalApplications">0</div>
+                    <div class="stat-label">Total Applications</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-value" id="pendingReviews">0</div>
+                    <div class="stat-label">Pending Reviews</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-value" id="savedSpeakers">0</div>
+                    <div class="stat-label">Saved Speakers</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="actions-grid">
+                    <a href="post-opportunity.html" class="action-card">
+                        <div class="action-icon">➕</div>
+                        <div class="action-title">Post New Opportunity</div>
+                    </a>
+                    <a href="members.html" class="action-card">
+                        <div class="action-icon">🔍</div>
+                        <div class="action-title">Browse Speakers</div>
+                    </a>
+                    <a href="my-opportunities.html" class="action-card">
+                        <div class="action-icon">📋</div>
+                        <div class="action-title">Manage Opportunities</div>
+                    </a>
+                    <a href="saved-speakers.html" class="action-card">
+                        <div class="action-icon">💾</div>
+                        <div class="action-title">View Saved Speakers</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Left Column -->
+                <div>
+                    <!-- Recent Applications -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h2>Recent Applications</h2>
+                            <a href="my-opportunities.html" class="btn btn-primary">View All</a>
+                        </div>
+                        <div id="recentApplicationsContent">
+                            <div class="loading">
+                                <div class="loading-spinner"></div>
+                                Loading applications...
+                            </div>
+                        </div>
                     </div>
-                    <div class="opportunity-list">
-                        <div class="opportunity-card">
-                            <div class="opportunity-header">
-                                <div>
-                                    <div class="opportunity-title">Keynote Speaker - Annual Business Summit</div>
-                                    <div class="opportunity-details">March 15, 2024 • Phoenix Convention Center</div>
-                                </div>
-                                <span class="opportunity-status status-open">Open</span>
-                            </div>
-                            <div class="opportunity-stats">
-                                <span class="opportunity-stat"><strong>12</strong> Applications</span>
-                                <span class="opportunity-stat"><strong>5</strong> New Today</span>
-                                <span class="opportunity-stat">Closes in <strong>7 days</strong></span>
-                            </div>
+
+                    <!-- Active Opportunities -->
+                    <div class="section-card" style="margin-top: 2rem;">
+                        <div class="section-header">
+                            <h2>Your Active Opportunities</h2>
+                            <a href="post-opportunity.html" class="btn btn-success">Post New</a>
                         </div>
-                        
-                        <div class="opportunity-card">
-                            <div class="opportunity-header">
-                                <div>
-                                    <div class="opportunity-title">Workshop Facilitator - Leadership Training</div>
-                                    <div class="opportunity-details">February 28, 2024 • Chamber Office</div>
-                                </div>
-                                <span class="opportunity-status status-filled">Filled</span>
-                            </div>
-                            <div class="opportunity-stats">
-                                <span class="opportunity-stat"><strong>8</strong> Applications</span>
-                                <span class="opportunity-stat">Speaker: <strong>John Smith</strong></span>
-                            </div>
-                        </div>
-                        
-                        <div class="opportunity-card">
-                            <div class="opportunity-header">
-                                <div>
-                                    <div class="opportunity-title">Panel Moderator - Women in Business</div>
-                                    <div class="opportunity-details">April 5, 2024 • Virtual Event</div>
-                                </div>
-                                <span class="opportunity-status status-open">Open</span>
-                            </div>
-                            <div class="opportunity-stats">
-                                <span class="opportunity-stat"><strong>6</strong> Applications</span>
-                                <span class="opportunity-stat"><strong>2</strong> New Today</span>
-                                <span class="opportunity-stat">Closes in <strong>14 days</strong></span>
+                        <div id="activeOpportunitiesContent">
+                            <div class="loading">
+                                <div class="loading-spinner"></div>
+                                Loading opportunities...
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Recent Applications -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h2>Recent Speaker Applications</h2>
-                        <a href="applications.html">View All</a>
-                    </div>
-                    <div class="applications-list">
-                        <div class="application-item">
-                            <div class="applicant-avatar">SJ</div>
-                            <div class="application-content">
-                                <div class="applicant-name">Sarah Johnson</div>
-                                <div class="applicant-details">Applied for: Annual Business Summit • Tech Innovation Expert • 4.9★</div>
-                            </div>
-                            <div class="application-actions">
-                                <button class="btn btn-success btn-small">Accept</button>
-                                <button class="btn btn-small">View Profile</button>
-                            </div>
-                        </div>
-                        
-                        <div class="application-item">
-                            <div class="applicant-avatar">MD</div>
-                            <div class="application-content">
-                                <div class="applicant-name">Michael Davis</div>
-                                <div class="applicant-details">Applied for: Leadership Training • Business Coach • 4.7★</div>
-                            </div>
-                            <div class="application-actions">
-                                <button class="btn btn-success btn-small">Accept</button>
-                                <button class="btn btn-small">View Profile</button>
-                            </div>
-                        </div>
-                        
-                        <div class="application-item">
-                            <div class="applicant-avatar">LC</div>
-                            <div class="application-content">
-                                <div class="applicant-name">Lisa Chen</div>
-                                <div class="applicant-details">Applied for: Women in Business Panel • Entrepreneur • 5.0★</div>
-                            </div>
-                            <div class="application-actions">
-                                <button class="btn btn-success btn-small">Accept</button>
-                                <button class="btn btn-small">View Profile</button>
+                <!-- Right Column -->
+                <div>
+                    <!-- Recent Activity -->
+                    <div class="section-card">
+                        <h2>Recent Activity</h2>
+                        <div id="recentActivityContent">
+                            <div class="loading">
+                                <div class="loading-spinner"></div>
+                                Loading activity...
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Upcoming Events -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h2>Upcoming Events with Speakers</h2>
-                        <a href="events.html">View Calendar</a>
-                    </div>
-                    <div class="opportunity-list">
-                        <div class="opportunity-card">
-                            <div class="opportunity-header">
-                                <div>
-                                    <div class="opportunity-title">Monthly Networking Breakfast</div>
-                                    <div class="opportunity-details">February 10, 2024 • 8:00 AM</div>
+                    <!-- Quick Stats -->
+                    <div class="section-card" style="margin-top: 2rem;">
+                        <h2>This Month</h2>
+                        <div id="monthlyStats">
+                            <div class="opportunity-item">
+                                <div class="opportunity-meta">
+                                    <span>📝 New Applications: <strong id="monthApplications">0</strong></span>
+                                </div>
+                                <div class="opportunity-meta">
+                                    <span>✅ Accepted: <strong id="monthAccepted">0</strong></span>
+                                </div>
+                                <div class="opportunity-meta">
+                                    <span>👁 Profile Views: <strong id="monthViews">0</strong></span>
                                 </div>
                             </div>
-                            <div class="opportunity-stats">
-                                <span class="opportunity-stat">Speaker: <strong>Robert Williams</strong></span>
-                                <span class="opportunity-stat">Topic: <strong>Financial Planning</strong></span>
-                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Sidebar -->
-            <div class="dashboard-sidebar">
-                <!-- Free Account Benefits -->
-                <div class="dashboard-card">
-                    <div class="free-badge">
-                        <h3>🎉 FREE Forever</h3>
-                        <p>Full access to all speakers, no fees, no limits!</p>
-                    </div>
-                    <h3 style="color: #f2b236; margin-bottom: 1rem;">Your Benefits:</h3>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="padding: 0.5rem 0; color: #666;">✓ Unlimited speaker searches</li>
-                        <li style="padding: 0.5rem 0; color: #666;">✓ Post unlimited opportunities</li>
-                        <li style="padding: 0.5rem 0; color: #666;">✓ Direct speaker contact</li>
-                        <li style="padding: 0.5rem 0; color: #666;">✓ No booking fees</li>
-                        <li style="padding: 0.5rem 0; color: #666;">✓ Priority support</li>
-                    </ul>
-                </div>
-
-                <!-- Quick Actions -->
-                <div class="dashboard-card">
-                    <h3 style="color: #f2b236; margin-bottom: 1rem;">Quick Actions</h3>
-                    <div class="quick-actions">
-                        <a href="post-opportunity.html" class="action-btn">
-                            <i>➕</i>
-                            Post Opportunity
-                        </a>
-                        <a href="members.html" class="action-btn">
-                            <i>🔍</i>
-                            Find Speakers
-                        </a>
-                        <a href="saved-speakers.html" class="action-btn">
-                            <i>⭐</i>
-                            Saved List
-                        </a>
-                        <a href="messages.html" class="action-btn">
-                            <i>💬</i>
-                            Messages
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Recommended Speakers -->
-                <div class="dashboard-card">
-                    <h3 style="color: #f2b236; margin-bottom: 1rem;">Recommended Speakers</h3>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <div style="display: flex; align-items: center; gap: 1rem;">
-                            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #1e93b7); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">JD</div>
-                            <div>
-                                <div style="font-weight: bold; color: #333;">Jane Doe</div>
-                                <div style="font-size: 0.9rem; color: #666;">Marketing Expert • 4.9★</div>
-                            </div>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 1rem;">
-                            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #1e93b7); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">TJ</div>
-                            <div>
-                                <div style="font-weight: bold; color: #333;">Tom Johnson</div>
-                                <div style="font-size: 0.9rem; color: #666;">Leadership Coach • 4.8★</div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="members.html" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Browse All Speakers</a>
-                </div>
-
-                <!-- Help & Resources -->
-                <div class="dashboard-card">
-                    <h3 style="color: #f2b236; margin-bottom: 1rem;">Help & Resources</h3>
-                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                        <a href="how-it-works.html" style="color: #f2b236; text-decoration: none;">📚 How It Works</a>
-                        <a href="speaker-guidelines.html" style="color: #f2b236; text-decoration: none;">📋 Speaker Guidelines</a>
-                        <a href="event-planning.html" style="color: #f2b236; text-decoration: none;">📅 Event Planning Tips</a>
-                        <a href="contact.html" style="color: #f2b236; text-decoration: none;">📧 Contact Support</a>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </main>
 
-<script>
-    // Configuration
-    const CONFIG = {
-        API_BASE: window.location.hostname === 'localhost' ? 
-            'http://localhost:3001' : '/.netlify/functions/api'
-    };
-
-    // Load organization data on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        checkAuth();
-        loadOrganizationData();
-    });
-
-    // Check authentication
-    function checkAuth() {
-        const token = localStorage.getItem('token');
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        
-        if (!token) {
-            window.location.href = 'login.html';
-            return;
-        }
-        
-        // Check if user is an organization
-        if (user.type !== 'Organization') {
-            window.location.href = 'dashboard.html'; // Redirect to speaker dashboard
-            return;
-        }
-        
-        // Verify token
-        fetch(`${CONFIG.API_BASE}/auth/verify`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (!result.valid) {
-                logout();
-            } else {
-                updateOrgInfo(result.user);
-            }
-        })
-        .catch(error => {
-            console.error('Auth verification failed:', error);
-            logout();
-        });
-    }
-
-    // Update organization info in UI
-    function updateOrgInfo(user) {
-        const orgName = user.organizationName || user.name || 'Organization';
-        document.getElementById('orgName').textContent = orgName;
-        
-        // Update avatar with initials
-        const initials = orgName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-        document.getElementById('userAvatar').textContent = initials;
-    }
-
-    // Load organization dashboard data
-    async function loadOrganizationData() {
-        const token = localStorage.getItem('token');
-        
-        try {
-            // Load organization stats
-            const statsResponse = await fetch(`${CONFIG.API_BASE}/organization/stats`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-            if (statsResponse.ok) {
-                const stats = await statsResponse.json();
-                updateStats(stats);
-            }
-            
-            // Load opportunities
-            const oppsResponse = await fetch(`${CONFIG.API_BASE}/organization/opportunities`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-            if (oppsResponse.ok) {
-                const opportunities = await oppsResponse.json();
-                updateOpportunities(opportunities);
-            }
-            
-            // Load recent applications
-            const appsResponse = await fetch(`${CONFIG.API_BASE}/organization/applications`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-            if (appsResponse.ok) {
-                const applications = await appsResponse.json();
-                updateApplications(applications);
-            }
-            
-        } catch (error) {
-            console.error('Error loading organization data:', error);
-        }
-    }
-
-    // Update stats
-    function updateStats(stats) {
-        if (stats.activeOpportunities !== undefined) {
-            document.getElementById('activeOpportunities').textContent = stats.activeOpportunities;
-        }
-        if (stats.totalApplications !== undefined) {
-            document.getElementById('totalApplications').textContent = stats.totalApplications;
-        }
-        if (stats.bookedSpeakers !== undefined) {
-            document.getElementById('bookedSpeakers').textContent = stats.bookedSpeakers;
-        }
-        if (stats.savedSpeakers !== undefined) {
-            document.getElementById('savedSpeakers').textContent = stats.savedSpeakers;
-        }
-    }
-
-    // Update opportunities
-    function updateOpportunities(opportunities) {
-        // Update UI with opportunities data
-        // This would populate the opportunities list dynamically
-    }
-
-    // Update applications
-    function updateApplications(applications) {
-        // Update UI with applications data
-        // This would populate the applications list dynamically
-    }
-
-    // Toggle dropdown menu
-    function toggleDropdown() {
-        const dropdown = document.getElementById('dropdownMenu');
-        dropdown.classList.toggle('show');
-    }
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(event) {
-        const dropdown = document.getElementById('dropdownMenu');
-        const avatar = document.getElementById('userAvatar');
-        
-        if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-            dropdown.classList.remove('show');
-        }
-    });
-
-    // Logout function
-    function logout() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('user');
-        window.location.href = 'login.html';
-    }
-</script>
-
-<script>
-    // Mobile Navigation Functions
-    function toggleMobileMenu() {
-        const hamburger = document.getElementById('hamburger');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const overlay = document.getElementById('mobileMenuOverlay');
-        
-        hamburger.classList.toggle('active');
-        mobileMenu.classList.toggle('show');
-        overlay.classList.toggle('show');
-        
-        if (mobileMenu.classList.contains('show')) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-    }
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
-    function closeMobileMenu() {
-        const hamburger = document.getElementById('hamburger');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const overlay = document.getElementById('mobileMenuOverlay');
-        
-        hamburger.classList.remove('active');
-        mobileMenu.classList.remove('show');
-        overlay.classList.remove('show');
-        document.body.style.overflow = '';
-    }
+    <!-- Load config and Supabase client -->
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
     
-    // Update user menu based on auth status
-    function updateNavAuth() {
-        const token = localStorage.getItem('token');
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        
-        if (token && user) {
-            // Show logged in state
-            document.getElementById('userMenuDesktop').style.display = 'flex';
-            document.getElementById('authButtonsDesktop').style.display = 'none';
-            document.getElementById('mobileUserSection').style.display = 'block';
-            document.getElementById('mobileAuthButtons').style.display = 'none';
-            document.getElementById('mobileLogoutSection').style.display = 'block';
+    <script>
+        // Page state
+        let currentUser = null;
+        let organizationData = null;
+
+        // Wait for Supabase client
+        function waitForSupabase(callback) {
+            let attempts = 0;
+            const maxAttempts = 10;
             
-            // Update user info
-            const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
+            function check() {
+                attempts++;
+                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                    callback();
+                } else if (attempts < maxAttempts) {
+                    setTimeout(check, 500);
+                } else {
+                    console.error('Failed to initialize Supabase client');
+                    window.location.href = '/login.html';
+                }
+            }
+            check();
+        }
+
+        // Initialize page
+        async function initializePage() {
+            waitForSupabase(async () => {
+                try {
+                    // Check authentication
+                    const session = await window.covetalks.checkAuth();
+                    if (!session) {
+                        window.location.href = '/login.html';
+                        return;
+                    }
+
+                    // Get user profile
+                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                    if (!currentUser || currentUser.member_type !== 'Organization') {
+                        // Redirect non-organization users to appropriate dashboard
+                        window.location.href = '/dashboard.html';
+                        return;
+                    }
+
+                    // Update UI with user info
+                    updateUserInterface();
+
+                    // Load dashboard data
+                    await loadDashboardData();
+
+                } catch (error) {
+                    console.error('Initialization error:', error);
+                    alert('Failed to load dashboard. Please try refreshing the page.');
+                }
+            });
+        }
+
+        // Update user interface
+        function updateUserInterface() {
+            // Update organization name
+            document.getElementById('orgName').textContent = currentUser.name || 'Organization';
+            
+            // Update avatar
+            const initials = currentUser.name ? 
+                currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                'O';
             document.getElementById('userAvatar').textContent = initials;
-            document.getElementById('mobileUserAvatar').textContent = initials;
-            document.getElementById('mobileUserName').textContent = user.name || 'User';
-            document.getElementById('mobileUserType').textContent = user.type || 'Member';
-        } else {
-            // Show logged out state
-            if (document.getElementById('userMenuDesktop')) {
-                document.getElementById('userMenuDesktop').style.display = 'none';
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                // Load all data in parallel
+                const [
+                    opportunities,
+                    savedSpeakers,
+                    recentApplications,
+                    recentActivity
+                ] = await Promise.all([
+                    loadOpportunities(),
+                    loadSavedSpeakersCount(),
+                    loadRecentApplications(),
+                    loadRecentActivity()
+                ]);
+
+                // Update stats
+                updateDashboardStats(opportunities, recentApplications);
+
+                // Display active opportunities
+                displayActiveOpportunities(opportunities);
+
+                // Display recent applications
+                displayRecentApplications(recentApplications);
+
+                // Display recent activity
+                displayRecentActivity(recentActivity);
+
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
             }
-            document.getElementById('authButtonsDesktop').style.display = 'flex';
+        }
+
+        // Load opportunities
+        async function loadOpportunities() {
+            try {
+                const opportunities = await window.covetalks.getMyOpportunities();
+                return opportunities || [];
+            } catch (error) {
+                console.error('Error loading opportunities:', error);
+                return [];
+            }
+        }
+
+        // Load saved speakers count
+        async function loadSavedSpeakersCount() {
+            try {
+                const savedSpeakers = await window.covetalks.getSavedSpeakers();
+                document.getElementById('savedSpeakers').textContent = savedSpeakers.length;
+                return savedSpeakers.length;
+            } catch (error) {
+                console.error('Error loading saved speakers:', error);
+                return 0;
+            }
+        }
+
+        // Load recent applications
+        async function loadRecentApplications() {
+            try {
+                const opportunities = await window.covetalks.getMyOpportunities();
+                let allApplications = [];
+                
+                // Get applications for each opportunity
+                for (const opp of opportunities.slice(0, 5)) { // Limit to recent 5 opportunities
+                    const applications = await window.covetalks.getOpportunityApplications(opp.id);
+                    allApplications = allApplications.concat(
+                        applications.map(app => ({ ...app, opportunity: opp }))
+                    );
+                }
+                
+                // Sort by created_at and limit to recent 10
+                allApplications.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                return allApplications.slice(0, 10);
+            } catch (error) {
+                console.error('Error loading applications:', error);
+                return [];
+            }
+        }
+
+        // Load recent activity
+        async function loadRecentActivity() {
+            try {
+                const activity = await window.covetalks.getRecentActivity(currentUser.id, 10);
+                return activity || [];
+            } catch (error) {
+                console.error('Error loading activity:', error);
+                return [];
+            }
+        }
+
+        // Update dashboard stats
+        function updateDashboardStats(opportunities, applications) {
+            // Active opportunities
+            const activeOps = opportunities.filter(o => o.status === 'Open').length;
+            document.getElementById('activeOpportunities').textContent = activeOps;
             
-            if (document.getElementById('mobileUserSection')) {
-                document.getElementById('mobileUserSection').style.display = 'none';
+            // Total applications
+            document.getElementById('totalApplications').textContent = applications.length;
+            
+            // Pending reviews
+            const pendingCount = applications.filter(a => a.status === 'Pending').length;
+            document.getElementById('pendingReviews').textContent = pendingCount;
+            
+            // Monthly stats
+            const now = new Date();
+            const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+            
+            const monthlyApps = applications.filter(a => 
+                new Date(a.created_at) >= monthStart
+            );
+            
+            document.getElementById('monthApplications').textContent = monthlyApps.length;
+            document.getElementById('monthAccepted').textContent = 
+                monthlyApps.filter(a => a.status === 'Accepted').length;
+        }
+
+        // Display active opportunities
+        function displayActiveOpportunities(opportunities) {
+            const container = document.getElementById('activeOpportunitiesContent');
+            const activeOps = opportunities.filter(o => o.status === 'Open').slice(0, 5);
+            
+            if (activeOps.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📢</div>
+                        <p>No active opportunities</p>
+                        <a href="post-opportunity.html" class="btn btn-primary" style="margin-top: 1rem;">
+                            Post Your First Opportunity
+                        </a>
+                    </div>
+                `;
+                return;
             }
-            document.getElementById('mobileAuthButtons').style.display = 'flex';
-            if (document.getElementById('mobileLogoutSection')) {
-                document.getElementById('mobileLogoutSection').style.display = 'none';
+            
+            container.innerHTML = activeOps.map(opp => `
+                <div class="opportunity-item">
+                    <div class="opportunity-title">${opp.title}</div>
+                    <div class="opportunity-meta">
+                        <span>📅 ${formatDate(opp.event_date)}</span>
+                        <span>📍 ${opp.location || 'TBD'}</span>
+                    </div>
+                    <div class="opportunity-stats">
+                        <div class="opportunity-stat">
+                            <span>📝</span>
+                            <span>${opp.applications?.count || 0} applications</span>
+                        </div>
+                        <div class="opportunity-stat">
+                            <span>💰</span>
+                            <span>${opp.compensation_amount ? `$${opp.compensation_amount}` : 'Volunteer'}</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 0.5rem;">
+                        <a href="opportunity-details.html?id=${opp.id}" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Display recent applications
+        function displayRecentApplications(applications) {
+            const container = document.getElementById('recentApplicationsContent');
+            
+            if (applications.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <p>No applications yet</p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+                            Applications will appear here when speakers apply to your opportunities
+                        </p>
+                    </div>
+                `;
+                return;
             }
+            
+            container.innerHTML = `
+                <table class="applications-table">
+                    <thead>
+                        <tr>
+                            <th>Speaker</th>
+                            <th>Opportunity</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${applications.slice(0, 5).map(app => {
+                            const speaker = app.speaker || {};
+                            const initials = speaker.name ? 
+                                speaker.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                                '?';
+                            
+                            const statusClass = app.status.toLowerCase();
+                            
+                            return `
+                                <tr>
+                                    <td>
+                                        <div class="applicant-info">
+                                            <div class="applicant-avatar">${initials}</div>
+                                            <div>
+                                                <div>${speaker.name || 'Unknown'}</div>
+                                                <div style="font-size: 0.85rem; color: #666;">
+                                                    ${speaker.location || 'Location not specified'}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>${app.opportunity?.title || 'Unknown'}</td>
+                                    <td>
+                                        <span class="status-badge ${statusClass}">${app.status}</span>
+                                    </td>
+                                    <td>
+                                        <a href="application-review.html?id=${app.id}" class="btn btn-primary" 
+                                           style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+                                            Review
+                                        </a>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
         }
-    }
-    
-    // Toggle dropdown
-    function toggleDropdown() {
-        const dropdown = document.getElementById('dropdownMenu');
-        dropdown.classList.toggle('show');
-    }
-    
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(event) {
-        const dropdown = document.getElementById('dropdownMenu');
-        const avatar = document.getElementById('userAvatar');
-        
-        if (dropdown && avatar && !avatar.contains(event.target) && !dropdown.contains(event.target)) {
-            dropdown.classList.remove('show');
+
+        // Display recent activity
+        function displayRecentActivity(activities) {
+            const container = document.getElementById('recentActivityContent');
+            
+            if (activities.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📊</div>
+                        <p>No recent activity</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = activities.slice(0, 5).map(activity => {
+                const icon = getActivityIcon(activity.activity_type);
+                const text = getActivityText(activity);
+                
+                return `
+                    <div class="activity-item">
+                        <div class="activity-icon">${icon}</div>
+                        <div class="activity-content">
+                            <div class="activity-text">${text}</div>
+                            <div class="activity-time">${formatTimeAgo(activity.created_at)}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
-    });
-    
-    // Logout function - UPDATE IF YOU HAVE DIFFERENT LOGOUT LOGIC
-    function logout() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('user');
-        window.location.href = 'login.html';
-    }
-    
-    // Close mobile menu on resize
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
-            closeMobileMenu();
+
+        // Get activity icon
+        function getActivityIcon(type) {
+            const icons = {
+                'opportunity_posted': '📢',
+                'application_received': '📝',
+                'application_reviewed': '✅',
+                'speaker_saved': '⭐',
+                'profile_view': '👁',
+                'default': '📌'
+            };
+            return icons[type] || icons.default;
         }
-    });
-    
-    // Initialize on load
-    document.addEventListener('DOMContentLoaded', function() {
-        updateNavAuth();
-        
-        // Set active page - UPDATE FOR EACH PAGE
-        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-        document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
-            if (link.getAttribute('href') === currentPage) {
-                link.classList.add('active');
+
+        // Get activity text
+        function getActivityText(activity) {
+            const texts = {
+                'opportunity_posted': 'Posted a new opportunity',
+                'application_received': 'Received a new application',
+                'application_reviewed': 'Reviewed an application',
+                'speaker_saved': 'Saved a speaker',
+                'profile_view': 'Someone viewed your profile'
+            };
+            return texts[activity.activity_type] || 'New activity';
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return 'Date TBD';
+            return new Date(dateString).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
+        // Format time ago
+        function formatTimeAgo(dateString) {
+            if (!dateString) return 'Recently';
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+            if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+            if (diffDays < 30) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+            return formatDate(dateString);
+        }
+
+        // Toggle dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdownMenu');
+            const avatar = document.getElementById('userAvatar');
+            
+            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('show');
             }
         });
-    });
+
+        // Logout
+        async function logout() {
+            if (window.covetalks) {
+                await window.covetalks.logout();
+            }
+        }
+
+        // Initialize on load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
     </script>
-    <!-- Add before closing </body> tag on ALL pages -->
-<script src="/js/app.js"></script>
-<script src="/js/navigation.js"></script>
-<script>
-  // Initialize page-specific functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check auth and update navigation
-    updateNavigation();
-    
-    // Page-specific initialization
-    if (typeof initializePage === 'function') {
-      initializePage();
-    }
-  });
-</script>
-// Add to dashboard.html, bookings.html, settings.html, etc.
-<script>
-function initializePage() {
-  // Check authentication first
-  if (!requireAuth()) return;
-  
-  // Load page-specific data
-  loadDashboardData();
-}
-
-async function loadDashboardData() {
-  try {
-    // TODO: Connect to Airtable via API
-    // const profile = await api.getProfile();
-    // const bookings = await api.getBookings();
-    
-    // Placeholder for now
-    console.log('Loading dashboard data...');
-    
-    // Update UI with data
-    // updateDashboardUI(profile, bookings);
-  } catch (error) {
-    console.error('Failed to load dashboard:', error);
-  }
-}
-</script>
-// dashboard.html (Speaker Dashboard)
-<script>
-async function initializePage() {
-  if (!requireAuth()) return;
-  
-  const user = api.getCurrentUser();
-  
-  // TODO: Airtable Integration Points
-  // 1. Fetch user's bookings from Applications table
-  // 2. Get upcoming opportunities from Speaking_Opportunities
-  // 3. Fetch recent reviews from Reviews table
-  // 4. Get subscription status from Subscriptions table
-  
-  // Placeholder implementation
-  document.getElementById('welcomeMessage').textContent = `Welcome back, ${user.name}!`;
-  
-  // Load statistics
-  loadDashboardStats();
-}
-
-async function loadDashboardStats() {
-  try {
-    // TODO: Connect to Airtable
-    const stats = {
-      totalBookings: 0,
-      upcomingEvents: 0,
-      profileViews: 0,
-      averageRating: 0
-    };
-    
-    // Update UI
-    updateStatsDisplay(stats);
-  } catch (error) {
-    console.error('Error loading stats:', error);
-  }
-}
-</script>
 </body>
 </html>

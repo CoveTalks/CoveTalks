@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Connection Test - CoveTalks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #155588;
+            margin-bottom: 2rem;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        
+        .status.pending { background: #fef3c7; color: #92400e; }
+        .status.success { background: #d1fae5; color: #065f46; }
+        .status.error { background: #fee2e2; color: #991b1b; }
+        
+        .result-box {
+            background: #f9f9f9;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .btn {
+            background: #155588;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #1e3d6f;
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .error { color: #dc2626; }
+        .success { color: #059669; }
+        .info { color: #2563eb; }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .metric {
+            background: #f0f9ff;
+            padding: 1rem;
+            border-radius: 4px;
+            border-left: 4px solid #155588;
+        }
+        
+        .metric-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #155588;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Supabase Connection Test Dashboard</h1>
+        
+        <!-- Connection Test -->
+        <div class="test-section">
+            <div class="test-header">
+                <h2>1. Supabase Connection</h2>
+                <span id="conn-status" class="status pending">Pending</span>
+            </div>
+            <p>Testing connection to Supabase...</p>
+            <div id="conn-result" class="result-box"></div>
+        </div>
+        
+        <!-- Database Tables Test -->
+        <div class="test-section">
+            <div class="test-header">
+                <h2>2. Database Tables</h2>
+                <span id="db-status" class="status pending">Pending</span>
+            </div>
+            <button class="btn" onclick="testDatabaseTables()">Test Database Access</button>
+            <div id="db-result" class="result-box" style="display:none;"></div>
+        </div>
+        
+        <!-- Members Data Test -->
+        <div class="test-section">
+            <div class="test-header">
+                <h2>3. Members Table</h2>
+                <span id="members-status" class="status pending">Pending</span>
+            </div>
+            <button class="btn" onclick="testMembersTable()">Load Members</button>
+            <div class="grid" id="members-stats" style="display:none;">
+                <div class="metric">
+                    <div class="metric-label">Total Members</div>
+                    <div class="metric-value" id="total-members">0</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Speakers</div>
+                    <div class="metric-value" id="total-speakers">0</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Organizations</div>
+                    <div class="metric-value" id="total-orgs">0</div>
+                </div>
+            </div>
+            <div id="members-result" class="result-box" style="display:none;"></div>
+        </div>
+        
+        <!-- Organizations Test -->
+        <div class="test-section">
+            <div class="test-header">
+                <h2>4. Organizations Table</h2>
+                <span id="orgs-status" class="status pending">Pending</span>
+            </div>
+            <button class="btn" onclick="testOrganizationsTable()">Load Organizations</button>
+            <div id="orgs-result" class="result-box" style="display:none;"></div>
+        </div>
+        
+        <!-- Storage Test -->
+        <div class="test-section">
+            <div class="test-header">
+                <h2>5. Storage Buckets</h2>
+                <span id="storage-status" class="status pending">Pending</span>
+            </div>
+            <button class="btn" onclick="testStorageBuckets()">Test Storage Access</button>
+            <div id="storage-result" class="result-box" style="display:none;"></div>
+        </div>
+        
+        <!-- Auth Test -->
+        <div class="test-section">
+            <div class="test-header">
+                <h2>6. Authentication</h2>
+                <span id="auth-status" class="status pending">Pending</span>
+            </div>
+            <button class="btn" onclick="testAuth()">Check Auth Status</button>
+            <div id="auth-result" class="result-box" style="display:none;"></div>
+        </div>
+        
+        <!-- Create Test Data -->
+        <div class="test-section" style="background: #fef3c7;">
+            <div class="test-header">
+                <h2>7. Create Test Data</h2>
+                <span id="create-status" class="status pending">Ready</span>
+            </div>
+            <p style="margin-bottom: 1rem;">⚠️ This will create sample data in your database for testing.</p>
+            <button class="btn" onclick="createTestData()">Create Test Speaker</button>
+            <button class="btn" onclick="createTestOrg()" style="margin-left: 1rem;">Create Test Organization</button>
+            <div id="create-result" class="result-box" style="display:none;"></div>
+        </div>
+    </div>
+    
+    <!-- Load Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="supabase-client.js"></script>
+    
+    <script>
+        // Test connection on page load
+        window.addEventListener('DOMContentLoaded', async () => {
+            await testConnection();
+        });
+        
+        async function testConnection() {
+            const statusEl = document.getElementById('conn-status');
+            const resultEl = document.getElementById('conn-result');
+            
+            try {
+                if (!window.covetalks) {
+                    throw new Error('Supabase client not initialized');
+                }
+                
+                // Test basic connection
+                const { data, error } = await window.covetalks.supabase
+                    .from('members')
+                    .select('count', { count: 'exact', head: true });
+                
+                if (error) throw error;
+                
+                statusEl.className = 'status success';
+                statusEl.textContent = 'Connected';
+                resultEl.innerHTML = `<span class="success">✓ Successfully connected to Supabase</span>
+URL: ${window.APP_CONFIG.SUPABASE_URL}
+Status: Active`;
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = 'Failed';
+                resultEl.innerHTML = `<span class="error">✗ Connection failed: ${error.message}</span>`;
+            }
+        }
+        
+        async function testDatabaseTables() {
+            const statusEl = document.getElementById('db-status');
+            const resultEl = document.getElementById('db-result');
+            resultEl.style.display = 'block';
+            
+            const tables = [
+                'members',
+                'organizations', 
+                'organization_members',
+                'speaking_opportunities',
+                'applications',
+                'reviews',
+                'subscriptions',
+                'payments',
+                'activity',
+                'saved_speakers'
+            ];
+            
+            let results = [];
+            
+            for (const table of tables) {
+                try {
+                    const { count, error } = await window.covetalks.supabase
+                        .from(table)
+                        .select('*', { count: 'exact', head: true });
+                    
+                    if (error) {
+                        results.push(`❌ ${table}: ${error.message}`);
+                    } else {
+                        results.push(`✅ ${table}: ${count || 0} records`);
+                    }
+                } catch (error) {
+                    results.push(`❌ ${table}: ${error.message}`);
+                }
+            }
+            
+            statusEl.className = 'status success';
+            statusEl.textContent = 'Tested';
+            resultEl.innerHTML = results.join('\n');
+        }
+        
+        async function testMembersTable() {
+            const statusEl = document.getElementById('members-status');
+            const resultEl = document.getElementById('members-result');
+            const statsEl = document.getElementById('members-stats');
+            
+            resultEl.style.display = 'block';
+            statsEl.style.display = 'grid';
+            
+            try {
+                const { data: members, error } = await window.covetalks.supabase
+                    .from('members')
+                    .select('*')
+                    .limit(5);
+                
+                if (error) throw error;
+                
+                // Get counts
+                const { count: totalCount } = await window.covetalks.supabase
+                    .from('members')
+                    .select('*', { count: 'exact', head: true });
+                    
+                const { count: speakerCount } = await window.covetalks.supabase
+                    .from('members')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('member_type', 'Speaker');
+                    
+                const { count: orgCount } = await window.covetalks.supabase
+                    .from('members')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('member_type', 'Organization');
+                
+                // Update stats
+                document.getElementById('total-members').textContent = totalCount || 0;
+                document.getElementById('total-speakers').textContent = speakerCount || 0;
+                document.getElementById('total-orgs').textContent = orgCount || 0;
+                
+                statusEl.className = 'status success';
+                statusEl.textContent = 'Loaded';
+                
+                if (members && members.length > 0) {
+                    resultEl.innerHTML = `Sample members (first 5):
+${members.map(m => `- ${m.name} (${m.member_type}) - ${m.email}`).join('\n')}`;
+                } else {
+                    resultEl.innerHTML = 'No members found. Use "Create Test Data" section to add sample data.';
+                }
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = 'Failed';
+                resultEl.innerHTML = `Error: ${error.message}`;
+            }
+        }
+        
+        async function testOrganizationsTable() {
+            const statusEl = document.getElementById('orgs-status');
+            const resultEl = document.getElementById('orgs-result');
+            resultEl.style.display = 'block';
+            
+            try {
+                const { data: orgs, error } = await window.covetalks.supabase
+                    .from('organizations')
+                    .select('*, organization_members(member_id)')
+                    .limit(5);
+                
+                if (error) throw error;
+                
+                statusEl.className = 'status success';
+                statusEl.textContent = 'Loaded';
+                
+                if (orgs && orgs.length > 0) {
+                    resultEl.innerHTML = `Organizations found:
+${orgs.map(o => `- ${o.name} (${o.organization_type}) - ${o.organization_members?.length || 0} members`).join('\n')}`;
+                } else {
+                    resultEl.innerHTML = 'No organizations found. Create test organization to verify.';
+                }
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = 'Failed';
+                resultEl.innerHTML = `Error: ${error.message}`;
+            }
+        }
+        
+        async function testStorageBuckets() {
+            const statusEl = document.getElementById('storage-status');
+            const resultEl = document.getElementById('storage-result');
+            resultEl.style.display = 'block';
+            
+            try {
+                // List files in avatars bucket
+                const { data: files, error } = await window.covetalks.supabase
+                    .storage
+                    .from('avatars')
+                    .list('members', {
+                        limit: 5
+                    });
+                
+                if (error) throw error;
+                
+                statusEl.className = 'status success';
+                statusEl.textContent = 'Accessible';
+                
+                resultEl.innerHTML = `Storage bucket 'avatars' is accessible.
+${files && files.length > 0 ? `Found ${files.length} files in members folder` : 'No files uploaded yet'}
+
+Public URL format: ${window.APP_CONFIG.SUPABASE_URL}/storage/v1/object/public/avatars/[path]`;
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = 'Failed';
+                resultEl.innerHTML = `Error accessing storage: ${error.message}`;
+            }
+        }
+        
+        async function testAuth() {
+            const statusEl = document.getElementById('auth-status');
+            const resultEl = document.getElementById('auth-result');
+            resultEl.style.display = 'block';
+            
+            try {
+                const { data: { session }, error } = await window.covetalks.supabase.auth.getSession();
+                
+                if (error) throw error;
+                
+                if (session) {
+                    const user = session.user;
+                    statusEl.className = 'status success';
+                    statusEl.textContent = 'Authenticated';
+                    resultEl.innerHTML = `Logged in as:
+Email: ${user.email}
+User ID: ${user.id}
+Created: ${new Date(user.created_at).toLocaleDateString()}`;
+                } else {
+                    statusEl.className = 'status success';
+                    statusEl.textContent = 'Not Authenticated';
+                    resultEl.innerHTML = 'No active session. User is not logged in.';
+                }
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = 'Error';
+                resultEl.innerHTML = `Auth check failed: ${error.message}`;
+            }
+        }
+        
+        async function createTestData() {
+            const statusEl = document.getElementById('create-status');
+            const resultEl = document.getElementById('create-result');
+            resultEl.style.display = 'block';
+            
+            const testEmail = `test.speaker.${Date.now()}@example.com`;
+            
+            try {
+                resultEl.innerHTML = 'Creating test speaker account...';
+                
+                const { data, error } = await window.covetalks.signup({
+                    email: testEmail,
+                    password: 'TestPassword123!',
+                    name: 'Test Speaker ' + Date.now(),
+                    memberType: 'Speaker',
+                    bio: 'This is a test speaker account for verification purposes.',
+                    location: 'Phoenix, AZ',
+                    specialties: ['Testing', 'Development', 'Supabase']
+                });
+                
+                if (error) throw error;
+                
+                statusEl.className = 'status success';
+                statusEl.textContent = 'Created';
+                resultEl.innerHTML = `✅ Test speaker created successfully!
+Email: ${testEmail}
+Password: TestPassword123!
+User ID: ${data.user?.id}
+
+You can now test login with these credentials.`;
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = 'Failed';
+                resultEl.innerHTML = `Failed to create test data: ${error.message}`;
+            }
+        }
+        
+        async function createTestOrg() {
+            const statusEl = document.getElementById('create-status');
+            const resultEl = document.getElementById('create-result');
+            resultEl.style.display = 'block';
+            
+            const testEmail = `test.org.${Date.now()}@example.com`;
+            
+            try {
+                resultEl.innerHTML = 'Creating test organization account...';
+                
+                const { data, error } = await window.covetalks.signup({
+                    email: testEmail,
+                    password: 'TestPassword123!',
+                    name: 'Test Org Admin',
+                    memberType: 'Organization',
+                    location: 'San Francisco, CA',
+                    organizationData: {
+                        Organization_Name: 'Test Organization ' + Date.now(),
+                        Organization_Type: 'Corporate',
+                        website: 'https://example.com',
+                        description: 'Test organization for verification'
+                    }
+                });
+                
+                if (error) throw error;
+                
+                statusEl.className = 'status success';
+                statusEl.textContent = 'Created';
+                resultEl.innerHTML = `✅ Test organization created successfully!
+Email: ${testEmail}
+Password: TestPassword123!
+User ID: ${data.user?.id}
+
+You can now test login with these credentials.`;
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = 'Failed';
+                resultEl.innerHTML = `Failed to create test organization: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

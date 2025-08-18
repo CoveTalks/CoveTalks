@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Status - CoveTalks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: white;
+            color: #333;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .logo-img {
+            height: 70px;
+            width: auto;
+            display: block;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #155588;
+        }
+
+        .nav-links a.active {
+            color: #155588;
+            border-bottom: 2px solid #155588;
+            padding-bottom: 2px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #155588;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e3d6f;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #155588;
+            border: 2px solid #155588;
+        }
+
+        .btn-secondary:hover {
+            background: #155588;
+            color: white;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e1e8ed;
+            margin: 0;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 6rem;
+            padding-bottom: 3rem;
+            min-height: 100vh;
+        }
+
+        /* Status Header */
+        .status-header {
+            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            border-radius: 15px;
+        }
+
+        .status-header h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-badge-large {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.2);
+            margin-bottom: 1rem;
+        }
+
+        .status-badge-large.pending {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .status-badge-large.accepted {
+            background: #27ae60;
+            color: white;
+        }
+
+        .status-badge-large.rejected {
+            background: #dc3545;
+            color: white;
+        }
+
+        .status-badge-large.withdrawn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .application-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            opacity: 0.95;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .card h2 {
+            color: #155588;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .card h3 {
+            color: #155588;
+            margin-bottom: 1rem;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e1e8ed;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -25px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #155588;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timeline-marker.pending {
+            border-color: #ffc107;
+        }
+
+        .timeline-marker.accepted {
+            border-color: #27ae60;
+        }
+
+        .timeline-marker.rejected {
+            border-color: #dc3545;
+        }
+
+        .timeline-marker.current {
+            background: #155588;
+            color: white;
+        }
+
+        .timeline-content {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-description {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Detail Rows */
+        .detail-row {
+            display: flex;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+            flex: 0 0 150px;
+        }
+
+        .detail-value {
+            flex: 1;
+            color: #333;
+        }
+
+        /* Application Content */
+        .application-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .application-section h4 {
+            color: #155588;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .cover-letter-box {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        /* Message Box */
+        .message-box {
+            background: #e8f4fd;
+            border-left: 4px solid #155588;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+
+        .message-box.success {
+            background: #d4edda;
+            border-color: #27ae60;
+        }
+
+        .message-box.error {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+
+        .message-box h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Next Steps */
+        .next-steps {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        .next-steps h4 {
+            color: #155588;
+            margin-bottom: 1rem;
+        }
+
+        .next-steps ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .next-steps li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .next-steps li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #666;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #155588;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            color: #155588;
+        }
+
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .status-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .application-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .detail-row {
+                flex-direction: column;
+            }
+
+            .detail-label {
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="nav-container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
+                </a>
+                
+                <!-- Navigation links will be dynamically updated -->
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="members.html">Find Speakers</a></li>
+                    <li><a href="opportunities.html">Opportunities</a></li>
+                    <li><a href="bookings.html">My Bookings</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                </ul>
+    
+                <div class="nav-right">
+                    <!-- User menu -->
+                    <div class="user-menu" id="userMenu">
+                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="inbox.html">Inbox</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="settings.html">Settings</a>
+                            <a href="billing.html">Billing</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" onclick="logout(); return false;">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Loading State -->
+            <div id="loadingState" class="loading">
+                <div class="loading-spinner"></div>
+                Loading application details...
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="card hidden">
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <h3>Application Not Found</h3>
+                    <p id="errorMessage">We couldn't find this application or you don't have permission to view it.</p>
+                    <a href="dashboard.html" class="btn btn-primary" style="margin-top: 1rem;">
+                        Back to Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <!-- Application Content -->
+            <div id="applicationContent" class="hidden">
+                <!-- Status Header -->
+                <div class="status-header">
+                    <h1 id="opportunityTitle">Loading...</h1>
+                    <span id="statusBadge" class="status-badge-large pending">PENDING</span>
+                    <div class="application-meta">
+                        <div class="meta-item">
+                            <span>📅</span>
+                            <span>Applied: <strong id="appliedDate">Loading...</strong></span>
+                        </div>
+                        <div class="meta-item">
+                            <span>🏢</span>
+                            <span>Organization: <strong id="orgName">Loading...</strong></span>
+                        </div>
+                        <div class="meta-item">
+                            <span>📍</span>
+                            <span>Location: <strong id="eventLocation">Loading...</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Grid -->
+                <div class="content-grid">
+                    <!-- Left Column -->
+                    <div>
+                        <!-- Application Details -->
+                        <div class="card">
+                            <h2>Application Details</h2>
+                            
+                            <div class="application-section">
+                                <h4>Your Cover Letter</h4>
+                                <div class="cover-letter-box" id="coverLetter">
+                                    Loading...
+                                </div>
+                            </div>
+
+                            <div class="application-section">
+                                <h4>Application Information</h4>
+                                <div class="detail-row">
+                                    <div class="detail-label">Application ID</div>
+                                    <div class="detail-value" id="applicationId">Loading...</div>
+                                </div>
+                                <div class="detail-row">
+                                    <div class="detail-label">Submitted</div>
+                                    <div class="detail-value" id="submittedDate">Loading...</div>
+                                </div>
+                                <div class="detail-row">
+                                    <div class="detail-label">Requested Fee</div>
+                                    <div class="detail-value" id="requestedFee">Loading...</div>
+                                </div>
+                                <div class="detail-row">
+                                    <div class="detail-label">Last Updated</div>
+                                    <div class="detail-value" id="lastUpdated">Loading...</div>
+                                </div>
+                            </div>
+
+                            <div id="reviewMessage" class="application-section hidden">
+                                <h4>Message from Reviewer</h4>
+                                <div class="message-box" id="messageBox">
+                                    <p id="messageContent"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Opportunity Details -->
+                        <div class="card">
+                            <h2>Opportunity Details</h2>
+                            <div class="detail-row">
+                                <div class="detail-label">Event Date</div>
+                                <div class="detail-value" id="eventDate">Loading...</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Duration</div>
+                                <div class="detail-value" id="eventDuration">Loading...</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Format</div>
+                                <div class="detail-value" id="eventFormat">Loading...</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Audience Size</div>
+                                <div class="detail-value" id="audienceSize">Loading...</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Compensation</div>
+                                <div class="detail-value" id="compensation">Loading...</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Travel Coverage</div>
+                                <div class="detail-value" id="travelCoverage">Loading...</div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <a id="viewOpportunityBtn" href="#" class="btn btn-primary">
+                                    View Full Opportunity
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div>
+                        <!-- Status Timeline -->
+                        <div class="card">
+                            <h3>Application Timeline</h3>
+                            <div class="timeline" id="timeline">
+                                <!-- Timeline items will be inserted here -->
+                            </div>
+                        </div>
+
+                        <!-- Next Steps -->
+                        <div class="card">
+                            <h3>Next Steps</h3>
+                            <div class="next-steps" id="nextSteps">
+                                <!-- Next steps will be inserted based on status -->
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="card">
+                            <h3>Actions</h3>
+                            <div id="applicationActions">
+                                <!-- Actions will be inserted based on status -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Withdraw Modal -->
+    <div id="withdrawModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Withdraw Application</h3>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to withdraw your application?</p>
+                <p style="margin-top: 1rem; color: #666;">
+                    This action cannot be undone. You will need to submit a new application if you change your mind.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal()" class="btn btn-secondary">Cancel</button>
+                <button onclick="confirmWithdraw()" class="btn btn-danger">Withdraw Application</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load config and Supabase client -->
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    
+    <script>
+        // Page state
+        let currentUser = null;
+        let applicationData = null;
+        let applicationId = null;
+
+        // Get application ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        applicationId = urlParams.get('id');
+
+        // Wait for Supabase client
+        function waitForSupabase(callback) {
+            let attempts = 0;
+            const maxAttempts = 10;
+            
+            function check() {
+                attempts++;
+                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                    callback();
+                } else if (attempts < maxAttempts) {
+                    setTimeout(check, 500);
+                } else {
+                    showError('Failed to initialize. Please refresh the page.');
+                }
+            }
+            check();
+        }
+
+        // Initialize page
+        async function initializePage() {
+            waitForSupabase(async () => {
+                try {
+                    // Check if application ID provided
+                    if (!applicationId) {
+                        showError('No application ID provided');
+                        return;
+                    }
+
+                    // Check authentication
+                    const session = await window.covetalks.checkAuth();
+                    if (!session) {
+                        window.location.href = `/login.html?redirect=${encodeURIComponent(window.location.href)}`;
+                        return;
+                    }
+
+                    // Get user profile
+                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                    updateNavigation(currentUser);
+
+                    // Load application details
+                    await loadApplicationDetails();
+
+                    // Load timeline
+                    await loadApplicationTimeline();
+
+                } catch (error) {
+                    console.error('Initialization error:', error);
+                    showError('Failed to load application details');
+                }
+            });
+        }
+
+        // Update navigation
+        function updateNavigation(user) {
+            const navLinks = document.getElementById('navLinks');
+            const userAvatar = document.getElementById('userAvatar');
+            
+            if (user) {
+                const initials = user.name ? 
+                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                    'U';
+                userAvatar.textContent = initials;
+                
+                if (user.member_type === 'Organization') {
+                    navLinks.innerHTML = `
+                        <li><a href="organization-dashboard.html">Dashboard</a></li>
+                        <li><a href="members.html">Find Speakers</a></li>
+                        <li><a href="post-opportunity.html">Post Opportunity</a></li>
+                        <li><a href="my-opportunities.html">My Opportunities</a></li>
+                        <li><a href="saved-speakers.html">Saved Speakers</a></li>
+                    `;
+                } else {
+                    navLinks.innerHTML = `
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="members.html">Find Speakers</a></li>
+                        <li><a href="opportunities.html">Opportunities</a></li>
+                        <li><a href="bookings.html">My Bookings</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                    `;
+                }
+            }
+        }
+
+        // Load application details
+        async function loadApplicationDetails() {
+            try {
+                applicationData = await window.covetalks.getApplicationById(applicationId);
+                
+                if (!applicationData) {
+                    showError('Application not found');
+                    return;
+                }
+
+                // Verify the user owns this application
+                if (applicationData.speaker_id !== currentUser.id) {
+                    showError('You do not have permission to view this application');
+                    return;
+                }
+
+                // Hide loading, show content
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('applicationContent').classList.remove('hidden');
+
+                // Display application details
+                displayApplicationDetails();
+
+            } catch (error) {
+                console.error('Error loading application:', error);
+                showError('Failed to load application details');
+            }
+        }
+
+        // Display application details
+        function displayApplicationDetails() {
+            const opportunity = applicationData.opportunity;
+            
+            // Header info
+            document.getElementById('opportunityTitle').textContent = opportunity.title || 'Untitled Opportunity';
+            document.getElementById('appliedDate').textContent = formatDate(applicationData.created_at);
+            document.getElementById('orgName').textContent = opportunity.organization?.name || 'Organization';
+            document.getElementById('eventLocation').textContent = opportunity.location || 'TBD';
+
+            // Status badge
+            const statusBadge = document.getElementById('statusBadge');
+            statusBadge.textContent = applicationData.status.toUpperCase();
+            statusBadge.className = `status-badge-large ${applicationData.status.toLowerCase()}`;
+
+            // Application details
+            document.getElementById('coverLetter').textContent = applicationData.cover_letter || 'No cover letter provided';
+            document.getElementById('applicationId').textContent = applicationData.id.substring(0, 8).toUpperCase();
+            document.getElementById('submittedDate').textContent = formatDateTime(applicationData.created_at);
+            document.getElementById('requestedFee').textContent = 
+                applicationData.requested_fee ? `$${applicationData.requested_fee}` : 'As posted';
+            document.getElementById('lastUpdated').textContent = formatDateTime(applicationData.updated_at || applicationData.created_at);
+
+            // Review message if exists
+            if (applicationData.review_message) {
+                document.getElementById('reviewMessage').classList.remove('hidden');
+                document.getElementById('messageContent').textContent = applicationData.review_message;
+                
+                const messageBox = document.getElementById('messageBox');
+                if (applicationData.status === 'Accepted') {
+                    messageBox.className = 'message-box success';
+                } else if (applicationData.status === 'Rejected') {
+                    messageBox.className = 'message-box error';
+                }
+            }
+
+            // Opportunity details
+            document.getElementById('eventDate').textContent = formatDateTime(opportunity.event_date);
+            document.getElementById('eventDuration').textContent = 
+                opportunity.duration ? `${opportunity.duration} hours` : 'TBD';
+            document.getElementById('eventFormat').textContent = opportunity.event_format || 'TBD';
+            document.getElementById('audienceSize').textContent = 
+                opportunity.audience_size ? `${opportunity.audience_size} attendees` : 'TBD';
+            document.getElementById('compensation').textContent = 
+                opportunity.compensation_amount ? `$${opportunity.compensation_amount}` : 'Volunteer/Unpaid';
+            
+            const travelAccom = [];
+            if (opportunity.travel_covered) travelAccom.push('Travel covered');
+            if (opportunity.accommodation_covered) travelAccom.push('Accommodation covered');
+            document.getElementById('travelCoverage').textContent = 
+                travelAccom.length > 0 ? travelAccom.join(', ') : 'Not covered';
+
+            // View opportunity button
+            document.getElementById('viewOpportunityBtn').href = 
+                `opportunity-details.html?id=${opportunity.id}`;
+
+            // Display next steps and actions based on status
+            displayNextSteps();
+            displayActions();
+        }
+
+        // Load application timeline
+        async function loadApplicationTimeline() {
+            try {
+                const timeline = await window.covetalks.getApplicationTimeline(applicationId);
+                displayTimeline(timeline);
+            } catch (error) {
+                console.error('Error loading timeline:', error);
+                // Display basic timeline if advanced timeline not available
+                displayBasicTimeline();
+            }
+        }
+
+        // Display timeline
+        function displayTimeline(timeline) {
+            const container = document.getElementById('timeline');
+            
+            // If no timeline data, use basic timeline
+            if (!timeline || timeline.length === 0) {
+                displayBasicTimeline();
+                return;
+            }
+
+            container.innerHTML = timeline.map(item => {
+                const statusClass = item.status ? item.status.toLowerCase() : '';
+                const isCurrent = item.status === applicationData.status;
+                
+                return `
+                    <div class="timeline-item">
+                        <div class="timeline-marker ${statusClass} ${isCurrent ? 'current' : ''}">
+                            ${getStatusIcon(item.status)}
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">${formatDateTime(item.created_at)}</div>
+                            <div class="timeline-title">${item.title || getStatusTitle(item.status)}</div>
+                            ${item.description ? `<div class="timeline-description">${item.description}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Display basic timeline
+        function displayBasicTimeline() {
+            const container = document.getElementById('timeline');
+            const status = applicationData.status;
+            
+            const timelineItems = [
+                {
+                    status: 'Submitted',
+                    date: applicationData.created_at,
+                    title: 'Application Submitted',
+                    description: 'Your application has been received',
+                    completed: true
+                }
+            ];
+
+            if (status === 'Pending') {
+                timelineItems.push({
+                    status: 'Pending',
+                    title: 'Under Review',
+                    description: 'The organization is reviewing your application',
+                    current: true
+                });
+            } else if (status === 'Accepted') {
+                timelineItems.push({
+                    status: 'Accepted',
+                    date: applicationData.reviewed_at,
+                    title: 'Application Accepted',
+                    description: 'Congratulations! Your application has been accepted',
+                    completed: true,
+                    current: true
+                });
+            } else if (status === 'Rejected') {
+                timelineItems.push({
+                    status: 'Rejected',
+                    date: applicationData.reviewed_at,
+                    title: 'Application Not Selected',
+                    description: 'Your application was not selected for this opportunity',
+                    completed: true,
+                    current: true
+                });
+            }
+
+            container.innerHTML = timelineItems.map(item => `
+                <div class="timeline-item">
+                    <div class="timeline-marker ${item.status.toLowerCase()} ${item.current ? 'current' : ''}">
+                        ${getStatusIcon(item.status)}
+                    </div>
+                    <div class="timeline-content">
+                        ${item.date ? `<div class="timeline-date">${formatDateTime(item.date)}</div>` : ''}
+                        <div class="timeline-title">${item.title}</div>
+                        <div class="timeline-description">${item.description}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Display next steps
+        function displayNextSteps() {
+            const container = document.getElementById('nextSteps');
+            const status = applicationData.status;
+            
+            let stepsHtml = '<ul>';
+            
+            if (status === 'Pending') {
+                stepsHtml += `
+                    <li>Your application is being reviewed</li>
+                    <li>You'll be notified once a decision is made</li>
+                    <li>Average review time is 3-5 business days</li>
+                    <li>Check your email for updates</li>
+                `;
+            } else if (status === 'Accepted') {
+                stepsHtml += `
+                    <li>Review the event details carefully</li>
+                    <li>Confirm your availability for the event date</li>
+                    <li>The organization will contact you with next steps</li>
+                    <li>Prepare your presentation materials</li>
+                    <li>Coordinate travel arrangements if applicable</li>
+                `;
+            } else if (status === 'Rejected') {
+                stepsHtml += `
+                    <li>Consider applying to similar opportunities</li>
+                    <li>Review and update your profile</li>
+                    <li>Request feedback if available</li>
+                    <li>Keep building your speaking portfolio</li>
+                `;
+            }
+            
+            stepsHtml += '</ul>';
+            container.innerHTML = stepsHtml;
+        }
+
+        // Display actions
+        function displayActions() {
+            const container = document.getElementById('applicationActions');
+            const status = applicationData.status;
+            
+            let actionsHtml = '';
+            
+            if (status === 'Pending') {
+                actionsHtml = `
+                    <button onclick="showWithdrawModal()" class="btn btn-danger" style="width: 100%;">
+                        Withdraw Application
+                    </button>
+                `;
+            } else if (status === 'Accepted') {
+                actionsHtml = `
+                    <a href="contact-organization.html?id=${applicationData.opportunity.organization_id}" 
+                       class="btn btn-primary" style="width: 100%; margin-bottom: 0.5rem;">
+                        Contact Organization
+                    </a>
+                    <a href="booking-details.html?id=${applicationData.id}" 
+                       class="btn btn-success" style="width: 100%;">
+                        View Booking Details
+                    </a>
+                `;
+            } else if (status === 'Rejected') {
+                actionsHtml = `
+                    <a href="opportunities.html" class="btn btn-primary" style="width: 100%;">
+                        Browse More Opportunities
+                    </a>
+                `;
+            }
+            
+            container.innerHTML = actionsHtml;
+        }
+
+        // Get status icon
+        function getStatusIcon(status) {
+            const icons = {
+                'Submitted': '✉️',
+                'Pending': '⏳',
+                'Accepted': '✅',
+                'Rejected': '❌',
+                'Withdrawn': '↩️'
+            };
+            return icons[status] || '•';
+        }
+
+        // Get status title
+        function getStatusTitle(status) {
+            const titles = {
+                'Submitted': 'Application Submitted',
+                'Pending': 'Under Review',
+                'Accepted': 'Application Accepted',
+                'Rejected': 'Application Not Selected',
+                'Withdrawn': 'Application Withdrawn'
+            };
+            return titles[status] || status;
+        }
+
+        // Show withdraw modal
+        function showWithdrawModal() {
+            document.getElementById('withdrawModal').classList.add('show');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('withdrawModal').classList.remove('show');
+        }
+
+        // Confirm withdraw
+        async function confirmWithdraw() {
+            try {
+                // Update application status to Withdrawn
+                await window.covetalks.updateApplicationStatus(applicationId, 'Withdrawn');
+                
+                alert('Application withdrawn successfully');
+                window.location.href = 'dashboard.html';
+                
+            } catch (error) {
+                console.error('Error withdrawing application:', error);
+                alert('Failed to withdraw application. Please try again.');
+            }
+        }
+
+        // Show error
+        function showError(message) {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('applicationContent').classList.add('hidden');
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorState').classList.remove('hidden');
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return 'Unknown';
+            return new Date(dateString).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
+        // Format date and time
+        function formatDateTime(dateString) {
+            if (!dateString) return 'Unknown';
+            return new Date(dateString).toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+        }
+
+        // Toggle dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdownMenu');
+            const avatar = document.getElementById('userAvatar');
+            
+            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                closeModal();
+            }
+        });
+
+        // Logout
+        async function logout() {
+            if (window.covetalks) {
+                await window.covetalks.logout();
+            }
+        }
+
+        // Initialize on load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
+    </script>
+</body>
+</html>

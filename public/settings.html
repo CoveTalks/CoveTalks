@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings - CoveTalks</title>
     <style>
-        /* Reset and Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -20,12 +19,12 @@
         }
 
         .container {
-            max-width: 1280px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
-        /* Header - Matching Dashboard */
+        /* Header */
         header {
             background: white;
             color: #333;
@@ -54,11 +53,11 @@
             width: auto;
             display: block;
         }
-        
-        @media (max-width: 768px) {
-            .logo-img {
-                height: 50px;
-            }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
         .nav-links {
@@ -84,73 +83,10 @@
             padding-bottom: 2px;
         }
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
         .nav-right {
             display: flex;
             align-items: center;
             gap: 1rem;
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .user-dropdown {
-            position: relative;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-            padding: 1rem 0;
-            min-width: 200px;
-            display: none;
-            margin-top: 0.5rem;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.5rem 1.5rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.3s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            border-top: 1px solid #e1e8ed;
-            margin: 0.5rem 0;
         }
 
         .auth-buttons {
@@ -191,163 +127,219 @@
             color: white;
         }
 
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #1e93b7);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e1e8ed;
+            margin: 0;
+        }
+
         /* Settings Layout */
         .settings-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 6rem 1.5rem 2rem;
+            padding-top: 100px;
+            padding-bottom: 3rem;
+            min-height: 100vh;
+        }
+
+        .settings-header {
+            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .settings-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .settings-header p {
+            opacity: 0.9;
+        }
+
+        /* Settings Grid */
+        .settings-grid {
             display: grid;
-            grid-template-columns: 280px 1fr;
+            grid-template-columns: 250px 1fr;
             gap: 2rem;
         }
 
-        /* Settings Sidebar */
-        .settings-sidebar {
+        /* Sidebar Navigation */
+        .settings-nav {
             background: white;
             border-radius: 15px;
             padding: 1.5rem;
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
             height: fit-content;
             position: sticky;
-            top: 5rem;
+            top: 100px;
         }
 
-        .settings-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .settings-nav__item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
+        .settings-nav-item {
+            display: block;
             padding: 0.75rem 1rem;
-            border-radius: 8px;
-            color: #666;
-            text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-            border: none;
-            background: transparent;
-            width: 100%;
-            text-align: left;
-        }
-
-        .settings-nav__item:hover {
-            background: #f8f9fa;
             color: #333;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
         }
 
-        .settings-nav__item--active {
-            background: rgba(21, 85, 136, 0.1);
+        .settings-nav-item:hover {
+            background: #f8f9fa;
+        }
+
+        .settings-nav-item.active {
+            background: #e8f4fd;
             color: #155588;
+            font-weight: 500;
         }
 
-        .settings-nav__icon {
+        .settings-nav-item i {
+            margin-right: 0.5rem;
             width: 20px;
-            height: 20px;
-            flex-shrink: 0;
+            display: inline-block;
         }
 
         /* Settings Content */
         .settings-content {
             background: white;
             border-radius: 15px;
+            padding: 2rem;
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            overflow: hidden;
         }
 
-        .settings-panel {
+        .settings-section {
             display: none;
         }
 
-        .settings-panel--active {
+        .settings-section.active {
             display: block;
         }
 
-        .settings-panel__header {
-            padding: 2rem;
-            border-bottom: 1px solid #e1e8ed;
-        }
-
-        .settings-panel__title {
-            font-size: 1.5rem;
-            font-weight: 700;
+        .section-title {
             color: #155588;
-            margin-bottom: 0.5rem;
-        }
-
-        .settings-panel__description {
-            color: #666;
-            font-size: 0.875rem;
-        }
-
-        .settings-panel__body {
-            padding: 2rem;
-        }
-
-        /* Form Sections */
-        .form-section {
             margin-bottom: 2rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid #e1e8ed;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
         }
 
-        .form-section:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-
-        .form-section__title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: #155588;
-            margin-bottom: 1rem;
-        }
-
+        /* Form Styles */
         .form-group {
             margin-bottom: 1.5rem;
         }
 
-        .form-label {
+        .form-group label {
             display: block;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: #333;
+            font-weight: 600;
+            color: #555;
             margin-bottom: 0.5rem;
         }
 
-        .form-input,
-        .form-select,
-        .form-textarea {
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
             width: 100%;
             padding: 0.75rem;
             border: 2px solid #e1e8ed;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 1rem;
-            color: #333;
-            background: white;
             transition: border-color 0.3s;
+            font-family: inherit;
         }
 
-        .form-input:focus,
-        .form-select:focus,
-        .form-textarea:focus {
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
             outline: none;
             border-color: #155588;
         }
 
-        .form-textarea {
-            min-height: 100px;
+        .form-group textarea {
+            min-height: 120px;
             resize: vertical;
         }
 
-        .form-helper {
-            font-size: 0.75rem;
+        .form-help {
+            font-size: 0.85rem;
             color: #666;
             margin-top: 0.25rem;
         }
@@ -358,395 +350,241 @@
             gap: 1rem;
         }
 
-        /* Toggle Switch */
-        .toggle-group {
+        /* Profile Image Upload */
+        .profile-image-section {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 1rem 0;
-            border-bottom: 1px solid #e1e8ed;
-        }
-
-        .toggle-group:last-child {
-            border-bottom: none;
-        }
-
-        .toggle-info {
-            flex: 1;
-            margin-right: 1rem;
-        }
-
-        .toggle-label {
-            font-weight: 500;
-            color: #333;
-            display: block;
-            margin-bottom: 0.25rem;
-        }
-
-        .toggle-description {
-            font-size: 0.75rem;
-            color: #666;
-        }
-
-        .toggle-switch {
-            position: relative;
-            width: 48px;
-            height: 24px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #e1e8ed;
-            transition: 0.3s;
-            border-radius: 24px;
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: 0.3s;
-            border-radius: 50%;
-        }
-
-        input:checked + .toggle-slider {
-            background-color: #155588;
-        }
-
-        input:checked + .toggle-slider:before {
-            transform: translateX(24px);
-        }
-
-        /* Button Groups */
-        .btn-group {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .btn-save {
-            background: #155588;
-            color: white;
-            padding: 0.75rem 2rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .btn-save:hover {
-            background: #1e3d6f;
-            transform: translateY(-2px);
-        }
-
-        .btn-cancel {
-            background: transparent;
-            color: #666;
-            padding: 0.75rem 2rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .btn-cancel:hover {
-            background: #f8f9fa;
-        }
-
-        /* Avatar Upload */
-        .avatar-upload {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
+            gap: 2rem;
             margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
         }
 
-        .avatar-preview {
-            width: 100px;
-            height: 100px;
+        .profile-image-preview {
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
-            background: #f8f9fa;
+            background: #e1e8ed;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            border: 3px solid #e1e8ed;
+            position: relative;
         }
 
-        .avatar-preview img {
+        .profile-image-preview img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .avatar-actions {
+        .profile-image-placeholder {
+            font-size: 3rem;
+            color: #999;
+        }
+
+        .image-upload-actions {
+            flex: 1;
+        }
+
+        .image-upload-actions h3 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .image-upload-actions p {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .upload-btn-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .upload-btn-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .upload-label {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #155588;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 1rem;
+        }
+
+        .upload-label:hover {
+            background: #1e3d6f;
+            transform: translateY(-2px);
+        }
+
+        /* Specialties Tags */
+        .specialties-input {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            min-height: 50px;
+        }
+
+        .specialty-tag {
+            background: #e8f4fd;
+            color: #155588;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
             gap: 0.5rem;
         }
 
-        /* Messages */
-        .message {
+        .specialty-tag .remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .specialty-input-field {
+            border: none;
+            outline: none;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        /* Switch Toggle */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 30px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #155588;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+
+        .switch-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             padding: 1rem;
-            border-radius: 5px;
-            margin: 1rem auto;
-            max-width: 1280px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .switch-label {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .switch-label strong {
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+
+        .switch-label span {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        /* Success/Error Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
             display: none;
         }
 
-        .message.show {
+        .alert.show {
             display: block;
         }
 
-        .message--success {
+        .alert-success {
             background: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
 
-        .message--error {
+        .alert-error {
             background: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
 
-        /* Mobile Navigation */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 35px;
-            height: 35px;
-            cursor: pointer;
-            z-index: 1002;
-            background: none;
-            border: none;
-            padding: 5px;
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
         }
 
-        .hamburger span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background: #333;
-            margin: 3px 0;
-            transition: all 0.3s ease;
-            border-radius: 2px;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-
-        .mobile-menu-overlay {
-            display: none;
+        /* Loading State */
+        .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .mobile-menu-overlay.show {
-            display: block;
-            opacity: 1;
-        }
-
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: 300px;
-            height: 100vh;
-            background: white;
-            z-index: 1001;
-            transition: right 0.3s ease;
-            overflow-y: auto;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-        }
-
-        .mobile-menu.show {
-            right: 0;
-        }
-
-        .mobile-menu-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e1e8ed;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .mobile-menu-close {
-            width: 30px;
-            height: 30px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            display: flex;
+            background: rgba(0,0,0,0.5);
+            display: none;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            color: #666;
+            z-index: 9999;
         }
 
-        .mobile-nav-links {
-            list-style: none;
-            padding: 1rem 0;
-        }
-
-        .mobile-nav-links li {
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .mobile-nav-links a {
-            display: block;
-            padding: 1rem 1.5rem;
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .mobile-nav-links a:hover {
-            background: #f8f9fa;
-            color: #155588;
-            padding-left: 2rem;
-        }
-
-        .mobile-nav-links a.active {
-            color: #155588;
-            background: #e8f4fd;
-        }
-
-        .mobile-user-section {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e1e8ed;
-            background: #f8f9fa;
-        }
-
-        .mobile-user-info {
+        .loading-overlay.show {
             display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
         }
 
-        .mobile-user-avatar {
+        .loading-spinner {
             width: 50px;
             height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        .mobile-user-details h3 {
-            margin: 0;
-            color: #333;
-        }
-
-        .mobile-user-details p {
-            margin: 0;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .mobile-auth-buttons {
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .mobile-auth-buttons .btn {
-            width: 100%;
-            text-align: center;
-        }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .settings-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .settings-sidebar {
-                position: static;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none !important;
-            }
-            
-            .auth-buttons.desktop-only {
-                display: none !important;
-            }
-            
-            .hamburger {
-                display: flex;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .avatar-upload {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .mobile-menu {
-                width: 85vw;
-                right: -85vw;
-            }
-        }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #155588;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #155588;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-left: 10px;
         }
 
         @keyframes spin {
@@ -754,829 +592,821 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Hide file input */
-        #avatarInput {
-            display: none;
+        /* Delete Account Section */
+        .danger-zone {
+            border: 2px solid #dc3545;
+            border-radius: 10px;
+            padding: 1.5rem;
+            background: #fff5f5;
+        }
+
+        .danger-zone h3 {
+            color: #dc3545;
+            margin-bottom: 1rem;
+        }
+
+        .danger-zone p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-nav {
+                position: static;
+                margin-bottom: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-image-section {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header with Full Navigation -->
+    <!-- Header -->
     <header>
         <div class="nav-container">
             <nav>
-                <!-- Logo -->
                 <a href="index.html" class="logo">
-                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
+                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
                 </a>
                 
-                <!-- Desktop Navigation -->
-                <!-- Logged Out Navigation -->
-                <ul class="nav-links nav-logged-out" id="navLoggedOut">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
-                
-                <!-- Logged In Navigation (Speakers) -->
-                <ul class="nav-links nav-logged-in nav-speaker" id="navSpeaker" style="display: none;">
+                <ul class="nav-links" id="navLinks">
                     <li><a href="dashboard.html">Dashboard</a></li>
                     <li><a href="members.html">Find Speakers</a></li>
                     <li><a href="opportunities.html">Opportunities</a></li>
                     <li><a href="bookings.html">My Bookings</a></li>
                     <li><a href="profile.html">Profile</a></li>
                 </ul>
-                
-                <!-- Logged In Navigation (Organizations) -->
-                <ul class="nav-links nav-logged-in nav-organization" id="navOrganization" style="display: none;">
-                    <li><a href="organization-dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                    <li><a href="my-opportunities.html">My Opportunities</a></li>
-                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                </ul>
-
-                <!-- Right Side Navigation -->
+    
                 <div class="nav-right">
-                    <!-- For Logged In Users -->
-                    <div class="user-menu" id="userMenuDesktop" style="display: none;">
-                        <div class="user-dropdown">
-                            <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">JD</div>
-                            <div class="dropdown-menu" id="dropdownMenu">
-                                <a href="profile-edit.html">Edit Profile</a>
-                                <a href="settings.html" class="active">Settings</a>
-                                <a href="billing.html">Billing</a>
-                                <div class="dropdown-divider"></div>
-                                <a href="#" onclick="logout()">Logout</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- For Logged Out Users -->
-                    <div class="auth-buttons desktop-only" id="authButtonsDesktop">
+                    <div class="auth-buttons hidden" id="authButtons">
                         <a href="register.html" class="btn btn-secondary">Join</a>
                         <a href="login.html" class="btn btn-primary">Login</a>
                     </div>
-
-                    <!-- Hamburger Menu Button -->
-                    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
+                    
+                    <div class="user-menu" id="userMenu">
+                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="inbox.html">Inbox</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="settings.html">Settings</a>
+                            <a href="billing.html">Billing</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" onclick="logout(); return false;">Logout</a>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </div>
     </header>
 
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
-
-    <!-- Mobile Menu Panel -->
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-header">
-            <a href="index.html" class="logo">
-                <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
-            </a>
-            <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
-        </div>
-
-        <!-- Mobile User Section (for logged in users) -->
-        <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
-            <div class="mobile-user-info">
-                <div class="mobile-user-avatar" id="mobileUserAvatar">JD</div>
-                <div class="mobile-user-details">
-                    <h3 id="mobileUserName">John Doe</h3>
-                    <p id="mobileUserType">Speaker - Plus Plan</p>
-                </div>
+    <!-- Settings Container -->
+    <div class="settings-container">
+        <!-- Settings Header -->
+        <div class="settings-header">
+            <div class="container">
+                <h1>Account Settings</h1>
+                <p>Manage your profile and account preferences</p>
             </div>
         </div>
 
-        <!-- Mobile Navigation Links -->
-        <!-- Logged Out Mobile Navigation -->
-        <ul class="mobile-nav-links mobile-nav-logged-out" id="mobileNavLoggedOut">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="members.html">Find Speakers</a></li>
-            <li><a href="pricing.html">Pricing</a></li>
-            <li><a href="register.html">Register</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="help.html">Help Center</a></li>
-        </ul>
-
-        <!-- Logged In Mobile Navigation (Speakers) -->
-        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-speaker" id="mobileNavSpeaker" style="display: none;">
-            <li><a href="dashboard.html">Dashboard</a></li>
-            <li><a href="members.html">Find Speakers</a></li>
-            <li><a href="opportunities.html">Opportunities</a></li>
-            <li><a href="bookings.html">My Bookings</a></li>
-            <li><a href="profile.html">Profile</a></li>
-            <li><a href="settings.html" class="active">Settings</a></li>
-            <li><a href="billing.html">Billing</a></li>
-            <li><a href="help.html">Help & Support</a></li>
-        </ul>
-
-        <!-- Logged In Mobile Navigation (Organizations) -->
-        <ul class="mobile-nav-links mobile-nav-logged-in mobile-nav-organization" id="mobileNavOrganization" style="display: none;">
-            <li><a href="organization-dashboard.html">Dashboard</a></li>
-            <li><a href="members.html">Find Speakers</a></li>
-            <li><a href="post-opportunity.html">Post Opportunity</a></li>
-            <li><a href="my-opportunities.html">My Opportunities</a></li>
-            <li><a href="saved-speakers.html">Saved Speakers</a></li>
-            <li><a href="settings.html" class="active">Settings</a></li>
-            <li><a href="team.html">Team Members</a></li>
-            <li><a href="help.html">Help & Support</a></li>
-        </ul>
-
-        <!-- Mobile Auth Buttons (for logged out users) -->
-        <div class="mobile-auth-buttons" id="mobileAuthButtons">
-            <a href="register.html" class="btn btn-secondary">Join Community</a>
-            <a href="login.html" class="btn btn-primary">Login</a>
-        </div>
-
-        <!-- Mobile Logout Button (for logged in users) -->
-        <div class="mobile-auth-buttons" id="mobileLogoutSection" style="display: none;">
-            <button class="btn btn-primary" onclick="logout()">Logout</button>
-        </div>
-    </div>
-
-    <!-- Messages -->
-    <div id="successMessage" class="message message--success"></div>
-    <div id="errorMessage" class="message message--error"></div>
-
-    <!-- Settings Layout -->
-    <div class="settings-container">
-        <!-- Sidebar Navigation -->
-        <aside class="settings-sidebar">
-            <nav class="settings-nav">
-                <button class="settings-nav__item settings-nav__item--active" data-panel="profile">
-                    <svg class="settings-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                    <span>Profile</span>
-                </button>
-                
-                <button class="settings-nav__item" data-panel="account">
-                    <svg class="settings-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M12 1v6m0 6v6m4.22-13.22l4.24 4.24M1.54 9.96l4.24 4.24M18.46 14.04l4.24 4.24M1.54 14.04l4.24-4.24"></path>
-                    </svg>
-                    <span>Account</span>
-                </button>
-                
-                <button class="settings-nav__item" data-panel="notifications">
-                    <svg class="settings-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                    </svg>
-                    <span>Notifications</span>
-                </button>
-            </nav>
-        </aside>
-
-        <!-- Settings Content -->
-        <main class="settings-content">
-            <!-- Profile Panel -->
-            <div class="settings-panel settings-panel--active" id="profile-panel">
-                <div class="settings-panel__header">
-                    <h1 class="settings-panel__title">Profile Settings</h1>
-                    <p class="settings-panel__description">Manage your public profile information and speaker details</p>
+        <!-- Main Content -->
+        <div class="container">
+            <div class="settings-grid">
+                <!-- Sidebar Navigation -->
+                <div class="settings-nav">
+                    <a href="#profile" class="settings-nav-item active" onclick="switchSection('profile')">Profile</a>
+                    <a href="#professional" class="settings-nav-item" onclick="switchSection('professional')">Professional Details</a>
+                    <a href="#password" class="settings-nav-item" onclick="switchSection('password')">Password & Security</a>
+                    <a href="#notifications" class="settings-nav-item" onclick="switchSection('notifications')">Notifications</a>
+                    <a href="#privacy" class="settings-nav-item" onclick="switchSection('privacy')">Privacy</a>
+                    <a href="#danger" class="settings-nav-item" onclick="switchSection('danger')">Danger Zone</a>
                 </div>
-                
-                <div class="settings-panel__body">
-                    <form id="profileForm">
-                        <!-- Avatar Upload -->
-                        <div class="avatar-upload">
-                            <div class="avatar-preview">
-                                <img src="" alt="" id="avatarPreview" style="display: none;">
-                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" id="avatarPlaceholder">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="12" cy="7" r="4"></circle>
-                                </svg>
+
+                <!-- Settings Content -->
+                <div class="settings-content">
+                    <!-- Success/Error Messages -->
+                    <div id="alertMessage" class="alert"></div>
+
+                    <!-- Profile Section -->
+                    <div id="profile-section" class="settings-section active">
+                        <h2 class="section-title">Profile Information</h2>
+                        
+                        <!-- Profile Image -->
+                        <div class="profile-image-section">
+                            <div class="profile-image-preview" id="imagePreview">
+                                <span class="profile-image-placeholder" id="imagePlaceholder">👤</span>
                             </div>
-                            <div class="avatar-actions">
-                                <input type="file" id="avatarInput" accept="image/*" onchange="handleAvatarChange(event)">
-                                <button type="button" class="btn btn-secondary" onclick="document.getElementById('avatarInput').click()">
-                                    Upload Photo
-                                </button>
-                                <span class="form-helper">JPG, PNG or GIF. Max 2MB.</span>
+                            <div class="image-upload-actions">
+                                <h3>Profile Photo</h3>
+                                <p>Upload a professional photo. This will be displayed on your public profile.</p>
+                                <div class="upload-btn-wrapper">
+                                    <label for="imageUpload" class="upload-label">Choose Photo</label>
+                                    <input type="file" id="imageUpload" accept="image/*" onchange="previewImage(event)">
+                                </div>
+                                <button class="btn btn-secondary" onclick="removeImage()" id="removeImageBtn" style="display:none;">Remove Photo</button>
                             </div>
                         </div>
 
-                        <!-- Personal Information -->
-                        <div class="form-section">
-                            <h2 class="form-section__title">Personal Information</h2>
+                        <form id="profileForm">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label class="form-label" for="firstName">First Name</label>
-                                    <input type="text" class="form-input" id="firstName" placeholder="John">
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" id="firstName" name="firstName" required>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="lastName">Last Name</label>
-                                    <input type="text" class="form-input" id="lastName" placeholder="Doe">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" id="lastName" name="lastName" required>
                                 </div>
                             </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="email">Email Address</label>
-                                <input type="email" class="form-input" id="email" placeholder="john@example.com" readonly>
-                                <span class="form-helper">Email cannot be changed</span>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="phone">Phone Number</label>
-                                <input type="tel" class="form-input" id="phone" placeholder="+1 (555) 123-4567">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="location">Location</label>
-                                <input type="text" class="form-input" id="location" placeholder="City, State">
-                            </div>
-                        </div>
 
-                        <!-- Speaker Profile -->
-                        <div class="form-section">
-                            <h2 class="form-section__title">Speaker Profile</h2>
                             <div class="form-group">
-                                <label class="form-label" for="bio">Professional Bio</label>
-                                <textarea class="form-textarea" id="bio" placeholder="Tell us about your expertise and experience..."></textarea>
-                                <span class="form-helper">Max 500 characters</span>
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" required disabled>
+                                <p class="form-help">Contact support to change your email address</p>
                             </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="expertise">Areas of Expertise</label>
-                                <input type="text" class="form-input" id="expertise" placeholder="e.g., Digital Marketing, Leadership, Innovation">
-                                <span class="form-helper">Separate multiple topics with commas</span>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="website">Website</label>
-                                <input type="url" class="form-input" id="website" placeholder="https://yourwebsite.com">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="bookingLink">Booking Calendar Link</label>
-                                <input type="url" class="form-input" id="bookingLink" placeholder="https://calendly.com/yourname">
-                            </div>
-                        </div>
 
-                        <div class="btn-group">
-                            <button type="submit" class="btn btn-save" id="saveButton">
-                                <span id="saveText">Save Changes</span>
-                                <span id="saveLoader" class="loading" style="display: none;"></span>
-                            </button>
-                            <button type="button" class="btn btn-cancel" onclick="cancelChanges()">
-                                Cancel
-                            </button>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" placeholder="+1 (555) 123-4567">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="location">Location</label>
+                                <input type="text" id="location" name="location" placeholder="City, State">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="bio">Bio</label>
+                                <textarea id="bio" name="bio" placeholder="Tell us about yourself and your speaking experience..."></textarea>
+                                <p class="form-help">This will appear on your public profile. Make it compelling!</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="website">Website</label>
+                                <input type="url" id="website" name="website" placeholder="https://yourwebsite.com">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="linkedin">LinkedIn Profile</label>
+                                <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Save Profile</button>
+                        </form>
+                    </div>
+
+                    <!-- Professional Details Section -->
+                    <div id="professional-section" class="settings-section">
+                        <h2 class="section-title">Professional Details</h2>
+                        
+                        <form id="professionalForm">
+                            <div class="form-group">
+                                <label for="title">Professional Title</label>
+                                <input type="text" id="title" name="title" placeholder="e.g., Keynote Speaker, Business Consultant">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="yearsExperience">Years of Speaking Experience</label>
+                                <input type="number" id="yearsExperience" name="yearsExperience" min="0" max="50">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Speaking Topics</label>
+                                <div class="specialties-input" id="specialtiesInput">
+                                    <input type="text" class="specialty-input-field" id="specialtyInput" 
+                                        placeholder="Add a topic and press Enter">
+                                </div>
+                                <p class="form-help">Press Enter to add topics. Click × to remove.</p>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="minFee">Minimum Speaking Fee ($)</label>
+                                    <input type="number" id="minFee" name="minFee" min="0" placeholder="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="maxFee">Maximum Speaking Fee ($)</label>
+                                    <input type="number" id="maxFee" name="maxFee" min="0" placeholder="10000">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="audienceSize">Preferred Audience Size</label>
+                                <select id="audienceSize" name="audienceSize">
+                                    <option value="">Any size</option>
+                                    <option value="small">Small (< 50 people)</option>
+                                    <option value="medium">Medium (50-200 people)</option>
+                                    <option value="large">Large (200-500 people)</option>
+                                    <option value="xlarge">Very Large (500+ people)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="formats">Preferred Event Formats (select all that apply)</label>
+                                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                    <label><input type="checkbox" name="formats" value="In-Person"> In-Person</label>
+                                    <label><input type="checkbox" name="formats" value="Virtual"> Virtual</label>
+                                    <label><input type="checkbox" name="formats" value="Hybrid"> Hybrid</label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Save Professional Details</button>
+                        </form>
+                    </div>
+
+                    <!-- Password Section -->
+                    <div id="password-section" class="settings-section">
+                        <h2 class="section-title">Password & Security</h2>
+                        
+                        <form id="passwordForm">
+                            <div class="form-group">
+                                <label for="currentPassword">Current Password</label>
+                                <input type="password" id="currentPassword" name="currentPassword" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword" name="newPassword" required>
+                                <p class="form-help">Must be at least 8 characters long</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm New Password</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Update Password</button>
+                        </form>
+                    </div>
+
+                    <!-- Notifications Section -->
+                    <div id="notifications-section" class="settings-section">
+                        <h2 class="section-title">Notification Preferences</h2>
+                        
+                        <form id="notificationsForm">
+                            <div class="switch-group">
+                                <div class="switch-label">
+                                    <strong>Email Notifications</strong>
+                                    <span>Receive updates about your applications and bookings</span>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="emailNotifications" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="switch-group">
+                                <div class="switch-label">
+                                    <strong>New Opportunities</strong>
+                                    <span>Get notified about speaking opportunities matching your profile</span>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="opportunityNotifications" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="switch-group">
+                                <div class="switch-label">
+                                    <strong>Application Updates</strong>
+                                    <span>Receive notifications when your applications are reviewed</span>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="applicationNotifications" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="switch-group">
+                                <div class="switch-label">
+                                    <strong>Marketing Emails</strong>
+                                    <span>Tips, resources, and updates from CoveTalks</span>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="marketingEmails">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Save Preferences</button>
+                        </form>
+                    </div>
+
+                    <!-- Privacy Section -->
+                    <div id="privacy-section" class="settings-section">
+                        <h2 class="section-title">Privacy Settings</h2>
+                        
+                        <form id="privacyForm">
+                            <div class="switch-group">
+                                <div class="switch-label">
+                                    <strong>Public Profile</strong>
+                                    <span>Allow your profile to appear in search results</span>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="publicProfile" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="switch-group">
+                                <div class="switch-label">
+                                    <strong>Show Contact Information</strong>
+                                    <span>Display email and phone to logged-in members</span>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="showContact" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="switch-group">
+                                <div class="switch-label">
+                                    <strong>Show Fee Range</strong>
+                                    <span>Display your speaking fee range on your profile</span>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="showFees" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Save Privacy Settings</button>
+                        </form>
+                    </div>
+
+                    <!-- Danger Zone Section -->
+                    <div id="danger-section" class="settings-section">
+                        <h2 class="section-title">Danger Zone</h2>
+                        
+                        <div class="danger-zone">
+                            <h3>Delete Account</h3>
+                            <p>Once you delete your account, there is no going back. All your data will be permanently removed.</p>
+                            <button class="btn btn-danger" onclick="confirmDeleteAccount()">Delete Account</button>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-
-            <!-- Account Panel -->
-            <div class="settings-panel" id="account-panel">
-                <div class="settings-panel__header">
-                    <h1 class="settings-panel__title">Account Settings</h1>
-                    <p class="settings-panel__description">Manage your account preferences and settings</p>
-                </div>
-                
-                <div class="settings-panel__body">
-                    <div class="form-section">
-                        <h2 class="form-section__title">Account Preferences</h2>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="timezone">Timezone</label>
-                            <select class="form-select" id="timezone">
-                                <option value="PST">Pacific Time (PST)</option>
-                                <option value="MST">Mountain Time (MST)</option>
-                                <option value="CST">Central Time (CST)</option>
-                                <option value="EST">Eastern Time (EST)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="btn-group">
-                        <button class="btn btn-save" onclick="saveAccountSettings()">
-                            Save Changes
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Notifications Panel -->
-            <div class="settings-panel" id="notifications-panel">
-                <div class="settings-panel__header">
-                    <h1 class="settings-panel__title">Notification Preferences</h1>
-                    <p class="settings-panel__description">Choose how you want to be notified</p>
-                </div>
-                
-                <div class="settings-panel__body">
-                    <div class="form-section">
-                        <h2 class="form-section__title">Email Notifications</h2>
-                        
-                        <div class="toggle-group">
-                            <div class="toggle-info">
-                                <label class="toggle-label">New Speaking Opportunities</label>
-                                <p class="toggle-description">Get notified when new opportunities match your expertise</p>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="notifyOpportunities" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        
-                        <div class="toggle-group">
-                            <div class="toggle-info">
-                                <label class="toggle-label">Booking Confirmations</label>
-                                <p class="toggle-description">Receive confirmation when a booking is accepted</p>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="notifyBookings" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="btn-group">
-                        <button class="btn btn-save" onclick="saveNotificationSettings()">
-                            Save Preferences
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Debug Panel (temporary for troubleshooting) -->
-    <div style="position: fixed; bottom: 20px; left: 20px; background: white; padding: 15px; border: 2px solid #155588; border-radius: 10px; max-width: 400px; max-height: 300px; overflow-y: auto; z-index: 9999; display: none;" id="debugPanel">
-        <h4 style="margin: 0 0 10px 0; color: #155588;">Debug Panel</h4>
-        <div id="debugContent" style="font-size: 12px; font-family: monospace;">
-            Loading...
         </div>
-        <button onclick="document.getElementById('debugPanel').style.display='none'" style="margin-top: 10px; padding: 5px 10px; background: #155588; color: white; border: none; border-radius: 5px; cursor: pointer;">Close</button>
     </div>
 
-    <!-- Include the API client and navigation -->
-    <script src="/js/app.js"></script>
-    <script src="/js/navigation.js"></script>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
 
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load config and Supabase client -->
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    
     <script>
-        // Variables to track changes
-        let profileImageData = null;
-        let hasChanges = false;
-
-        // Wait for API to be fully loaded
-        function waitForAPI(callback) {
-            if (typeof api !== 'undefined' && typeof updateNavigation !== 'undefined') {
-                callback();
-            } else {
-                setTimeout(() => waitForAPI(callback), 50);
-            }
-        }
+        // Page state
+        let currentUser = null;
+        let specialties = [];
+        let profileImageFile = null;
 
         // Initialize page
-        function initializePage() {
+        async function initializePage() {
             console.log('[Settings] Initializing page');
-            loadUserSettings();
             
-            // Add manual reload button for debugging
-            setTimeout(() => {
-                const btn = document.createElement('button');
-                btn.textContent = 'Reload Profile Data';
-                btn.style.cssText = 'position: fixed; top: 100px; right: 20px; z-index: 9999; background: #155588; color: white; padding: 10px; border-radius: 5px; border: none; cursor: pointer;';
-                btn.onclick = () => {
-                    console.log('[Settings] Manual reload triggered');
-                    loadUserSettings();
-                };
-                document.body.appendChild(btn);
-            }, 1000);
-        }
-
-        // Load user settings - MAIN FUNCTION
-        async function loadUserSettings() {
-            const debugPanel = document.getElementById('debugPanel');
-            const debugContent = document.getElementById('debugContent');
+            // Wait for Supabase client
+            await waitForSupabase();
             
             try {
-                console.log('[Settings] Loading user profile...');
-                
-                // Show debug panel if on localhost
-                if (window.location.hostname === 'localhost') {
-                    debugPanel.style.display = 'block';
-                    debugContent.innerHTML = 'Fetching profile...';
+                // Check authentication
+                const session = await window.covetalks.checkAuth();
+                if (!session) {
+                    // Not authenticated, redirect to login
+                    window.location.href = '/login.html?redirect=' + encodeURIComponent(window.location.href);
+                    return;
                 }
                 
-                const response = await api.getProfile();
-                
-                console.log('[Settings] Full API Response:', response);
-                
-                // Update debug panel
-                if (debugContent) {
-                    debugContent.innerHTML = `
-                        <strong>API Response:</strong><br>
-                        Success: ${response ? 'Yes' : 'No'}<br>
-                        Has Profile: ${response?.profile ? 'Yes' : 'No'}<br><br>
-                    `;
+                // Get current user profile
+                currentUser = await window.covetalks.getCurrentUser();
+                if (!currentUser) {
+                    showAlert('Failed to load user profile', 'error');
+                    return;
                 }
                 
-                if (response && response.profile) {
-                    const profile = response.profile;
-                    console.log('[Settings] Profile object:', profile);
-                    
-                    // Log each field value for debugging
-                    console.log('[Settings] Field values from API:');
-                    console.log('  - name:', profile.name);
-                    console.log('  - email:', profile.email);
-                    console.log('  - phone:', profile.phone);
-                    console.log('  - location:', profile.location);
-                    console.log('  - bio:', profile.bio);
-                    console.log('  - specialty:', profile.specialty);
-                    console.log('  - website:', profile.website);
-                    console.log('  - bookingLink:', profile.bookingLink);
-                    console.log('  - profileImage:', profile.profileImage);
-                    
-                    // Update debug panel with field values
-                    if (debugContent) {
-                        const fields = [
-                            `Name: ${profile.name || '(empty)'}`,
-                            `Phone: ${profile.phone || '(empty)'}`,
-                            `Location: ${profile.location || '(empty)'}`,
-                            `Website: ${profile.website || '(empty)'}`,
-                            `Booking: ${profile.bookingLink || '(empty)'}`
-                        ];
-                        debugContent.innerHTML += '<strong>Fields:</strong><br>' + fields.join('<br>');
-                    }
-                    
-                    // Populate form fields
-                    const name = profile.name || '';
-                    const nameParts = name.split(' ');
-                    
-                    // Set form values with debugging
-                    setFieldValue('firstName', nameParts[0] || '');
-                    setFieldValue('lastName', nameParts.slice(1).join(' ') || '');
-                    setFieldValue('email', profile.email || '');
-                    setFieldValue('phone', profile.phone || '');
-                    setFieldValue('location', profile.location || '');
-                    setFieldValue('bio', profile.bio || '');
-                    setFieldValue('website', profile.website || '');
-                    setFieldValue('bookingLink', profile.bookingLink || '');
-                    
-                    // Handle specialty/expertise field
-                    if (profile.specialty) {
-                        const specialtyValue = Array.isArray(profile.specialty) ? 
-                            profile.specialty.join(', ') : profile.specialty;
-                        setFieldValue('expertise', specialtyValue);
-                    }
-                    
-                    // Load avatar if available
-                    if (profile.profileImage) {
-                        const preview = document.getElementById('avatarPreview');
-                        const placeholder = document.getElementById('avatarPlaceholder');
-                        if (preview) {
-                            preview.src = profile.profileImage;
-                            preview.style.display = 'block';
-                            if (placeholder) placeholder.style.display = 'none';
-                        }
-                    }
-                    
-                    // Update navigation with user info
-                    updateUserNavigation(profile);
-                    
-                    console.log('[Settings] ✅ Profile data loaded successfully');
-                } else {
-                    console.error('[Settings] ❌ No profile data in response');
-                    showMessage('error', 'Unable to load profile data');
-                }
+                // Update navigation
+                updateNavigation(currentUser);
+                
+                // Load user data into forms
+                loadUserData();
+                
             } catch (error) {
-                console.error('[Settings] ❌ Error loading settings:', error);
-                showMessage('error', 'Failed to load settings: ' + error.message);
+                console.error('[Settings] Error:', error);
+                showAlert('Failed to initialize settings', 'error');
+            }
+        }
+
+        // Wait for Supabase client
+        function waitForSupabase() {
+            return new Promise((resolve) => {
+                let attempts = 0;
+                const maxAttempts = 20;
                 
-                if (debugContent) {
-                    debugContent.innerHTML = `<span style="color: red;">Error: ${error.message}</span>`;
+                function check() {
+                    attempts++;
+                    if (window.covetalks && window.covetalks.supabase) {
+                        resolve();
+                    } else if (attempts < maxAttempts) {
+                        setTimeout(check, 500);
+                    } else {
+                        console.error('Failed to load Supabase client');
+                        resolve();
+                    }
                 }
+                check();
+            });
+        }
+
+        // Update navigation
+        function updateNavigation(user) {
+            const userAvatar = document.getElementById('userAvatar');
+            if (user) {
+                const initials = user.name ? 
+                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 'U';
+                userAvatar.textContent = initials;
             }
         }
 
-        // Helper function to safely set field values
-        function setFieldValue(fieldId, value) {
-            const field = document.getElementById(fieldId);
-            if (field) {
-                field.value = value || '';
-                console.log(`[Settings] Set ${fieldId} = "${value || '(empty)'}"`);
-            } else {
-                console.warn(`[Settings] ❌ Field not found: ${fieldId}`);
+        // Load user data into forms
+        function loadUserData() {
+            // Profile section
+            const nameParts = (currentUser.name || '').split(' ');
+            document.getElementById('firstName').value = nameParts[0] || '';
+            document.getElementById('lastName').value = nameParts.slice(1).join(' ') || '';
+            document.getElementById('email').value = currentUser.email || '';
+            document.getElementById('phone').value = currentUser.phone || '';
+            document.getElementById('location').value = currentUser.location || '';
+            document.getElementById('bio').value = currentUser.bio || '';
+            document.getElementById('website').value = currentUser.website || '';
+            document.getElementById('linkedin').value = currentUser.linkedin || '';
+            
+            // Profile image
+            if (currentUser.profile_image_url) {
+                const preview = document.getElementById('imagePreview');
+                preview.innerHTML = `<img src="${currentUser.profile_image_url}" alt="Profile">`;
+                document.getElementById('removeImageBtn').style.display = 'inline-block';
             }
+            
+            // Professional details
+            document.getElementById('title').value = currentUser.title || '';
+            document.getElementById('yearsExperience').value = currentUser.years_experience || '';
+            
+            // Specialties
+            specialties = currentUser.specialties || [];
+            displaySpecialties();
+            
+            // Fee range
+            if (currentUser.speaking_fee_range) {
+                document.getElementById('minFee').value = currentUser.speaking_fee_range.min || '';
+                document.getElementById('maxFee').value = currentUser.speaking_fee_range.max || '';
+            }
+            
+            // Audience size
+            document.getElementById('audienceSize').value = currentUser.preferred_audience_size || '';
+            
+            // Event formats
+            const formats = currentUser.preferred_formats || [];
+            document.querySelectorAll('input[name="formats"]').forEach(checkbox => {
+                checkbox.checked = formats.includes(checkbox.value);
+            });
         }
 
-        // Update user navigation elements
-        function updateUserNavigation(profile) {
-            const user = api.getCurrentUser();
-            if (user || profile) {
-                const name = user?.name || profile?.name || 'User';
-                const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U';
-                
-                const userAvatar = document.getElementById('userAvatar');
-                const mobileUserAvatar = document.getElementById('mobileUserAvatar');
-                const mobileUserName = document.getElementById('mobileUserName');
-                const mobileUserType = document.getElementById('mobileUserType');
-                
-                if (userAvatar) userAvatar.textContent = initials;
-                if (mobileUserAvatar) mobileUserAvatar.textContent = initials;
-                if (mobileUserName) mobileUserName.textContent = name;
-                if (mobileUserType) mobileUserType.textContent = user?.memberType || profile?.memberType || 'Member';
-            }
-        }
-
-        // Handle avatar file selection
-        function handleAvatarChange(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        // Switch between sections
+        function switchSection(section) {
+            // Update nav
+            document.querySelectorAll('.settings-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.settings-nav-item').classList.add('active');
             
-            // Check file size (2MB limit)
-            if (file.size > 2097152) {
-                showMessage('error', 'Please select an image under 2MB');
-                event.target.value = '';
-                return;
-            }
-            
-            // Check file type
-            if (!file.type.startsWith('image/')) {
-                showMessage('error', 'Please select a valid image file');
-                event.target.value = '';
-                return;
-            }
-            
-            // Read and preview the file
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const preview = document.getElementById('avatarPreview');
-                const placeholder = document.getElementById('avatarPlaceholder');
-                
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-                if (placeholder) placeholder.style.display = 'none';
-                
-                // Store the base64 data for upload
-                profileImageData = e.target.result;
-                hasChanges = true;
-                console.log('[Settings] Avatar selected, size:', (file.size / 1024).toFixed(2), 'KB');
-            };
-            reader.readAsDataURL(file);
+            // Update content
+            document.querySelectorAll('.settings-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+            document.getElementById(`${section}-section`).classList.add('active');
         }
 
         // Profile form submission
-        document.getElementById('profileForm').addEventListener('submit', async function(e) {
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            const saveButton = document.getElementById('saveButton');
-            const saveText = document.getElementById('saveText');
-            const saveLoader = document.getElementById('saveLoader');
-            
-            // Show loading state
-            saveButton.disabled = true;
-            saveText.style.display = 'none';
-            saveLoader.style.display = 'inline-block';
+            showLoading(true);
             
             try {
-                // Gather form data
-                const firstName = document.getElementById('firstName').value.trim();
-                const lastName = document.getElementById('lastName').value.trim();
-                const fullName = `${firstName} ${lastName}`.trim();
+                // Upload image if changed
+                if (profileImageFile) {
+                    const result = await window.covetalks.uploadProfileImage(profileImageFile);
+                    currentUser.profile_image_url = result.url;
+                }
                 
-                const formData = {
-                    name: fullName,
-                    phone: document.getElementById('phone').value.trim(),
-                    location: document.getElementById('location').value.trim(),
-                    bio: document.getElementById('bio').value.trim(),
-                    website: document.getElementById('website').value.trim(),
-                    bookingLink: document.getElementById('bookingLink').value.trim()
+                // Prepare update data
+                const updates = {
+                    name: `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}`.trim(),
+                    phone: document.getElementById('phone').value,
+                    location: document.getElementById('location').value,
+                    bio: document.getElementById('bio').value,
+                    website: document.getElementById('website').value,
+                    linkedin: document.getElementById('linkedin').value
                 };
                 
-                // Add specialty as array
-                const expertiseValue = document.getElementById('expertise').value.trim();
-                if (expertiseValue) {
-                    formData.specialty = expertiseValue.split(',').map(s => s.trim()).filter(s => s);
-                }
+                // Update profile
+                await window.covetalks.updateProfile(updates);
                 
-                // Add profile image if changed (for now, skip base64)
-                if (profileImageData) {
-                    console.log('[Settings] Note: Profile image upload requires cloud storage integration');
-                    showMessage('warning', 'Profile image upload is not yet available. Other changes will be saved.');
-                }
-                
-                console.log('[Settings] Submitting profile update:', formData);
-                
-                // Send update request
-                const result = await api.updateProfile(formData);
-                
-                console.log('[Settings] Update response:', result);
-                
-                if (result.success || result.profile) {
-                    showMessage('success', 'Profile updated successfully!');
-                    
-                    // Update user in local storage
-                    const user = api.getCurrentUser();
-                    if (user) {
-                        user.name = fullName;
-                        const storage = localStorage.getItem('user') ? localStorage : sessionStorage;
-                        storage.setItem('user', JSON.stringify(user));
-                        
-                        // Update navigation display
-                        updateUserNavigation({ name: fullName });
-                        if (typeof updateNavigation === 'function') {
-                            updateNavigation();
-                        }
-                    }
-                    
-                    // Reset change tracking
-                    profileImageData = null;
-                    hasChanges = false;
-                    
-                    // Reload the data to confirm it saved
-                    setTimeout(() => {
-                        loadUserSettings();
-                    }, 1000);
-                } else {
-                    throw new Error(result.error || 'Update failed');
-                }
+                showAlert('Profile updated successfully!', 'success');
+                profileImageFile = null;
             } catch (error) {
                 console.error('[Settings] Profile update error:', error);
-                showMessage('error', 'Failed to update profile: ' + (error.message || 'Unknown error'));
+                showAlert('Failed to update profile', 'error');
             } finally {
-                // Reset button state
-                saveButton.disabled = false;
-                saveText.style.display = 'inline';
-                saveLoader.style.display = 'none';
+                showLoading(false);
             }
         });
 
-        // Show message
-        function showMessage(type, message) {
-            const successDiv = document.getElementById('successMessage');
-            const errorDiv = document.getElementById('errorMessage');
+        // Professional form submission
+        document.getElementById('professionalForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showLoading(true);
             
-            // Hide all messages first
-            successDiv.classList.remove('show');
-            errorDiv.classList.remove('show');
+            try {
+                const formats = [];
+                document.querySelectorAll('input[name="formats"]:checked').forEach(checkbox => {
+                    formats.push(checkbox.value);
+                });
+                
+                const updates = {
+                    title: document.getElementById('title').value,
+                    years_experience: parseInt(document.getElementById('yearsExperience').value) || null,
+                    specialties: specialties,
+                    speaking_fee_range: {
+                        min: parseInt(document.getElementById('minFee').value) || 0,
+                        max: parseInt(document.getElementById('maxFee').value) || 0
+                    },
+                    preferred_audience_size: document.getElementById('audienceSize').value,
+                    preferred_formats: formats
+                };
+                
+                await window.covetalks.updateProfile(updates);
+                showAlert('Professional details updated successfully!', 'success');
+            } catch (error) {
+                console.error('[Settings] Professional update error:', error);
+                showAlert('Failed to update professional details', 'error');
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // Password form submission
+        document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
             
-            if (type === 'success') {
-                successDiv.textContent = message;
-                successDiv.classList.add('show');
-            } else if (type === 'error' || type === 'warning') {
-                errorDiv.textContent = message;
-                errorDiv.classList.add('show');
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (newPassword !== confirmPassword) {
+                showAlert('Passwords do not match', 'error');
+                return;
             }
             
-            // Auto-hide after 5 seconds
+            if (newPassword.length < 8) {
+                showAlert('Password must be at least 8 characters', 'error');
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                // Update password using Supabase Auth
+                const { error } = await window.covetalks.supabase.auth.updateUser({
+                    password: newPassword
+                });
+                
+                if (error) throw error;
+                
+                showAlert('Password updated successfully!', 'success');
+                document.getElementById('passwordForm').reset();
+            } catch (error) {
+                console.error('[Settings] Password update error:', error);
+                showAlert('Failed to update password', 'error');
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // Notifications form submission
+        document.getElementById('notificationsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showLoading(true);
+            
+            try {
+                const preferences = {
+                    email_notifications: document.getElementById('emailNotifications').checked,
+                    opportunity_notifications: document.getElementById('opportunityNotifications').checked,
+                    application_notifications: document.getElementById('applicationNotifications').checked,
+                    marketing_emails: document.getElementById('marketingEmails').checked
+                };
+                
+                await window.covetalks.updateProfile({ notification_preferences: preferences });
+                showAlert('Notification preferences updated!', 'success');
+            } catch (error) {
+                console.error('[Settings] Notifications update error:', error);
+                showAlert('Failed to update preferences', 'error');
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // Privacy form submission
+        document.getElementById('privacyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showLoading(true);
+            
+            try {
+                const privacy = {
+                    public_profile: document.getElementById('publicProfile').checked,
+                    show_contact: document.getElementById('showContact').checked,
+                    show_fees: document.getElementById('showFees').checked
+                };
+                
+                await window.covetalks.updateProfile({ privacy_settings: privacy });
+                showAlert('Privacy settings updated!', 'success');
+            } catch (error) {
+                console.error('[Settings] Privacy update error:', error);
+                showAlert('Failed to update privacy settings', 'error');
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // Image preview
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Validate file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    showAlert('Image must be less than 5MB', 'error');
+                    event.target.value = '';
+                    return;
+                }
+                
+                profileImageFile = file;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Profile">`;
+                    document.getElementById('removeImageBtn').style.display = 'inline-block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Remove image
+        async function removeImage() {
+            if (confirm('Remove profile photo?')) {
+                showLoading(true);
+                try {
+                    await window.covetalks.deleteProfileImage();
+                    document.getElementById('imagePreview').innerHTML = 
+                        '<span class="profile-image-placeholder">👤</span>';
+                    document.getElementById('removeImageBtn').style.display = 'none';
+                    document.getElementById('imageUpload').value = '';
+                    profileImageFile = null;
+                    showAlert('Profile photo removed', 'success');
+                } catch (error) {
+                    console.error('[Settings] Remove image error:', error);
+                    showAlert('Failed to remove photo', 'error');
+                } finally {
+                    showLoading(false);
+                }
+            }
+        }
+
+        // Specialties management
+        document.getElementById('specialtyInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const value = e.target.value.trim();
+                if (value && !specialties.includes(value)) {
+                    specialties.push(value);
+                    displaySpecialties();
+                    e.target.value = '';
+                }
+            }
+        });
+
+        function displaySpecialties() {
+            const container = document.getElementById('specialtiesInput');
+            const input = document.getElementById('specialtyInput');
+            
+            // Clear existing tags
+            container.querySelectorAll('.specialty-tag').forEach(tag => tag.remove());
+            
+            // Add tags
+            specialties.forEach((specialty, index) => {
+                const tag = document.createElement('div');
+                tag.className = 'specialty-tag';
+                tag.innerHTML = `
+                    ${specialty}
+                    <span class="remove" onclick="removeSpecialty(${index})">×</span>
+                `;
+                container.insertBefore(tag, input);
+            });
+        }
+
+        function removeSpecialty(index) {
+            specialties.splice(index, 1);
+            displaySpecialties();
+        }
+
+        // Delete account
+        async function confirmDeleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                if (confirm('This will permanently delete all your data. Are you absolutely sure?')) {
+                    showLoading(true);
+                    try {
+                        // Delete user account
+                        const { error } = await window.covetalks.supabase.auth.admin.deleteUser(currentUser.id);
+                        if (error) throw error;
+                        
+                        // Sign out and redirect
+                        await window.covetalks.logout();
+                        window.location.href = '/';
+                    } catch (error) {
+                        console.error('[Settings] Delete account error:', error);
+                        showAlert('Failed to delete account. Please contact support.', 'error');
+                        showLoading(false);
+                    }
+                }
+            }
+        }
+
+        // Show alert message
+        function showAlert(message, type) {
+            const alert = document.getElementById('alertMessage');
+            alert.className = `alert alert-${type} show`;
+            alert.textContent = message;
+            
             setTimeout(() => {
-                successDiv.classList.remove('show');
-                errorDiv.classList.remove('show');
+                alert.classList.remove('show');
             }, 5000);
         }
 
-        // Settings panel navigation
-        document.querySelectorAll('.settings-nav__item').forEach(item => {
-            item.addEventListener('click', function() {
-                const panelId = this.dataset.panel;
-                
-                // Update nav items
-                document.querySelectorAll('.settings-nav__item').forEach(navItem => {
-                    navItem.classList.remove('settings-nav__item--active');
-                });
-                this.classList.add('settings-nav__item--active');
-                
-                // Update panels
-                document.querySelectorAll('.settings-panel').forEach(panel => {
-                    panel.classList.remove('settings-panel--active');
-                });
-                const targetPanel = document.getElementById(`${panelId}-panel`);
-                if (targetPanel) {
-                    targetPanel.classList.add('settings-panel--active');
-                }
-            });
-        });
-
-        // Account settings
-        function saveAccountSettings() {
-            showMessage('success', 'Account settings saved successfully!');
+        // Show/hide loading overlay
+        function showLoading(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.classList.toggle('show', show);
         }
 
-        // Notification settings
-        function saveNotificationSettings() {
-            const settings = {
-                opportunities: document.getElementById('notifyOpportunities').checked,
-                bookings: document.getElementById('notifyBookings').checked
-            };
-            
-            console.log('[Settings] Saving notification settings:', settings);
-            showMessage('success', 'Notification preferences saved!');
-        }
-
-        // Cancel changes
-        function cancelChanges() {
-            if (hasChanges && !confirm('Are you sure you want to discard your changes?')) {
-                return;
-            }
-            loadUserSettings(); // Reload original data
-            profileImageData = null;
-            hasChanges = false;
-        }
-
-        // Toggle dropdown menu
+        // Toggle dropdown
         function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
+            document.getElementById('dropdownMenu').classList.toggle('show');
         }
 
         // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (dropdown && avatar && !avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
+            if (!event.target.closest('.user-menu')) {
+                document.getElementById('dropdownMenu').classList.remove('show');
             }
         });
 
-        // Mobile menu functions
-        function toggleMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            
-            hamburger.classList.toggle('active');
-            mobileMenu.classList.toggle('show');
-            overlay.classList.toggle('show');
-            
-            if (mobileMenu.classList.contains('show')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
+        // Logout
+        async function logout() {
+            if (window.covetalks) {
+                await window.covetalks.logout();
             }
         }
 
-        function closeMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            
-            hamburger.classList.remove('active');
-            mobileMenu.classList.remove('show');
-            overlay.classList.remove('show');
-            document.body.style.overflow = '';
+        // Initialize on load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
         }
-
-        // Logout function
-        function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                api.logout();
-            }
-        }
-
-        // Close mobile menu on window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                closeMobileMenu();
-            }
-        });
-
-        // Main initialization
-        document.addEventListener('DOMContentLoaded', function() {
-            // Wait for API and navigation to be ready
-            waitForAPI(function() {
-                console.log('[Settings] API and navigation ready');
-                
-                // Update navigation UI first
-                if (typeof updateNavigation === 'function') {
-                    updateNavigation();
-                }
-                
-                // Check authentication
-                if (!api.isAuthenticated()) {
-                    console.log('[Settings] Not authenticated, redirecting to login');
-                    sessionStorage.setItem('redirectUrl', window.location.href);
-                    window.location.href = '/login.html';
-                    return;
-                }
-                
-                console.log('[Settings] Authentication verified, initializing page');
-                // Initialize page
-                initializePage();
-            });
-        });
-
-        // Add console helper for debugging
-        window.debugProfile = async function() {
-            console.log('=== MANUAL PROFILE DEBUG ===');
-            const response = await api.getProfile();
-            console.log('Raw API Response:', response);
-            if (response && response.profile) {
-                console.table(response.profile);
-            }
-            console.log('=== END DEBUG ===');
-        };
     </script>
 </body>
 </html>
