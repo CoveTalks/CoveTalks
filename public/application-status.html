@@ -266,6 +266,13 @@
             gap: 0.5rem;
         }
 
+        .meta-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+        }
+
         /* Content Grid */
         .content-grid {
             display: grid;
@@ -610,21 +617,6 @@
                 margin-bottom: 0.5rem;
             }
         }
-
-        .meta-icon {
-            width: 20px;
-            height: 20px;
-            object-fit: contain;
-            /* Optional: add a white filter if your icons are dark and need to be white */
-            filter: brightness(0) invert(1);
-        }
-
-        /* If you want the icons to align better */
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
     </style>
 </head>
 <body>
@@ -705,7 +697,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
                 <!-- Content Grid -->
                 <div class="content-grid">
@@ -813,7 +804,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> <!-- Closing applicationContent div - CORRECTED POSITION -->
         </div>
     </main>
 
@@ -1196,14 +1187,14 @@
         // Get status icon - Using images for all statuses
         function getStatusIcon(status) {
             const icons = {
-                'Submitted': 'mail-icon.png',
-                'Pending': 'pending-icon.png', 
-                'Accepted': 'accepted-icon.png',
-                'Rejected': 'rejected-icon.png',
-                'Withdrawn': 'withdrawn-icon.png'
+                'Submitted': 'mail_icon.png',
+                'Pending': 'pending_icon.png', 
+                'Accepted': 'accepted_icon.png',
+                'Rejected': 'rejected_icon.png',
+                'Withdrawn': 'withdrawn_icon.png'
             };
             
-            const iconFile = icons[status] || 'default-icon.png';
+            const iconFile = icons[status] || 'default_icon.png';
             return `<img src="/Images/${iconFile}" alt="${status}" onerror="this.style.display='none'">`;
         }
 
