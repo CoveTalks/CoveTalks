@@ -232,6 +232,13 @@ nav {
     gap: var(--spacing-md);
 }
 
+/* Ensure proper spacing on mobile between avatar and hamburger */
+@media (max-width: 768px) {
+    .nav-right {
+        gap: var(--spacing-sm);
+    }
+}
+
 /* Mobile Menu Toggle */
 .mobile-menu-toggle {
     display: none;
@@ -893,8 +900,20 @@ textarea.form-control {
         display: block;
     }
     
+    /* Hide desktop auth buttons on mobile (they're in the mobile menu) */
     .auth-buttons {
         display: none;
+    }
+    
+    /* Keep user menu (avatar) visible on mobile when logged in */
+    .user-menu {
+        display: block;
+    }
+    
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
     }
     
     .main-content {
@@ -981,8 +1000,8 @@ textarea.form-control {
     }
     
     .user-avatar {
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
+        width: 38px;
+        height: 38px;
+        font-size: 0.95rem;
     }
 }

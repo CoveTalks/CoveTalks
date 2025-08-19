@@ -136,35 +136,9 @@ class CoveTalksFooter {
                 
                 /* Mobile User Section Styles */
                 .mobile-user-section {
-                    padding: var(--spacing-lg) 0;
-                }
-                
-                .mobile-user-info {
-                    display: flex;
-                    align-items: center;
-                    gap: var(--spacing-md);
-                    padding-bottom: var(--spacing-lg);
-                    border-bottom: 1px solid var(--color-border);
-                    margin-bottom: var(--spacing-lg);
-                }
-                
-                .user-avatar-large {
-                    width: 60px;
-                    height: 60px;
-                    border-radius: 50%;
-                    background: linear-gradient(135deg, #667eea, var(--color-calm));
-                    color: white;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-weight: var(--font-weight-bold);
-                    font-size: 1.5rem;
-                }
-                
-                .user-name {
-                    font-size: 1.1rem;
-                    font-weight: var(--font-weight-medium);
-                    color: #333;
+                    padding-top: var(--spacing-lg);
+                    border-top: 1px solid var(--color-border);
+                    margin-top: var(--spacing-lg);
                 }
                 
                 .mobile-user-links {
@@ -175,6 +149,10 @@ class CoveTalksFooter {
                 
                 .mobile-user-links li {
                     border-bottom: 1px solid var(--color-border);
+                }
+                
+                .mobile-user-links li:first-child {
+                    border-top: none;
                 }
                 
                 .mobile-user-links li:last-child {

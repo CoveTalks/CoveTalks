@@ -85,10 +85,6 @@ class CoveTalksHeader {
                     
                     <!-- Mobile user menu (when logged in) -->
                     <div class="mobile-user-section hidden" id="mobileUserSection">
-                        <div class="mobile-user-info">
-                            <div class="user-avatar-large" id="mobileUserAvatar">U</div>
-                            <div class="user-name" id="mobileUserName">User Name</div>
-                        </div>
                         <ul class="mobile-user-links">
                             <li><a href="/inbox.html">Inbox</a></li>
                             <li><a href="/settings.html">Settings</a></li>
@@ -222,8 +218,6 @@ class CoveTalksHeader {
         const userMenu = document.getElementById('userMenu');
         const mobileUserSection = document.getElementById('mobileUserSection');
         const userAvatar = document.getElementById('userAvatar');
-        const mobileUserAvatar = document.getElementById('mobileUserAvatar');
-        const mobileUserName = document.getElementById('mobileUserName');
         
         if (user) {
             // Hide auth buttons, show user menu
@@ -232,14 +226,12 @@ class CoveTalksHeader {
             if (userMenu) userMenu.classList.remove('hidden');
             if (mobileUserSection) mobileUserSection.classList.remove('hidden');
             
-            // Update avatars with user initials
+            // Update avatar with user initials (only the header avatar)
             const initials = user.name ? 
                 user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
                 'U';
             
             if (userAvatar) userAvatar.textContent = initials;
-            if (mobileUserAvatar) mobileUserAvatar.textContent = initials;
-            if (mobileUserName) mobileUserName.textContent = user.name || 'User';
             
             // Update navigation links based on user type
             let navHTML = '';
