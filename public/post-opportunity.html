@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/css/main.css">
     
     <!-- Page-specific styles aligned with brand consistency -->
+    <!-- Replace the existing <style> section in post-opportunity.html with this corrected version -->
     <style>
         /* Page Header - Matching My Opportunities & Saved Speakers */
         .page-header {
@@ -44,6 +45,7 @@
         .content-wrapper {
             max-width: 900px;
             margin: 0 auto;
+            /* Remove any fixed padding here - let container handle it */
         }
 
         /* Progress Container - Simplified to match brand */
@@ -60,14 +62,16 @@
             justify-content: space-between;
             position: relative;
             margin-bottom: var(--spacing-sm);
+            /* Add padding to prevent cutoff on mobile */
+            padding: 0 25px;
         }
 
         .progress-track::before {
             content: '';
             position: absolute;
             top: 25px;
-            left: 60px;
-            right: 60px;
+            left: 50px;
+            right: 50px;
             height: 3px;
             background: var(--color-foam);
             z-index: 0;
@@ -76,7 +80,7 @@
         .progress-line {
             position: absolute;
             top: 25px;
-            left: 60px;
+            left: 50px;
             height: 3px;
             background: var(--color-sand);
             z-index: 1;
@@ -541,11 +545,12 @@
             cursor: pointer;
         }
 
-        /* Responsive Design */
+        /* ============================================
+        RESPONSIVE DESIGN - FIXED FOR MOBILE
+        ============================================ */
         @media (max-width: 992px) {
             .content-wrapper {
                 max-width: 100%;
-                padding: 0 var(--spacing-md);
             }
 
             .page-header h1 {
@@ -554,17 +559,40 @@
         }
 
         @media (max-width: 768px) {
+            /* Fix page header padding */
+            .page-header {
+                padding: 4rem var(--spacing-md) 2rem;
+                margin-bottom: var(--spacing-md);
+                border-radius: 0;
+            }
+
             .page-header h1 {
                 font-size: 1.75rem;
             }
 
-            .page-header {
-                padding: var(--spacing-xl) var(--spacing-md) var(--spacing-lg);
+            .page-header p {
+                font-size: 1rem;
+                padding: 0 var(--spacing-md);
+            }
+
+            /* Simplify progress indicator for mobile */
+            .progress-container {
+                padding: var(--spacing-md);
+                margin-bottom: var(--spacing-md);
+            }
+
+            .progress-track {
+                padding: 0;
+                justify-content: space-around;
             }
 
             .progress-track::before,
             .progress-line {
                 display: none;
+            }
+
+            .progress-step {
+                flex: none;
             }
 
             .step-indicator {
@@ -575,18 +603,57 @@
 
             .step-title {
                 font-size: 0.8rem;
+                display: none;
             }
 
+            /* Only show active step title */
+            .progress-step.active .step-title {
+                display: block;
+                position: static;
+                margin-top: var(--spacing-xs);
+            }
+
+            /* Tips banner adjustments */
+            .tips-banner {
+                padding: var(--spacing-md);
+                margin-bottom: var(--spacing-md);
+            }
+
+            .tips-banner h3 {
+                font-size: 1.1rem;
+                margin-bottom: var(--spacing-md);
+            }
+
+            .tip-text {
+                font-size: 0.9rem;
+            }
+
+            /* Form step padding */
             .form-step {
-                padding: var(--spacing-lg);
+                padding: var(--spacing-md);
+                margin-bottom: var(--spacing-md);
             }
 
             .section-header {
                 font-size: 1.5rem;
+                margin-bottom: var(--spacing-md);
+                padding-bottom: var(--spacing-sm);
             }
 
+            /* Form grid responsive */
             .form-grid-2 {
                 grid-template-columns: 1fr;
+            }
+
+            /* Form group spacing */
+            .form-group {
+                margin-bottom: var(--spacing-md);
+            }
+
+            /* Preview section adjustments */
+            .preview-section {
+                padding: var(--spacing-md);
+                margin-top: var(--spacing-md);
             }
 
             .preview-header {
@@ -597,6 +664,7 @@
 
             .preview-item {
                 flex-direction: column;
+                padding: var(--spacing-sm) 0;
             }
 
             .preview-label {
@@ -604,8 +672,12 @@
                 margin-bottom: var(--spacing-xs);
             }
 
+            /* Form navigation responsive */
             .form-navigation {
+                padding-top: var(--spacing-md);
+                margin-top: var(--spacing-md);
                 flex-direction: column;
+                gap: var(--spacing-sm);
             }
 
             .nav-left,
@@ -618,41 +690,120 @@
             .nav-right .btn {
                 flex: 1;
             }
+
+            /* Button adjustments */
+            .btn {
+                padding: 0.75rem 1.25rem;
+                font-size: 0.9rem;
+            }
+
+            /* Modal responsive */
+            .modal-content {
+                margin: var(--spacing-md);
+            }
         }
 
         @media (max-width: 576px) {
+            /* Further mobile optimizations */
+            .page-header {
+                padding: 3rem var(--spacing-sm) 1.5rem;
+            }
+
             .page-header h1 {
                 font-size: 1.5rem;
             }
 
-            .form-step {
-                padding: var(--spacing-md);
+            .page-header p {
+                font-size: 0.95rem;
+            }
+
+            /* Cards and forms with minimal padding */
+            .progress-container,
+            .tips-banner,
+            .form-step,
+            .preview-section {
+                padding: var(--spacing-sm);
+                border-radius: 10px;
             }
 
             .section-header {
                 font-size: 1.3rem;
             }
 
-            .progress-container {
-                padding: var(--spacing-md);
+            /* Compact progress steps */
+            .progress-step {
+                margin: 0 var(--spacing-xs);
             }
 
-            .step-title {
-                display: none;
+            .step-indicator {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+                border-width: 2px;
             }
 
-            .progress-step.active .step-title {
-                display: block;
-                position: absolute;
-                top: 60px;
-                left: 50%;
-                transform: translateX(-50%);
-                white-space: nowrap;
-                font-size: 0.75rem;
+            /* Smaller form controls */
+            .form-control {
+                padding: 0.625rem 0.875rem;
+                font-size: 0.9rem;
             }
 
+            /* Compact buttons */
             .btn {
                 width: 100%;
+                padding: 0.625rem 1rem;
+            }
+
+            #submitBtn {
+                padding: 0.75rem 1.25rem;
+            }
+
+            /* Stack all navigation buttons */
+            .nav-left,
+            .nav-right {
+                flex-direction: column;
+            }
+
+            /* Topic tags */
+            .topic-tag {
+                font-size: 0.85rem;
+                padding: 0.25rem 0.5rem;
+            }
+
+            /* Reduce spacing throughout */
+            .form-group {
+                margin-bottom: var(--spacing-sm);
+            }
+
+            .tips-list {
+                gap: var(--spacing-sm);
+            }
+
+            .tip-item {
+                padding: var(--spacing-xs) 0;
+            }
+
+            /* Alerts */
+            .alert {
+                padding: var(--spacing-sm) var(--spacing-md);
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            /* Ultra-small screens */
+            .page-header h1 {
+                font-size: 1.35rem;
+            }
+
+            .section-header {
+                font-size: 1.15rem;
+            }
+
+            .step-indicator {
+                width: 32px;
+                height: 32px;
+                font-size: 0.85rem;
             }
         }
     </style>
