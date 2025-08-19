@@ -4,236 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Bookings - CoveTalks</title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- Page-specific styles ONLY for unique bookings elements -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header */
-        header {
-            background: white;
-            color: #333;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        
-        .logo-img {
-            height: 70px;
-            width: auto;
-            display: block;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #155588;
-        }
-
-        .nav-links a.active {
-            color: #155588;
-            border-bottom: 2px solid #155588;
-            padding-bottom: 2px;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1e3d6f;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #155588;
-            border: 2px solid #155588;
-        }
-
-        .btn-secondary:hover {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-small {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-        }
-
-        /* User Menu */
-        .user-menu {
-            position: relative;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: transform 0.2s;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.05);
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.75rem 1.25rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #e1e8ed;
-            margin: 0;
-        }
-
-        /* Page Header */
+        /* Page Header - Unique gradient */
         .page-header {
-            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
-            padding: 8rem 0 4rem;
+            padding: var(--spacing-3xl) 0 var(--spacing-xl);
             text-align: center;
-            margin-top: 70px;
+            margin-bottom: var(--spacing-xl);
         }
 
         .page-header h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-md);
+            color: white;
         }
 
         .page-header p {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             max-width: 600px;
             margin: 0 auto;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding: 3rem 0;
-            margin-top: -4rem;
+            opacity: 0.95;
         }
 
         /* Stats Cards */
         .stats-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
         }
 
         .stat-card {
             background: white;
             border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: var(--spacing-md);
         }
 
         .stat-icon {
@@ -248,68 +65,68 @@
 
         .stat-icon.blue {
             background: #e8f4fd;
-            color: #155588;
+            color: var(--color-deep);
         }
 
         .stat-icon.green {
             background: #d4edda;
-            color: #27ae60;
+            color: var(--color-success);
         }
 
         .stat-icon.purple {
-            background: #f3e5f5;
-            color: #9b59b6;
+            background: #fff3e0;
+            color: var(--color-sand);
         }
 
         .stat-icon.orange {
             background: #fff3e0;
-            color: #f39c12;
+            color: var(--color-warning);
         }
 
         .stat-content h3 {
             font-size: 2rem;
-            color: #155588;
+            color: var(--color-deep);
             margin-bottom: 0.25rem;
         }
 
         .stat-content p {
-            color: #666;
+            color: var(--color-gray);
             font-size: 0.9rem;
         }
 
-        /* Tabs */
+        /* Tabs Container */
         .tabs-container {
             background: white;
             border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--spacing-xl);
         }
 
         .tabs {
             display: flex;
-            gap: 1rem;
-            border-bottom: 2px solid #e1e8ed;
-            margin-bottom: 2rem;
+            gap: var(--spacing-md);
+            border-bottom: 2px solid var(--color-border);
+            margin-bottom: var(--spacing-xl);
         }
 
         .tab {
-            padding: 1rem 1.5rem;
+            padding: var(--spacing-md) var(--spacing-lg);
             background: none;
             border: none;
-            color: #666;
-            font-weight: 500;
+            color: var(--color-gray);
+            font-weight: var(--font-weight-medium);
             cursor: pointer;
             position: relative;
-            transition: color 0.3s;
+            transition: color var(--transition-normal);
         }
 
         .tab:hover {
-            color: #155588;
+            color: var(--color-deep);
         }
 
         .tab.active {
-            color: #155588;
+            color: var(--color-deep);
         }
 
         .tab.active::after {
@@ -318,54 +135,86 @@
             bottom: -2px;
             left: 0;
             right: 0;
-            height: 2px;
-            background: #155588;
+            height: 3px;
+            background: var(--color-sand);
         }
 
         .tab-badge {
-            background: #155588;
-            color: white;
+            background: var(--color-sand);
+            color: #333;
             padding: 0.25rem 0.5rem;
             border-radius: 10px;
             font-size: 0.8rem;
-            margin-left: 0.5rem;
+            margin-left: var(--spacing-sm);
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: white;
+            border-radius: 15px;
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--spacing-xl);
+            display: flex;
+            gap: var(--spacing-md);
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .filter-group label {
+            font-weight: var(--font-weight-medium);
+            color: var(--color-gray);
+            font-size: 0.9rem;
+        }
+
+        .filter-group select {
+            padding: var(--spacing-sm);
+            border: 2px solid var(--color-border);
+            border-radius: 5px;
+            font-family: var(--font-primary);
         }
 
         /* Bookings Grid */
         .bookings-grid {
             display: grid;
-            gap: 1.5rem;
+            gap: var(--spacing-lg);
         }
 
         .booking-card {
             background: white;
             border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            border-left: 4px solid #155588;
-            transition: all 0.3s;
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+            border-left: 4px solid var(--color-deep);
+            transition: all var(--transition-normal);
         }
 
         .booking-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            box-shadow: var(--shadow-lg);
         }
 
         .booking-card.upcoming {
-            border-left-color: #27ae60;
+            border-left-color: var(--color-success);
         }
 
         .booking-card.pending {
-            border-left-color: #f39c12;
+            border-left-color: var(--color-warning);
         }
 
         .booking-card.past {
-            border-left-color: #95a5a6;
+            border-left-color: var(--color-gray-light);
             opacity: 0.8;
         }
 
         .booking-card.rejected {
-            border-left-color: #e74c3c;
+            border-left-color: var(--color-danger);
             opacity: 0.7;
         }
 
@@ -373,18 +222,18 @@
             display: flex;
             justify-content: space-between;
             align-items: start;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
         }
 
         .booking-title {
             font-size: 1.2rem;
-            color: #155588;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
+            color: var(--color-deep);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--spacing-sm);
         }
 
         .booking-org {
-            color: #666;
+            color: var(--color-gray);
             font-size: 0.95rem;
         }
 
@@ -392,22 +241,22 @@
             padding: 0.25rem 0.75rem;
             border-radius: 15px;
             font-size: 0.85rem;
-            font-weight: bold;
+            font-weight: var(--font-weight-bold);
         }
 
         .status-accepted {
             background: #d4edda;
-            color: #27ae60;
+            color: var(--color-success);
         }
 
         .status-pending {
             background: #fff3cd;
-            color: #f39c12;
+            color: var(--color-warning);
         }
 
         .status-rejected {
             background: #f8d7da;
-            color: #e74c3c;
+            color: var(--color-danger);
         }
 
         .status-withdrawn {
@@ -418,27 +267,32 @@
         .booking-details {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 1rem 0;
-            padding: 1rem;
-            background: #f8f9fa;
+            gap: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+            padding: var(--spacing-md);
+            background: var(--color-foam);
             border-radius: 10px;
         }
 
         .detail-item {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: var(--spacing-sm);
         }
 
         .detail-icon {
-            color: #155588;
+            color: var(--color-deep);
             font-size: 1.2rem;
         }
 
+        .detail-info {
+            display: flex;
+            flex-direction: column;
+        }
+
         .detail-label {
-            font-weight: 600;
-            color: #666;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-gray);
             font-size: 0.9rem;
         }
 
@@ -449,115 +303,51 @@
 
         .booking-actions {
             display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #e1e8ed;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--color-border);
         }
 
-        /* Filter Bar */
-        .filter-bar {
-            background: white;
-            border-radius: 15px;
-            padding: 1rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .filter-group label {
-            font-weight: 500;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .filter-group select {
-            padding: 0.5rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 5px;
-            font-family: inherit;
-        }
-
-        /* Loading State */
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 3rem;
-            color: #666;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #155588;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 1rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-
-        .empty-state-icon {
-            font-size: 4rem;
-            color: #ddd;
-            margin-bottom: 1rem;
-        }
-
-        .empty-state h3 {
-            color: #666;
-            margin-bottom: 0.5rem;
-        }
-
-        .empty-state p {
-            color: #999;
-            margin-bottom: 1.5rem;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Responsive */
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
             .page-header h1 {
                 font-size: 2rem;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr;
             }
 
             .tabs {
                 flex-direction: column;
             }
 
+            .tab {
+                width: 100%;
+                text-align: left;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .filter-group select {
+                width: 100%;
+            }
+
             .booking-header {
                 flex-direction: column;
-                gap: 1rem;
+                gap: var(--spacing-md);
+            }
+
+            .booking-details {
+                grid-template-columns: 1fr;
             }
 
             .booking-actions {
@@ -567,56 +357,11 @@
             .booking-actions .btn {
                 width: 100%;
             }
-
-            .filter-bar {
-                flex-direction: column;
-                align-items: stretch;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="nav-container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
-                </a>
-                
-                <!-- Navigation links will be dynamically inserted here -->
-                <ul class="nav-links" id="navLinks">
-                    <!-- Default logged out navigation -->
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
-    
-                <div class="nav-right">
-                    <!-- Auth buttons (shown when logged out) -->
-                    <div class="auth-buttons" id="authButtons">
-                        <a href="register.html" class="btn btn-secondary">Join</a>
-                        <a href="login.html" class="btn btn-primary">Login</a>
-                    </div>
-                    
-                    <!-- User menu (shown when logged in) -->
-                    <div class="user-menu hidden" id="userMenu">
-                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
-                        <div class="dropdown-menu" id="dropdownMenu">
-                            <a href="inbox.html">Inbox</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="settings.html">Settings</a>
-                            <a href="billing.html">Billing</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" onclick="logout(); return false;">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <!-- Header will be auto-injected by header.js -->
 
     <!-- Page Header -->
     <div class="page-header">
@@ -714,13 +459,20 @@
         </div>
     </main>
 
+    <!-- Footer will be auto-injected by footer.js -->
+
     <!-- Load Supabase from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <!-- Load config and Supabase client -->
-    <script src="js/config.js"></script>
-    <script src="js/supabase-client.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
     
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
     <script>
         // Global state
         let currentUser = null;
@@ -728,81 +480,54 @@
         let filteredApplications = [];
         let currentTab = 'all';
 
-        // Wait for Supabase client
-        function waitForSupabase(callback) {
-            let attempts = 0;
-            const maxAttempts = 10;
-            
-            function check() {
-                attempts++;
-                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
-                    callback();
-                } else if (attempts < maxAttempts) {
-                    setTimeout(check, 500);
-                } else {
-                    showError('Failed to initialize. Please refresh the page.');
-                }
-            }
-            check();
-        }
-
         // Initialize page
         async function initializePage() {
-            waitForSupabase(async () => {
-                try {
-                    // Check authentication
-                    const session = await window.covetalks.checkAuth();
-                    if (!session) {
-                        window.location.href = '/login.html';
-                        return;
-                    }
-
-                    // Get current user
-                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
-                    
-                    // Check if user is a speaker
-                    if (currentUser.member_type !== 'Speaker') {
-                        window.location.href = '/organization-dashboard.html';
-                        return;
-                    }
-
-                    updateNavigation(currentUser);
-
-                    // Load all data
-                    await loadAllData();
-
-                } catch (error) {
-                    console.error('Error initializing:', error);
-                    showError('Failed to load your bookings. Please refresh the page.');
+            try {
+                await waitForSupabase();
+                
+                // Check authentication
+                const session = await window.covetalks.checkAuth();
+                if (!session) {
+                    window.location.href = `/login.html?redirect=${encodeURIComponent(window.location.href)}`;
+                    return;
                 }
-            });
+
+                // Get current user
+                currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                
+                // Check if user is a speaker
+                if (currentUser.member_type !== 'Speaker') {
+                    window.location.href = '/organization-dashboard.html';
+                    return;
+                }
+
+                // Load all data
+                await loadAllData();
+
+            } catch (error) {
+                console.error('Error initializing:', error);
+                showError('Failed to load your bookings. Please refresh the page.');
+            }
         }
 
-        // Update navigation
-        function updateNavigation(user) {
-            const navLinks = document.getElementById('navLinks');
-            const authButtons = document.getElementById('authButtons');
-            const userMenu = document.getElementById('userMenu');
-            const userAvatar = document.getElementById('userAvatar');
-            
-            if (user) {
-                authButtons.classList.add('hidden');
-                userMenu.classList.remove('hidden');
+        // Wait for Supabase client
+        function waitForSupabase() {
+            return new Promise((resolve) => {
+                let attempts = 0;
+                const maxAttempts = 20;
                 
-                const initials = user.name ? 
-                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
-                    'U';
-                userAvatar.textContent = initials;
-                
-                // Update navigation links for speakers
-                navLinks.innerHTML = `
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="opportunities.html">Opportunities</a></li>
-                    <li><a href="bookings.html" class="active">My Bookings</a></li>
-                    <li><a href="profile.html">Profile</a></li>
-                `;
-            }
+                function check() {
+                    attempts++;
+                    if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                        resolve();
+                    } else if (attempts < maxAttempts) {
+                        setTimeout(check, 250);
+                    } else {
+                        showError('Failed to initialize. Please refresh the page.');
+                    }
+                }
+                check();
+            });
         }
 
         // Load all data
@@ -963,7 +688,7 @@
                         <div class="empty-state-icon">📅</div>
                         <h3>No ${currentTab === 'pending' ? 'pending applications' : currentTab === 'upcoming' ? 'upcoming bookings' : 'applications'} found</h3>
                         <p>${currentTab === 'pending' ? 'Your pending applications will appear here' : currentTab === 'upcoming' ? 'Your confirmed bookings will appear here' : 'Start applying to speaking opportunities'}</p>
-                        <a href="opportunities.html" class="btn btn-primary">Browse Opportunities</a>
+                        <a href="/opportunities.html" class="btn btn-primary mt-3">Browse Opportunities</a>
                     </div>
                 `;
                 return;
@@ -994,28 +719,28 @@
                         <div class="booking-details">
                             <div class="detail-item">
                                 <span class="detail-icon">📅</span>
-                                <div>
+                                <div class="detail-info">
                                     <div class="detail-label">Event Date</div>
                                     <div class="detail-value">${formatDate(eventDate)}</div>
                                 </div>
                             </div>
                             <div class="detail-item">
                                 <span class="detail-icon">📍</span>
-                                <div>
+                                <div class="detail-info">
                                     <div class="detail-label">Location</div>
                                     <div class="detail-value">${opp?.location || 'TBD'}</div>
                                 </div>
                             </div>
                             <div class="detail-item">
                                 <span class="detail-icon">💰</span>
-                                <div>
+                                <div class="detail-info">
                                     <div class="detail-label">Compensation</div>
                                     <div class="detail-value">${app.requested_fee ? `$${app.requested_fee}` : opp?.compensation_amount ? `$${opp.compensation_amount}` : 'Volunteer'}</div>
                                 </div>
                             </div>
                             <div class="detail-item">
                                 <span class="detail-icon">📝</span>
-                                <div>
+                                <div class="detail-info">
                                     <div class="detail-label">Applied</div>
                                     <div class="detail-value">${formatDate(app.created_at)}</div>
                                 </div>
@@ -1024,15 +749,15 @@
                         
                         <div class="booking-actions">
                             ${app.status === 'Accepted' ? `
-                                <a href="booking-details.html?id=${app.id}" class="btn btn-primary btn-small">View Booking Details</a>
+                                <a href="/booking-details.html?id=${app.id}" class="btn btn-primary btn-sm">View Booking Details</a>
                             ` : `
-                                <a href="application-status.html?id=${app.id}" class="btn btn-secondary btn-small">View Application</a>
+                                <a href="/application-status.html?id=${app.id}" class="btn btn-secondary btn-sm">View Application</a>
                             `}
                             ${app.status === 'Accepted' && isUpcoming ? `
-                                <button class="btn btn-secondary btn-small" onclick="addToCalendar('${app.id}')">📅 Add to Calendar</button>
+                                <button class="btn btn-secondary btn-sm" onclick="addToCalendar('${app.id}')">📅 Add to Calendar</button>
                             ` : ''}
                             ${app.status === 'Pending' ? `
-                                <button class="btn btn-secondary btn-small" onclick="withdrawApplication('${app.id}')">Withdraw</button>
+                                <button class="btn btn-secondary btn-sm" onclick="withdrawApplication('${app.id}')">Withdraw</button>
                             ` : ''}
                         </div>
                     </div>
@@ -1104,29 +829,6 @@
             `;
             document.getElementById('loadingState').classList.add('hidden');
             grid.classList.remove('hidden');
-        }
-
-        // Toggle dropdown
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-
-        // Logout
-        async function logout() {
-            if (window.covetalks) {
-                await window.covetalks.logout();
-            }
         }
 
         // Initialize on load

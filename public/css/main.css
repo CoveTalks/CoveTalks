@@ -358,7 +358,7 @@ nav {
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, var(--color-calm));
+    background: linear-gradient(135deg, var(--color-deep), var(--color-calm));
     color: white;
     display: flex;
     align-items: center;
