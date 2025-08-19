@@ -210,7 +210,7 @@ class CoveTalksFooter {
                 @media (max-width: 768px) {
                     .footer-content {
                         grid-template-columns: 1fr;
-                        text-align: left;
+                        text-align: center;
                     }
                     
                     .footer-section {
