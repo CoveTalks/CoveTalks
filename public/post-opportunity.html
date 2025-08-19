@@ -13,135 +13,209 @@
     
     <!-- Page-specific styles ONLY for unique elements -->
     <style>
-        /* Page Header - Sand/Gold gradient for organizations */
+        /* ==============================================
+           PAGE HEADER - Following brand sand/calm gradient
+           ============================================== */
         .page-header {
             background: linear-gradient(135deg, var(--color-sand) 0%, var(--color-calm) 100%);
             color: white;
-            padding: calc(var(--header-height) + var(--spacing-3xl)) 0 var(--spacing-2xl);
+            padding: var(--spacing-2xl) 0;
+            margin-bottom: var(--spacing-xl);
             text-align: center;
         }
 
         .page-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: var(--spacing-md);
             color: white;
+            margin-bottom: var(--spacing-sm);
+            font-size: 2.5rem;
         }
 
         .page-header p {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            opacity: 0.95;
             max-width: 600px;
             margin: 0 auto;
         }
 
-        /* Form Container */
-        .form-container {
-            max-width: 800px;
-            margin: calc(var(--spacing-2xl) * -1) auto 0;
-            position: relative;
-            z-index: 10;
+        /* ==============================================
+           CONTENT CONTAINER - Centralized like other pages
+           ============================================== */
+        .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
         }
 
-        /* Progress Bar */
-        .progress-bar {
+        /* ==============================================
+           PROGRESS INDICATOR - Mobile optimized
+           ============================================== */
+        .progress-container {
             background: white;
             border-radius: 15px;
-            padding: var(--spacing-xl);
+            padding: var(--spacing-lg);
             box-shadow: var(--shadow-md);
             margin-bottom: var(--spacing-xl);
         }
 
-        .progress-steps {
+        .progress-track {
             display: flex;
             justify-content: space-between;
             position: relative;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .progress-track::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            right: 40px;
+            height: 2px;
+            background: var(--color-border);
+            z-index: 0;
         }
 
         .progress-step {
             flex: 1;
             text-align: center;
             position: relative;
+            z-index: 1;
         }
 
-        .progress-step::before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: -50%;
-            right: 50%;
-            height: 2px;
-            background: var(--color-border);
-            z-index: -1;
-        }
-
-        .progress-step:first-child::before {
-            display: none;
-        }
-
-        .progress-step.completed::before {
-            background: var(--color-sand);
-        }
-
-        .step-circle {
+        .step-indicator {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: var(--color-border);
+            background: white;
+            border: 2px solid var(--color-border);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto var(--spacing-sm);
+            margin: 0 auto var(--spacing-xs);
             font-weight: var(--font-weight-bold);
+            color: var(--color-gray);
+            transition: all var(--transition-normal);
+        }
+
+        .progress-step.active .step-indicator {
+            background: var(--color-sand);
+            border-color: var(--color-sand);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-indicator {
+            background: var(--color-calm);
+            border-color: var(--color-calm);
             color: white;
         }
 
-        .progress-step.active .step-circle,
-        .progress-step.completed .step-circle {
-            background: var(--color-sand);
-        }
-
-        .step-label {
-            font-size: 0.9rem;
+        .step-title {
+            font-size: 0.85rem;
             color: var(--color-gray);
+            font-weight: var(--font-weight-medium);
         }
 
-        .progress-step.active .step-label {
+        .progress-step.active .step-title {
             color: var(--color-sand);
             font-weight: var(--font-weight-bold);
         }
 
-        /* Form Sections */
-        .form-section {
+        .progress-step.completed .step-title {
+            color: var(--color-calm);
+        }
+
+        /* ==============================================
+           TIPS BANNER - Brand colors
+           ============================================== */
+        .tips-banner {
+            background: linear-gradient(135deg, var(--color-calm) 0%, var(--color-deep) 100%);
+            color: white;
+            border-radius: 15px;
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .tips-banner h3 {
+            color: white;
+            margin-bottom: var(--spacing-md);
+            font-size: 1.2rem;
+        }
+
+        .tips-list {
+            display: grid;
+            gap: var(--spacing-sm);
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: start;
+            gap: var(--spacing-sm);
+        }
+
+        .tip-icon {
+            color: var(--color-sand);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .tip-text {
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        /* ==============================================
+           FORM SECTIONS - Clean card-based design
+           ============================================== */
+        .form-step {
             background: white;
             border-radius: 15px;
             padding: var(--spacing-xl);
             box-shadow: var(--shadow-md);
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .section-header {
+            color: var(--color-deep);
             margin-bottom: var(--spacing-xl);
-        }
-
-        .form-section h2 {
-            color: var(--color-sand);
-            margin-bottom: var(--spacing-lg);
             padding-bottom: var(--spacing-md);
-            border-bottom: 2px solid var(--color-bg-light);
+            border-bottom: 2px solid var(--color-foam);
         }
 
-        .form-row {
+        /* Form Groups */
+        .form-grid {
+            display: grid;
+            gap: var(--spacing-lg);
+        }
+
+        .form-grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-md);
+            gap: var(--spacing-lg);
         }
 
-        .required {
+        .form-label {
+            display: block;
+            margin-bottom: var(--spacing-sm);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-gray-dark);
+        }
+
+        .required-mark {
             color: var(--color-danger);
+            margin-left: 2px;
         }
 
-        .help-text {
+        .form-hint {
             font-size: 0.85rem;
             color: var(--color-gray);
             margin-top: var(--spacing-xs);
         }
 
-        /* Character Counter */
+        /* Character counter */
         .char-counter {
             text-align: right;
             font-size: 0.85rem;
@@ -157,149 +231,182 @@
             color: var(--color-danger);
         }
 
-        /* Tag Input */
-        .tag-input-container {
+        /* ==============================================
+           TOPICS INPUT - Clean tag system
+           ============================================== */
+        .topics-input-wrapper {
             border: 2px solid var(--color-border);
             border-radius: 8px;
             padding: var(--spacing-sm);
             min-height: 50px;
             display: flex;
             flex-wrap: wrap;
-            gap: var(--spacing-sm);
+            gap: var(--spacing-xs);
             align-items: center;
-            transition: border-color var(--transition-fast);
+            transition: all var(--transition-fast);
         }
 
-        .tag-input-container:focus-within {
+        .topics-input-wrapper:focus-within {
             border-color: var(--color-sand);
             box-shadow: 0 0 0 3px rgba(243, 179, 56, 0.1);
         }
 
-        .tag {
+        .topic-tag {
             background: var(--color-sand);
             color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
             font-size: 0.9rem;
             display: inline-flex;
             align-items: center;
-            gap: var(--spacing-sm);
+            gap: var(--spacing-xs);
+            animation: tagAdd 0.3s ease;
         }
 
-        .tag-remove {
+        @keyframes tagAdd {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .topic-remove {
             cursor: pointer;
             font-weight: var(--font-weight-bold);
+            opacity: 0.8;
+            transition: opacity var(--transition-fast);
         }
 
-        .tag-input {
+        .topic-remove:hover {
+            opacity: 1;
+        }
+
+        .topic-input {
             border: none;
             outline: none;
             flex: 1;
-            min-width: 150px;
+            min-width: 120px;
+            padding: var(--spacing-xs);
             font-family: var(--font-primary);
         }
 
-        /* Preview Card */
-        .preview-card {
+        /* ==============================================
+           PREVIEW SECTION - Clean presentation
+           ============================================== */
+        .preview-section {
             background: var(--color-foam);
             border: 2px dashed var(--color-sand);
             border-radius: 15px;
-            padding: var(--spacing-lg);
-            margin-top: var(--spacing-md);
+            padding: var(--spacing-xl);
+            margin-top: var(--spacing-xl);
         }
 
         .preview-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 2px solid var(--color-sand);
         }
 
         .preview-title {
-            color: var(--color-sand);
-            font-size: 1.1rem;
+            color: var(--color-deep);
+            font-size: 1.2rem;
             font-weight: var(--font-weight-bold);
         }
 
-        /* Form Actions */
-        .form-actions {
+        .preview-content {
+            display: grid;
+            gap: var(--spacing-md);
+        }
+
+        .preview-item {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .preview-label {
+            font-weight: var(--font-weight-bold);
+            color: var(--color-deep);
+            min-width: 140px;
+        }
+
+        .preview-value {
+            color: var(--color-gray-dark);
+        }
+
+        /* ==============================================
+           FORM NAVIGATION - Mobile-friendly buttons
+           ============================================== */
+        .form-navigation {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: var(--spacing-xl);
             padding-top: var(--spacing-xl);
-            border-top: 2px solid var(--color-bg-light);
+            border-top: 2px solid var(--color-foam);
+            gap: var(--spacing-md);
         }
 
-        .action-group {
+        .nav-left,
+        .nav-right {
             display: flex;
             gap: var(--spacing-md);
         }
 
-        /* Success/Error Banners */
-        .success-banner,
-        .error-banner {
-            padding: var(--spacing-md);
+        /* ==============================================
+           ALERTS - Success/Error messages
+           ============================================== */
+        .alert {
+            padding: var(--spacing-md) var(--spacing-lg);
             border-radius: 10px;
-            margin-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
             display: none;
+            animation: slideDown 0.3s ease;
         }
 
-        .success-banner {
-            background: #d4edda;
-            color: var(--color-success);
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .error-banner {
-            background: #f8d7da;
-            color: var(--color-danger);
-        }
-
-        .success-banner.show,
-        .error-banner.show {
+        .alert.show {
             display: block;
         }
 
-        /* Tips Card */
-        .tips-card {
-            background: linear-gradient(135deg, var(--color-sand) 0%, var(--color-calm) 100%);
-            color: white;
-            border-radius: 15px;
-            padding: var(--spacing-lg);
-            margin-bottom: var(--spacing-xl);
+        .alert-success {
+            background: #d4edda;
+            color: var(--color-success);
+            border: 1px solid #c3e6cb;
         }
 
-        .tips-card h3 {
-            margin-bottom: var(--spacing-md);
-            color: white;
+        .alert-error {
+            background: #f8d7da;
+            color: var(--color-danger);
+            border: 1px solid #f5c6cb;
         }
 
-        .tips-card ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .tips-card li {
-            padding: var(--spacing-sm) 0;
-            padding-left: var(--spacing-lg);
-            position: relative;
-        }
-
-        .tips-card li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            font-weight: var(--font-weight-bold);
-        }
-
-        /* Loading Overlay */
+        /* ==============================================
+           LOADING OVERLAY
+           ============================================== */
         .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.7);
             display: none;
             align-items: center;
             justify-content: center;
@@ -310,50 +417,183 @@
             display: flex;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .page-header {
-                padding-top: calc(var(--header-height-mobile) + var(--spacing-2xl));
-            }
+        .loading-content {
+            background: white;
+            padding: var(--spacing-xl);
+            border-radius: 15px;
+            text-align: center;
+        }
 
-            .page-header h1 {
-                font-size: 1.8rem;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .progress-step .step-label {
-                font-size: 0.8rem;
-            }
-
-            .form-actions {
-                flex-direction: column;
-                gap: var(--spacing-md);
-            }
-
-            .action-group {
-                width: 100%;
-                flex-direction: column;
-            }
-
-            .action-group .btn {
-                width: 100%;
+        /* ==============================================
+           MOBILE RESPONSIVE - Following pattern of other pages
+           ============================================== */
+        @media (max-width: 992px) {
+            .content-wrapper {
+                max-width: 100%;
+                padding: 0 var(--spacing-md);
             }
         }
 
-        @media (max-width: 576px) {
+        @media (max-width: 768px) {
+            /* Header adjustments */
             .page-header h1 {
-                font-size: 1.5rem;
+                font-size: 1.8rem;
             }
 
             .page-header p {
                 font-size: 1rem;
             }
 
-            .form-container {
-                margin-top: calc(var(--spacing-lg) * -1);
+            /* Progress indicator mobile */
+            .progress-track::before {
+                display: none;
+            }
+
+            .progress-track {
+                gap: var(--spacing-sm);
+            }
+
+            .step-indicator {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+
+            .step-title {
+                font-size: 0.75rem;
+            }
+
+            /* Form sections */
+            .form-step {
+                padding: var(--spacing-lg);
+            }
+
+            .form-grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            /* Tips banner mobile */
+            .tips-banner {
+                padding: var(--spacing-md);
+            }
+
+            .tips-banner h3 {
+                font-size: 1.1rem;
+            }
+
+            .tip-text {
+                font-size: 0.9rem;
+            }
+
+            /* Preview mobile */
+            .preview-header {
+                flex-direction: column;
+                gap: var(--spacing-md);
+                text-align: center;
+            }
+
+            .preview-item {
+                flex-direction: column;
+            }
+
+            .preview-label {
+                min-width: unset;
+            }
+
+            /* Navigation mobile */
+            .form-navigation {
+                flex-direction: column;
+            }
+
+            .nav-left,
+            .nav-right {
+                width: 100%;
+            }
+
+            .nav-left .btn,
+            .nav-right .btn {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 576px) {
+            /* Further mobile optimizations */
+            .page-header {
+                padding: var(--spacing-lg) 0;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-step {
+                padding: var(--spacing-md);
+                border-radius: 10px;
+            }
+
+            .section-header {
+                font-size: 1.3rem;
+            }
+
+            /* Compact progress on small screens */
+            .progress-container {
+                padding: var(--spacing-md);
+            }
+
+            .progress-step {
+                flex: initial;
+            }
+
+            .step-title {
+                display: none;
+            }
+
+            .progress-step.active .step-title {
+                display: block;
+                position: absolute;
+                top: 50px;
+                left: 50%;
+                transform: translateX(-50%);
+                white-space: nowrap;
+            }
+
+            /* Buttons full width on mobile */
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* ==============================================
+           ACCESSIBILITY & FOCUS STATES
+           ============================================== */
+        .form-control:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--color-sand);
+            box-shadow: 0 0 0 3px rgba(243, 179, 56, 0.1);
+        }
+
+        .btn:focus {
+            outline: 2px solid var(--color-sand);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .form-control,
+            select,
+            textarea {
+                border-width: 2px;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
         }
     </style>
@@ -365,267 +605,307 @@
     <div class="page-header">
         <div class="container">
             <h1>Post a Speaking Opportunity</h1>
-            <p>Find the perfect speaker for your event - completely free!</p>
+            <p>Find the perfect speaker for your event</p>
         </div>
     </div>
 
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <div class="form-container">
-                <!-- Success/Error Messages -->
-                <div class="success-banner" id="successBanner">
-                    ✅ Your opportunity has been posted successfully! Speakers will start applying soon.
+            <div class="content-wrapper">
+                <!-- Alert Messages -->
+                <div class="alert alert-success" id="successAlert">
+                    ✅ Your opportunity has been posted successfully!
                 </div>
                 
-                <div class="error-banner" id="errorBanner">
-                    ⚠️ Please fill in all required fields before submitting.
+                <div class="alert alert-error" id="errorAlert">
+                    ⚠️ Please fill in all required fields
                 </div>
 
-                <!-- Progress Bar -->
-                <div class="progress-bar">
-                    <div class="progress-steps">
-                        <div class="progress-step active" id="step1">
-                            <div class="step-circle">1</div>
-                            <div class="step-label">Event Details</div>
+                <!-- Progress Indicator -->
+                <div class="progress-container">
+                    <div class="progress-track">
+                        <div class="progress-step active" id="progress1">
+                            <div class="step-indicator">1</div>
+                            <div class="step-title">Event Details</div>
                         </div>
-                        <div class="progress-step" id="step2">
-                            <div class="step-circle">2</div>
-                            <div class="step-label">Requirements</div>
+                        <div class="progress-step" id="progress2">
+                            <div class="step-indicator">2</div>
+                            <div class="step-title">Requirements</div>
                         </div>
-                        <div class="progress-step" id="step3">
-                            <div class="step-circle">3</div>
-                            <div class="step-label">Review & Post</div>
+                        <div class="progress-step" id="progress3">
+                            <div class="step-indicator">3</div>
+                            <div class="step-title">Review</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Tips Card -->
-                <div class="tips-card">
-                    <h3>💡 Tips for a Great Posting</h3>
-                    <ul>
-                        <li>Be specific about your event and audience</li>
-                        <li>Include the event date and duration</li>
-                        <li>Mention any travel or expense coverage</li>
-                        <li>Describe the impact speakers can make</li>
-                        <li>Set a reasonable application deadline</li>
-                    </ul>
+                <!-- Tips Banner -->
+                <div class="tips-banner">
+                    <h3>💡 Create a Great Opportunity Post</h3>
+                    <div class="tips-list">
+                        <div class="tip-item">
+                            <span class="tip-icon">✓</span>
+                            <span class="tip-text">Be specific about your event and audience</span>
+                        </div>
+                        <div class="tip-item">
+                            <span class="tip-icon">✓</span>
+                            <span class="tip-text">Include the event date and duration</span>
+                        </div>
+                        <div class="tip-item">
+                            <span class="tip-icon">✓</span>
+                            <span class="tip-text">Mention any travel or expense coverage</span>
+                        </div>
+                        <div class="tip-item">
+                            <span class="tip-icon">✓</span>
+                            <span class="tip-text">Describe the impact speakers can make</span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Form -->
                 <form id="opportunityForm">
                     <!-- Step 1: Event Details -->
-                    <div class="form-section" id="section1">
-                        <h2>Event Details</h2>
+                    <div class="form-step active" id="step1">
+                        <h2 class="section-header">Event Details</h2>
                         
-                        <div class="form-group">
-                            <label class="form-label" for="title">Event Title <span class="required">*</span></label>
-                            <input type="text" id="title" name="title" class="form-control" required 
-                                   placeholder="e.g., Annual Business Summit 2025">
-                            <div class="help-text">Choose a clear, descriptive title that speakers will understand</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="speaker_type">Speaker Role <span class="required">*</span></label>
-                            <select id="speaker_type" name="speaker_type" class="form-control" required>
-                                <option value="">Select a role</option>
-                                <option value="Keynote Speaker">Keynote Speaker</option>
-                                <option value="Workshop Facilitator">Workshop Facilitator</option>
-                                <option value="Panel Moderator">Panel Moderator</option>
-                                <option value="Panel Participant">Panel Participant</option>
-                                <option value="Training Instructor">Training Instructor</option>
-                                <option value="Breakout Session Speaker">Breakout Session Speaker</option>
-                                <option value="Webinar Presenter">Webinar Presenter</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="description">Event Description <span class="required">*</span></label>
-                            <textarea id="description" name="description" class="form-control" required 
-                                      placeholder="Describe your event, its purpose, and what you're looking for in a speaker..."></textarea>
-                            <div class="char-counter" id="descCounter">0 / 500 characters</div>
-                        </div>
-                        
-                        <div class="form-row">
+                        <div class="form-grid">
                             <div class="form-group">
-                                <label class="form-label" for="event_date">Event Date <span class="required">*</span></label>
-                                <input type="date" id="event_date" name="event_date" class="form-control" required>
+                                <label class="form-label" for="title">
+                                    Event Title <span class="required-mark">*</span>
+                                </label>
+                                <input type="text" id="title" name="title" class="form-control" required 
+                                       placeholder="e.g., Annual Business Summit 2025">
+                                <div class="form-hint">Choose a clear, descriptive title</div>
                             </div>
                             
                             <div class="form-group">
-                                <label class="form-label" for="event_time">Event Time <span class="required">*</span></label>
-                                <input type="time" id="event_time" name="event_time" class="form-control" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label" for="duration">Speaking Duration</label>
-                                <select id="duration" name="duration" class="form-control">
-                                    <option value="">Select duration</option>
-                                    <option value="0.25">15 minutes</option>
-                                    <option value="0.5">30 minutes</option>
-                                    <option value="0.75">45 minutes</option>
-                                    <option value="1">1 hour</option>
-                                    <option value="1.5">90 minutes</option>
-                                    <option value="2">2 hours</option>
-                                    <option value="4">Half day (3-4 hours)</option>
-                                    <option value="8">Full day (6-8 hours)</option>
+                                <label class="form-label" for="speaker_type">
+                                    Speaker Role <span class="required-mark">*</span>
+                                </label>
+                                <select id="speaker_type" name="speaker_type" class="form-control" required>
+                                    <option value="">Select a role</option>
+                                    <option value="Keynote Speaker">Keynote Speaker</option>
+                                    <option value="Workshop Facilitator">Workshop Facilitator</option>
+                                    <option value="Panel Moderator">Panel Moderator</option>
+                                    <option value="Panel Participant">Panel Participant</option>
+                                    <option value="Training Instructor">Training Instructor</option>
+                                    <option value="Breakout Session Speaker">Breakout Session Speaker</option>
+                                    <option value="Webinar Presenter">Webinar Presenter</option>
                                 </select>
                             </div>
                             
                             <div class="form-group">
-                                <label class="form-label" for="event_format">Event Format <span class="required">*</span></label>
-                                <select id="event_format" name="event_format" class="form-control" required>
-                                    <option value="">Select format</option>
-                                    <option value="In-Person">In-Person</option>
-                                    <option value="Virtual">Virtual/Online</option>
-                                    <option value="Hybrid">Hybrid (In-Person + Virtual)</option>
-                                </select>
+                                <label class="form-label" for="description">
+                                    Event Description <span class="required-mark">*</span>
+                                </label>
+                                <textarea id="description" name="description" class="form-control" required 
+                                          rows="4" placeholder="Describe your event and what you're looking for..."></textarea>
+                                <div class="char-counter" id="descCounter">0 / 500</div>
+                            </div>
+                            
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="event_date">
+                                        Event Date <span class="required-mark">*</span>
+                                    </label>
+                                    <input type="date" id="event_date" name="event_date" class="form-control" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="event_time">
+                                        Event Time <span class="required-mark">*</span>
+                                    </label>
+                                    <input type="time" id="event_time" name="event_time" class="form-control" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="duration">Duration</label>
+                                    <select id="duration" name="duration" class="form-control">
+                                        <option value="">Select duration</option>
+                                        <option value="0.25">15 minutes</option>
+                                        <option value="0.5">30 minutes</option>
+                                        <option value="0.75">45 minutes</option>
+                                        <option value="1">1 hour</option>
+                                        <option value="1.5">90 minutes</option>
+                                        <option value="2">2 hours</option>
+                                        <option value="4">Half day</option>
+                                        <option value="8">Full day</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="event_format">
+                                        Format <span class="required-mark">*</span>
+                                    </label>
+                                    <select id="event_format" name="event_format" class="form-control" required>
+                                        <option value="">Select format</option>
+                                        <option value="In-Person">In-Person</option>
+                                        <option value="Virtual">Virtual/Online</option>
+                                        <option value="Hybrid">Hybrid</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="location">
+                                    Location <span class="required-mark">*</span>
+                                </label>
+                                <input type="text" id="location" name="location" class="form-control" required 
+                                       placeholder="e.g., Phoenix, AZ or Virtual">
                             </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label class="form-label" for="location">Event Location <span class="required">*</span></label>
-                            <input type="text" id="location" name="location" class="form-control" required 
-                                   placeholder="e.g., Phoenix Convention Center, Phoenix, AZ or Virtual">
-                        </div>
-                        
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" onclick="saveDraft()">Save as Draft</button>
-                            <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next: Requirements →</button>
+                        <div class="form-navigation">
+                            <div class="nav-left">
+                                <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                                    Save Draft
+                                </button>
+                            </div>
+                            <div class="nav-right">
+                                <button type="button" class="btn btn-primary" onclick="nextStep(2)">
+                                    Next: Requirements →
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Step 2: Requirements -->
-                    <div class="form-section" id="section2" style="display: none;">
-                        <h2>Speaker Requirements</h2>
+                    <div class="form-step" id="step2">
+                        <h2 class="section-header">Speaker Requirements</h2>
                         
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label" for="audience_size">Expected Audience Size</label>
-                                <input type="number" id="audience_size" name="audience_size" class="form-control"
-                                       placeholder="e.g., 100">
+                        <div class="form-grid">
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="audience_size">Audience Size</label>
+                                    <input type="number" id="audience_size" name="audience_size" class="form-control"
+                                           placeholder="e.g., 100">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="audience_type">Audience Type</label>
+                                    <input type="text" id="audience_type" name="audience_type" class="form-control"
+                                           placeholder="e.g., Business executives">
+                                </div>
                             </div>
                             
                             <div class="form-group">
-                                <label class="form-label" for="audience_type">Audience Type</label>
-                                <input type="text" id="audience_type" name="audience_type" class="form-control"
-                                       placeholder="e.g., Business executives, Students, Healthcare professionals">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="topics">Topics/Categories (Add up to 5)</label>
-                            <div class="tag-input-container" id="topicsContainer">
-                                <input type="text" class="tag-input" id="topicInput" 
-                                       placeholder="Type and press Enter to add topic">
-                            </div>
-                            <div class="help-text">Add relevant topics like: Leadership, Technology, Health, etc.</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="requirements">Specific Speaker Requirements</label>
-                            <textarea id="requirements" name="requirements" class="form-control"
-                                      placeholder="Any specific expertise, experience, or qualifications needed?"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="experience_level">Preferred Experience Level</label>
-                            <select id="experience_level" name="experience_level" class="form-control">
-                                <option value="">Any experience level</option>
-                                <option value="Beginner">Beginner (1-2 years)</option>
-                                <option value="Intermediate">Intermediate (3-5 years)</option>
-                                <option value="Experienced">Experienced (5+ years)</option>
-                                <option value="Expert">Expert (10+ years)</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label" for="compensation_amount">Speaking Fee ($)</label>
-                                <input type="number" id="compensation_amount" name="compensation_amount" class="form-control"
-                                       placeholder="0 for volunteer" min="0" step="100">
-                                <div class="help-text">Leave as 0 for volunteer opportunities</div>
+                                <label class="form-label" for="topics">Topics (Max 5)</label>
+                                <div class="topics-input-wrapper" id="topicsContainer">
+                                    <input type="text" class="topic-input" id="topicInput" 
+                                           placeholder="Type and press Enter">
+                                </div>
+                                <div class="form-hint">Add topics like: Leadership, Technology, Health</div>
                             </div>
                             
                             <div class="form-group">
-                                <label class="form-label" for="compensation_type">Compensation Type</label>
-                                <select id="compensation_type" name="compensation_type" class="form-control">
-                                    <option value="None">Volunteer (No payment)</option>
-                                    <option value="Fixed">Fixed Fee</option>
-                                    <option value="Hourly">Hourly Rate</option>
-                                    <option value="Negotiable">Negotiable</option>
-                                </select>
+                                <label class="form-label" for="requirements">Speaker Requirements</label>
+                                <textarea id="requirements" name="requirements" class="form-control" rows="3"
+                                          placeholder="Any specific expertise needed?"></textarea>
                             </div>
-                        </div>
+                            
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="compensation_amount">Speaking Fee ($)</label>
+                                    <input type="number" id="compensation_amount" name="compensation_amount" 
+                                           class="form-control" placeholder="0 for volunteer" min="0" step="100">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="compensation_type">Compensation Type</label>
+                                    <select id="compensation_type" name="compensation_type" class="form-control">
+                                        <option value="None">Volunteer</option>
+                                        <option value="Fixed">Fixed Fee</option>
+                                        <option value="Hourly">Hourly Rate</option>
+                                        <option value="Negotiable">Negotiable</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label" for="travel_covered">Travel Covered?</label>
-                                <select id="travel_covered" name="travel_covered" class="form-control">
-                                    <option value="false">No</option>
-                                    <option value="true">Yes</option>
-                                </select>
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="travel_covered">Travel Covered?</label>
+                                    <select id="travel_covered" name="travel_covered" class="form-control">
+                                        <option value="false">No</option>
+                                        <option value="true">Yes</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="accommodation_covered">Accommodation?</label>
+                                    <select id="accommodation_covered" name="accommodation_covered" class="form-control">
+                                        <option value="false">No</option>
+                                        <option value="true">Yes</option>
+                                    </select>
+                                </div>
                             </div>
                             
                             <div class="form-group">
-                                <label class="form-label" for="accommodation_covered">Accommodation Covered?</label>
-                                <select id="accommodation_covered" name="accommodation_covered" class="form-control">
-                                    <option value="false">No</option>
-                                    <option value="true">Yes</option>
-                                </select>
+                                <label class="form-label" for="application_deadline">
+                                    Application Deadline <span class="required-mark">*</span>
+                                </label>
+                                <input type="date" id="application_deadline" name="application_deadline" 
+                                       class="form-control" required>
+                                <div class="form-hint">Give speakers at least 1-2 weeks to apply</div>
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="additional_benefits">Additional Benefits</label>
-                            <textarea id="additional_benefits" name="additional_benefits" class="form-control"
-                                      placeholder="e.g., Meals provided, networking opportunities, recording rights, etc."></textarea>
-                        </div>
                         
-                        <div class="form-group">
-                            <label class="form-label" for="application_deadline">Application Deadline <span class="required">*</span></label>
-                            <input type="date" id="application_deadline" name="application_deadline" class="form-control" required>
-                            <div class="help-text">Give speakers at least 1-2 weeks to apply</div>
-                        </div>
-                        
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" onclick="previousStep(1)">← Previous</button>
-                            <div class="action-group">
-                                <button type="button" class="btn btn-secondary" onclick="saveDraft()">Save as Draft</button>
-                                <button type="button" class="btn btn-primary" onclick="nextStep(3)">Next: Review →</button>
+                        <div class="form-navigation">
+                            <div class="nav-left">
+                                <button type="button" class="btn btn-secondary" onclick="previousStep(1)">
+                                    ← Previous
+                                </button>
+                            </div>
+                            <div class="nav-right">
+                                <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                                    Save Draft
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="nextStep(3)">
+                                    Review →
+                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Step 3: Review & Post -->
-                    <div class="form-section" id="section3" style="display: none;">
-                        <h2>Review Your Opportunity</h2>
+                    <div class="form-step" id="step3">
+                        <h2 class="section-header">Review Your Opportunity</h2>
                         
-                        <div class="preview-card">
+                        <div class="preview-section">
                             <div class="preview-header">
                                 <div class="preview-title">Preview</div>
-                                <button type="button" class="btn btn-secondary" onclick="editSection(1)">Edit Details</button>
+                                <button type="button" class="btn btn-secondary btn-sm" onclick="editSection(1)">
+                                    Edit Details
+                                </button>
                             </div>
                             
-                            <div id="previewContent">
-                                <!-- Preview content will be populated by JavaScript -->
+                            <div class="preview-content" id="previewContent">
+                                <!-- Preview will be populated by JavaScript -->
                             </div>
                         </div>
                         
-                        <div class="form-group">
+                        <div class="form-group" style="margin-top: var(--spacing-xl);">
                             <label>
                                 <input type="checkbox" id="agreeTerms" required>
-                                I agree to the <a href="/terms.html" target="_blank">Terms of Service</a> and confirm that this is a legitimate speaking opportunity
+                                I agree to the <a href="/terms.html" target="_blank">Terms of Service</a>
                             </label>
                         </div>
                         
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" onclick="previousStep(2)">← Previous</button>
-                            <div class="action-group">
-                                <button type="button" class="btn btn-secondary" onclick="saveDraft()">Save as Draft</button>
-                                <button type="submit" class="btn btn-primary" id="submitBtn">Post Opportunity</button>
+                        <div class="form-navigation">
+                            <div class="nav-left">
+                                <button type="button" class="btn btn-secondary" onclick="previousStep(2)">
+                                    ← Previous
+                                </button>
+                            </div>
+                            <div class="nav-right">
+                                <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                                    Save Draft
+                                </button>
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
+                                    Post Opportunity
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -638,7 +918,10 @@
 
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p style="margin-top: var(--spacing-md);">Posting your opportunity...</p>
+        </div>
     </div>
 
     <!-- Load Supabase from CDN -->
@@ -685,7 +968,7 @@
                 // Verify user exists
                 if (!currentUser) {
                     console.error('[Post Opportunity] No user profile found');
-                    alert('User profile not found. Please try logging in again.');
+                    showAlert('error', 'User profile not found. Please try logging in again.');
                     window.location.href = '/login.html';
                     return;
                 }
@@ -694,7 +977,7 @@
                 console.log('[Post Opportunity] User member_type:', currentUser.member_type);
                 if (currentUser.member_type !== 'Organization') {
                     console.error('[Post Opportunity] User is not an organization');
-                    alert('Only organizations can post opportunities');
+                    showAlert('error', 'Only organizations can post opportunities');
                     window.location.href = '/dashboard.html';
                     return;
                 }
@@ -714,7 +997,7 @@
 
             } catch (error) {
                 console.error('[Post Opportunity] Initialization error:', error);
-                showError('Failed to initialize. Please try again.');
+                showAlert('error', 'Failed to initialize. Please try again.');
             }
         }
 
@@ -731,7 +1014,7 @@
                     } else if (attempts < maxAttempts) {
                         setTimeout(check, 250);
                     } else {
-                        showError('Failed to initialize. Please refresh the page.');
+                        showAlert('error', 'Failed to initialize. Please refresh the page.');
                     }
                 }
                 check();
@@ -806,13 +1089,14 @@
             const length = textarea.value.length;
             const max = 500;
             
-            counter.textContent = `${length} / ${max} characters`;
+            counter.textContent = `${length} / ${max}`;
             
             if (length > max) {
                 counter.classList.add('error');
                 textarea.value = textarea.value.substring(0, max);
             } else if (length > max * 0.9) {
                 counter.classList.add('warning');
+                counter.classList.remove('error');
             } else {
                 counter.classList.remove('warning', 'error');
             }
@@ -827,6 +1111,8 @@
                 topics.push(topic);
                 renderTopics();
                 input.value = '';
+            } else if (topics.length >= 5) {
+                showAlert('error', 'Maximum 5 topics allowed');
             }
         }
 
@@ -837,18 +1123,18 @@
 
         function renderTopics() {
             const container = document.getElementById('topicsContainer');
-            const input = container.querySelector('.tag-input');
+            const input = container.querySelector('.topic-input');
             
             // Clear existing tags
-            container.querySelectorAll('.tag').forEach(tag => tag.remove());
+            container.querySelectorAll('.topic-tag').forEach(tag => tag.remove());
             
             // Add tags before input
             topics.forEach((topic, index) => {
                 const tag = document.createElement('div');
-                tag.className = 'tag';
+                tag.className = 'topic-tag';
                 tag.innerHTML = `
                     ${topic}
-                    <span class="tag-remove" onclick="removeTopic(${index})">×</span>
+                    <span class="topic-remove" onclick="removeTopic(${index})">×</span>
                 `;
                 container.insertBefore(tag, input);
             });
@@ -869,29 +1155,26 @@
         }
 
         function showStep(step) {
-            // Hide all sections
-            document.querySelectorAll('.form-section').forEach(section => {
-                section.style.display = 'none';
+            // Hide all steps
+            document.querySelectorAll('.form-step').forEach(section => {
+                section.classList.remove('active');
             });
             
-            // Show current section
-            document.getElementById(`section${step}`).style.display = 'block';
+            // Show current step
+            document.getElementById(`step${step}`).classList.add('active');
             
-            // Update progress bar
+            // Update progress
             document.querySelectorAll('.progress-step').forEach((el, index) => {
-                if (index < step) {
+                el.classList.remove('active', 'completed');
+                if (index < step - 1) {
                     el.classList.add('completed');
-                    el.classList.remove('active');
                 } else if (index === step - 1) {
                     el.classList.add('active');
-                    el.classList.remove('completed');
-                } else {
-                    el.classList.remove('active', 'completed');
                 }
             });
             
             currentStep = step;
-            window.scrollTo(0, 0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function editSection(step) {
@@ -901,11 +1184,11 @@
         // Validation
         function validateStep(step) {
             let isValid = true;
-            const section = document.getElementById(`section${step}`);
+            const section = document.getElementById(`step${step}`);
             
             section.querySelectorAll('[required]').forEach(field => {
                 if (!field.value) {
-                    field.style.borderColor = var(--color-danger);
+                    field.style.borderColor = 'var(--color-danger)';
                     isValid = false;
                 } else {
                     field.style.borderColor = '';
@@ -913,7 +1196,7 @@
             });
             
             if (!isValid) {
-                showError('Please fill in all required fields');
+                showAlert('error', 'Please fill in all required fields');
             }
             
             return isValid;
@@ -931,19 +1214,50 @@
             const accommodation = formData.get('accommodation_covered') === 'true';
             
             preview.innerHTML = `
-                <h3>${formData.get('title') || 'Untitled'}</h3>
-                <p><strong>Role:</strong> ${formData.get('speaker_type') || 'Not specified'}</p>
-                <p><strong>Date:</strong> ${eventDate ? new Date(eventDate).toLocaleDateString() : 'TBD'} at ${eventTime || 'TBD'}</p>
-                <p><strong>Location:</strong> ${formData.get('location') || 'TBD'}</p>
-                <p><strong>Duration:</strong> ${formData.get('duration') ? formData.get('duration') + ' hours' : 'TBD'}</p>
-                <p><strong>Format:</strong> ${formData.get('event_format') || 'TBD'}</p>
-                <p><strong>Audience:</strong> ${formData.get('audience_size') || 'TBD'} ${formData.get('audience_type') || ''}</p>
-                <p><strong>Compensation:</strong> ${compensation > 0 ? '$' + compensation : 'Volunteer'}</p>
-                <p><strong>Travel:</strong> ${travel ? 'Covered' : 'Not covered'}</p>
-                <p><strong>Accommodation:</strong> ${accommodation ? 'Covered' : 'Not covered'}</p>
-                <p><strong>Description:</strong><br>${formData.get('description') || ''}</p>
-                ${topics.length > 0 ? `<p><strong>Topics:</strong> ${topics.join(', ')}</p>` : ''}
-                <p><strong>Application Deadline:</strong> ${formData.get('application_deadline') ? new Date(formData.get('application_deadline')).toLocaleDateString() : 'TBD'}</p>
+                <div class="preview-item">
+                    <span class="preview-label">Event Title:</span>
+                    <span class="preview-value">${formData.get('title') || 'Not specified'}</span>
+                </div>
+                <div class="preview-item">
+                    <span class="preview-label">Speaker Role:</span>
+                    <span class="preview-value">${formData.get('speaker_type') || 'Not specified'}</span>
+                </div>
+                <div class="preview-item">
+                    <span class="preview-label">Date & Time:</span>
+                    <span class="preview-value">${eventDate ? new Date(eventDate).toLocaleDateString() : 'TBD'} at ${eventTime || 'TBD'}</span>
+                </div>
+                <div class="preview-item">
+                    <span class="preview-label">Location:</span>
+                    <span class="preview-value">${formData.get('location') || 'TBD'}</span>
+                </div>
+                <div class="preview-item">
+                    <span class="preview-label">Format:</span>
+                    <span class="preview-value">${formData.get('event_format') || 'TBD'}</span>
+                </div>
+                <div class="preview-item">
+                    <span class="preview-label">Audience:</span>
+                    <span class="preview-value">${formData.get('audience_size') || 'TBD'} ${formData.get('audience_type') || ''}</span>
+                </div>
+                <div class="preview-item">
+                    <span class="preview-label">Compensation:</span>
+                    <span class="preview-value">${compensation > 0 ? '$' + compensation : 'Volunteer'}</span>
+                </div>
+                <div class="preview-item">
+                    <span class="preview-label">Travel/Accommodation:</span>
+                    <span class="preview-value">
+                        Travel: ${travel ? 'Covered' : 'Not covered'} | 
+                        Accommodation: ${accommodation ? 'Covered' : 'Not covered'}
+                    </span>
+                </div>
+                ${topics.length > 0 ? `
+                <div class="preview-item">
+                    <span class="preview-label">Topics:</span>
+                    <span class="preview-value">${topics.join(', ')}</span>
+                </div>` : ''}
+                <div class="preview-item">
+                    <span class="preview-label">Application Deadline:</span>
+                    <span class="preview-value">${formData.get('application_deadline') ? new Date(formData.get('application_deadline')).toLocaleDateString() : 'TBD'}</span>
+                </div>
             `;
         }
 
@@ -956,7 +1270,7 @@
             }
             
             if (!document.getElementById('agreeTerms').checked) {
-                showError('Please agree to the terms of service');
+                showAlert('error', 'Please agree to the terms of service');
                 return;
             }
             
@@ -967,14 +1281,6 @@
             try {
                 const formData = new FormData(e.target);
                 
-                // Map experience level
-                let experienceYears = null;
-                const expLevel = formData.get('experience_level');
-                if (expLevel === 'Beginner') experienceYears = 1;
-                else if (expLevel === 'Intermediate') experienceYears = 3;
-                else if (expLevel === 'Experienced') experienceYears = 5;
-                else if (expLevel === 'Expert') experienceYears = 10;
-                
                 // Prepare opportunity data
                 const opportunityData = {
                     title: formData.get('title'),
@@ -983,26 +1289,20 @@
                     event_date: formData.get('event_date'),
                     event_time: formData.get('event_time') || null,
                     location: formData.get('location'),
-                    venue_name: null,
                     event_format: formData.get('event_format'),
                     duration_hours: parseFloat(formData.get('duration')) || null,
                     audience_size: parseInt(formData.get('audience_size')) || null,
                     audience_type: formData.get('audience_type') || null,
                     topics: topics,
                     required_specialties: formData.get('requirements') ? [formData.get('requirements')] : [],
-                    preferred_experience_years: experienceYears,
                     compensation_amount: parseFloat(formData.get('compensation_amount')) || 0,
                     compensation_type: formData.get('compensation_type') || 'None',
                     travel_covered: formData.get('travel_covered') === 'true',
                     accommodation_covered: formData.get('accommodation_covered') === 'true',
-                    additional_benefits: formData.get('additional_benefits') || null,
-                    additional_terms: null,
                     application_deadline: formData.get('application_deadline'),
                     status: 'Open',
                     posted_by: currentUser.id,
-                    organization_id: organizationData ? organizationData.id : null,
-                    application_count: 0,
-                    view_count: 0
+                    organization_id: organizationData ? organizationData.id : null
                 };
 
                 console.log('[Post Opportunity] Submitting opportunity:', opportunityData);
@@ -1024,7 +1324,7 @@
                 // Clear draft
                 localStorage.removeItem('opportunityDraft');
                 
-                showSuccess('Your opportunity has been posted successfully!');
+                showAlert('success', 'Your opportunity has been posted successfully!');
                 
                 // Redirect
                 setTimeout(() => {
@@ -1033,7 +1333,7 @@
                 
             } catch (error) {
                 console.error('[Post Opportunity] Submit error:', error);
-                showError(error.message || 'Failed to post opportunity. Please try again.');
+                showAlert('error', error.message || 'Failed to post opportunity. Please try again.');
                 submitBtn.disabled = false;
             } finally {
                 showLoading(false);
@@ -1047,7 +1347,7 @@
             data.topics = topics;
             
             localStorage.setItem('opportunityDraft', JSON.stringify(data));
-            showSuccess('Draft saved successfully!');
+            showAlert('success', 'Draft saved successfully!');
         }
 
         // Load draft
@@ -1067,6 +1367,8 @@
                         topics = data.topics;
                         renderTopics();
                     }
+                    
+                    showAlert('success', 'Draft loaded successfully');
                 } catch (error) {
                     console.error('[Post Opportunity] Error loading draft:', error);
                 }
@@ -1074,18 +1376,23 @@
         }
 
         // UI helpers
-        function showSuccess(message) {
-            const banner = document.getElementById('successBanner');
-            banner.textContent = '✅ ' + message;
-            banner.classList.add('show');
-            setTimeout(() => banner.classList.remove('show'), 5000);
-        }
-
-        function showError(message) {
-            const banner = document.getElementById('errorBanner');
-            banner.textContent = '⚠️ ' + message;
-            banner.classList.add('show');
-            setTimeout(() => banner.classList.remove('show'), 5000);
+        function showAlert(type, message) {
+            const successAlert = document.getElementById('successAlert');
+            const errorAlert = document.getElementById('errorAlert');
+            
+            // Hide all alerts first
+            successAlert.classList.remove('show');
+            errorAlert.classList.remove('show');
+            
+            if (type === 'success') {
+                successAlert.textContent = '✅ ' + message;
+                successAlert.classList.add('show');
+                setTimeout(() => successAlert.classList.remove('show'), 5000);
+            } else {
+                errorAlert.textContent = '⚠️ ' + message;
+                errorAlert.classList.add('show');
+                setTimeout(() => errorAlert.classList.remove('show'), 5000);
+            }
         }
 
         function showLoading(show) {

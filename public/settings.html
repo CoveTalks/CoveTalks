@@ -4,232 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings - CoveTalks</title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- Page-specific styles ONLY for unique elements -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header */
-        header {
-            background: white;
-            color: #333;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        
-        .logo-img {
-            height: 70px;
-            width: auto;
-            display: block;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #155588;
-        }
-
-        .nav-links a.active {
-            color: #155588;
-            border-bottom: 2px solid #155588;
-            padding-bottom: 2px;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1e3d6f;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #155588;
-            border: 2px solid #155588;
-        }
-
-        .btn-secondary:hover {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #c82333;
-            transform: translateY(-2px);
-        }
-
-        .btn-success {
-            background: #27ae60;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #229954;
-            transform: translateY(-2px);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        /* User Menu */
-        .user-menu {
-            position: relative;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: transform 0.2s;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.05);
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.75rem 1.25rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #e1e8ed;
-            margin: 0;
-        }
-
-        /* Settings Layout */
-        .settings-container {
-            padding-top: 100px;
-            padding-bottom: 3rem;
-            min-height: 100vh;
-        }
-
+        /* Settings Header */
         .settings-header {
-            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
+            padding: var(--spacing-2xl) 0;
+            margin-bottom: var(--spacing-xl);
         }
 
         .settings-header h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: var(--spacing-sm);
+            color: white;
         }
 
         .settings-header p {
@@ -240,52 +34,46 @@
         .settings-grid {
             display: grid;
             grid-template-columns: 250px 1fr;
-            gap: 2rem;
+            gap: var(--spacing-xl);
         }
 
         /* Sidebar Navigation */
         .settings-nav {
             background: white;
             border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
             height: fit-content;
             position: sticky;
-            top: 100px;
+            top: calc(var(--header-height) + var(--spacing-md));
         }
 
         .settings-nav-item {
             display: block;
-            padding: 0.75rem 1rem;
+            padding: var(--spacing-sm) var(--spacing-md);
             color: #333;
             text-decoration: none;
             border-radius: 8px;
-            margin-bottom: 0.5rem;
-            transition: all 0.3s;
+            margin-bottom: var(--spacing-sm);
+            transition: all var(--transition-fast);
         }
 
         .settings-nav-item:hover {
-            background: #f8f9fa;
+            background: var(--color-foam);
         }
 
         .settings-nav-item.active {
             background: #e8f4fd;
-            color: #155588;
-            font-weight: 500;
-        }
-
-        .settings-nav-item i {
-            margin-right: 0.5rem;
-            width: 20px;
-            display: inline-block;
+            color: var(--color-deep);
+            font-weight: var(--font-weight-medium);
         }
 
         /* Settings Content */
         .settings-content {
             background: white;
             border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
         }
 
         .settings-section {
@@ -297,68 +85,20 @@
         }
 
         .section-title {
-            color: #155588;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        /* Form Styles */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-            font-family: inherit;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #155588;
-        }
-
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .form-help {
-            font-size: 0.85rem;
-            color: #666;
-            margin-top: 0.25rem;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 2px solid var(--color-bg-light);
         }
 
         /* Profile Image Upload */
         .profile-image-section {
             display: flex;
             align-items: center;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background: #f8f9fa;
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            padding: var(--spacing-lg);
+            background: var(--color-foam);
             border-radius: 10px;
         }
 
@@ -366,7 +106,7 @@
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            background: #e1e8ed;
+            background: var(--color-border);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -382,7 +122,7 @@
 
         .profile-image-placeholder {
             font-size: 3rem;
-            color: #999;
+            color: var(--color-gray-light);
         }
 
         .image-upload-actions {
@@ -390,13 +130,13 @@
         }
 
         .image-upload-actions h3 {
-            margin-bottom: 0.5rem;
+            margin-bottom: var(--spacing-sm);
             color: #333;
         }
 
         .image-upload-actions p {
-            color: #666;
-            margin-bottom: 1rem;
+            color: var(--color-gray);
+            margin-bottom: var(--spacing-md);
             font-size: 0.9rem;
         }
 
@@ -412,45 +152,45 @@
 
         .upload-label {
             display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background: #155588;
+            padding: var(--spacing-sm) var(--spacing-lg);
+            background: var(--color-deep);
             color: white;
             border-radius: 25px;
             cursor: pointer;
-            transition: all 0.3s;
-            margin-right: 1rem;
+            transition: all var(--transition-fast);
+            margin-right: var(--spacing-md);
         }
 
         .upload-label:hover {
-            background: #1e3d6f;
+            background: var(--color-deep-dark);
             transform: translateY(-2px);
         }
 
-        /* Specialties Tags */
+        /* Specialties Input */
         .specialties-input {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
-            padding: 0.75rem;
-            border: 2px solid #e1e8ed;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm);
+            border: 2px solid var(--color-border);
             border-radius: 8px;
             min-height: 50px;
         }
 
         .specialty-tag {
             background: #e8f4fd;
-            color: #155588;
+            color: var(--color-deep);
             padding: 0.25rem 0.75rem;
             border-radius: 15px;
             font-size: 0.9rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: var(--spacing-sm);
         }
 
         .specialty-tag .remove {
             cursor: pointer;
-            font-weight: bold;
+            font-weight: var(--font-weight-bold);
         }
 
         .specialty-input-field {
@@ -499,7 +239,7 @@
         }
 
         input:checked + .slider {
-            background-color: #155588;
+            background-color: var(--color-deep);
         }
 
         input:checked + .slider:before {
@@ -510,10 +250,10 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 1rem;
-            background: #f8f9fa;
+            padding: var(--spacing-md);
+            background: var(--color-foam);
             border-radius: 8px;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
         }
 
         .switch-label {
@@ -527,15 +267,15 @@
         }
 
         .switch-label span {
-            color: #666;
+            color: var(--color-gray);
             font-size: 0.85rem;
         }
 
-        /* Success/Error Messages */
+        /* Alert Messages */
         .alert {
-            padding: 1rem;
+            padding: var(--spacing-md);
             border-radius: 8px;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
             display: none;
         }
 
@@ -555,13 +295,25 @@
             border: 1px solid #f5c6cb;
         }
 
-        .alert-warning {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
+        /* Danger Zone */
+        .danger-zone {
+            border: 2px solid var(--color-danger);
+            border-radius: 10px;
+            padding: var(--spacing-lg);
+            background: #fff5f5;
         }
 
-        /* Loading State */
+        .danger-zone h3 {
+            color: var(--color-danger);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .danger-zone p {
+            color: var(--color-gray);
+            margin-bottom: var(--spacing-md);
+        }
+
+        /* Loading Overlay */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -579,55 +331,15 @@
             display: flex;
         }
 
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #155588;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Delete Account Section */
-        .danger-zone {
-            border: 2px solid #dc3545;
-            border-radius: 10px;
-            padding: 1.5rem;
-            background: #fff5f5;
-        }
-
-        .danger-zone h3 {
-            color: #dc3545;
-            margin-bottom: 1rem;
-        }
-
-        .danger-zone p {
-            color: #666;
-            margin-bottom: 1rem;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
             .settings-grid {
                 grid-template-columns: 1fr;
             }
 
             .settings-nav {
                 position: static;
-                margin-bottom: 2rem;
+                margin-bottom: var(--spacing-xl);
             }
 
             .form-row {
@@ -638,59 +350,38 @@
                 flex-direction: column;
                 text-align: center;
             }
+
+            .switch-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-md);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .settings-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .settings-content {
+                padding: var(--spacing-lg);
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="nav-container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
-                </a>
-                
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="opportunities.html">Opportunities</a></li>
-                    <li><a href="bookings.html">My Bookings</a></li>
-                    <li><a href="profile.html">Profile</a></li>
-                </ul>
-    
-                <div class="nav-right">
-                    <div class="auth-buttons hidden" id="authButtons">
-                        <a href="register.html" class="btn btn-secondary">Join</a>
-                        <a href="login.html" class="btn btn-primary">Login</a>
-                    </div>
-                    
-                    <div class="user-menu" id="userMenu">
-                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
-                        <div class="dropdown-menu" id="dropdownMenu">
-                            <a href="inbox.html">Inbox</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="settings.html">Settings</a>
-                            <a href="billing.html">Billing</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" onclick="logout(); return false;">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <!-- Header will be auto-injected by header.js -->
 
-    <!-- Settings Container -->
-    <div class="settings-container">
-        <!-- Settings Header -->
-        <div class="settings-header">
-            <div class="container">
-                <h1>Account Settings</h1>
-                <p>Manage your profile and account preferences</p>
-            </div>
+    <!-- Settings Header -->
+    <div class="settings-header">
+        <div class="container">
+            <h1>Account Settings</h1>
+            <p>Manage your profile and account preferences</p>
         </div>
+    </div>
 
-        <!-- Main Content -->
+    <!-- Main Content -->
+    <main class="main-content">
         <div class="container">
             <div class="settings-grid">
                 <!-- Sidebar Navigation -->
@@ -731,45 +422,45 @@
                         <form id="profileForm">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="firstName">First Name</label>
-                                    <input type="text" id="firstName" name="firstName" required>
+                                    <label class="form-label" for="firstName">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" name="firstName" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="lastName">Last Name</label>
-                                    <input type="text" id="lastName" name="lastName" required>
+                                    <label class="form-label" for="lastName">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" name="lastName" required>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="email">Email Address</label>
-                                <input type="email" id="email" name="email" required disabled>
+                                <label class="form-label" for="email">Email Address</label>
+                                <input type="email" class="form-control" id="email" name="email" required disabled>
                                 <p class="form-help">Contact support to change your email address</p>
                             </div>
 
                             <div class="form-group">
-                                <label for="phone">Phone Number</label>
-                                <input type="tel" id="phone" name="phone" placeholder="+1 (555) 123-4567">
+                                <label class="form-label" for="phone">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="+1 (555) 123-4567">
                             </div>
 
                             <div class="form-group">
-                                <label for="location">Location</label>
-                                <input type="text" id="location" name="location" placeholder="City, State">
+                                <label class="form-label" for="location">Location</label>
+                                <input type="text" class="form-control" id="location" name="location" placeholder="City, State">
                             </div>
 
                             <div class="form-group">
-                                <label for="bio">Bio</label>
-                                <textarea id="bio" name="bio" placeholder="Tell us about yourself and your speaking experience..."></textarea>
+                                <label class="form-label" for="bio">Bio</label>
+                                <textarea class="form-control" id="bio" name="bio" placeholder="Tell us about yourself and your speaking experience..."></textarea>
                                 <p class="form-help">This will appear on your public profile. Make it compelling!</p>
                             </div>
 
                             <div class="form-group">
-                                <label for="website">Website</label>
-                                <input type="url" id="website" name="website" placeholder="https://yourwebsite.com">
+                                <label class="form-label" for="website">Website</label>
+                                <input type="url" class="form-control" id="website" name="website" placeholder="https://yourwebsite.com">
                             </div>
 
                             <div class="form-group">
-                                <label for="linkedin">LinkedIn Profile</label>
-                                <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                                <label class="form-label" for="linkedin">LinkedIn Profile</label>
+                                <input type="url" class="form-control" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile">
                             </div>
 
                             <button type="submit" class="btn btn-primary">Save Profile</button>
@@ -782,17 +473,17 @@
                         
                         <form id="professionalForm">
                             <div class="form-group">
-                                <label for="title">Professional Title</label>
-                                <input type="text" id="title" name="title" placeholder="e.g., Keynote Speaker, Business Consultant">
+                                <label class="form-label" for="title">Professional Title</label>
+                                <input type="text" class="form-control" id="title" name="title" placeholder="e.g., Keynote Speaker, Business Consultant">
                             </div>
 
                             <div class="form-group">
-                                <label for="yearsExperience">Years of Speaking Experience</label>
-                                <input type="number" id="yearsExperience" name="yearsExperience" min="0" max="50">
+                                <label class="form-label" for="yearsExperience">Years of Speaking Experience</label>
+                                <input type="number" class="form-control" id="yearsExperience" name="yearsExperience" min="0" max="50">
                             </div>
 
                             <div class="form-group">
-                                <label>Speaking Topics</label>
+                                <label class="form-label">Speaking Topics</label>
                                 <div class="specialties-input" id="specialtiesInput">
                                     <input type="text" class="specialty-input-field" id="specialtyInput" 
                                         placeholder="Add a topic and press Enter">
@@ -802,18 +493,18 @@
 
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="minFee">Minimum Speaking Fee ($)</label>
-                                    <input type="number" id="minFee" name="minFee" min="0" placeholder="0">
+                                    <label class="form-label" for="minFee">Minimum Speaking Fee ($)</label>
+                                    <input type="number" class="form-control" id="minFee" name="minFee" min="0" placeholder="0">
                                 </div>
                                 <div class="form-group">
-                                    <label for="maxFee">Maximum Speaking Fee ($)</label>
-                                    <input type="number" id="maxFee" name="maxFee" min="0" placeholder="10000">
+                                    <label class="form-label" for="maxFee">Maximum Speaking Fee ($)</label>
+                                    <input type="number" class="form-control" id="maxFee" name="maxFee" min="0" placeholder="10000">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="audienceSize">Preferred Audience Size</label>
-                                <select id="audienceSize" name="audienceSize">
+                                <label class="form-label" for="audienceSize">Preferred Audience Size</label>
+                                <select class="form-control" id="audienceSize" name="audienceSize">
                                     <option value="">Any size</option>
                                     <option value="small">Small (< 50 people)</option>
                                     <option value="medium">Medium (50-200 people)</option>
@@ -823,8 +514,8 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="formats">Preferred Event Formats (select all that apply)</label>
-                                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <label class="form-label">Preferred Event Formats (select all that apply)</label>
+                                <div style="display: flex; flex-direction: column; gap: var(--spacing-sm);">
                                     <label><input type="checkbox" name="formats" value="In-Person"> In-Person</label>
                                     <label><input type="checkbox" name="formats" value="Virtual"> Virtual</label>
                                     <label><input type="checkbox" name="formats" value="Hybrid"> Hybrid</label>
@@ -841,19 +532,19 @@
                         
                         <form id="passwordForm">
                             <div class="form-group">
-                                <label for="currentPassword">Current Password</label>
-                                <input type="password" id="currentPassword" name="currentPassword" required>
+                                <label class="form-label" for="currentPassword">Current Password</label>
+                                <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
                             </div>
 
                             <div class="form-group">
-                                <label for="newPassword">New Password</label>
-                                <input type="password" id="newPassword" name="newPassword" required>
+                                <label class="form-label" for="newPassword">New Password</label>
+                                <input type="password" class="form-control" id="newPassword" name="newPassword" required>
                                 <p class="form-help">Must be at least 8 characters long</p>
                             </div>
 
                             <div class="form-group">
-                                <label for="confirmPassword">Confirm New Password</label>
-                                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                                <label class="form-label" for="confirmPassword">Confirm New Password</label>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
                             </div>
 
                             <button type="submit" class="btn btn-primary">Update Password</button>
@@ -968,7 +659,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
+    
+    <!-- Footer will be auto-injected by footer.js -->
 
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
@@ -979,435 +672,14 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <!-- Load config and Supabase client -->
-    <script src="js/config.js"></script>
-    <script src="js/supabase-client.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
     
-    <script>
-        // Page state
-        let currentUser = null;
-        let specialties = [];
-        let profileImageFile = null;
-
-        // Initialize page
-        async function initializePage() {
-            console.log('[Settings] Initializing page');
-            
-            // Wait for Supabase client
-            await waitForSupabase();
-            
-            try {
-                // Check authentication
-                const session = await window.covetalks.checkAuth();
-                if (!session) {
-                    // Not authenticated, redirect to login
-                    window.location.href = '/login.html?redirect=' + encodeURIComponent(window.location.href);
-                    return;
-                }
-                
-                // Get current user profile
-                currentUser = await window.covetalks.getCurrentUser();
-                if (!currentUser) {
-                    showAlert('Failed to load user profile', 'error');
-                    return;
-                }
-                
-                // Update navigation
-                updateNavigation(currentUser);
-                
-                // Load user data into forms
-                loadUserData();
-                
-            } catch (error) {
-                console.error('[Settings] Error:', error);
-                showAlert('Failed to initialize settings', 'error');
-            }
-        }
-
-        // Wait for Supabase client
-        function waitForSupabase() {
-            return new Promise((resolve) => {
-                let attempts = 0;
-                const maxAttempts = 20;
-                
-                function check() {
-                    attempts++;
-                    if (window.covetalks && window.covetalks.supabase) {
-                        resolve();
-                    } else if (attempts < maxAttempts) {
-                        setTimeout(check, 500);
-                    } else {
-                        console.error('Failed to load Supabase client');
-                        resolve();
-                    }
-                }
-                check();
-            });
-        }
-
-        // Update navigation
-        function updateNavigation(user) {
-            const userAvatar = document.getElementById('userAvatar');
-            if (user) {
-                const initials = user.name ? 
-                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 'U';
-                userAvatar.textContent = initials;
-            }
-        }
-
-        // Load user data into forms
-        function loadUserData() {
-            // Profile section
-            const nameParts = (currentUser.name || '').split(' ');
-            document.getElementById('firstName').value = nameParts[0] || '';
-            document.getElementById('lastName').value = nameParts.slice(1).join(' ') || '';
-            document.getElementById('email').value = currentUser.email || '';
-            document.getElementById('phone').value = currentUser.phone || '';
-            document.getElementById('location').value = currentUser.location || '';
-            document.getElementById('bio').value = currentUser.bio || '';
-            document.getElementById('website').value = currentUser.website || '';
-            document.getElementById('linkedin').value = currentUser.linkedin || '';
-            
-            // Profile image
-            if (currentUser.profile_image_url) {
-                const preview = document.getElementById('imagePreview');
-                preview.innerHTML = `<img src="${currentUser.profile_image_url}" alt="Profile">`;
-                document.getElementById('removeImageBtn').style.display = 'inline-block';
-            }
-            
-            // Professional details
-            document.getElementById('title').value = currentUser.title || '';
-            document.getElementById('yearsExperience').value = currentUser.years_experience || '';
-            
-            // Specialties
-            specialties = currentUser.specialties || [];
-            displaySpecialties();
-            
-            // Fee range
-            if (currentUser.speaking_fee_range) {
-                document.getElementById('minFee').value = currentUser.speaking_fee_range.min || '';
-                document.getElementById('maxFee').value = currentUser.speaking_fee_range.max || '';
-            }
-            
-            // Audience size
-            document.getElementById('audienceSize').value = currentUser.preferred_audience_size || '';
-            
-            // Event formats
-            const formats = currentUser.preferred_formats || [];
-            document.querySelectorAll('input[name="formats"]').forEach(checkbox => {
-                checkbox.checked = formats.includes(checkbox.value);
-            });
-        }
-
-        // Switch between sections
-        function switchSection(section) {
-            // Update nav
-            document.querySelectorAll('.settings-nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            event.target.closest('.settings-nav-item').classList.add('active');
-            
-            // Update content
-            document.querySelectorAll('.settings-section').forEach(sec => {
-                sec.classList.remove('active');
-            });
-            document.getElementById(`${section}-section`).classList.add('active');
-        }
-
-        // Profile form submission
-        document.getElementById('profileForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            showLoading(true);
-            
-            try {
-                // Upload image if changed
-                if (profileImageFile) {
-                    const result = await window.covetalks.uploadProfileImage(profileImageFile);
-                    currentUser.profile_image_url = result.url;
-                }
-                
-                // Prepare update data
-                const updates = {
-                    name: `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}`.trim(),
-                    phone: document.getElementById('phone').value,
-                    location: document.getElementById('location').value,
-                    bio: document.getElementById('bio').value,
-                    website: document.getElementById('website').value,
-                    linkedin: document.getElementById('linkedin').value
-                };
-                
-                // Update profile
-                await window.covetalks.updateProfile(updates);
-                
-                showAlert('Profile updated successfully!', 'success');
-                profileImageFile = null;
-            } catch (error) {
-                console.error('[Settings] Profile update error:', error);
-                showAlert('Failed to update profile', 'error');
-            } finally {
-                showLoading(false);
-            }
-        });
-
-        // Professional form submission
-        document.getElementById('professionalForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            showLoading(true);
-            
-            try {
-                const formats = [];
-                document.querySelectorAll('input[name="formats"]:checked').forEach(checkbox => {
-                    formats.push(checkbox.value);
-                });
-                
-                const updates = {
-                    title: document.getElementById('title').value,
-                    years_experience: parseInt(document.getElementById('yearsExperience').value) || null,
-                    specialties: specialties,
-                    speaking_fee_range: {
-                        min: parseInt(document.getElementById('minFee').value) || 0,
-                        max: parseInt(document.getElementById('maxFee').value) || 0
-                    },
-                    preferred_audience_size: document.getElementById('audienceSize').value,
-                    preferred_formats: formats
-                };
-                
-                await window.covetalks.updateProfile(updates);
-                showAlert('Professional details updated successfully!', 'success');
-            } catch (error) {
-                console.error('[Settings] Professional update error:', error);
-                showAlert('Failed to update professional details', 'error');
-            } finally {
-                showLoading(false);
-            }
-        });
-
-        // Password form submission
-        document.getElementById('passwordForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            
-            if (newPassword !== confirmPassword) {
-                showAlert('Passwords do not match', 'error');
-                return;
-            }
-            
-            if (newPassword.length < 8) {
-                showAlert('Password must be at least 8 characters', 'error');
-                return;
-            }
-            
-            showLoading(true);
-            
-            try {
-                // Update password using Supabase Auth
-                const { error } = await window.covetalks.supabase.auth.updateUser({
-                    password: newPassword
-                });
-                
-                if (error) throw error;
-                
-                showAlert('Password updated successfully!', 'success');
-                document.getElementById('passwordForm').reset();
-            } catch (error) {
-                console.error('[Settings] Password update error:', error);
-                showAlert('Failed to update password', 'error');
-            } finally {
-                showLoading(false);
-            }
-        });
-
-        // Notifications form submission
-        document.getElementById('notificationsForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            showLoading(true);
-            
-            try {
-                const preferences = {
-                    email_notifications: document.getElementById('emailNotifications').checked,
-                    opportunity_notifications: document.getElementById('opportunityNotifications').checked,
-                    application_notifications: document.getElementById('applicationNotifications').checked,
-                    marketing_emails: document.getElementById('marketingEmails').checked
-                };
-                
-                await window.covetalks.updateProfile({ notification_preferences: preferences });
-                showAlert('Notification preferences updated!', 'success');
-            } catch (error) {
-                console.error('[Settings] Notifications update error:', error);
-                showAlert('Failed to update preferences', 'error');
-            } finally {
-                showLoading(false);
-            }
-        });
-
-        // Privacy form submission
-        document.getElementById('privacyForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            showLoading(true);
-            
-            try {
-                const privacy = {
-                    public_profile: document.getElementById('publicProfile').checked,
-                    show_contact: document.getElementById('showContact').checked,
-                    show_fees: document.getElementById('showFees').checked
-                };
-                
-                await window.covetalks.updateProfile({ privacy_settings: privacy });
-                showAlert('Privacy settings updated!', 'success');
-            } catch (error) {
-                console.error('[Settings] Privacy update error:', error);
-                showAlert('Failed to update privacy settings', 'error');
-            } finally {
-                showLoading(false);
-            }
-        });
-
-        // Image preview
-        function previewImage(event) {
-            const file = event.target.files[0];
-            if (file) {
-                // Validate file size (max 5MB)
-                if (file.size > 5 * 1024 * 1024) {
-                    showAlert('Image must be less than 5MB', 'error');
-                    event.target.value = '';
-                    return;
-                }
-                
-                profileImageFile = file;
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const preview = document.getElementById('imagePreview');
-                    preview.innerHTML = `<img src="${e.target.result}" alt="Profile">`;
-                    document.getElementById('removeImageBtn').style.display = 'inline-block';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // Remove image
-        async function removeImage() {
-            if (confirm('Remove profile photo?')) {
-                showLoading(true);
-                try {
-                    await window.covetalks.deleteProfileImage();
-                    document.getElementById('imagePreview').innerHTML = 
-                        '<span class="profile-image-placeholder">👤</span>';
-                    document.getElementById('removeImageBtn').style.display = 'none';
-                    document.getElementById('imageUpload').value = '';
-                    profileImageFile = null;
-                    showAlert('Profile photo removed', 'success');
-                } catch (error) {
-                    console.error('[Settings] Remove image error:', error);
-                    showAlert('Failed to remove photo', 'error');
-                } finally {
-                    showLoading(false);
-                }
-            }
-        }
-
-        // Specialties management
-        document.getElementById('specialtyInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const value = e.target.value.trim();
-                if (value && !specialties.includes(value)) {
-                    specialties.push(value);
-                    displaySpecialties();
-                    e.target.value = '';
-                }
-            }
-        });
-
-        function displaySpecialties() {
-            const container = document.getElementById('specialtiesInput');
-            const input = document.getElementById('specialtyInput');
-            
-            // Clear existing tags
-            container.querySelectorAll('.specialty-tag').forEach(tag => tag.remove());
-            
-            // Add tags
-            specialties.forEach((specialty, index) => {
-                const tag = document.createElement('div');
-                tag.className = 'specialty-tag';
-                tag.innerHTML = `
-                    ${specialty}
-                    <span class="remove" onclick="removeSpecialty(${index})">×</span>
-                `;
-                container.insertBefore(tag, input);
-            });
-        }
-
-        function removeSpecialty(index) {
-            specialties.splice(index, 1);
-            displaySpecialties();
-        }
-
-        // Delete account
-        async function confirmDeleteAccount() {
-            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-                if (confirm('This will permanently delete all your data. Are you absolutely sure?')) {
-                    showLoading(true);
-                    try {
-                        // Delete user account
-                        const { error } = await window.covetalks.supabase.auth.admin.deleteUser(currentUser.id);
-                        if (error) throw error;
-                        
-                        // Sign out and redirect
-                        await window.covetalks.logout();
-                        window.location.href = '/';
-                    } catch (error) {
-                        console.error('[Settings] Delete account error:', error);
-                        showAlert('Failed to delete account. Please contact support.', 'error');
-                        showLoading(false);
-                    }
-                }
-            }
-        }
-
-        // Show alert message
-        function showAlert(message, type) {
-            const alert = document.getElementById('alertMessage');
-            alert.className = `alert alert-${type} show`;
-            alert.textContent = message;
-            
-            setTimeout(() => {
-                alert.classList.remove('show');
-            }, 5000);
-        }
-
-        // Show/hide loading overlay
-        function showLoading(show) {
-            const overlay = document.getElementById('loadingOverlay');
-            overlay.classList.toggle('show', show);
-        }
-
-        // Toggle dropdown
-        function toggleDropdown() {
-            document.getElementById('dropdownMenu').classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!event.target.closest('.user-menu')) {
-                document.getElementById('dropdownMenu').classList.remove('show');
-            }
-        });
-
-        // Logout
-        async function logout() {
-            if (window.covetalks) {
-                await window.covetalks.logout();
-            }
-        }
-
-        // Initialize on load
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializePage);
-        } else {
-            initializePage();
-        }
-    </script>
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
+    <script src="/js/pages/settings.js"></script>
 </body>
 </html>
