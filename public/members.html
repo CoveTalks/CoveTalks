@@ -4,210 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Members - CoveTalks</title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- Page-specific styles ONLY for unique elements -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header Styles */
-        header {
-            background: white;
-            color: #333;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        
-        .logo-img {
-            height: 70px;
-            width: auto;
-            display: block;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #155588;
-        }
-
-        .nav-links a.active {
-            color: #155588;
-            border-bottom: 2px solid #155588;
-            padding-bottom: 2px;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1e3d6f;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #155588;
-            border: 2px solid #155588;
-        }
-
-        .btn-secondary:hover {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.85rem;
-        }
-
-        /* User Menu Styles */
-        .user-menu {
-            position: relative;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: transform 0.2s;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.05);
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.75rem 1.25rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #e1e8ed;
-            margin: 0;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding-top: 6rem;
-            min-height: 100vh;
-            background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
-        }
-
+        /* Page Header - Unique to members page */
         .page-header {
-            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
-            padding: 10rem 0 4rem 0;
+            padding: 8rem 0 4rem 0;
             text-align: center;
+            margin-top: calc(var(--header-height) * -1);
+            padding-top: calc(var(--header-height) + 8rem);
         }
 
         .page-header h1 {
             font-size: 3rem;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
+            color: white;
+            font-weight: var(--font-weight-black);
         }
 
         .page-header p {
@@ -217,29 +37,30 @@
 
         /* Search Section */
         .search-section {
-            padding: 0 0 3rem;
+            padding: 0 0 var(--spacing-2xl);
         }
 
         .search-container {
             background: white;
-            padding: 2rem;
+            padding: var(--spacing-xl);
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-bottom: 3rem;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: var(--spacing-2xl);
             position: relative;
             top: -2rem;
         }
 
         .search-container h2 {
-            color: #155588;
-            margin-bottom: 1.5rem;
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-lg);
+            font-weight: var(--font-weight-black);
         }
 
         .search-filters {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
         }
 
         .filter-group {
@@ -248,74 +69,84 @@
         }
 
         .filter-group label {
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #555;
+            margin-bottom: var(--spacing-sm);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-gray-dark);
         }
 
         .filter-group input,
         .filter-group select {
-            padding: 0.75rem;
-            border: 2px solid #e1e8ed;
+            padding: var(--spacing-md);
+            border: 2px solid var(--color-border);
             border-radius: 5px;
-            transition: border-color 0.3s;
+            transition: border-color var(--transition-fast);
             font-size: 0.95rem;
+            font-family: var(--font-primary);
         }
 
         .filter-group input:focus,
         .filter-group select:focus {
             outline: none;
-            border-color: #155588;
+            border-color: var(--color-deep);
+            box-shadow: 0 0 0 3px rgba(21, 84, 135, 0.1);
+        }
+
+        .search-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
         }
 
         /* Results Section */
         .results-section {
-            margin-top: 2rem;
+            margin-top: var(--spacing-xl);
         }
 
         .results-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: var(--spacing-xl);
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
         }
 
         .results-info {
-            color: #666;
+            color: var(--color-gray);
             font-size: 1.1rem;
         }
 
         .results-count {
-            color: #155588;
-            font-weight: bold;
+            color: var(--color-deep);
+            font-weight: var(--font-weight-bold);
         }
 
-        /* Enhanced Member Cards Grid */
+        /* Member Cards Grid */
         .results-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
+            gap: var(--spacing-lg);
         }
 
         .member-card {
             background: white;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-normal);
             position: relative;
             cursor: pointer;
         }
 
         .member-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+            box-shadow: var(--shadow-xl);
         }
 
         .member-image-container {
             position: relative;
             height: 200px;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
+            background: linear-gradient(135deg, var(--color-deep), var(--color-calm));
             overflow: hidden;
         }
 
@@ -332,28 +163,28 @@
             align-items: center;
             justify-content: center;
             font-size: 3rem;
-            font-weight: bold;
+            font-weight: var(--font-weight-bold);
             color: white;
-            background: linear-gradient(135deg, #155588, #1e93b7);
+            background: linear-gradient(135deg, var(--color-deep), var(--color-calm));
         }
 
         .member-badge {
             position: absolute;
-            top: 0.75rem;
-            left: 0.75rem;
+            top: var(--spacing-md);
+            left: var(--spacing-md);
             padding: 0.35rem 0.75rem;
             border-radius: 15px;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: var(--font-weight-bold);
             color: white;
         }
 
         .badge-speaker {
-            background: linear-gradient(135deg, #155588, #1e93b7);
+            background: linear-gradient(135deg, var(--color-deep), var(--color-calm));
         }
 
         .badge-organization {
-            background: linear-gradient(135deg, #f2b236, #ff8c42);
+            background: linear-gradient(135deg, var(--color-sand), #ff8c42);
         }
 
         .badge-verified {
@@ -365,13 +196,13 @@
         }
 
         .member-info {
-            padding: 1.25rem;
+            padding: var(--spacing-lg);
         }
 
         .member-name {
             font-size: 1.25rem;
-            font-weight: bold;
-            color: #155588;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-deep);
             margin-bottom: 0.35rem;
             white-space: nowrap;
             overflow: hidden;
@@ -379,9 +210,9 @@
         }
 
         .member-tagline {
-            color: #666;
+            color: var(--color-gray);
             font-size: 0.85rem;
-            margin-bottom: 0.75rem;
+            margin-bottom: var(--spacing-md);
             line-height: 1.3;
             min-height: 2.2rem;
             display: -webkit-box;
@@ -394,9 +225,9 @@
             display: flex;
             align-items: center;
             gap: 0.35rem;
-            color: #999;
+            color: var(--color-gray-light);
             font-size: 0.8rem;
-            margin-bottom: 0.75rem;
+            margin-bottom: var(--spacing-md);
         }
 
         .member-location::before {
@@ -408,40 +239,40 @@
             display: flex;
             flex-wrap: wrap;
             gap: 0.35rem;
-            margin-bottom: 0.75rem;
+            margin-bottom: var(--spacing-md);
             min-height: 2rem;
         }
 
         .specialty-tag {
             background: #e8f4fd;
-            color: #155588;
-            padding: 0.5rem 0.5rem;
+            color: var(--color-deep);
+            padding: 0.25rem 0.5rem;
             border-radius: 12px;
             font-size: 0.7rem;
-            font-weight: 500;
+            font-weight: var(--font-weight-medium);
             border: 1px solid rgba(21, 85, 136, 0.1);
-            transition: all 0.2s;
+            transition: all var(--transition-fast);
         }
 
         .specialty-tag:hover {
-            background: #155588;
+            background: var(--color-deep);
             color: white;
         }
 
         .more-tags {
-            background: #f0f0f0;
-            color: #666;
+            background: var(--color-bg-light);
+            color: var(--color-gray);
             padding: 0.25rem 0.5rem;
             border-radius: 12px;
             font-size: 0.7rem;
-            font-weight: 500;
+            font-weight: var(--font-weight-medium);
         }
 
         .member-rating {
             display: flex;
             align-items: center;
             gap: 0.35rem;
-            margin-bottom: 0.75rem;
+            margin-bottom: var(--spacing-md);
         }
 
         .stars {
@@ -450,7 +281,7 @@
         }
 
         .star {
-            color: #f2b236;
+            color: var(--color-sand);
             font-size: 0.85rem;
         }
 
@@ -459,13 +290,13 @@
         }
 
         .rating-count {
-            color: #999;
+            color: var(--color-gray-light);
             font-size: 0.75rem;
         }
 
         .member-footer {
-            padding: 0.75rem 1.25rem;
-            border-top: 1px solid #f0f0f0;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-top: 1px solid var(--color-bg-light);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -476,106 +307,98 @@
             align-items: center;
             gap: 0.35rem;
             font-size: 0.75rem;
-            color: #666;
+            color: var(--color-gray);
         }
 
         .status-dot {
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: #4caf50;
+            background: var(--color-success);
         }
 
         .status-dot.locked {
-            background: #ff9800;
+            background: var(--color-warning);
         }
 
         .view-profile-btn {
             padding: 0.4rem 1rem;
-            background: #155588;
+            background: var(--color-deep);
             color: white;
             border: none;
             border-radius: 15px;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: var(--font-weight-bold);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all var(--transition-normal);
         }
 
         .view-profile-btn:hover {
-            background: #1e3d6f;
+            background: var(--color-deep-dark);
             transform: translateY(-1px);
         }
 
         /* Auth Required Banner */
         .auth-required {
             text-align: center;
-            padding: 2rem;
+            padding: var(--spacing-xl);
             background: linear-gradient(135deg, #fff4e6, #fff);
-            border: 2px solid #f2b236;
+            border: 2px solid var(--color-sand);
             border-radius: 15px;
-            margin-bottom: 2rem;
+            margin-bottom: var(--spacing-xl);
         }
 
         .auth-required h3 {
-            color: #f2b236;
-            margin-bottom: 0.5rem;
+            color: var(--color-sand);
+            margin-bottom: var(--spacing-sm);
+            font-weight: var(--font-weight-black);
         }
 
         .auth-required p {
-            color: #666;
-            margin-bottom: 1rem;
+            color: var(--color-gray);
+            margin-bottom: var(--spacing-md);
         }
 
-        /* Loading state */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #155588;
+        .auth-required .btn-group {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Loading spinner for button */
+        #searchBtn.loading #searchLoader {
+            display: inline-block !important;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-left: 0.5rem;
+            animation: spin 0.8s linear infinite;
+            margin-left: var(--spacing-sm);
+            vertical-align: middle;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        /* Empty state */
-        .empty-state {
-            text-align: center;
-            padding: 4rem;
-            color: #666;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        /* Empty state override for grid */
+        .results-grid .empty-state {
             grid-column: 1 / -1;
         }
 
-        .empty-state h3 {
-            color: #155588;
-            margin-bottom: 1rem;
-        }
-
-        /* Responsive Design */
+        /* Mobile Responsive Overrides */
         @media (max-width: 1200px) {
             .results-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 1.25rem;
+                grid-template-columns: repeat(4, 1fr);
+                gap: var(--spacing-md);
+            }
+            
+            .member-card {
+                font-size: 0.95rem;
             }
         }
 
         @media (max-width: 992px) {
             .results-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1.25rem;
+                grid-template-columns: repeat(3, 1fr);
             }
             
             .member-image-container {
@@ -588,21 +411,31 @@
         }
 
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .search-filters {
-                grid-template-columns: 1fr;
+            .page-header {
+                padding: 6rem 0 3rem 0;
+                padding-top: calc(var(--header-height-mobile) + 6rem);
             }
 
             .page-header h1 {
                 font-size: 2rem;
             }
 
+            .page-header p {
+                font-size: 1rem;
+            }
+
+            .search-container {
+                padding: var(--spacing-lg);
+                top: -1rem;
+            }
+
+            .search-filters {
+                grid-template-columns: 1fr;
+            }
+
             .results-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
+                gap: var(--spacing-md);
             }
 
             .member-image-container {
@@ -610,7 +443,7 @@
             }
 
             .member-info {
-                padding: 1rem;
+                padding: var(--spacing-md);
             }
 
             .member-name {
@@ -618,24 +451,30 @@
             }
 
             .member-footer {
-                padding: 0.75rem 1rem;
+                padding: var(--spacing-sm) var(--spacing-md);
             }
 
             .results-header {
                 flex-direction: column;
-                gap: 1rem;
                 align-items: start;
             }
 
-            .logo-img {
-                height: 50px;
+            .search-actions {
+                width: 100%;
+            }
+
+            .search-actions .btn {
+                flex: 1;
             }
         }
 
         @media (max-width: 576px) {
+            .page-header h1 {
+                font-size: 1.75rem;
+            }
+
             .results-grid {
                 grid-template-columns: 1fr;
-                gap: 1.25rem;
             }
 
             .member-image-container {
@@ -647,7 +486,7 @@
             }
 
             .member-info {
-                padding: 1.25rem;
+                padding: var(--spacing-lg);
             }
 
             .member-name {
@@ -669,18 +508,26 @@
             }
 
             .member-footer {
-                padding: 1rem 1.25rem;
+                padding: var(--spacing-md) var(--spacing-lg);
             }
 
             .view-profile-btn {
                 padding: 0.5rem 1.2rem;
                 font-size: 0.8rem;
             }
+
+            .auth-required .btn-group {
+                flex-direction: column;
+            }
+
+            .auth-required .btn {
+                width: 100%;
+            }
         }
 
         @media (max-width: 400px) {
             .page-header {
-                padding: 6rem 0 3rem;
+                padding: 4rem 0 2rem;
             }
 
             .member-image-container {
@@ -690,46 +537,7 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="nav-container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
-                </a>
-                
-                <!-- Navigation links will be dynamically inserted here -->
-                <ul class="nav-links" id="navLinks">
-                    <!-- Default logged out navigation -->
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="members.html" class="active">Find Speakers</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
-    
-                <div class="nav-right">
-                    <!-- Auth buttons (shown when logged out) -->
-                    <div class="auth-buttons" id="authButtons">
-                        <a href="register.html" class="btn btn-secondary">Join</a>
-                        <a href="login.html" class="btn btn-primary">Login</a>
-                    </div>
-                    
-                    <!-- User menu (shown when logged in) -->
-                    <div class="user-menu hidden" id="userMenu">
-                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
-                        <div class="dropdown-menu" id="dropdownMenu">
-                            <a href="inbox.html">Inbox</a>
-                            <a href="settings.html">Settings</a>
-                            <a href="billing.html">Billing</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" onclick="logout(); return false;">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <!-- Header will be auto-injected by header.js -->
 
     <!-- Page Header -->
     <div class="page-header">
@@ -769,10 +577,10 @@
                         </div>
                     </div>
                     
-                    <div style="display: flex; gap: 1rem;">
+                    <div class="search-actions">
                         <button id="searchBtn" class="btn btn-primary">
                             <span id="searchBtnText">Search</span>
-                            <span id="searchLoader" class="loading hidden"></span>
+                            <span id="searchLoader" class="loading-spinner hidden"></span>
                         </button>
                         <button id="clearBtn" class="btn btn-secondary" onclick="clearFilters()">
                             Clear Filters
@@ -786,9 +594,9 @@
                     <div id="authRequired" class="auth-required hidden">
                         <h3>🔒 Login to View Contact Information</h3>
                         <p>Join our community to connect with speakers and organizations</p>
-                        <div style="display: flex; gap: 1rem; justify-content: center;">
-                            <a href="login.html" class="btn btn-primary">Login</a>
-                            <a href="register.html" class="btn btn-secondary">Register Now</a>
+                        <div class="btn-group">
+                            <a href="/login.html" class="btn btn-primary">Login</a>
+                            <a href="/register.html" class="btn btn-secondary">Register Now</a>
                         </div>
                     </div>
 
@@ -806,131 +614,28 @@
         </div>
     </main>
 
+    <!-- Footer will be auto-injected by footer.js -->
+
     <!-- Load Supabase from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <!-- Load config and Supabase client -->
-    <script src="js/config.js"></script>
-    <script src="js/supabase-client.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
     
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
     <script>
         // Page state
         let currentUser = null;
         let isAuthenticated = false;
         let allMembers = [];
-        let initAttempts = 0;
-        const MAX_INIT_ATTEMPTS = 10;
 
         // DOM Elements
         let searchBtn, searchResults, authRequired, resultsInfo, resultsCount;
-
-        // Wait for Supabase client to be ready
-        function waitForSupabase(callback) {
-            initAttempts++;
-            
-            if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
-                callback();
-            } else if (initAttempts < MAX_INIT_ATTEMPTS) {
-                setTimeout(() => waitForSupabase(callback), 500);
-            } else {
-                console.error('[Members] Failed to load Supabase client');
-                showError('Failed to initialize. Please refresh the page.');
-            }
-        }
-
-        // Update navigation based on user type
-        function updateNavigation(user) {
-            const navLinks = document.getElementById('navLinks');
-            const authButtons = document.getElementById('authButtons');
-            const userMenu = document.getElementById('userMenu');
-            const userAvatar = document.getElementById('userAvatar');
-            
-            if (user) {
-                // Hide auth buttons, show user menu
-                authButtons.classList.add('hidden');
-                userMenu.classList.remove('hidden');
-                
-                // Update avatar with user initials
-                const initials = user.name ? 
-                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
-                    'U';
-                userAvatar.textContent = initials;
-                
-                // Update navigation links based on user type
-                if (user.member_type === 'Organization') {
-                    navLinks.innerHTML = `
-                        <li><a href="organization-dashboard.html">Dashboard</a></li>
-                        <li><a href="members.html" class="active">Find Speakers</a></li>
-                        <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                        <li><a href="my-opportunities.html">My Opportunities</a></li>
-                        <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                    `;
-                } else {
-                    // Speaker navigation
-                    navLinks.innerHTML = `
-                        <li><a href="dashboard.html">Dashboard</a></li>
-                        <li><a href="members.html" class="active">Find Speakers</a></li>
-                        <li><a href="opportunities.html">Opportunities</a></li>
-                        <li><a href="bookings.html">My Bookings</a></li>
-                        <li><a href="profile.html">Profile</a></li>
-                    `;
-                }
-            } else {
-                // Show default logged out navigation
-                authButtons.classList.remove('hidden');
-                userMenu.classList.add('hidden');
-                
-                navLinks.innerHTML = `
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="members.html" class="active">Find Speakers</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                `;
-            }
-        }
-
-        // Helper function to generate star HTML
-        function generateStars(rating) {
-            const fullStars = Math.floor(rating);
-            const hasHalfStar = rating % 1 >= 0.5;
-            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-            
-            let starsHtml = '';
-            for (let i = 0; i < fullStars; i++) {
-                starsHtml += '<span class="star">★</span>';
-            }
-            if (hasHalfStar) {
-                starsHtml += '<span class="star">★</span>';
-            }
-            for (let i = 0; i < emptyStars; i++) {
-                starsHtml += '<span class="star empty">☆</span>';
-            }
-            return starsHtml;
-        }
-
-        // Check if member is new (joined within last 30 days)
-        function isNewMember(createdAt) {
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            return new Date(createdAt) > thirtyDaysAgo;
-        }
-
-        // Toggle dropdown menu
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
 
         // Initialize page
         async function initializePage() {
@@ -942,30 +647,21 @@
             resultsCount = document.getElementById('resultsCount');
             
             // Show initial loading state
-            searchResults.innerHTML = '<div class="empty-state"><span class="loading"></span> Loading members...</div>';
+            searchResults.innerHTML = '<div class="empty-state"><div class="loading-spinner"></div> Loading members...</div>';
             
-            // Wait for Supabase client
-            waitForSupabase(async () => {
-                try {
-                    // Check authentication status
-                    const session = await window.covetalks.checkAuth();
-                    if (session) {
-                        isAuthenticated = true;
-                        currentUser = await window.covetalks.getMemberProfile(session.user.id);
-                        authRequired.classList.add('hidden');
-                        
-                        // Update navigation with user info
-                        updateNavigation(currentUser);
-                    } else {
-                        isAuthenticated = false;
-                        authRequired.classList.remove('hidden');
-                        updateNavigation(null);
-                    }
-                } catch (error) {
-                    console.error('[Members] Auth check error:', error);
+            try {
+                // Wait for Supabase
+                await waitForSupabase();
+                
+                // Check authentication status
+                const session = await window.covetalks.checkAuth();
+                if (session) {
+                    isAuthenticated = true;
+                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                    authRequired.classList.add('hidden');
+                } else {
                     isAuthenticated = false;
                     authRequired.classList.remove('hidden');
-                    updateNavigation(null);
                 }
                 
                 // Load all members
@@ -973,6 +669,32 @@
                 
                 // Set up event listeners
                 setupEventListeners();
+                
+            } catch (error) {
+                console.error('Initialization error:', error);
+                displaySampleMembers();
+            }
+        }
+
+        // Wait for Supabase client
+        function waitForSupabase() {
+            return new Promise((resolve) => {
+                let attempts = 0;
+                const maxAttempts = 20;
+                
+                function check() {
+                    attempts++;
+                    if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                        resolve();
+                    } else if (attempts < maxAttempts) {
+                        setTimeout(check, 250);
+                    } else {
+                        console.error('Failed to initialize Supabase client');
+                        showError('Failed to initialize. Please refresh the page.');
+                        resolve();
+                    }
+                }
+                check();
             });
         }
 
@@ -1002,7 +724,7 @@
                     .order('created_at', { ascending: false });
                 
                 if (error) {
-                    console.error('[Members] Supabase error:', error);
+                    console.error('Supabase error:', error);
                     displaySampleMembers();
                     return;
                 }
@@ -1015,7 +737,7 @@
                     displayResults(allMembers);
                 }
             } catch (error) {
-                console.error('[Members] Unexpected error:', error);
+                console.error('Unexpected error:', error);
                 displaySampleMembers();
             }
         }
@@ -1059,6 +781,19 @@
                     average_rating: 4.7,
                     total_reviews: 32,
                     created_at: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 'sample4',
+                    name: 'Emily Rodriguez',
+                    member_type: 'Speaker',
+                    location: 'Chicago, IL',
+                    bio: 'Motivational speaker and wellness expert helping individuals achieve work-life balance',
+                    specialties: ['Wellness', 'Work-Life Balance', 'Mental Health'],
+                    email: 'emily@example.com',
+                    phone: '555-0400',
+                    average_rating: 4.8,
+                    total_reviews: 28,
+                    created_at: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString()
                 }
             ];
             
@@ -1073,6 +808,8 @@
             const locationFilter = document.getElementById('locationFilter').value.trim().toLowerCase();
             const specialtyFilter = document.getElementById('specialtyFilter').value.trim().toLowerCase();
 
+            // Show loading state
+            searchBtn.classList.add('loading');
             document.getElementById('searchBtnText').textContent = 'Searching...';
             document.getElementById('searchLoader').classList.remove('hidden');
             searchBtn.disabled = true;
@@ -1108,8 +845,10 @@
                 
                 displayResults(filteredResults);
             } catch (error) {
-                console.error('[Members] Search error:', error);
+                console.error('Search error:', error);
             } finally {
+                // Reset button state
+                searchBtn.classList.remove('loading');
                 document.getElementById('searchBtnText').textContent = 'Search';
                 document.getElementById('searchLoader').classList.add('hidden');
                 searchBtn.disabled = false;
@@ -1125,7 +864,7 @@
             loadMembers();
         }
 
-        // Display results with enhanced card styling
+        // Display results
         function displayResults(members) {
             resultsCount.textContent = members.length;
             resultsInfo.classList.remove('hidden');
@@ -1133,9 +872,10 @@
             if (members.length === 0) {
                 searchResults.innerHTML = `
                     <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
                         <h3>No members found</h3>
                         <p>Try adjusting your search criteria or browse all members.</p>
-                        <div style="margin-top: 1rem;">
+                        <div class="mt-3">
                             <button class="btn btn-secondary" onclick="clearFilters()">Clear Filters & Show All</button>
                         </div>
                     </div>
@@ -1182,7 +922,7 @@
                     `;
                 }
                 
-                // Tagline - use bio or generate one
+                // Tagline
                 const tagline = member.bio ? 
                     member.bio.substring(0, 80) + (member.bio.length > 80 ? '...' : '') :
                     member.member_type === 'Organization' ? 
@@ -1230,12 +970,40 @@
             }).join('');
         }
 
+        // Helper function to generate star HTML
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            
+            let starsHtml = '';
+            for (let i = 0; i < fullStars; i++) {
+                starsHtml += '<span class="star">★</span>';
+            }
+            if (hasHalfStar) {
+                starsHtml += '<span class="star">★</span>';
+            }
+            for (let i = 0; i < emptyStars; i++) {
+                starsHtml += '<span class="star empty">☆</span>';
+            }
+            return starsHtml;
+        }
+
+        // Check if member is new
+        function isNewMember(createdAt) {
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            return new Date(createdAt) > thirtyDaysAgo;
+        }
+
         // View member profile
         function viewMember(memberId) {
             if (isAuthenticated) {
-                window.location.href = `profile.html?id=${memberId}`;
+                window.location.href = `/profile.html?id=${memberId}`;
             } else {
-                window.location.href = 'register.html';
+                // Store intended destination
+                const currentUrl = window.location.href;
+                window.location.href = `/login.html?redirect=${encodeURIComponent(`/profile.html?id=${memberId}`)}`;
             }
         }
 
@@ -1243,17 +1011,11 @@
         function showError(message) {
             searchResults.innerHTML = `
                 <div class="empty-state">
-                    <h3 style="color: #dc2626;">Error</h3>
+                    <div class="empty-state-icon">⚠️</div>
+                    <h3>Error</h3>
                     <p>${message}</p>
                 </div>
             `;
-        }
-
-        // Logout function
-        async function logout() {
-            if (window.covetalks) {
-                await window.covetalks.logout();
-            }
         }
 
         // Initialize when DOM is ready

@@ -4,351 +4,144 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inbox - CoveTalks</title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- Page-specific styles ONLY for unique elements -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header Styles */
-        header {
-            background: white;
-            color: #333;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        
-        .logo-img {
-            height: 70px;
-            width: auto;
-            display: block;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #155588;
-        }
-
-        .nav-links a.active {
-            color: #155588;
-            border-bottom: 2px solid #155588;
-            padding-bottom: 2px;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: #155588;
+        /* Page Header - Unique to inbox */
+        .inbox-header {
+            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1e3d6f;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #155588;
-            border: 2px solid #155588;
-        }
-
-        .btn-secondary:hover {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-success {
-            background: #27ae60;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #229954;
-        }
-
-        .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.85rem;
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        /* User Menu */
-        .user-menu {
-            position: relative;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: transform 0.2s;
-            position: relative;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.05);
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #dc3545;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.75rem 1.25rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #e1e8ed;
-            margin: 0;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding-top: 6rem;
-            padding-bottom: 3rem;
-            min-height: 100vh;
-        }
-
-        /* Page Header */
-        .page-header {
-            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
-            color: white;
-            padding: 2rem;
-            margin: 2rem 0;
+            padding: var(--spacing-2xl) var(--spacing-xl);
+            margin: var(--spacing-xl) 0;
             border-radius: 15px;
         }
 
-        .page-header h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+        .inbox-header h1 {
+            color: white;
+            margin-bottom: var(--spacing-md);
         }
 
         .inbox-stats {
             display: flex;
-            gap: 2rem;
-            margin-top: 1rem;
+            gap: var(--spacing-xl);
+            flex-wrap: wrap;
         }
 
         .inbox-stat {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: var(--spacing-sm);
             background: rgba(255, 255, 255, 0.2);
-            padding: 0.5rem 1rem;
+            padding: var(--spacing-sm) var(--spacing-md);
             border-radius: 20px;
+            font-size: 0.9rem;
         }
 
         /* Inbox Layout */
         .inbox-container {
             display: grid;
             grid-template-columns: 250px 1fr;
-            gap: 2rem;
+            gap: var(--spacing-xl);
         }
 
         /* Sidebar */
         .inbox-sidebar {
-            background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            height: fit-content;
             position: sticky;
-            top: 100px;
+            top: calc(var(--header-height) + var(--spacing-md));
+            height: fit-content;
         }
 
         .inbox-menu {
             list-style: none;
+            padding: 0;
+            margin: 0;
         }
 
         .inbox-menu li {
-            margin-bottom: 0.5rem;
+            margin-bottom: var(--spacing-sm);
         }
 
         .inbox-menu a {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0.75rem 1rem;
+            padding: var(--spacing-md);
             color: #333;
             text-decoration: none;
             border-radius: 10px;
-            transition: all 0.3s;
+            transition: all var(--transition-normal);
         }
 
         .inbox-menu a:hover {
-            background: #f8f9fa;
+            background: var(--color-foam);
         }
 
         .inbox-menu a.active {
             background: #e8f4fd;
-            color: #155588;
-            font-weight: 600;
+            color: var(--color-deep);
+            font-weight: var(--font-weight-bold);
         }
 
         .menu-count {
-            background: #dc3545;
+            background: var(--color-danger);
             color: white;
             padding: 0.25rem 0.5rem;
             border-radius: 10px;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: var(--font-weight-bold);
             min-width: 20px;
             text-align: center;
         }
 
-        /* Messages List */
+        /* Messages Container */
         .messages-container {
             background: white;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow-md);
             overflow: hidden;
         }
 
         .messages-header {
-            padding: 1.5rem;
-            border-bottom: 2px solid #f0f0f0;
+            padding: var(--spacing-lg);
+            border-bottom: 2px solid var(--color-foam);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
         }
 
         .messages-header h2 {
-            color: #155588;
+            color: var(--color-deep);
+            margin: 0;
         }
 
+        /* Search Box */
         .search-box {
             position: relative;
             width: 300px;
+            max-width: 100%;
         }
 
         .search-box input {
             width: 100%;
-            padding: 0.5rem 1rem 0.5rem 2.5rem;
-            border: 2px solid #e1e8ed;
+            padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) 2.5rem;
+            border: 2px solid var(--color-border);
             border-radius: 20px;
             font-size: 0.9rem;
+            transition: border-color var(--transition-fast);
         }
 
         .search-box input:focus {
             outline: none;
-            border-color: #155588;
+            border-color: var(--color-deep);
+            box-shadow: 0 0 0 3px rgba(21, 84, 135, 0.1);
         }
 
         .search-icon {
@@ -356,22 +149,26 @@
             left: 1rem;
             top: 50%;
             transform: translateY(-50%);
-            color: #999;
+            color: var(--color-gray-light);
+        }
+
+        .search-icon::before {
+            content: "🔍";
         }
 
         /* Message Item */
         .message-item {
-            padding: 1.5rem;
-            border-bottom: 1px solid #f0f0f0;
-            transition: background 0.2s;
+            padding: var(--spacing-lg);
+            border-bottom: 1px solid var(--color-foam);
+            transition: background var(--transition-fast);
             cursor: pointer;
             display: flex;
-            gap: 1rem;
+            gap: var(--spacing-md);
             position: relative;
         }
 
         .message-item:hover {
-            background: #f8f9fa;
+            background: var(--color-foam);
         }
 
         .message-item:hover .message-actions-quick {
@@ -380,19 +177,19 @@
 
         .message-item.unread {
             background: #f0f8ff;
-            border-left: 4px solid #155588;
+            border-left: 4px solid var(--color-deep);
         }
 
         .message-avatar {
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
+            background: linear-gradient(135deg, var(--color-deep), var(--color-calm));
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            font-weight: var(--font-weight-bold);
             flex-shrink: 0;
         }
 
@@ -405,32 +202,33 @@
             display: flex;
             justify-content: space-between;
             align-items: start;
-            margin-bottom: 0.5rem;
+            margin-bottom: var(--spacing-sm);
+            gap: var(--spacing-md);
         }
 
         .message-sender {
-            font-weight: 600;
+            font-weight: var(--font-weight-bold);
             color: #333;
         }
 
         .message-sender.unread {
-            color: #155588;
+            color: var(--color-deep);
         }
 
         .message-time {
             font-size: 0.85rem;
-            color: #999;
+            color: var(--color-gray-light);
             white-space: nowrap;
         }
 
         .message-subject {
-            font-weight: 500;
-            color: #555;
+            font-weight: var(--font-weight-medium);
+            color: var(--color-gray-dark);
             margin-bottom: 0.25rem;
         }
 
         .message-preview {
-            color: #666;
+            color: var(--color-gray);
             font-size: 0.9rem;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -439,50 +237,50 @@
 
         .message-meta {
             display: flex;
-            gap: 1rem;
-            margin-top: 0.5rem;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-sm);
             font-size: 0.85rem;
-            color: #999;
+            color: var(--color-gray-light);
         }
 
         .message-tag {
             background: #e8f4fd;
-            color: #155588;
+            color: var(--color-deep);
             padding: 0.25rem 0.5rem;
             border-radius: 10px;
             font-size: 0.75rem;
         }
 
-        /* Quick Actions on Hover */
+        /* Quick Actions */
         .message-actions-quick {
             position: absolute;
-            right: 1rem;
-            bottom: 1rem;
+            right: var(--spacing-md);
+            bottom: var(--spacing-md);
             display: flex;
-            gap: 0.5rem;
+            gap: var(--spacing-sm);
             opacity: 0;
-            transition: opacity 0.2s;
+            transition: opacity var(--transition-fast);
         }
 
         .quick-action-btn {
             padding: 0.4rem 0.8rem;
             background: white;
-            border: 1px solid #e1e8ed;
+            border: 1px solid var(--color-border);
             border-radius: 15px;
             font-size: 0.8rem;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all var(--transition-fast);
         }
 
         .quick-action-btn:hover {
-            background: #155588;
+            background: var(--color-deep);
             color: white;
-            border-color: #155588;
+            border-color: var(--color-deep);
         }
 
         /* Message View */
         .message-view {
-            padding: 2rem;
+            padding: var(--spacing-xl);
             display: none;
         }
 
@@ -491,111 +289,108 @@
         }
 
         .message-view-header {
-            margin-bottom: 2rem;
+            margin-bottom: var(--spacing-xl);
         }
 
         .message-view-subject {
             font-size: 1.5rem;
-            color: #155588;
-            margin-bottom: 1rem;
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-md);
         }
 
         .message-view-meta {
             display: flex;
-            gap: 2rem;
-            color: #666;
+            gap: var(--spacing-xl);
+            color: var(--color-gray);
             font-size: 0.9rem;
-            padding: 1rem;
-            background: #f8f9fa;
+            padding: var(--spacing-md);
+            background: var(--color-foam);
             border-radius: 10px;
-            margin-bottom: 1.5rem;
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
         }
 
         .message-view-body {
             background: white;
-            padding: 2rem;
-            border: 2px solid #f0f0f0;
+            padding: var(--spacing-xl);
+            border: 2px solid var(--color-foam);
             border-radius: 10px;
             line-height: 1.8;
             white-space: pre-wrap;
-            margin-bottom: 2rem;
+            margin-bottom: var(--spacing-xl);
             min-height: 200px;
         }
 
         .message-actions {
             display: flex;
-            gap: 1rem;
-            padding: 1rem 0;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
         }
 
-        /* Recipient Autocomplete Styles */
-        #recipientField {
-            position: relative;
-        }
-
+        /* Recipient Autocomplete */
         .recipient-search-container {
             position: relative;
         }
 
         #recipientSearch {
             width: 100%;
-            padding: 0.75rem;
+            padding: var(--spacing-md);
             padding-left: 2.5rem;
-            border: 2px solid #e1e8ed;
+            border: 2px solid var(--color-border);
             border-radius: 5px;
             font-size: 1rem;
-            transition: border-color 0.3s;
+            transition: border-color var(--transition-normal);
         }
 
         #recipientSearch:focus {
             outline: none;
-            border-color: #155588;
+            border-color: var(--color-deep);
             box-shadow: 0 0 0 3px rgba(21, 85, 136, 0.1);
         }
 
         .search-input-icon {
             position: absolute;
-            left: 0.75rem;
+            left: var(--spacing-md);
             top: 50%;
             transform: translateY(-50%);
-            color: #999;
+            color: var(--color-gray-light);
             font-size: 1.1rem;
         }
 
         .selected-recipient {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem;
-            background: #f8f9fa;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm);
+            background: var(--color-foam);
             border-radius: 5px;
         }
 
         .recipient-tag {
             background: #e8f4fd;
-            color: #155588;
-            padding: 0.5rem 1rem;
+            color: var(--color-deep);
+            padding: var(--spacing-sm) var(--spacing-md);
             border-radius: 20px;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            font-weight: 500;
+            gap: var(--spacing-sm);
+            font-weight: var(--font-weight-medium);
         }
 
         .remove-btn {
             background: none;
             border: none;
-            color: #155588;
+            color: var(--color-deep);
             font-size: 1.2rem;
             cursor: pointer;
             padding: 0;
-            margin-left: 0.5rem;
+            margin-left: var(--spacing-sm);
             line-height: 1;
-            transition: color 0.2s;
+            transition: color var(--transition-fast);
         }
 
         .remove-btn:hover {
-            color: #dc3545;
+            color: var(--color-danger);
         }
 
         .recipient-suggestions {
@@ -604,26 +399,26 @@
             left: 0;
             right: 0;
             background: white;
-            border: 2px solid #e1e8ed;
+            border: 2px solid var(--color-border);
             border-radius: 5px;
             max-height: 300px;
             overflow-y: auto;
             z-index: 100;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-lg);
         }
 
         .suggestion-item {
-            padding: 1rem;
+            padding: var(--spacing-md);
             cursor: pointer;
-            border-bottom: 1px solid #f0f0f0;
-            transition: background 0.2s;
+            border-bottom: 1px solid var(--color-foam);
+            transition: background var(--transition-fast);
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: var(--spacing-md);
         }
 
         .suggestion-item:hover {
-            background: #f8f9fa;
+            background: var(--color-foam);
         }
 
         .suggestion-item:last-child {
@@ -634,12 +429,12 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
+            background: linear-gradient(135deg, var(--color-deep), var(--color-calm));
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            font-weight: var(--font-weight-bold);
             font-size: 0.9rem;
         }
 
@@ -648,64 +443,41 @@
         }
 
         .suggestion-name {
-            font-weight: 600;
+            font-weight: var(--font-weight-bold);
             color: #333;
             margin-bottom: 0.25rem;
         }
 
         .suggestion-email {
             font-size: 0.85rem;
-            color: #666;
+            color: var(--color-gray);
         }
 
         .member-type-badge {
-            background: #f0f0f0;
+            background: var(--color-foam);
             padding: 0.25rem 0.5rem;
             border-radius: 10px;
             font-size: 0.75rem;
-            color: #666;
+            color: var(--color-gray);
             white-space: nowrap;
         }
 
         .member-type-badge.speaker {
             background: #e8f4fd;
-            color: #155588;
+            color: var(--color-deep);
         }
 
         .member-type-badge.organization {
             background: #fff4e6;
-            color: #f2b236;
+            color: var(--color-sand);
         }
 
-        .no-results {
-            padding: 2rem;
-            text-align: center;
-            color: #999;
-        }
-
-        .searching-indicator {
-            padding: 1rem;
-            text-align: center;
-            color: #666;
-        }
-
-        .searching-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid #155588;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 0.5rem;
-        }
-
-        /* Reply Thread Styles */
+        /* Reply Thread */
         .message-thread {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-left: 3px solid #155588;
-            margin-bottom: 1rem;
+            background: var(--color-foam);
+            padding: var(--spacing-md);
+            border-left: 3px solid var(--color-deep);
+            margin-bottom: var(--spacing-md);
             border-radius: 5px;
         }
 
@@ -713,164 +485,26 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.5rem;
+            margin-bottom: var(--spacing-sm);
         }
 
         .message-thread-title {
             font-size: 0.85rem;
-            color: #666;
-            font-weight: 600;
+            color: var(--color-gray);
+            font-weight: var(--font-weight-bold);
         }
 
         .message-thread-date {
             font-size: 0.8rem;
-            color: #999;
+            color: var(--color-gray-light);
         }
 
         .message-thread-content {
-            color: #555;
+            color: var(--color-gray-dark);
             font-size: 0.9rem;
             line-height: 1.5;
             max-height: 150px;
             overflow-y: auto;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: #666;
-        }
-
-        .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        /* Loading */
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 3rem;
-            color: #666;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #155588;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 1rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            max-width: 600px;
-            width: 90%;
-            max-height: 85vh;
-            overflow-y: auto;
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .modal-header {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        .modal-header h3 {
-            color: #155588;
-            font-size: 1.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #155588;
-            box-shadow: 0 0 0 3px rgba(21, 85, 136, 0.1);
-        }
-
-        .form-group textarea {
-            min-height: 200px;
-            resize: vertical;
-            font-family: inherit;
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #f0f0f0;
-            margin-top: 1.5rem;
         }
 
         /* Notification Toast */
@@ -878,29 +512,29 @@
             position: fixed;
             top: 100px;
             right: 20px;
-            padding: 1rem 1.5rem;
+            padding: var(--spacing-md) var(--spacing-lg);
             border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            box-shadow: var(--shadow-xl);
             z-index: 3000;
             animation: slideInRight 0.3s ease;
-            font-weight: 500;
+            font-weight: var(--font-weight-medium);
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: var(--spacing-md);
         }
 
         .notification-success {
-            background: #27ae60;
+            background: var(--color-success);
             color: white;
         }
 
         .notification-error {
-            background: #dc3545;
+            background: var(--color-danger);
             color: white;
         }
 
         .notification-info {
-            background: #155588;
+            background: var(--color-deep);
             color: white;
         }
 
@@ -926,11 +560,7 @@
             }
         }
 
-        .hidden {
-            display: none !important;
-        }
-
-        /* Responsive */
+        /* Mobile Responsive Overrides */
         @media (max-width: 992px) {
             .inbox-container {
                 grid-template-columns: 1fr;
@@ -938,82 +568,113 @@
 
             .inbox-sidebar {
                 position: static;
-                margin-bottom: 2rem;
+                margin-bottom: var(--spacing-xl);
+            }
+
+            .inbox-menu {
+                display: flex;
+                gap: var(--spacing-sm);
+                overflow-x: auto;
+                padding-bottom: var(--spacing-sm);
+            }
+
+            .inbox-menu li {
+                margin-bottom: 0;
+            }
+
+            .inbox-menu a {
+                white-space: nowrap;
+                padding: var(--spacing-sm) var(--spacing-md);
             }
         }
 
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
+            .inbox-header {
+                padding: var(--spacing-lg);
+            }
+
+            .inbox-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .inbox-stats {
+                gap: var(--spacing-sm);
+            }
+
+            .inbox-stat {
+                font-size: 0.8rem;
+                padding: 0.25rem 0.5rem;
             }
 
             .messages-header {
                 flex-direction: column;
-                gap: 1rem;
+                align-items: stretch;
             }
 
             .search-box {
                 width: 100%;
             }
 
+            .message-item {
+                padding: var(--spacing-md);
+            }
+
+            .message-avatar {
+                width: 40px;
+                height: 40px;
+                font-size: 0.9rem;
+            }
+
+            .message-header {
+                flex-direction: column;
+                gap: var(--spacing-xs);
+            }
+
             .message-view-meta {
                 flex-direction: column;
-                gap: 0.5rem;
+                gap: var(--spacing-sm);
             }
 
             .message-actions-quick {
                 opacity: 1;
                 position: static;
-                margin-top: 0.5rem;
+                margin-top: var(--spacing-sm);
+                justify-content: flex-end;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: var(--spacing-lg);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .message-view-subject {
+                font-size: 1.25rem;
+            }
+
+            .message-view-body {
+                padding: var(--spacing-md);
+            }
+
+            .message-actions {
+                flex-direction: column;
+            }
+
+            .message-actions .btn {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="nav-container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
-                </a>
-                
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="opportunities.html">Opportunities</a></li>
-                    <li><a href="bookings.html">My Bookings</a></li>
-                    <li><a href="profile.html">Profile</a></li>
-                </ul>
+    <!-- Header will be auto-injected by header.js -->
     
-                <div class="nav-right">
-                    <div class="user-menu" id="userMenu">
-                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">
-                            U
-                            <span class="notification-badge hidden" id="unreadBadge">0</span>
-                        </div>
-                        <div class="dropdown-menu" id="dropdownMenu">
-                            <a href="inbox.html" class="active">
-                                Inbox
-                                <span id="dropdownUnread" class="menu-count hidden">0</span>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="settings.html">Settings</a>
-                            <a href="billing.html">Billing</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" onclick="logout(); return false;">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
-
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
             <!-- Page Header -->
-            <div class="page-header">
+            <div class="inbox-header">
                 <h1>Inbox</h1>
                 <div class="inbox-stats">
                     <div class="inbox-stat">
@@ -1034,8 +695,8 @@
             <!-- Inbox Container -->
             <div class="inbox-container">
                 <!-- Sidebar -->
-                <div class="inbox-sidebar">
-                    <button onclick="showComposeModal()" class="btn btn-primary" style="width: 100%; margin-bottom: 1.5rem;">
+                <div class="inbox-sidebar card">
+                    <button onclick="showComposeModal()" class="btn btn-primary btn-block mb-3">
                         Compose
                     </button>
                     <ul class="inbox-menu">
@@ -1085,27 +746,29 @@
             </div>
         </div>
     </main>
+    
+    <!-- Footer will be auto-injected by footer.js -->
 
     <!-- Compose Modal -->
     <div id="composeModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>✉️ Compose New Message</h3>
+                <h3>Compose New Message</h3>
             </div>
             <form id="composeForm">
                 <div class="form-group">
-                    <label for="recipient">To <span style="color: #dc3545;">*</span></label>
+                    <label class="form-label" for="recipient">To <span style="color: var(--color-danger);">*</span></label>
                     <div id="recipientField">
                         <!-- Dynamic recipient field will be inserted here -->
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="subject">Subject <span style="color: #dc3545;">*</span></label>
-                    <input type="text" id="subject" placeholder="Enter message subject..." required>
+                    <label class="form-label" for="subject">Subject <span style="color: var(--color-danger);">*</span></label>
+                    <input type="text" id="subject" class="form-control" placeholder="Enter message subject..." required>
                 </div>
                 <div class="form-group">
-                    <label for="message">Message <span style="color: #dc3545;">*</span></label>
-                    <textarea id="message" placeholder="Type your message here..." required></textarea>
+                    <label class="form-label" for="message">Message <span style="color: var(--color-danger);">*</span></label>
+                    <textarea id="message" class="form-control" placeholder="Type your message here..." required rows="8"></textarea>
                 </div>
             </form>
             <div class="modal-footer">
@@ -1121,14 +784,14 @@
     <div id="replyModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>↩️ Reply to Message</h3>
+                <h3>Reply to Message</h3>
             </div>
             <form id="replyForm">
                 <div class="form-group">
-                    <label>To: <strong id="replyTo"></strong></label>
+                    <label class="form-label">To: <strong id="replyTo"></strong></label>
                 </div>
                 <div class="form-group">
-                    <label>Subject: <strong id="replySubject"></strong></label>
+                    <label class="form-label">Subject: <strong id="replySubject"></strong></label>
                 </div>
                 <div class="message-thread">
                     <div class="message-thread-header">
@@ -1138,8 +801,8 @@
                     <div class="message-thread-content" id="quotedMessage"></div>
                 </div>
                 <div class="form-group">
-                    <label for="replyMessage">Your Reply <span style="color: #dc3545;">*</span></label>
-                    <textarea id="replyMessage" placeholder="Type your reply..." required></textarea>
+                    <label class="form-label" for="replyMessage">Your Reply <span style="color: var(--color-danger);">*</span></label>
+                    <textarea id="replyMessage" class="form-control" placeholder="Type your reply..." required rows="6"></textarea>
                 </div>
             </form>
             <div class="modal-footer">
@@ -1155,9 +818,14 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <!-- Load config and Supabase client -->
-    <script src="js/config.js"></script>
-    <script src="js/supabase-client.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
     
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
     <script>
         // Page state
         let currentUser = null;
@@ -1170,51 +838,53 @@
 
         // Initialize page
         async function initializePage() {
-            await waitForSupabase(async () => {
-                try {
-                    // Check authentication
-                    const session = await window.covetalks.checkAuth();
-                    if (!session) {
-                        window.location.href = '/login.html';
-                        return;
-                    }
+            try {
+                // Wait for Supabase
+                await waitForSupabase();
 
-                    // Get user profile
-                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
-                    updateNavigation(currentUser);
-
-                    // Load messages
-                    await loadMessages();
-
-                    // Update unread count
-                    await updateUnreadCount();
-                    
-                    // Check URL params for compose
-                    checkUrlParams();
-
-                } catch (error) {
-                    console.error('Initialization error:', error);
+                // Check authentication
+                const session = await window.covetalks.checkAuth();
+                if (!session) {
+                    window.location.href = '/login.html';
+                    return;
                 }
-            });
+
+                // Get user profile
+                currentUser = await window.covetalks.getMemberProfile(session.user.id);
+
+                // Load messages
+                await loadMessages();
+
+                // Update unread count
+                await updateUnreadCount();
+                
+                // Check URL params for compose
+                checkUrlParams();
+
+            } catch (error) {
+                console.error('Initialization error:', error);
+            }
         }
 
         // Wait for Supabase client
-        function waitForSupabase(callback) {
-            let attempts = 0;
-            const maxAttempts = 10;
-            
-            function check() {
-                attempts++;
-                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
-                    callback();
-                } else if (attempts < maxAttempts) {
-                    setTimeout(check, 500);
-                } else {
-                    console.error('Failed to initialize Supabase client');
-                    window.location.href = '/login.html';
+        function waitForSupabase() {
+            return new Promise((resolve) => {
+                let attempts = 0;
+                const maxAttempts = 20;
+                
+                function check() {
+                    attempts++;
+                    if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                        resolve();
+                    } else if (attempts < maxAttempts) {
+                        setTimeout(check, 250);
+                    } else {
+                        console.error('Failed to initialize Supabase client');
+                        window.location.href = '/login.html';
+                    }
                 }
-            }
-            check();
+                check();
+            });
         }
 
         // Check URL parameters for compose
@@ -1252,37 +922,6 @@
             }
         }
 
-        // Update navigation
-        function updateNavigation(user) {
-            const navLinks = document.getElementById('navLinks');
-            const userAvatar = document.getElementById('userAvatar');
-            
-            if (user) {
-                const initials = user.name ? 
-                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
-                    'U';
-                userAvatar.childNodes[0].textContent = initials;
-                
-                if (user.member_type === 'Organization') {
-                    navLinks.innerHTML = `
-                        <li><a href="organization-dashboard.html">Dashboard</a></li>
-                        <li><a href="members.html">Find Speakers</a></li>
-                        <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                        <li><a href="my-opportunities.html">My Opportunities</a></li>
-                        <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                    `;
-                } else {
-                    navLinks.innerHTML = `
-                        <li><a href="dashboard.html">Dashboard</a></li>
-                        <li><a href="members.html">Find Speakers</a></li>
-                        <li><a href="opportunities.html">Opportunities</a></li>
-                        <li><a href="bookings.html">My Bookings</a></li>
-                        <li><a href="profile.html">Profile</a></li>
-                    `;
-                }
-            }
-        }
-
         // Load messages
         async function loadMessages() {
             try {
@@ -1303,7 +942,7 @@
                 document.getElementById('unreadMessages').textContent = inboxUnread;
                 document.getElementById('sentMessages').textContent = sent.length;
                 
-                // Update sidebar - Only show count for inbox if there are unread messages
+                // Update sidebar
                 const inboxCountElement = document.getElementById('inboxCount');
                 if (inboxUnread > 0) {
                     inboxCountElement.textContent = inboxUnread;
@@ -1312,8 +951,6 @@
                     inboxCountElement.classList.add('hidden');
                 }
                 
-                // No counts for sent and archived (removed the count display)
-
                 // Display messages
                 displayMessages();
 
@@ -1322,7 +959,7 @@
             }
         }
 
-        // Display messages with quick reply buttons
+        // Display messages
         function displayMessages() {
             const container = document.getElementById('messagesList');
             
@@ -1389,7 +1026,7 @@
             }).join('');
         }
 
-        // Quick reply function
+        // Quick reply
         function quickReply(messageId) {
             const message = allMessages.find(m => m.id === messageId);
             if (message) {
@@ -1397,7 +1034,7 @@
             }
         }
 
-        // View message with proper reply button
+        // View message
         async function viewMessage(messageId) {
             const message = allMessages.find(m => m.id === messageId);
             if (!message) return;
@@ -1423,7 +1060,7 @@
 
             messageView.innerHTML = `
                 <div class="message-view-header">
-                    <button onclick="backToList()" class="btn btn-secondary btn-sm" style="margin-bottom: 1rem;">
+                    <button onclick="backToList()" class="btn btn-secondary btn-sm mb-3">
                         ← Back to Messages
                     </button>
                     <h2 class="message-view-subject">${message.subject}</h2>
@@ -1439,12 +1076,12 @@
                 <div class="message-actions">
                     ${isReceived ? `
                         <button onclick="showReplyModal('${message.id}')" class="btn btn-primary">
-                            ↩️ Reply
+                            Reply
                         </button>
                     ` : ''}
                     ${message.status !== 'archived' ? `
                         <button onclick="archiveMessage('${message.id}')" class="btn btn-secondary">
-                            📁 Archive
+                            Archive
                         </button>
                     ` : ''}
                 </div>
@@ -1457,7 +1094,7 @@
             document.getElementById('messageView').classList.remove('active');
         }
 
-        // Show compose modal with optional recipient
+        // Show compose modal
         function showComposeModal(recipientId = null, recipientName = null) {
             const modal = document.getElementById('composeModal');
             modal.classList.add('show');
@@ -1487,7 +1124,7 @@
             }
         }
 
-        // Setup recipient search with autocomplete
+        // Setup recipient search
         function setupRecipientSearch() {
             const recipientField = document.getElementById('recipientField');
             recipientField.innerHTML = `
@@ -1509,7 +1146,7 @@
             }, 100);
         }
 
-        // Handle recipient search with debouncing
+        // Handle recipient search
         function handleRecipientSearch(query) {
             clearTimeout(searchTimeout);
             
@@ -1523,7 +1160,7 @@
             // Show searching indicator
             suggestions.innerHTML = `
                 <div class="searching-indicator">
-                    <span class="searching-spinner"></span>
+                    <span class="loading-spinner"></span>
                     Searching...
                 </div>
             `;
@@ -1543,7 +1180,7 @@
                     .from('members')
                     .select('id, name, email, member_type')
                     .or(`name.ilike.%${query}%,email.ilike.%${query}%`)
-                    .neq('id', currentUser.id) // Exclude current user
+                    .neq('id', currentUser.id)
                     .limit(10);
                 
                 if (error) throw error;
@@ -1657,7 +1294,7 @@
                 await loadMessages();
                 
                 // Show success message
-                showNotification('✅ Message sent successfully!', 'success');
+                showNotification('Message sent successfully!', 'success');
                 
             } catch (error) {
                 console.error('Error sending message:', error);
@@ -1721,7 +1358,7 @@
                 
                 closeModal();
                 await loadMessages();
-                showNotification('✅ Reply sent successfully!', 'success');
+                showNotification('Reply sent successfully!', 'success');
                 
             } catch (error) {
                 console.error('Error sending reply:', error);
@@ -1780,7 +1417,7 @@
                     </div>
                 `;
             } else {
-                // Display filtered results (reuse display logic)
+                // Display filtered results
                 displayMessages();
             }
         }
@@ -1807,14 +1444,15 @@
         async function updateUnreadCount() {
             const count = await window.covetalks.getUnreadMessageCount();
             
-            if (count > 0) {
-                document.getElementById('unreadBadge').textContent = count;
-                document.getElementById('unreadBadge').classList.remove('hidden');
-                document.getElementById('dropdownUnread').textContent = count;
-                document.getElementById('dropdownUnread').classList.remove('hidden');
-            } else {
-                document.getElementById('unreadBadge').classList.add('hidden');
-                document.getElementById('dropdownUnread').classList.add('hidden');
+            // Update badge in header if it exists
+            const headerBadge = document.getElementById('inboxBadge');
+            if (headerBadge) {
+                if (count > 0) {
+                    headerBadge.textContent = count > 99 ? '99+' : count;
+                    headerBadge.classList.remove('hidden');
+                } else {
+                    headerBadge.classList.add('hidden');
+                }
             }
         }
 
@@ -1877,35 +1515,12 @@
             });
         }
 
-        // Toggle dropdown
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-
         // Close modals when clicking outside
         document.addEventListener('click', function(event) {
             if (event.target.classList.contains('modal')) {
                 closeModal();
             }
         });
-
-        // Logout
-        async function logout() {
-            if (window.covetalks) {
-                await window.covetalks.logout();
-            }
-        }
 
         // Initialize on load
         if (document.readyState === 'loading') {

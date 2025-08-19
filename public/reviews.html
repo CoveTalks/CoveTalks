@@ -4,244 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Reviews - CoveTalks</title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- Page-specific styles ONLY for unique elements -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header */
-        header {
-            background: white;
-            color: #333;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        
-        .logo-img {
-            height: 70px;
-            width: auto;
-            display: block;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #155588;
-        }
-
-        .nav-links a.active {
-            color: #155588;
-            border-bottom: 2px solid #155588;
-            padding-bottom: 2px;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1e3d6f;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #155588;
-            border: 2px solid #155588;
-        }
-
-        .btn-secondary:hover {
-            background: #155588;
-            color: white;
-        }
-
-        /* User Menu */
-        .user-menu {
-            position: relative;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: transform 0.2s;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.05);
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.75rem 1.25rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #e1e8ed;
-            margin: 0;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding-top: 7rem;
-            padding-bottom: 3rem;
-            min-height: 100vh;
-        }
-
-        /* Page Header */
+        /* Page Header - Reviews specific */
         .page-header {
-            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
-            padding: 3rem 0;
-            margin-bottom: 2rem;
+            padding: var(--spacing-2xl) 0;
+            margin-bottom: var(--spacing-xl);
         }
 
         .page-header h1 {
-            margin-bottom: 0.5rem;
+            margin-bottom: var(--spacing-sm);
+            color: white;
+        }
+
+        .page-header p {
+            opacity: 0.95;
         }
 
         /* Stats Overview */
         .stats-overview {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
+            margin-bottom: var(--spacing-xl);
         }
 
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 2fr;
-            gap: 2rem;
+            gap: var(--spacing-xl);
         }
 
         .overall-rating {
             text-align: center;
-            padding: 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            padding: var(--spacing-xl);
+            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
             border-radius: 15px;
         }
 
         .rating-number {
-            font-size: 4rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
+            font-size: 3.5rem;
+            font-weight: var(--font-weight-black);
+            margin-bottom: var(--spacing-sm);
         }
 
         .rating-stars {
             font-size: 1.5rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: var(--spacing-sm);
         }
 
         .star {
-            color: #f2b236;
+            color: var(--color-sand);
         }
 
         .star.empty {
@@ -250,35 +70,37 @@
 
         .review-count {
             opacity: 0.9;
+            font-size: 0.95rem;
         }
 
+        /* Rating Breakdown */
         .rating-breakdown {
-            padding: 1rem;
+            padding: var(--spacing-md);
         }
 
         .rating-breakdown h3 {
-            color: #155588;
-            margin-bottom: 1rem;
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-md);
         }
 
         .rating-category {
             display: flex;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
         }
 
         .rating-label {
             flex: 0 0 150px;
-            font-weight: 500;
-            color: #666;
+            font-weight: var(--font-weight-medium);
+            color: var(--color-gray);
         }
 
         .rating-bar {
             flex: 1;
             height: 8px;
-            background: #e1e8ed;
+            background: var(--color-border);
             border-radius: 4px;
-            margin: 0 1rem;
+            margin: 0 var(--spacing-md);
             position: relative;
             overflow: hidden;
         }
@@ -288,110 +110,126 @@
             left: 0;
             top: 0;
             height: 100%;
-            background: linear-gradient(90deg, #667eea, #1e93b7);
+            background: linear-gradient(90deg, var(--color-deep), var(--color-calm));
             border-radius: 4px;
-            transition: width 0.5s;
+            transition: width 0.5s ease;
         }
 
         .rating-value {
-            font-weight: 600;
+            font-weight: var(--font-weight-bold);
             color: #333;
+            min-width: 40px;
+            text-align: right;
         }
 
-        /* Filters */
+        /* Filters Section */
         .filters-section {
             background: white;
-            padding: 1.5rem;
+            padding: var(--spacing-lg);
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--spacing-xl);
         }
 
         .filters-row {
             display: flex;
-            gap: 1rem;
+            gap: var(--spacing-md);
             align-items: center;
         }
 
         .filter-group {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: var(--spacing-sm);
         }
 
         .filter-group label {
-            font-weight: 500;
-            color: #666;
+            font-weight: var(--font-weight-medium);
+            color: var(--color-gray);
         }
 
         .filter-group select {
-            padding: 0.5rem 1rem;
-            border: 2px solid #e1e8ed;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 2px solid var(--color-border);
             border-radius: 5px;
             background: white;
             cursor: pointer;
+            font-family: var(--font-primary);
+            transition: border-color var(--transition-fast);
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--color-deep);
         }
 
         /* Reviews List */
         .reviews-list {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: var(--spacing-lg);
         }
 
         .review-card {
             background: white;
-            padding: 2rem;
+            padding: var(--spacing-xl);
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow-md);
+            transition: transform var(--transition-fast);
+        }
+
+        .review-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
 
         .review-header {
             display: flex;
             justify-content: space-between;
             align-items: start;
-            margin-bottom: 1.5rem;
+            margin-bottom: var(--spacing-lg);
         }
 
         .reviewer-info {
             display: flex;
-            gap: 1rem;
+            gap: var(--spacing-md);
         }
 
         .reviewer-avatar {
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: #f0f0f0;
+            background: var(--color-foam);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            color: #666;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-gray);
         }
 
         .reviewer-details h4 {
-            color: #155588;
+            color: var(--color-deep);
             margin-bottom: 0.25rem;
         }
 
         .reviewer-details p {
-            color: #666;
+            color: var(--color-gray);
             font-size: 0.9rem;
         }
 
         .review-date {
-            color: #999;
+            color: var(--color-gray-light);
             font-size: 0.9rem;
         }
 
+        /* Review Ratings Grid */
         .review-ratings {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background: #f8f9fa;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            padding: var(--spacing-md);
+            background: var(--color-foam);
             border-radius: 10px;
         }
 
@@ -402,102 +240,54 @@
         }
 
         .rating-item-label {
-            font-weight: 500;
-            color: #666;
+            font-weight: var(--font-weight-medium);
+            color: var(--color-gray);
             font-size: 0.9rem;
         }
 
         .rating-item-stars {
-            color: #f2b236;
+            color: var(--color-sand);
         }
 
+        /* Review Content */
         .review-content {
-            margin-bottom: 1.5rem;
+            margin-bottom: var(--spacing-lg);
             line-height: 1.8;
         }
 
         .review-content h5 {
-            color: #155588;
-            margin-bottom: 0.5rem;
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-sm);
         }
 
+        .review-content p {
+            color: var(--color-gray-dark);
+        }
+
+        /* Review Footer */
         .review-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 1rem;
-            border-top: 1px solid #f0f0f0;
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--color-bg-light);
         }
 
         .event-info {
-            color: #666;
+            color: var(--color-gray);
             font-size: 0.9rem;
         }
 
         .verified-badge {
             background: #d4edda;
-            color: #27ae60;
+            color: var(--color-success);
             padding: 0.25rem 0.75rem;
             border-radius: 15px;
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: var(--font-weight-bold);
         }
 
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-
-        .empty-state img {
-            width: 150px;
-            opacity: 0.5;
-            margin-bottom: 1.5rem;
-        }
-
-        .empty-state h3 {
-            color: #155588;
-            margin-bottom: 0.5rem;
-        }
-
-        .empty-state p {
-            color: #666;
-            margin-bottom: 1.5rem;
-        }
-
-        /* Loading State */
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 3rem;
-            color: #666;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #155588;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 1rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Responsive */
+        /* Mobile Responsive */
         @media (max-width: 992px) {
             .stats-grid {
                 grid-template-columns: 1fr;
@@ -505,10 +295,6 @@
         }
 
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
             .filters-row {
                 flex-direction: column;
                 align-items: stretch;
@@ -518,9 +304,13 @@
                 width: 100%;
             }
 
+            .filter-group select {
+                width: 100%;
+            }
+
             .review-header {
                 flex-direction: column;
-                gap: 1rem;
+                gap: var(--spacing-md);
             }
 
             .review-ratings {
@@ -529,54 +319,42 @@
 
             .review-footer {
                 flex-direction: column;
-                gap: 0.5rem;
+                gap: var(--spacing-sm);
                 align-items: start;
+            }
+
+            .rating-category {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .rating-label {
+                margin-bottom: var(--spacing-xs);
+            }
+
+            .rating-bar {
+                margin: 0;
+            }
+
+            .rating-value {
+                text-align: left;
+                margin-top: var(--spacing-xs);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .rating-number {
+                font-size: 2.5rem;
+            }
+
+            .overall-rating {
+                padding: var(--spacing-lg);
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="nav-container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
-                </a>
-                
-                <!-- Navigation links will be dynamically inserted here -->
-                <ul class="nav-links" id="navLinks">
-                    <!-- Default logged out navigation -->
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
-    
-                <div class="nav-right">
-                    <!-- Auth buttons (shown when logged out) -->
-                    <div class="auth-buttons" id="authButtons">
-                        <a href="register.html" class="btn btn-secondary">Join</a>
-                        <a href="login.html" class="btn btn-primary">Login</a>
-                    </div>
-                    
-                    <!-- User menu (shown when logged in) -->
-                    <div class="user-menu hidden" id="userMenu">
-                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
-                        <div class="dropdown-menu" id="dropdownMenu">
-                        <a href="inbox.html">Inbox</a>
-                        <div class="dropdown-divider"></div>
-                        <a href="settings.html">Settings</a>
-                        <a href="billing.html">Billing</a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" onclick="logout(); return false;">Logout</a>
-                    </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <!-- Header will be auto-injected by header.js -->
 
     <!-- Page Header -->
     <div class="page-header">
@@ -598,7 +376,7 @@
             <!-- Reviews Content (Hidden Initially) -->
             <div id="reviewsContent" class="hidden">
                 <!-- Stats Overview -->
-                <div class="stats-overview">
+                <div class="stats-overview card">
                     <div class="stats-grid">
                         <!-- Overall Rating -->
                         <div class="overall-rating">
@@ -679,333 +457,32 @@
                 </div>
 
                 <!-- Empty State -->
-                <div id="emptyState" class="empty-state hidden">
-                    <h3>No Reviews Yet</h3>
-                    <p>You haven't received any reviews yet. Keep speaking at events to build your reputation!</p>
-                    <a href="opportunities.html" class="btn btn-primary">Browse Opportunities</a>
+                <div id="emptyState" class="card hidden">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <h3>No Reviews Yet</h3>
+                        <p>You haven't received any reviews yet. Keep speaking at events to build your reputation!</p>
+                        <a href="/opportunities.html" class="btn btn-primary">Browse Opportunities</a>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
+    
+    <!-- Footer will be auto-injected by footer.js -->
 
     <!-- Load Supabase from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <!-- Load config and Supabase client -->
-    <script src="js/config.js"></script>
-    <script src="js/supabase-client.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
     
-    <script>
-        // Page state
-        let currentUser = null;
-        let allReviews = [];
-        let filteredReviews = [];
-
-        // Wait for Supabase client
-        function waitForSupabase(callback) {
-            let attempts = 0;
-            const maxAttempts = 10;
-            
-            function check() {
-                attempts++;
-                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
-                    callback();
-                } else if (attempts < maxAttempts) {
-                    setTimeout(check, 500);
-                } else {
-                    console.error('Failed to initialize');
-                }
-            }
-            check();
-        }
-
-        // Update navigation
-        function updateNavigation(user) {
-            const navLinks = document.getElementById('navLinks');
-            const authButtons = document.getElementById('authButtons');
-            const userMenu = document.getElementById('userMenu');
-            const userAvatar = document.getElementById('userAvatar');
-            
-            if (user) {
-                authButtons.classList.add('hidden');
-                userMenu.classList.remove('hidden');
-                
-                const initials = user.name ? 
-                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
-                    'U';
-                userAvatar.textContent = initials;
-                
-                navLinks.innerHTML = `
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="opportunities.html">Opportunities</a></li>
-                    <li><a href="bookings.html">My Bookings</a></li>
-                    <li><a href="reviews.html" class="active">Reviews</a></li>
-                `;
-            }
-        }
-
-        // Initialize page
-        async function initializePage() {
-            waitForSupabase(async () => {
-                try {
-                    // Check authentication
-                    const session = await window.covetalks.checkAuth();
-                    if (!session) {
-                        window.location.href = '/login.html';
-                        return;
-                    }
-
-                    // Get current user
-                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
-                    updateNavigation(currentUser);
-
-                    // Load reviews
-                    await loadReviews();
-
-                } catch (error) {
-                    console.error('Error initializing:', error);
-                }
-            });
-        }
-
-        // Load reviews
-        async function loadReviews() {
-            try {
-                const reviews = await window.covetalks.getReviews(currentUser.id);
-                allReviews = reviews;
-                filteredReviews = reviews;
-
-                // Hide loading, show content
-                document.getElementById('loadingState').classList.add('hidden');
-                document.getElementById('reviewsContent').classList.remove('hidden');
-
-                if (reviews.length === 0) {
-                    document.getElementById('emptyState').classList.remove('hidden');
-                    document.querySelector('.stats-overview').classList.add('hidden');
-                    document.querySelector('.filters-section').classList.add('hidden');
-                } else {
-                    displayStats(reviews);
-                    displayReviews(reviews);
-                }
-
-            } catch (error) {
-                console.error('Error loading reviews:', error);
-            }
-        }
-
-        // Display statistics
-        function displayStats(reviews) {
-            const totalReviews = reviews.length;
-            let totalRating = 0;
-            let totalContent = 0;
-            let totalDelivery = 0;
-            let totalProfessionalism = 0;
-            let recommendCount = 0;
-
-            reviews.forEach(review => {
-                totalRating += review.rating || 0;
-                totalContent += review.content_rating || 0;
-                totalDelivery += review.delivery_rating || 0;
-                totalProfessionalism += review.professionalism_rating || 0;
-                if (review.would_recommend) recommendCount++;
-            });
-
-            const avgRating = totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : '0.0';
-            const avgContent = totalReviews > 0 ? (totalContent / totalReviews).toFixed(1) : '0.0';
-            const avgDelivery = totalReviews > 0 ? (totalDelivery / totalReviews).toFixed(1) : '0.0';
-            const avgProfessionalism = totalReviews > 0 ? (totalProfessionalism / totalReviews).toFixed(1) : '0.0';
-            const recommendPercent = totalReviews > 0 ? Math.round((recommendCount / totalReviews) * 100) : 0;
-
-            // Update overall rating
-            document.getElementById('overallRating').textContent = avgRating;
-            document.getElementById('totalReviews').textContent = totalReviews;
-            updateStars('overallStars', parseFloat(avgRating));
-
-            // Update breakdown
-            document.getElementById('contentRating').textContent = avgContent;
-            document.getElementById('contentBar').style.width = `${(avgContent / 5) * 100}%`;
-            
-            document.getElementById('deliveryRating').textContent = avgDelivery;
-            document.getElementById('deliveryBar').style.width = `${(avgDelivery / 5) * 100}%`;
-            
-            document.getElementById('professionalismRating').textContent = avgProfessionalism;
-            document.getElementById('professionalismBar').style.width = `${(avgProfessionalism / 5) * 100}%`;
-            
-            document.getElementById('recommendPercent').textContent = recommendPercent;
-            document.getElementById('recommendBar').style.width = `${recommendPercent}%`;
-        }
-
-        // Update star display
-        function updateStars(elementId, rating) {
-            const starsContainer = document.getElementById(elementId);
-            const stars = starsContainer.querySelectorAll('.star');
-            
-            stars.forEach((star, index) => {
-                if (index < Math.floor(rating)) {
-                    star.classList.remove('empty');
-                } else {
-                    star.classList.add('empty');
-                }
-            });
-        }
-
-        // Display reviews
-        function displayReviews(reviews) {
-            const reviewsList = document.getElementById('reviewsList');
-            
-            if (reviews.length === 0) {
-                reviewsList.innerHTML = '<p style="text-align: center; color: #666;">No reviews match your filters</p>';
-                return;
-            }
-
-            reviewsList.innerHTML = reviews.map(review => {
-                const org = review.organization || {};
-                const stars = generateStars(review.rating);
-                const date = formatDate(review.created_at);
-
-                return `
-                    <div class="review-card">
-                        <div class="review-header">
-                            <div class="reviewer-info">
-                                <div class="reviewer-avatar">
-                                    ${org.name ? org.name.substring(0, 2).toUpperCase() : 'OR'}
-                                </div>
-                                <div class="reviewer-details">
-                                    <h4>${org.name || 'Organization'}</h4>
-                                    <p>${org.organization_type || 'Organization'} • ${org.location || 'Location not specified'}</p>
-                                </div>
-                            </div>
-                            <div class="review-date">${date}</div>
-                        </div>
-
-                        <div class="review-ratings">
-                            <div class="rating-item">
-                                <span class="rating-item-label">Overall Rating</span>
-                                <span class="rating-item-stars">${generateStars(review.rating)}</span>
-                            </div>
-                            <div class="rating-item">
-                                <span class="rating-item-label">Content Quality</span>
-                                <span class="rating-item-stars">${generateStars(review.content_rating)}</span>
-                            </div>
-                            <div class="rating-item">
-                                <span class="rating-item-label">Delivery</span>
-                                <span class="rating-item-stars">${generateStars(review.delivery_rating)}</span>
-                            </div>
-                            <div class="rating-item">
-                                <span class="rating-item-label">Professionalism</span>
-                                <span class="rating-item-stars">${generateStars(review.professionalism_rating)}</span>
-                            </div>
-                        </div>
-
-                        ${review.review_text ? `
-                        <div class="review-content">
-                            <h5>Review</h5>
-                            <p>${review.review_text}</p>
-                        </div>
-                        ` : ''}
-
-                        <div class="review-footer">
-                            <div class="event-info">
-                                ${review.would_recommend ? 
-                                    '✅ Would recommend to others' : 
-                                    '⚠️ Might not recommend'}
-                            </div>
-                            ${review.verified ? '<span class="verified-badge">✓ Verified Event</span>' : ''}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Generate star display
-        function generateStars(rating) {
-            let stars = '';
-            for (let i = 1; i <= 5; i++) {
-                if (i <= rating) {
-                    stars += '★';
-                } else {
-                    stars += '☆';
-                }
-            }
-            return stars;
-        }
-
-        // Sort reviews
-        function sortReviews() {
-            const sortBy = document.getElementById('sortBy').value;
-            let sorted = [...filteredReviews];
-
-            switch (sortBy) {
-                case 'recent':
-                    sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                    break;
-                case 'highest':
-                    sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-                    break;
-                case 'lowest':
-                    sorted.sort((a, b) => (a.rating || 0) - (b.rating || 0));
-                    break;
-            }
-
-            displayReviews(sorted);
-        }
-
-        // Filter reviews
-        function filterReviews() {
-            const filterRating = document.getElementById('filterRating').value;
-            
-            if (filterRating === 'all') {
-                filteredReviews = allReviews;
-            } else {
-                const minRating = parseInt(filterRating);
-                filteredReviews = allReviews.filter(review => 
-                    (review.rating || 0) >= minRating
-                );
-            }
-
-            sortReviews();
-        }
-
-        // Format date
-        function formatDate(dateString) {
-            if (!dateString) return 'Date not available';
-            return new Date(dateString).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-        }
-
-        // Toggle dropdown
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-
-        // Logout
-        async function logout() {
-            if (window.covetalks) {
-                await window.covetalks.logout();
-            }
-        }
-
-        // Initialize on load
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializePage);
-        } else {
-            initializePage();
-        }
-    </script>
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
+    <script src="/js/pages/reviews.js"></script>
 </body>
 </html>

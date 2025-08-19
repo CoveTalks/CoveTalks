@@ -4,166 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pricing - CoveTalks</title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
-    <script src="https://js.stripe.com/v3/"></script>
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- Page-specific styles ONLY for unique elements -->
     <style>
-        /* Base styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header */
-        header {
-            background: white;
-            color: #333;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        
-        .logo-img {
-            height: 70px;
-            width: auto;
-            display: block;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #155588;
-        }
-
-        .nav-links a.active {
-            color: #155588;
-            border-bottom: 2px solid #155588;
-            padding-bottom: 2px;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            background: #1e3d6f;
-            transform: translateY(-2px);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #155588;
-            border: 2px solid #155588;
-        }
-
-        .btn-secondary:hover {
-            background: #155588;
-            color: white;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding-top: 6rem;
-            min-height: 100vh;
-            background: #f8f9fa;
-        }
-
+        /* Page Header - Unique to pricing page */
         .page-header {
-            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
-            padding: 10rem 0;
+            padding: var(--spacing-3xl) 0 var(--spacing-2xl);
             text-align: center;
+            margin-bottom: var(--spacing-2xl);
         }
 
         .page-header h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
+            font-size: 3rem;
+            margin-bottom: var(--spacing-md);
+            color: white;
         }
 
         .page-header p {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             max-width: 600px;
             margin: 0 auto;
+            opacity: 0.95;
         }
 
         /* Pricing Toggle */
         .pricing-toggle {
             text-align: center;
-            margin: 3rem 0;
+            margin: var(--spacing-2xl) 0;
         }
 
         .toggle-container {
@@ -171,60 +46,54 @@
             background: white;
             border-radius: 50px;
             padding: 0.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-md);
         }
 
         .toggle-option {
-            padding: 1rem 2rem;
+            padding: var(--spacing-md) var(--spacing-xl);
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
+            transition: all var(--transition-normal);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-gray);
         }
 
         .toggle-option.active {
-            background: #155588;
+            background: var(--color-deep);
             color: white;
         }
 
-        .toggle-option:not(.active) {
-            color: #666;
-        }
-
-        /* Pricing Section */
-        .pricing-section {
-            padding: 2rem 0 4rem;
-        }
-
+        /* Pricing Grid */
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
+            gap: var(--spacing-xl);
             max-width: 1100px;
             margin: 0 auto;
         }
 
+        /* Pricing Card */
         .pricing-card {
             background: white;
-            border: 2px solid #e1e8ed;
+            border: 2px solid var(--color-border);
             border-radius: 20px;
-            padding: 3rem 2rem;
+            padding: var(--spacing-2xl) var(--spacing-xl);
             text-align: center;
             position: relative;
-            transition: all 0.3s;
+            transition: all var(--transition-normal);
             display: flex;
             flex-direction: column;
             height: 100%;
         }
 
         .pricing-card:hover {
-            border-color: #155588;
+            border-color: var(--color-deep);
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            box-shadow: var(--shadow-xl);
         }
 
         .pricing-card.popular {
-            border-color: #f2b236;
+            border-color: var(--color-sand);
             background: linear-gradient(135deg, #fff, #fff8e1);
             transform: scale(1.05);
         }
@@ -238,53 +107,53 @@
             top: -15px;
             left: 50%;
             transform: translateX(-50%);
-            background: #f2b236;
+            background: var(--color-sand);
             color: white;
             padding: 0.75rem 2rem;
             border-radius: 25px;
             font-size: 0.9rem;
-            font-weight: bold;
+            font-weight: var(--font-weight-bold);
         }
 
         .plan-name {
             font-size: 2rem;
-            color: #155588;
-            margin-bottom: 1rem;
-            font-weight: bold;
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-md);
+            font-weight: var(--font-weight-black);
         }
 
         .price-container {
-            margin-bottom: 2rem;
+            margin-bottom: var(--spacing-xl);
         }
 
         .price {
-            font-size: 4rem;
-            font-weight: bold;
-            color: #155588;
+            font-size: 3.5rem;
+            font-weight: var(--font-weight-black);
+            color: var(--color-deep);
             margin-bottom: 0.5rem;
         }
 
         .price-period {
             font-size: 1.1rem;
-            color: #666;
+            color: var(--color-gray);
         }
 
         .price-note {
             font-size: 0.9rem;
-            color: #888;
+            color: var(--color-gray-light);
             margin-top: 0.5rem;
         }
 
         .features {
             list-style: none;
-            margin: 2rem 0;
+            margin: var(--spacing-xl) 0;
             text-align: left;
             flex-grow: 1;
         }
 
         .features li {
             padding: 0.75rem 0;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid var(--color-bg-light);
             position: relative;
             padding-left: 2rem;
         }
@@ -293,8 +162,8 @@
             content: "✓";
             position: absolute;
             left: 0;
-            color: #27ae60;
-            font-weight: bold;
+            color: var(--color-success);
+            font-weight: var(--font-weight-bold);
             font-size: 1.2rem;
         }
 
@@ -302,59 +171,50 @@
             border-bottom: none;
         }
 
-        .cta-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .btn-large {
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-        }
-
         /* Organization Section */
         .organization-section {
-            background: linear-gradient(135deg, #155588, #1e3d6f);
+            background: linear-gradient(135deg, var(--color-deep), var(--color-deep-dark));
             color: white;
-            padding: 4rem 0;
+            padding: var(--spacing-3xl) 0;
             text-align: center;
+            margin-top: var(--spacing-3xl);
         }
 
         .organization-card {
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 3rem;
+            padding: var(--spacing-2xl);
             max-width: 600px;
             margin: 0 auto;
         }
 
         .organization-card h2 {
             font-size: 2.5rem;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
+            color: white;
         }
 
         .organization-card p {
             font-size: 1.2rem;
-            margin-bottom: 2rem;
+            margin-bottom: var(--spacing-xl);
         }
 
         .btn-white {
             background: white;
-            color: #155588;
+            color: var(--color-deep);
             border: none;
         }
 
         .btn-white:hover {
-            background: #f8f9fa;
+            background: var(--color-foam);
+            color: var(--color-deep);
             transform: translateY(-2px);
         }
 
         /* FAQ Section */
         .faq-section {
-            padding: 4rem 0;
+            padding: var(--spacing-3xl) 0;
             background: white;
         }
 
@@ -363,21 +223,28 @@
             margin: 0 auto;
         }
 
+        .faq-section h2 {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+            color: var(--color-deep);
+        }
+
         .faq-item {
-            margin-bottom: 1.5rem;
-            border: 1px solid #e1e8ed;
+            margin-bottom: var(--spacing-lg);
+            border: 1px solid var(--color-border);
             border-radius: 10px;
             overflow: hidden;
         }
 
         .faq-question {
-            background: #f8f9fa;
-            padding: 1.5rem;
+            background: var(--color-foam);
+            padding: var(--spacing-lg);
             cursor: pointer;
-            font-weight: 500;
+            font-weight: var(--font-weight-medium);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: background var(--transition-fast);
         }
 
         .faq-question:hover {
@@ -385,7 +252,7 @@
         }
 
         .faq-answer {
-            padding: 1.5rem;
+            padding: var(--spacing-lg);
             display: none;
         }
 
@@ -393,127 +260,41 @@
             display: block;
         }
 
-        /* Footer */
-        footer {
-            background: #2c3e50;
-            color: white;
-            padding: 3rem 0 1rem;
+        .faq-toggle {
+            font-size: 1.5rem;
+            transition: transform var(--transition-fast);
         }
 
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+        .faq-answer.active + .faq-question .faq-toggle {
+            transform: rotate(45deg);
         }
 
-        .footer-section h3 {
-            margin-bottom: 1rem;
-            color: #f2b236;
+        /* Loading state for buttons */
+        .btn-loading {
+            position: relative;
+            color: transparent !important;
         }
 
-        .footer-section a {
-            color: #bdc3c7;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.5rem;
-            transition: color 0.3s;
-        }
-
-        .footer-section a:hover {
-            color: #f2b236;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #34495e;
-            padding-top: 1rem;
-            text-align: center;
-            color: #bdc3c7;
-        }
-
-        /* Loading */
-        .loading {
-            display: inline-block;
+        .btn-loading::after {
+            content: '';
+            position: absolute;
             width: 20px;
             height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #155588;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid white;
             border-radius: 50%;
+            border-top-color: transparent;
             animation: spin 1s linear infinite;
-            margin-left: 0.5rem;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        /* User Menu */
-        .user-menu {
-            position: relative;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 0.5rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.75rem 1rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #e1e8ed;
-            margin: 0.5rem 0;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
+        /* Mobile Responsive Overrides */
+        @media (max-width: 992px) {
             .pricing-grid {
                 grid-template-columns: 1fr;
-                gap: 1rem;
+                gap: var(--spacing-lg);
             }
 
             .pricing-card.popular {
@@ -523,82 +304,75 @@
             .pricing-card.popular:hover {
                 transform: translateY(-5px);
             }
+        }
 
+        @media (max-width: 768px) {
             .page-header h1 {
-                font-size: 2.5rem;
+                font-size: 2rem;
+            }
+
+            .page-header p {
+                font-size: 1rem;
             }
 
             .price {
-                font-size: 3rem;
+                font-size: 2.5rem;
             }
 
-            .logo-img {
-                height: 50px;
+            .plan-name {
+                font-size: 1.5rem;
+            }
+
+            .toggle-option {
+                padding: var(--spacing-sm) var(--spacing-md);
+                font-size: 0.9rem;
+            }
+
+            .organization-card h2 {
+                font-size: 1.75rem;
+            }
+
+            .organization-card p {
+                font-size: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="nav-container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
-                </a>
-                
-                <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="pricing.html" class="active">Pricing</a></li>
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
+    <!-- Header will be auto-injected by header.js -->
     
-                <div class="nav-right">
-                    <!-- Auth buttons or user menu will be inserted here -->
-                    <div class="auth-buttons" id="authButtons">
-                        <a href="register.html" class="btn btn-secondary">Join</a>
-                        <a href="login.html" class="btn btn-primary">Login</a>
-                    </div>
-                    
-                    <div class="user-menu hidden" id="userMenu">
-                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">JD</div>
-                        <div class="dropdown-menu" id="dropdownMenu">
-                            <a href="inbox.html">Inbox</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="settings.html">Settings</a>
-                            <a href="billing.html">Billing</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" onclick="logout(); return false;">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
-
     <!-- Page Header -->
     <div class="page-header">
         <div class="container">
-            <h1>PRICING</h1>
-            <p>Join the world's largest network of "no-fee" speakers for a low monthly cost</p>
+            <h1>Simple, Transparent Pricing</h1>
+            <p>Join the world's largest network of speakers for a low monthly cost</p>
         </div>
     </div>
 
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Pricing Toggle -->
-            <div class="pricing-toggle">
-                <div class="toggle-container">
-                    <div class="toggle-option active" data-period="monthly" onclick="togglePeriod('monthly')">Monthly</div>
-                    <div class="toggle-option" data-period="yearly" onclick="togglePeriod('yearly')">Yearly (Save 25%)</div>
-                </div>
+            <!-- Loading State -->
+            <div id="loadingState" class="loading hidden">
+                <div class="loading-spinner"></div>
+                Loading pricing information...
             </div>
 
-            <!-- Pricing Section -->
-            <div class="pricing-section">
+            <!-- Pricing Content -->
+            <div id="pricingContent">
+                <!-- Pricing Toggle -->
+                <div class="pricing-toggle">
+                    <div class="toggle-container">
+                        <div class="toggle-option active" data-period="monthly" onclick="togglePeriod('monthly')">
+                            Monthly
+                        </div>
+                        <div class="toggle-option" data-period="yearly" onclick="togglePeriod('yearly')">
+                            Yearly (Save 25%)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pricing Grid -->
                 <div class="pricing-grid">
                     <!-- Standard Plan -->
                     <div class="pricing-card">
@@ -617,11 +391,11 @@
                             <li>Speaking opportunity alerts</li>
                             <li>1 on 1 coaching (one session)</li>
                         </ul>
-                        <div class="cta-buttons">
-                            <button class="btn btn-primary btn-large monthly-btn" onclick="selectPlan('standard', 'monthly')">
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-block monthly-btn" onclick="selectPlan('standard', 'monthly')">
                                 Start Monthly Plan
                             </button>
-                            <button class="btn btn-primary btn-large yearly-btn hidden" onclick="selectPlan('standard', 'yearly')">
+                            <button class="btn btn-primary btn-block yearly-btn hidden" onclick="selectPlan('standard', 'yearly')">
                                 Start Yearly Plan
                             </button>
                         </div>
@@ -629,7 +403,7 @@
 
                     <!-- Plus Plan (Popular) -->
                     <div class="pricing-card popular">
-                        <div class="popular-badge">Most Popular</div>
+                        <div class="popular-badge">MOST POPULAR</div>
                         <h3 class="plan-name">Plus</h3>
                         <div class="price-container">
                             <div class="price" data-monthly="147" data-yearly="1497">$147</div>
@@ -646,11 +420,11 @@
                             <li>Custom speaker tags</li>
                             <li>One additional coaching session</li>
                         </ul>
-                        <div class="cta-buttons">
-                            <button class="btn btn-primary btn-large monthly-btn" onclick="selectPlan('plus', 'monthly')">
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-block monthly-btn" onclick="selectPlan('plus', 'monthly')">
                                 Start Monthly Plan
                             </button>
-                            <button class="btn btn-primary btn-large yearly-btn hidden" onclick="selectPlan('plus', 'yearly')">
+                            <button class="btn btn-primary btn-block yearly-btn hidden" onclick="selectPlan('plus', 'yearly')">
                                 Start Yearly Plan
                             </button>
                         </div>
@@ -673,177 +447,170 @@
                             <li>API access</li>
                             <li>Priority listing</li>
                             <li>Phone support</li>
-                            <li>Premium only speaking opportunities</li>
+                            <li>Premium only opportunities</li>
                         </ul>
-                        <div class="cta-buttons">
-                            <button class="btn btn-primary btn-large monthly-btn" onclick="selectPlan('premium', 'monthly')">
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-block monthly-btn" onclick="selectPlan('premium', 'monthly')">
                                 Start Monthly Plan
                             </button>
-                            <button class="btn btn-primary btn-large yearly-btn hidden" onclick="selectPlan('premium', 'yearly')">
+                            <button class="btn btn-primary btn-block yearly-btn hidden" onclick="selectPlan('premium', 'yearly')">
                                 Start Yearly Plan
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Organization Section -->
-        <div class="organization-section">
-            <div class="container">
-                <div class="organization-card">
-                    <h2>Organizations Get Free Access!</h2>
-                    <p>Non-profits, schools, churches, and other organizations can access our speaker database completely free. No subscription required.</p>
-                    <a href="register.html" class="btn btn-white btn-large">Register Your Organization Free</a>
+            <!-- Organization Section -->
+            <div class="organization-section" id="organizations">
+                <div class="container">
+                    <div class="organization-card">
+                        <h2>Organizations Get Free Access!</h2>
+                        <p>Non-profits, schools, churches, and other organizations can access our speaker database completely free. No subscription required.</p>
+                        <a href="/register.html?type=organization" class="btn btn-white btn-lg">
+                            Register Your Organization Free
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- FAQ Section -->
-        <div class="faq-section">
-            <div class="container">
-                <h2 style="text-align: center; margin-bottom: 3rem; color: #155588;">Frequently Asked Questions</h2>
-                <div class="faq-container">
-                    <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFAQ(this)">
-                            <span>What's the difference between the plans?</span>
-                            <span>+</span>
+            <!-- FAQ Section -->
+            <div class="faq-section">
+                <div class="container">
+                    <div class="faq-container">
+                        <h2>Frequently Asked Questions</h2>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFAQ(this)">
+                                <span>What's the difference between the plans?</span>
+                                <span class="faq-toggle">+</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>All plans include access to our speaker database and contact information. Plus adds advanced search filters and booking tools, while Premium includes unlimited bookings, API access, and dedicated support.</p>
+                            </div>
                         </div>
-                        <div class="faq-answer">
-                            <p>All plans include access to our speaker database and contact information. Plus adds advanced search filters and booking tools, while Premium includes unlimited bookings, API access, and dedicated support.</p>
-                        </div>
-                    </div>
 
-                    <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFAQ(this)">
-                            <span>Is there really no cost for organizations?</span>
-                            <span>+</span>
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFAQ(this)">
+                                <span>Is there really no cost for organizations?</span>
+                                <span class="faq-toggle">+</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Correct! Non-profits, schools, churches, and similar organizations get completely free access to our platform. This is part of our mission to connect speakers with meaningful causes.</p>
+                            </div>
                         </div>
-                        <div class="faq-answer">
-                            <p>Correct! Non-profits, schools, churches, and similar organizations get completely free access to our platform. This is part of our mission to connect speakers with meaningful causes.</p>
-                        </div>
-                    </div>
 
-                    <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFAQ(this)">
-                            <span>Can I cancel my subscription anytime?</span>
-                            <span>+</span>
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFAQ(this)">
+                                <span>Can I cancel my subscription anytime?</span>
+                                <span class="faq-toggle">+</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Yes, you can cancel your subscription at any time. Your access will continue until the end of your current billing period.</p>
+                            </div>
                         </div>
-                        <div class="faq-answer">
-                            <p>Yes, you can cancel your subscription at any time. Your access will continue until the end of your current billing period.</p>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFAQ(this)">
+                                <span>Do you offer discounts for annual billing?</span>
+                                <span class="faq-toggle">+</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Yes! When you choose annual billing, you save approximately 25% compared to monthly billing. This equals about 2-3 months free per year.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFAQ(this)">
+                                <span>Can I upgrade or downgrade my plan?</span>
+                                <span class="faq-toggle">+</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Absolutely! You can upgrade or downgrade your plan at any time. Changes take effect at the next billing cycle, and we'll prorate any differences.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>CoveTalks</h3>
-                    <p>Connecting speakers with organizations worldwide</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <a href="index.html">Home</a>
-                    <a href="members.html">Members</a>
-                    <a href="register.html">Register</a>
-                    <a href="pricing.html">Pricing</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Support</h3>
-                    <a href="#">Help Center</a>
-                    <a href="#">Contact Us</a>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Connect</h3>
-                    <a href="#">LinkedIn</a>
-                    <a href="#">Twitter</a>
-                    <a href="#">Facebook</a>
-                    <a href="#">Email</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 CoveTalks. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Load Supabase and Stripe -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/config.js"></script>
-    <script src="js/supabase-client.js"></script>
     
+    <!-- Footer will be auto-injected by footer.js -->
+
+    <!-- Load Stripe -->
+    <script src="https://js.stripe.com/v3/"></script>
+    
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load config and Supabase client -->
+    <script src="/js/config.js"></script>
+    <script src="/js/stripe-config.js"></script>
+    <script src="/js/supabase-client.js"></script>
+    
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
     <script>
         // Initialize Stripe
-        const stripe = Stripe('pk_live_51RrABe1Fvl67fP5VrtH3hkNvl4chaiFtlskEMSHJIw6M1tAHdcgZ21pgup7DCEajjyQFUDM1jnIE7W1KrGBDjieV002ztaIRXk');
-        
-        // Current billing period
+        let stripe = null;
         let currentPeriod = 'monthly';
         let currentUser = null;
 
-        // Wait for Supabase client
-        function waitForSupabase(callback) {
-            let attempts = 0;
-            const maxAttempts = 10;
-            
-            const checkClient = () => {
-                attempts++;
-                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
-                    callback();
-                } else if (attempts < maxAttempts) {
-                    setTimeout(checkClient, 500);
-                } else {
-                    console.error('Failed to load Supabase client');
-                }
-            };
-            
-            checkClient();
-        }
-
         // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            waitForSupabase(async () => {
-                await checkAuthStatus();
-            });
-        });
+        async function initializePage() {
+            try {
+                // Initialize Stripe
+                if (window.STRIPE_CONFIG && window.STRIPE_CONFIG.PUBLISHABLE_KEY) {
+                    stripe = Stripe(window.STRIPE_CONFIG.PUBLISHABLE_KEY);
+                }
 
-        // Check authentication status
-        async function checkAuthStatus() {
-            const session = await window.covetalks.checkAuth();
-            
-            if (session) {
-                currentUser = await window.covetalks.getMemberProfile(session.user.id);
-                
-                if (currentUser) {
-                    // Show user menu
-                    document.getElementById('authButtons').classList.add('hidden');
-                    document.getElementById('userMenu').classList.remove('hidden');
-                    
-                    // Update avatar
-                    const initials = currentUser.name ? 
-                        currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
-                        'U';
-                    document.getElementById('userAvatar').textContent = initials;
+                // Wait for Supabase
+                await waitForSupabase();
+
+                // Check authentication
+                const session = await window.covetalks.checkAuth();
+                if (session) {
+                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
                     
                     // If organization, show special message
-                    if (currentUser.member_type === 'Organization') {
-                        const pricingSection = document.querySelector('.pricing-section');
-                        pricingSection.innerHTML = `
-                            <div style="text-align: center; padding: 3rem;">
-                                <h2>Welcome ${currentUser.name}!</h2>
-                                <p style="font-size: 1.2rem; margin: 2rem 0;">As an organization, you have free access to CoveTalks.</p>
-                                <a href="organization-dashboard.html" class="btn btn-primary btn-large">Go to Dashboard</a>
-                            </div>
-                        `;
+                    if (currentUser && currentUser.member_type === 'Organization') {
+                        showOrganizationMessage();
                     }
                 }
+
+                // Check for subscription success
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('subscription') === 'success') {
+                    showSuccessMessage();
+                }
+
+            } catch (error) {
+                console.error('Initialization error:', error);
             }
+        }
+
+        // Wait for Supabase client
+        function waitForSupabase() {
+            return new Promise((resolve) => {
+                let attempts = 0;
+                const maxAttempts = 20;
+                
+                function check() {
+                    attempts++;
+                    if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                        resolve();
+                    } else if (attempts < maxAttempts) {
+                        setTimeout(check, 250);
+                    } else {
+                        console.warn('Supabase client not available');
+                        resolve();
+                    }
+                }
+                check();
+            });
         }
 
         // Toggle billing period
@@ -904,46 +671,81 @@
                 // Save selected plan and redirect to login
                 sessionStorage.setItem('selectedPlan', JSON.stringify({ plan, period }));
                 alert('Please login or register to continue with subscription');
-                window.location.href = 'login.html';
+                window.location.href = `/login.html?redirect=${encodeURIComponent(window.location.href)}`;
                 return;
             }
             
-            // For now, just show an alert
-            // In production, this would integrate with Stripe and create a subscription
-            alert(`Selected: ${plan} plan (${period})\n\nStripe integration would handle checkout here.`);
+            // Get button and add loading state
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.classList.add('btn-loading');
+            btn.disabled = true;
             
-            // You would typically:
-            // 1. Call a serverless function to create a Stripe checkout session
-            // 2. Redirect to Stripe Checkout
-            // 3. Handle success/cancel callbacks
+            try {
+                // In production, this would create a Stripe checkout session
+                // For now, show a message
+                await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
+                
+                alert(`Selected: ${plan} plan (${period})\n\nStripe integration would handle checkout here.`);
+                
+                // You would typically:
+                // 1. Call a serverless function to create a Stripe checkout session
+                // 2. Redirect to Stripe Checkout
+                // 3. Handle success/cancel callbacks
+                
+            } catch (error) {
+                console.error('Error selecting plan:', error);
+                alert('An error occurred. Please try again.');
+            } finally {
+                btn.classList.remove('btn-loading');
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
         }
 
         // Toggle FAQ
         function toggleFAQ(element) {
             const answer = element.nextElementSibling;
-            const icon = element.querySelector('span:last-child');
+            const icon = element.querySelector('.faq-toggle');
+            
             answer.classList.toggle('active');
             icon.textContent = answer.classList.contains('active') ? '−' : '+';
         }
 
-        // Toggle dropdown menu
-        function toggleDropdown() {
-            document.getElementById('dropdownMenu').classList.toggle('show');
+        // Show organization message
+        function showOrganizationMessage() {
+            const pricingContent = document.getElementById('pricingContent');
+            pricingContent.innerHTML = `
+                <div class="card" style="text-align: center; padding: 3rem;">
+                    <h2>Welcome ${currentUser.name}!</h2>
+                    <p style="font-size: 1.2rem; margin: 2rem 0;">
+                        As an organization, you have free access to CoveTalks.
+                    </p>
+                    <a href="/organization-dashboard.html" class="btn btn-primary btn-lg">
+                        Go to Dashboard
+                    </a>
+                </div>
+            `;
         }
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
+        // Show success message
+        function showSuccessMessage() {
+            const container = document.querySelector('.main-content .container');
+            const message = document.createElement('div');
+            message.className = 'message-box success';
+            message.style.marginBottom = '2rem';
+            message.innerHTML = `
+                <h4>Subscription Successful!</h4>
+                <p>Thank you for subscribing to CoveTalks. You now have full access to all features.</p>
+            `;
+            container.insertBefore(message, container.firstChild);
+        }
 
-        // Logout
-        async function logout() {
-            await window.covetalks.logout();
+        // Initialize on load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
         }
     </script>
 </body>

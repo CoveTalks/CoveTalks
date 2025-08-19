@@ -4,211 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post Speaking Opportunity - CoveTalks</title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- Page-specific styles ONLY for unique elements -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header - Organization Green Theme */
-        header {
-            background: white;
-            color: #333;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        
-        .logo-img {
-            height: 70px;
-            width: auto;
-            display: block;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #f2b236;
-        }
-
-        .nav-links a.active {
-            color: #f2b236;
-            border-bottom: 2px solid #f2b236;
-            padding-bottom: 2px;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: #f2b236;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #229954;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #f2b236;
-            border: 2px solid #f2b236;
-        }
-
-        .btn-secondary:hover {
-            background: #f2b236;
-            color: white;
-        }
-
-        .btn-danger {
-            background: #e74c3c;
-            color: white;
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        /* User Menu */
-        .user-menu {
-            position: relative;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: #f2b236;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: transform 0.2s;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.05);
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.75rem 1.25rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #e1e8ed;
-            margin: 0;
-        }
-
-        /* Page Header - Green Theme */
+        /* Page Header - Sand/Gold gradient for organizations */
         .page-header {
-            background: linear-gradient(135deg, #f2b236 0%, #2ecc71 100%);
+            background: linear-gradient(135deg, var(--color-sand) 0%, var(--color-calm) 100%);
             color: white;
-            padding: 8rem 0 4rem;
+            padding: calc(var(--header-height) + var(--spacing-3xl)) 0 var(--spacing-2xl);
             text-align: center;
         }
 
         .page-header h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-md);
+            color: white;
         }
 
         .page-header p {
@@ -217,24 +33,21 @@
             margin: 0 auto;
         }
 
-        /* Main Content */
-        .main-content {
-            padding: 3rem 0;
-            margin-top: -4rem;
-        }
-
+        /* Form Container */
         .form-container {
             max-width: 800px;
-            margin: 0 auto;
+            margin: calc(var(--spacing-2xl) * -1) auto 0;
+            position: relative;
+            z-index: 10;
         }
 
         /* Progress Bar */
         .progress-bar {
             background: white;
             border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--spacing-xl);
         }
 
         .progress-steps {
@@ -256,7 +69,7 @@
             left: -50%;
             right: 50%;
             height: 2px;
-            background: #e1e8ed;
+            background: var(--color-border);
             z-index: -1;
         }
 
@@ -265,152 +78,117 @@
         }
 
         .progress-step.completed::before {
-            background: #f2b236;
+            background: var(--color-sand);
         }
 
         .step-circle {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #e1e8ed;
+            background: var(--color-border);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 0.5rem;
-            font-weight: bold;
+            margin: 0 auto var(--spacing-sm);
+            font-weight: var(--font-weight-bold);
             color: white;
         }
 
-        .progress-step.active .step-circle {
-            background: #f2b236;
-        }
-
+        .progress-step.active .step-circle,
         .progress-step.completed .step-circle {
-            background: #f2b236;
+            background: var(--color-sand);
         }
 
         .step-label {
             font-size: 0.9rem;
-            color: #666;
+            color: var(--color-gray);
         }
 
         .progress-step.active .step-label {
-            color: #f2b236;
-            font-weight: 600;
+            color: var(--color-sand);
+            font-weight: var(--font-weight-bold);
         }
 
         /* Form Sections */
         .form-section {
             background: white;
             border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--spacing-xl);
         }
 
         .form-section h2 {
-            color: #f2b236;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #333;
-        }
-
-        .required {
-            color: #e74c3c;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 5px;
-            transition: border-color 0.3s;
-            font-family: inherit;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #f2b236;
-        }
-
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
+            color: var(--color-sand);
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 2px solid var(--color-bg-light);
         }
 
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            gap: var(--spacing-md);
+        }
+
+        .required {
+            color: var(--color-danger);
         }
 
         .help-text {
             font-size: 0.85rem;
-            color: #666;
-            margin-top: 0.25rem;
+            color: var(--color-gray);
+            margin-top: var(--spacing-xs);
         }
 
         /* Character Counter */
         .char-counter {
             text-align: right;
             font-size: 0.85rem;
-            color: #666;
-            margin-top: 0.25rem;
+            color: var(--color-gray);
+            margin-top: var(--spacing-xs);
         }
 
         .char-counter.warning {
-            color: #f2b236;
+            color: var(--color-sand);
         }
 
         .char-counter.error {
-            color: #e74c3c;
+            color: var(--color-danger);
         }
 
         /* Tag Input */
         .tag-input-container {
-            border: 2px solid #e1e8ed;
-            border-radius: 5px;
-            padding: 0.5rem;
+            border: 2px solid var(--color-border);
+            border-radius: 8px;
+            padding: var(--spacing-sm);
             min-height: 50px;
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: var(--spacing-sm);
             align-items: center;
+            transition: border-color var(--transition-fast);
         }
 
         .tag-input-container:focus-within {
-            border-color: #f2b236;
+            border-color: var(--color-sand);
+            box-shadow: 0 0 0 3px rgba(243, 179, 56, 0.1);
         }
 
         .tag {
-            background: #f2b236;
+            background: var(--color-sand);
             color: white;
             padding: 0.25rem 0.75rem;
             border-radius: 15px;
             font-size: 0.9rem;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: var(--spacing-sm);
         }
 
         .tag-remove {
             cursor: pointer;
-            font-weight: bold;
+            font-weight: var(--font-weight-bold);
         }
 
         .tag-input {
@@ -418,84 +196,82 @@
             outline: none;
             flex: 1;
             min-width: 150px;
+            font-family: var(--font-primary);
         }
 
         /* Preview Card */
         .preview-card {
-            background: #f8f9fa;
-            border: 2px dashed #f2b236;
+            background: var(--color-foam);
+            border: 2px dashed var(--color-sand);
             border-radius: 15px;
-            padding: 1.5rem;
-            margin-top: 1rem;
+            padding: var(--spacing-lg);
+            margin-top: var(--spacing-md);
         }
 
         .preview-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
         }
 
         .preview-title {
-            color: #f2b236;
+            color: var(--color-sand);
             font-size: 1.1rem;
-            font-weight: bold;
+            font-weight: var(--font-weight-bold);
         }
 
-        /* Action Buttons */
+        /* Form Actions */
         .form-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 2px solid #f0f0f0;
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-xl);
+            border-top: 2px solid var(--color-bg-light);
         }
 
         .action-group {
             display: flex;
-            gap: 1rem;
+            gap: var(--spacing-md);
         }
 
-        /* Success Message */
+        /* Success/Error Banners */
+        .success-banner,
+        .error-banner {
+            padding: var(--spacing-md);
+            border-radius: 10px;
+            margin-bottom: var(--spacing-md);
+            display: none;
+        }
+
         .success-banner {
             background: #d4edda;
-            color: #27ae60;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            display: none;
+            color: var(--color-success);
         }
 
-        .success-banner.show {
-            display: block;
-        }
-
-        /* Error Message */
         .error-banner {
             background: #f8d7da;
-            color: #e74c3c;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            display: none;
+            color: var(--color-danger);
         }
 
+        .success-banner.show,
         .error-banner.show {
             display: block;
         }
 
-        /* Tips Sidebar */
+        /* Tips Card */
         .tips-card {
-            background: linear-gradient(135deg, #f2b236 0%, #2ecc71 100%);
+            background: linear-gradient(135deg, var(--color-sand) 0%, var(--color-calm) 100%);
             color: white;
             border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
         }
 
         .tips-card h3 {
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
+            color: white;
         }
 
         .tips-card ul {
@@ -504,8 +280,8 @@
         }
 
         .tips-card li {
-            padding: 0.5rem 0;
-            padding-left: 1.5rem;
+            padding: var(--spacing-sm) 0;
+            padding-left: var(--spacing-lg);
             position: relative;
         }
 
@@ -513,10 +289,10 @@
             content: "✓";
             position: absolute;
             left: 0;
-            font-weight: bold;
+            font-weight: var(--font-weight-bold);
         }
 
-        /* Loading State */
+        /* Loading Overlay */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -534,32 +310,14 @@
             display: flex;
         }
 
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #f2b236;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        /* Responsive */
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
+            .page-header {
+                padding-top: calc(var(--header-height-mobile) + var(--spacing-2xl));
             }
 
             .page-header h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
 
             .form-row {
@@ -572,60 +330,36 @@
 
             .form-actions {
                 flex-direction: column;
-                gap: 1rem;
+                gap: var(--spacing-md);
             }
 
             .action-group {
                 width: 100%;
+                flex-direction: column;
             }
 
             .action-group .btn {
-                flex: 1;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .page-header p {
+                font-size: 1rem;
+            }
+
+            .form-container {
+                margin-top: calc(var(--spacing-lg) * -1);
             }
         }
     </style>
 </head>
-<body class="organization-theme">
-    <!-- Header -->
-    <header>
-        <div class="nav-container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
-                </a>
-                
-                <!-- Navigation links will be dynamically inserted here -->
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="organization-dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="post-opportunity.html" class="active">Post Opportunity</a></li>
-                    <li><a href="my-opportunities.html">My Opportunities</a></li>
-                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                </ul>
-    
-                <div class="nav-right">
-                    <!-- Auth buttons (shown when logged out) -->
-                    <div class="auth-buttons hidden" id="authButtons">
-                        <a href="register.html" class="btn btn-secondary">Join</a>
-                        <a href="login.html" class="btn btn-primary">Login</a>
-                    </div>
-                    
-                    <!-- User menu (shown when logged in) -->
-                    <div class="user-menu" id="userMenu">
-                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">O</div>
-                        <div class="dropdown-menu" id="dropdownMenu">
-                            <a href="inbox.html">Inbox</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="settings.html">Settings</a>
-                            <a href="billing.html">Billing</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" onclick="logout(); return false;">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
+<body>
+    <!-- Header will be auto-injected by header.js -->
 
     <!-- Page Header -->
     <div class="page-header">
@@ -685,15 +419,15 @@
                         <h2>Event Details</h2>
                         
                         <div class="form-group">
-                            <label for="title">Event Title <span class="required">*</span></label>
-                            <input type="text" id="title" name="title" required 
-                                   placeholder="e.g., Annual Business Summit 2024">
+                            <label class="form-label" for="title">Event Title <span class="required">*</span></label>
+                            <input type="text" id="title" name="title" class="form-control" required 
+                                   placeholder="e.g., Annual Business Summit 2025">
                             <div class="help-text">Choose a clear, descriptive title that speakers will understand</div>
                         </div>
                         
                         <div class="form-group">
-                            <label for="speaker_type">Speaker Role <span class="required">*</span></label>
-                            <select id="speaker_type" name="speaker_type" required>
+                            <label class="form-label" for="speaker_type">Speaker Role <span class="required">*</span></label>
+                            <select id="speaker_type" name="speaker_type" class="form-control" required>
                                 <option value="">Select a role</option>
                                 <option value="Keynote Speaker">Keynote Speaker</option>
                                 <option value="Workshop Facilitator">Workshop Facilitator</option>
@@ -706,28 +440,28 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="description">Event Description <span class="required">*</span></label>
-                            <textarea id="description" name="description" required 
+                            <label class="form-label" for="description">Event Description <span class="required">*</span></label>
+                            <textarea id="description" name="description" class="form-control" required 
                                       placeholder="Describe your event, its purpose, and what you're looking for in a speaker..."></textarea>
                             <div class="char-counter" id="descCounter">0 / 500 characters</div>
                         </div>
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="event_date">Event Date <span class="required">*</span></label>
-                                <input type="date" id="event_date" name="event_date" required>
+                                <label class="form-label" for="event_date">Event Date <span class="required">*</span></label>
+                                <input type="date" id="event_date" name="event_date" class="form-control" required>
                             </div>
                             
                             <div class="form-group">
-                                <label for="event_time">Event Time <span class="required">*</span></label>
-                                <input type="time" id="event_time" name="event_time" required>
+                                <label class="form-label" for="event_time">Event Time <span class="required">*</span></label>
+                                <input type="time" id="event_time" name="event_time" class="form-control" required>
                             </div>
                         </div>
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="duration">Speaking Duration</label>
-                                <select id="duration" name="duration">
+                                <label class="form-label" for="duration">Speaking Duration</label>
+                                <select id="duration" name="duration" class="form-control">
                                     <option value="">Select duration</option>
                                     <option value="0.25">15 minutes</option>
                                     <option value="0.5">30 minutes</option>
@@ -741,8 +475,8 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="event_format">Event Format <span class="required">*</span></label>
-                                <select id="event_format" name="event_format" required>
+                                <label class="form-label" for="event_format">Event Format <span class="required">*</span></label>
+                                <select id="event_format" name="event_format" class="form-control" required>
                                     <option value="">Select format</option>
                                     <option value="In-Person">In-Person</option>
                                     <option value="Virtual">Virtual/Online</option>
@@ -752,8 +486,8 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="location">Event Location <span class="required">*</span></label>
-                            <input type="text" id="location" name="location" required 
+                            <label class="form-label" for="location">Event Location <span class="required">*</span></label>
+                            <input type="text" id="location" name="location" class="form-control" required 
                                    placeholder="e.g., Phoenix Convention Center, Phoenix, AZ or Virtual">
                         </div>
                         
@@ -769,20 +503,20 @@
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="audience_size">Expected Audience Size</label>
-                                <input type="number" id="audience_size" name="audience_size" 
+                                <label class="form-label" for="audience_size">Expected Audience Size</label>
+                                <input type="number" id="audience_size" name="audience_size" class="form-control"
                                        placeholder="e.g., 100">
                             </div>
                             
                             <div class="form-group">
-                                <label for="audience_type">Audience Type</label>
-                                <input type="text" id="audience_type" name="audience_type" 
+                                <label class="form-label" for="audience_type">Audience Type</label>
+                                <input type="text" id="audience_type" name="audience_type" class="form-control"
                                        placeholder="e.g., Business executives, Students, Healthcare professionals">
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label for="topics">Topics/Categories (Add up to 5)</label>
+                            <label class="form-label" for="topics">Topics/Categories (Add up to 5)</label>
                             <div class="tag-input-container" id="topicsContainer">
                                 <input type="text" class="tag-input" id="topicInput" 
                                        placeholder="Type and press Enter to add topic">
@@ -791,14 +525,14 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="requirements">Specific Speaker Requirements</label>
-                            <textarea id="requirements" name="requirements" 
+                            <label class="form-label" for="requirements">Specific Speaker Requirements</label>
+                            <textarea id="requirements" name="requirements" class="form-control"
                                       placeholder="Any specific expertise, experience, or qualifications needed?"></textarea>
                         </div>
 
                         <div class="form-group">
-                            <label for="experience_level">Preferred Experience Level</label>
-                            <select id="experience_level" name="experience_level">
+                            <label class="form-label" for="experience_level">Preferred Experience Level</label>
+                            <select id="experience_level" name="experience_level" class="form-control">
                                 <option value="">Any experience level</option>
                                 <option value="Beginner">Beginner (1-2 years)</option>
                                 <option value="Intermediate">Intermediate (3-5 years)</option>
@@ -809,15 +543,15 @@
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="compensation_amount">Speaking Fee ($)</label>
-                                <input type="number" id="compensation_amount" name="compensation_amount" 
+                                <label class="form-label" for="compensation_amount">Speaking Fee ($)</label>
+                                <input type="number" id="compensation_amount" name="compensation_amount" class="form-control"
                                        placeholder="0 for volunteer" min="0" step="100">
                                 <div class="help-text">Leave as 0 for volunteer opportunities</div>
                             </div>
                             
                             <div class="form-group">
-                                <label for="compensation_type">Compensation Type</label>
-                                <select id="compensation_type" name="compensation_type">
+                                <label class="form-label" for="compensation_type">Compensation Type</label>
+                                <select id="compensation_type" name="compensation_type" class="form-control">
                                     <option value="None">Volunteer (No payment)</option>
                                     <option value="Fixed">Fixed Fee</option>
                                     <option value="Hourly">Hourly Rate</option>
@@ -828,16 +562,16 @@
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="travel_covered">Travel Covered?</label>
-                                <select id="travel_covered" name="travel_covered">
+                                <label class="form-label" for="travel_covered">Travel Covered?</label>
+                                <select id="travel_covered" name="travel_covered" class="form-control">
                                     <option value="false">No</option>
                                     <option value="true">Yes</option>
                                 </select>
                             </div>
                             
                             <div class="form-group">
-                                <label for="accommodation_covered">Accommodation Covered?</label>
-                                <select id="accommodation_covered" name="accommodation_covered">
+                                <label class="form-label" for="accommodation_covered">Accommodation Covered?</label>
+                                <select id="accommodation_covered" name="accommodation_covered" class="form-control">
                                     <option value="false">No</option>
                                     <option value="true">Yes</option>
                                 </select>
@@ -845,14 +579,14 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="additional_benefits">Additional Benefits</label>
-                            <textarea id="additional_benefits" name="additional_benefits" 
+                            <label class="form-label" for="additional_benefits">Additional Benefits</label>
+                            <textarea id="additional_benefits" name="additional_benefits" class="form-control"
                                       placeholder="e.g., Meals provided, networking opportunities, recording rights, etc."></textarea>
                         </div>
                         
                         <div class="form-group">
-                            <label for="application_deadline">Application Deadline <span class="required">*</span></label>
-                            <input type="date" id="application_deadline" name="application_deadline" required>
+                            <label class="form-label" for="application_deadline">Application Deadline <span class="required">*</span></label>
+                            <input type="date" id="application_deadline" name="application_deadline" class="form-control" required>
                             <div class="help-text">Give speakers at least 1-2 weeks to apply</div>
                         </div>
                         
@@ -883,7 +617,7 @@
                         <div class="form-group">
                             <label>
                                 <input type="checkbox" id="agreeTerms" required>
-                                I agree to the <a href="terms.html" target="_blank">Terms of Service</a> and confirm that this is a legitimate speaking opportunity
+                                I agree to the <a href="/terms.html" target="_blank">Terms of Service</a> and confirm that this is a legitimate speaking opportunity
                             </label>
                         </div>
                         
@@ -899,6 +633,8 @@
             </div>
         </div>
     </main>
+    
+    <!-- Footer will be auto-injected by footer.js -->
 
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
@@ -909,120 +645,96 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <!-- Load config and Supabase client -->
-    <script src="js/config.js"></script>
-    <script src="js/supabase-client.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
     
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
     <script>
         // Page state
         let currentUser = null;
         let organizationData = null;
         let currentStep = 1;
         let topics = [];
-        let initAttempts = 0;
-        const MAX_INIT_ATTEMPTS = 10;
 
-        // Wait for Supabase client to be ready
-        function waitForSupabase(callback) {
-            initAttempts++;
-            
-            if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
-                callback();
-            } else if (initAttempts < MAX_INIT_ATTEMPTS) {
-                setTimeout(() => waitForSupabase(callback), 500);
-            } else {
-                console.error('[Post Opportunity] Failed to load Supabase client');
-                showError('Failed to initialize. Please refresh the page.');
+        // Initialize page
+        async function initializePage() {
+            try {
+                console.log('[Post Opportunity] Starting initialization...');
+                
+                // Wait for Supabase
+                await waitForSupabase();
+                
+                // Check authentication
+                const session = await window.covetalks.checkAuth();
+                console.log('[Post Opportunity] Session exists:', !!session);
+                
+                if (!session) {
+                    console.log('[Post Opportunity] No session, redirecting to login');
+                    window.location.href = '/login.html?redirect=' + encodeURIComponent(window.location.href);
+                    return;
+                }
+
+                // Get member profile
+                currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                console.log('[Post Opportunity] Current user loaded:', currentUser);
+                
+                // Verify user exists
+                if (!currentUser) {
+                    console.error('[Post Opportunity] No user profile found');
+                    alert('User profile not found. Please try logging in again.');
+                    window.location.href = '/login.html';
+                    return;
+                }
+                
+                // Verify user is an organization
+                console.log('[Post Opportunity] User member_type:', currentUser.member_type);
+                if (currentUser.member_type !== 'Organization') {
+                    console.error('[Post Opportunity] User is not an organization');
+                    alert('Only organizations can post opportunities');
+                    window.location.href = '/dashboard.html';
+                    return;
+                }
+
+                console.log('[Post Opportunity] User verified as organization');
+                
+                // Get organization details
+                await loadOrganizationData();
+                
+                // Setup event listeners
+                setupEventListeners();
+                
+                // Load any saved draft
+                loadDraft();
+                
+                console.log('[Post Opportunity] Initialization complete');
+
+            } catch (error) {
+                console.error('[Post Opportunity] Initialization error:', error);
+                showError('Failed to initialize. Please try again.');
             }
         }
 
-        // Update navigation based on organization (FIXED VERSION)
-        function updateNavigation(user) {
-            const navLinks = document.getElementById('navLinks');
-            const authButtons = document.getElementById('authButtons');
-            const userMenu = document.getElementById('userMenu');
-            const userAvatar = document.getElementById('userAvatar');
-            
-            // We've already verified this is an organization user, so just update the UI
-            console.log('[Post Opportunity] Updating navigation for organization user');
-            
-            // Hide auth buttons, show user menu
-            authButtons.classList.add('hidden');
-            userMenu.classList.remove('hidden');
-            
-            // Update avatar with organization initials
-            const initials = user.name ? 
-                user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
-                'O';
-            userAvatar.textContent = initials;
-            
-            // Update navigation for organization
-            navLinks.innerHTML = `
-                <li><a href="organization-dashboard.html">Dashboard</a></li>
-                <li><a href="members.html">Find Speakers</a></li>
-                <li><a href="post-opportunity.html" class="active">Post Opportunity</a></li>
-                <li><a href="my-opportunities.html">My Opportunities</a></li>
-                <li><a href="saved-speakers.html">Saved Speakers</a></li>
-            `;
-        }
-
-        // Initialize page (FIXED VERSION)
-        async function initializePage() {
-            waitForSupabase(async () => {
-                try {
-                    console.log('[Post Opportunity] Starting initialization...');
-                    
-                    // Check authentication
-                    const session = await window.covetalks.checkAuth();
-                    console.log('[Post Opportunity] Session exists:', !!session);
-                    
-                    if (!session) {
-                        console.log('[Post Opportunity] No session, redirecting to login');
-                        window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.href);
-                        return;
+        // Wait for Supabase
+        function waitForSupabase() {
+            return new Promise((resolve) => {
+                let attempts = 0;
+                const maxAttempts = 20;
+                
+                function check() {
+                    attempts++;
+                    if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                        resolve();
+                    } else if (attempts < maxAttempts) {
+                        setTimeout(check, 250);
+                    } else {
+                        showError('Failed to initialize. Please refresh the page.');
                     }
-
-                    // Get member profile
-                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
-                    console.log('[Post Opportunity] Current user loaded:', currentUser);
-                    
-                    // Verify user exists
-                    if (!currentUser) {
-                        console.error('[Post Opportunity] No user profile found');
-                        alert('User profile not found. Please try logging in again.');
-                        window.location.href = 'login.html';
-                        return;
-                    }
-                    
-                    // Verify user is an organization
-                    console.log('[Post Opportunity] User member_type:', currentUser.member_type);
-                    if (currentUser.member_type !== 'Organization') {
-                        console.error('[Post Opportunity] User is not an organization, type is:', currentUser.member_type);
-                        alert('Only organizations can post opportunities');
-                        // Redirect to appropriate dashboard based on actual type
-                        window.location.href = currentUser.member_type === 'Speaker' ? 'dashboard.html' : 'organization-dashboard.html';
-                        return;
-                    }
-
-                    console.log('[Post Opportunity] User verified as organization, continuing...');
-                    
-                    // Get organization details
-                    await loadOrganizationData();
-                    
-                    // Update navigation
-                    updateNavigation(currentUser);
-                    
-                    // Setup event listeners
-                    setupEventListeners();
-                    
-                    // Load any saved draft
-                    loadDraft();
-                    
-                    console.log('[Post Opportunity] Initialization complete');
-
-                } catch (error) {
-                    console.error('[Post Opportunity] Initialization error:', error);
-                    showError('Failed to initialize. Please try again.');
                 }
+                check();
             });
         }
 
@@ -1048,12 +760,9 @@
                 if (data && data.organizations) {
                     organizationData = data.organizations;
                     console.log('[Post Opportunity] Organization loaded:', organizationData);
-                } else {
-                    console.warn('[Post Opportunity] No organization found for user');
                 }
             } catch (error) {
                 console.error('[Post Opportunity] Failed to load organization:', error);
-                // Don't throw - organization might not be created yet
             }
         }
 
@@ -1196,10 +905,10 @@
             
             section.querySelectorAll('[required]').forEach(field => {
                 if (!field.value) {
-                    field.style.borderColor = '#e74c3c';
+                    field.style.borderColor = var(--color-danger);
                     isValid = false;
                 } else {
-                    field.style.borderColor = '#e1e8ed';
+                    field.style.borderColor = '';
                 }
             });
             
@@ -1238,7 +947,7 @@
             `;
         }
 
-        // Form submission - FIXED to match actual database columns
+        // Form submission
         async function handleSubmit(e) {
             e.preventDefault();
             
@@ -1258,7 +967,7 @@
             try {
                 const formData = new FormData(e.target);
                 
-                // Map experience level text to years (integer)
+                // Map experience level
                 let experienceYears = null;
                 const expLevel = formData.get('experience_level');
                 if (expLevel === 'Beginner') experienceYears = 1;
@@ -1266,28 +975,28 @@
                 else if (expLevel === 'Experienced') experienceYears = 5;
                 else if (expLevel === 'Expert') experienceYears = 10;
                 
-                // Prepare opportunity data - MATCHING ACTUAL DATABASE COLUMNS
+                // Prepare opportunity data
                 const opportunityData = {
                     title: formData.get('title'),
                     description: formData.get('description'),
                     speaker_type: formData.get('speaker_type'),
-                    event_date: formData.get('event_date'),  // Keep as date only
-                    event_time: formData.get('event_time') || null,  // Separate time field
+                    event_date: formData.get('event_date'),
+                    event_time: formData.get('event_time') || null,
                     location: formData.get('location'),
-                    venue_name: null,  // You can add this to the form if needed
+                    venue_name: null,
                     event_format: formData.get('event_format'),
-                    duration_hours: parseFloat(formData.get('duration')) || null,  // Changed from 'duration' to 'duration_hours'
+                    duration_hours: parseFloat(formData.get('duration')) || null,
                     audience_size: parseInt(formData.get('audience_size')) || null,
                     audience_type: formData.get('audience_type') || null,
                     topics: topics,
-                    required_specialties: formData.get('requirements') ? [formData.get('requirements')] : [],  // Changed to array
-                    preferred_experience_years: experienceYears,  // Changed from experience_level (text) to years (integer)
+                    required_specialties: formData.get('requirements') ? [formData.get('requirements')] : [],
+                    preferred_experience_years: experienceYears,
                     compensation_amount: parseFloat(formData.get('compensation_amount')) || 0,
                     compensation_type: formData.get('compensation_type') || 'None',
                     travel_covered: formData.get('travel_covered') === 'true',
                     accommodation_covered: formData.get('accommodation_covered') === 'true',
                     additional_benefits: formData.get('additional_benefits') || null,
-                    additional_terms: null,  // You can add this field to the form if needed
+                    additional_terms: null,
                     application_deadline: formData.get('application_deadline'),
                     status: 'Open',
                     posted_by: currentUser.id,
@@ -1298,7 +1007,7 @@
 
                 console.log('[Post Opportunity] Submitting opportunity:', opportunityData);
 
-                // Post opportunity to Supabase
+                // Post opportunity
                 const { data, error } = await window.covetalks.supabase
                     .from('speaking_opportunities')
                     .insert(opportunityData)
@@ -1317,9 +1026,9 @@
                 
                 showSuccess('Your opportunity has been posted successfully!');
                 
-                // Redirect to opportunity details or management page
+                // Redirect
                 setTimeout(() => {
-                    window.location.href = `opportunity-details.html?id=${data.id}`;
+                    window.location.href = `/opportunity-details.html?id=${data.id}`;
                 }, 2000);
                 
             } catch (error) {
@@ -1383,30 +1092,7 @@
             document.getElementById('loadingOverlay').classList.toggle('show', show);
         }
 
-        // Toggle dropdown menu
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-
-        // Logout function
-        async function logout() {
-            if (window.covetalks) {
-                await window.covetalks.logout();
-            }
-        }
-
-        // Initialize when DOM is ready
+        // Initialize on load
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initializePage);
         } else {

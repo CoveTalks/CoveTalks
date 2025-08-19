@@ -4,238 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Opportunities - CoveTalks</title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- Page-specific styles ONLY for unique elements -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header Styles */
-        header {
-            background: white;
-            color: #333;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        
-        .logo-img {
-            height: 70px;
-            width: auto;
-            display: block;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #155588;
-        }
-
-        .nav-links a.active {
-            color: #155588;
-            border-bottom: 2px solid #155588;
-            padding-bottom: 2px;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1e3d6f;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #155588;
-            border: 2px solid #155588;
-        }
-
-        .btn-secondary:hover {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-success {
-            background: #27ae60;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #229954;
-            transform: translateY(-2px);
-        }
-
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #c82333;
-            transform: translateY(-2px);
-        }
-
-        .btn-warning {
-            background: #ffc107;
-            color: #333;
-        }
-
-        .btn-warning:hover {
-            background: #e0a800;
-            transform: translateY(-2px);
-        }
-
-        .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.85rem;
-        }
-
-        /* User Menu */
-        .user-menu {
-            position: relative;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: transform 0.2s;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.05);
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.75rem 1.25rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #e1e8ed;
-            margin: 0;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding-top: 6rem;
-            padding-bottom: 3rem;
-            min-height: 100vh;
-        }
-
-        /* Page Header */
+        /* Page Header - Organization specific gradient */
         .page-header {
-            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
-            padding: 3rem 0;
-            margin-bottom: 2rem;
+            padding: var(--spacing-2xl) 0;
+            margin-bottom: var(--spacing-xl);
             border-radius: 15px;
         }
 
         .page-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+            font-size: 2rem;
+            margin-bottom: var(--spacing-sm);
+            color: white;
         }
 
         .page-header p {
@@ -247,84 +37,70 @@
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
         }
 
         .stat-card {
             background: white;
-            padding: 1.5rem;
+            padding: var(--spacing-lg);
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow-md);
             text-align: center;
+            transition: transform var(--transition-normal);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
         }
 
         .stat-value {
             font-size: 2rem;
-            font-weight: bold;
-            color: #155588;
+            font-weight: var(--font-weight-black);
+            color: var(--color-deep);
             margin-bottom: 0.25rem;
         }
 
         .stat-label {
-            color: #666;
+            color: var(--color-gray);
             font-size: 0.9rem;
         }
 
         /* Filters Section */
         .filters-section {
             background: white;
-            padding: 1.5rem;
+            padding: var(--spacing-lg);
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--spacing-xl);
         }
 
         .filters-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
         }
 
         .filters-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-
-        .filter-group {
-            display: flex;
-            flex-direction: column;
+            gap: var(--spacing-md);
         }
 
         .filter-group label {
-            font-weight: 500;
-            color: #555;
-            margin-bottom: 0.5rem;
+            font-weight: var(--font-weight-medium);
+            color: var(--color-gray-dark);
+            margin-bottom: var(--spacing-sm);
             font-size: 0.9rem;
-        }
-
-        .filter-group select,
-        .filter-group input {
-            padding: 0.75rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .filter-group select:focus,
-        .filter-group input:focus {
-            outline: none;
-            border-color: #155588;
+            display: block;
         }
 
         /* Opportunities Table */
         .opportunities-table {
             background: white;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow-md);
             overflow: hidden;
         }
 
@@ -332,12 +108,16 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem;
-            border-bottom: 2px solid #f0f0f0;
+            padding: var(--spacing-lg);
+            border-bottom: 2px solid var(--color-bg-light);
         }
 
         .table-header h2 {
-            color: #155588;
+            color: var(--color-deep);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
         }
 
         table {
@@ -346,26 +126,26 @@
         }
 
         thead {
-            background: #f8f9fa;
+            background: var(--color-foam);
         }
 
         th {
             text-align: left;
-            padding: 1rem;
-            font-weight: 600;
-            color: #666;
+            padding: var(--spacing-md);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-gray);
             font-size: 0.9rem;
-            border-bottom: 2px solid #e1e8ed;
+            border-bottom: 2px solid var(--color-border);
         }
 
         td {
-            padding: 1rem;
-            border-bottom: 1px solid #e1e8ed;
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--color-border);
         }
 
         tbody tr:hover {
-            background: #f8f9fa;
-            transition: background 0.2s;
+            background: var(--color-foam);
+            transition: background var(--transition-fast);
         }
 
         tbody tr:last-child td {
@@ -374,63 +154,34 @@
 
         /* Opportunity Title Cell */
         .opportunity-title {
-            font-weight: 600;
-            color: #155588;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-deep);
             margin-bottom: 0.25rem;
         }
 
         .opportunity-meta {
             font-size: 0.85rem;
-            color: #666;
-        }
-
-        /* Status Badge */
-        .status-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .status-badge.open {
-            background: #d4edda;
-            color: #27ae60;
-        }
-
-        .status-badge.closed {
-            background: #f8d7da;
-            color: #dc3545;
-        }
-
-        .status-badge.draft {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .status-badge.filled {
-            background: #cce5ff;
-            color: #004085;
+            color: var(--color-gray);
         }
 
         /* Applications Count */
         .applications-count {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: var(--spacing-sm);
         }
 
         .count-badge {
-            background: #155588;
+            background: var(--color-deep);
             color: white;
-            padding: 0.25rem 0.5rem;
+            padding: 0.25rem var(--spacing-sm);
             border-radius: 10px;
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: var(--font-weight-bold);
         }
 
         .count-badge.new {
-            background: #dc3545;
+            background: var(--color-danger);
             animation: pulse 2s infinite;
         }
 
@@ -440,124 +191,23 @@
             100% { opacity: 1; }
         }
 
-        /* Action Buttons */
-        .action-buttons {
+        /* Action Buttons in Table */
+        .table-actions {
             display: flex;
-            gap: 0.5rem;
+            gap: var(--spacing-sm);
             flex-wrap: wrap;
         }
 
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: #666;
-        }
-
-        .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        .empty-state h3 {
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Loading */
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 3rem;
-            color: #666;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #155588;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 1rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            max-width: 500px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-header h3 {
-            color: #155588;
-        }
-
-        .modal-body {
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Responsive */
+        /* Responsive Design */
         @media (max-width: 992px) {
-            .filters-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
             .stats-grid {
                 grid-template-columns: 1fr 1fr;
             }
         }
 
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
             .page-header h1 {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
             }
 
             .filters-grid {
@@ -568,49 +218,28 @@
                 grid-template-columns: 1fr;
             }
 
-            .table-responsive {
-                overflow-x: auto;
+            .filters-header {
+                flex-direction: column;
+                gap: var(--spacing-md);
+                align-items: flex-start;
             }
 
             table {
                 min-width: 600px;
             }
+
+            .table-actions {
+                flex-direction: column;
+            }
+
+            .table-actions .btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="nav-container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
-                </a>
-                
-                <!-- Navigation links for Organization -->
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="organization-dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                    <li><a href="my-opportunities.html" class="active">My Opportunities</a></li>
-                    <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                </ul>
-    
-                <div class="nav-right">
-                    <!-- User menu -->
-                    <div class="user-menu" id="userMenu">
-                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">O</div>
-                        <div class="dropdown-menu" id="dropdownMenu">
-                            <a href="settings.html">Settings</a>
-                            <a href="billing.html">Billing</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" onclick="logout(); return false;">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <!-- Header will be auto-injected by header.js -->
 
     <!-- Main Content -->
     <main class="main-content">
@@ -654,7 +283,7 @@
                 <div class="filters-grid">
                     <div class="filter-group">
                         <label for="statusFilter">Status</label>
-                        <select id="statusFilter" onchange="applyFilters()">
+                        <select id="statusFilter" onchange="applyFilters()" class="form-control">
                             <option value="">All Status</option>
                             <option value="Open">Open</option>
                             <option value="Closed">Closed</option>
@@ -664,7 +293,7 @@
                     </div>
                     <div class="filter-group">
                         <label for="dateFilter">Event Date</label>
-                        <select id="dateFilter" onchange="applyFilters()">
+                        <select id="dateFilter" onchange="applyFilters()" class="form-control">
                             <option value="">All Dates</option>
                             <option value="upcoming">Upcoming</option>
                             <option value="past">Past Events</option>
@@ -674,7 +303,7 @@
                     </div>
                     <div class="filter-group">
                         <label for="applicationFilter">Applications</label>
-                        <select id="applicationFilter" onchange="applyFilters()">
+                        <select id="applicationFilter" onchange="applyFilters()" class="form-control">
                             <option value="">All</option>
                             <option value="hasApplications">Has Applications</option>
                             <option value="noApplications">No Applications</option>
@@ -683,7 +312,8 @@
                     </div>
                     <div class="filter-group">
                         <label for="searchFilter">Search</label>
-                        <input type="text" id="searchFilter" placeholder="Search by title..." onkeyup="applyFilters()">
+                        <input type="text" id="searchFilter" placeholder="Search by title..." 
+                               onkeyup="applyFilters()" class="form-control">
                     </div>
                 </div>
             </div>
@@ -692,7 +322,7 @@
             <div class="opportunities-table">
                 <div class="table-header">
                     <h2>Your Opportunities</h2>
-                    <a href="post-opportunity.html" class="btn btn-success">
+                    <a href="/post-opportunity.html" class="btn btn-success">
                         + Post New Opportunity
                     </a>
                 </div>
@@ -705,6 +335,8 @@
             </div>
         </div>
     </main>
+    
+    <!-- Footer will be auto-injected by footer.js -->
 
     <!-- Close Opportunity Modal -->
     <div id="closeModal" class="modal">
@@ -714,7 +346,7 @@
             </div>
             <div class="modal-body">
                 <p>Are you sure you want to close this opportunity?</p>
-                <p style="margin-top: 1rem; color: #666;">
+                <p style="margin-top: 1rem; color: var(--color-gray);">
                     This will stop accepting new applications. You can still review existing applications.
                 </p>
             </div>
@@ -725,32 +357,18 @@
         </div>
     </div>
 
-    <!-- Delete Opportunity Modal -->
-    <div id="deleteModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Delete Opportunity</h3>
-            </div>
-            <div class="modal-body">
-                <p><strong>Warning:</strong> This action cannot be undone!</p>
-                <p style="margin-top: 1rem; color: #666;">
-                    Deleting this opportunity will remove it permanently along with all applications.
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button onclick="closeModal()" class="btn btn-secondary">Cancel</button>
-                <button onclick="confirmDeleteOpportunity()" class="btn btn-danger">Delete Permanently</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Load Supabase from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <!-- Load config and Supabase client -->
-    <script src="js/config.js"></script>
-    <script src="js/supabase-client.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
     
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
     <script>
         // Page state
         let currentUser = null;
@@ -759,63 +377,55 @@
         let allApplications = {};
         let selectedOpportunityId = null;
 
-        // Wait for Supabase client
-        function waitForSupabase(callback) {
-            let attempts = 0;
-            const maxAttempts = 10;
-            
-            function check() {
-                attempts++;
-                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
-                    callback();
-                } else if (attempts < maxAttempts) {
-                    setTimeout(check, 500);
-                } else {
-                    console.error('Failed to initialize Supabase client');
-                    window.location.href = '/login.html';
-                }
-            }
-            check();
-        }
-
         // Initialize page
         async function initializePage() {
-            waitForSupabase(async () => {
-                try {
-                    // Check authentication
-                    const session = await window.covetalks.checkAuth();
-                    if (!session) {
-                        window.location.href = '/login.html';
-                        return;
-                    }
-
-                    // Get user profile
-                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
-                    if (!currentUser || currentUser.member_type !== 'Organization') {
-                        // Redirect non-organization users
-                        window.location.href = '/dashboard.html';
-                        return;
-                    }
-
-                    // Update UI with user info
-                    updateUserInterface();
-
-                    // Load opportunities
-                    await loadOpportunities();
-
-                } catch (error) {
-                    console.error('Initialization error:', error);
-                    alert('Failed to load opportunities. Please try refreshing the page.');
+            try {
+                // Wait for Supabase
+                await waitForSupabase();
+                
+                // Check authentication
+                const session = await window.covetalks.checkAuth();
+                if (!session) {
+                    window.location.href = '/login.html';
+                    return;
                 }
-            });
+
+                // Get user profile
+                currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                if (!currentUser || currentUser.member_type !== 'Organization') {
+                    // Redirect non-organization users
+                    window.location.href = '/dashboard.html';
+                    return;
+                }
+
+                // Load opportunities
+                await loadOpportunities();
+
+            } catch (error) {
+                console.error('Initialization error:', error);
+                alert('Failed to load opportunities. Please try refreshing the page.');
+            }
         }
 
-        // Update user interface
-        function updateUserInterface() {
-            const initials = currentUser.name ? 
-                currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
-                'O';
-            document.getElementById('userAvatar').textContent = initials;
+        // Wait for Supabase client
+        function waitForSupabase() {
+            return new Promise((resolve) => {
+                let attempts = 0;
+                const maxAttempts = 20;
+                
+                function check() {
+                    attempts++;
+                    if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                        resolve();
+                    } else if (attempts < maxAttempts) {
+                        setTimeout(check, 250);
+                    } else {
+                        console.error('Failed to initialize Supabase client');
+                        window.location.href = '/login.html';
+                    }
+                }
+                check();
+            });
         }
 
         // Load opportunities
@@ -884,7 +494,7 @@
                         <div class="empty-state-icon">📢</div>
                         <h3>No opportunities found</h3>
                         <p>You haven't posted any opportunities yet.</p>
-                        <a href="post-opportunity.html" class="btn btn-primary" style="margin-top: 1.5rem;">
+                        <a href="/post-opportunity.html" class="btn btn-primary mt-3">
                             Post Your First Opportunity
                         </a>
                     </div>
@@ -930,11 +540,11 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="action-buttons">
-                                                <a href="opportunity-details.html?id=${opp.id}" 
+                                            <div class="table-actions">
+                                                <a href="/opportunity-details.html?id=${opp.id}" 
                                                    class="btn btn-primary btn-sm">View</a>
                                                 ${applications.length > 0 ? 
-                                                    `<a href="review-applications.html?id=${opp.id}" 
+                                                    `<a href="/review-applications.html?id=${opp.id}" 
                                                         class="btn btn-secondary btn-sm">
                                                         Review (${applications.length})
                                                     </a>` : ''
@@ -1038,16 +648,9 @@
             document.getElementById('closeModal').classList.add('show');
         }
 
-        // Show delete modal
-        function showDeleteModal(oppId) {
-            selectedOpportunityId = oppId;
-            document.getElementById('deleteModal').classList.add('show');
-        }
-
         // Close modal
         function closeModal() {
             document.getElementById('closeModal').classList.remove('show');
-            document.getElementById('deleteModal').classList.remove('show');
             selectedOpportunityId = null;
         }
 
@@ -1066,24 +669,9 @@
             }
         }
 
-        // Confirm delete opportunity
-        async function confirmDeleteOpportunity() {
-            if (!selectedOpportunityId) return;
-            
-            try {
-                await window.covetalks.deleteOpportunity(selectedOpportunityId);
-                closeModal();
-                await loadOpportunities();
-                alert('Opportunity deleted successfully');
-            } catch (error) {
-                console.error('Error deleting opportunity:', error);
-                alert('Failed to delete opportunity. Please try again.');
-            }
-        }
-
         // Edit opportunity
         function editOpportunity(oppId) {
-            window.location.href = `edit-opportunity.html?id=${oppId}`;
+            window.location.href = `/edit-opportunity.html?id=${oppId}`;
         }
 
         // Display error
@@ -1094,7 +682,7 @@
                     <div class="empty-state-icon">⚠️</div>
                     <h3>Error Loading Opportunities</h3>
                     <p>There was an error loading your opportunities.</p>
-                    <button onclick="location.reload()" class="btn btn-primary" style="margin-top: 1rem;">
+                    <button onclick="location.reload()" class="btn btn-primary mt-3">
                         Try Again
                     </button>
                 </div>
@@ -1107,7 +695,6 @@
             const date = new Date(dateString);
             const now = new Date();
             
-            // Check if the date is in the past
             const isPast = date < now;
             
             const formatted = date.toLocaleDateString('en-US', {
@@ -1116,24 +703,8 @@
                 year: 'numeric'
             });
             
-            return isPast ? `<span style="color: #999;">${formatted}</span>` : formatted;
+            return isPast ? `<span style="color: var(--color-gray-light);">${formatted}</span>` : formatted;
         }
-
-        // Toggle dropdown
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
 
         // Close modals when clicking outside
         document.addEventListener('click', function(event) {
@@ -1141,13 +712,6 @@
                 closeModal();
             }
         });
-
-        // Logout
-        async function logout() {
-            if (window.covetalks) {
-                await window.covetalks.logout();
-            }
-        }
 
         // Initialize on load
         if (document.readyState === 'loading') {

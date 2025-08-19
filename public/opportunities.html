@@ -4,261 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Speaking Opportunities - CoveTalks</title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- Page-specific styles ONLY for unique elements -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header Styles */
-        header {
-            background: white;
-            color: #333;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        
-        .logo-img {
-            height: 70px;
-            width: auto;
-            display: block;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #155588;
-        }
-
-        .nav-links a.active {
-            color: #155588;
-            border-bottom: 2px solid #155588;
-            padding-bottom: 2px;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            font-weight: 500;
+        /* Page Header - Unique gradient background */
+        .opportunities-header {
+            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
+            color: white;
+            padding: var(--spacing-3xl) 0 var(--spacing-2xl);
+            margin-top: var(--header-height);
             text-align: center;
         }
 
-        .btn-primary {
-            background: #155588;
+        .opportunities-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-md);
             color: white;
         }
 
-        .btn-primary:hover {
-            background: #1e3d6f;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #155588;
-            border: 2px solid #155588;
-        }
-
-        .btn-secondary:hover {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-success {
-            background: #27ae60;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #229954;
-            transform: translateY(-2px);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        /* User Menu Styles */
-        .user-menu {
-            position: relative;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: transform 0.2s;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.05);
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.75rem 1.25rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #e1e8ed;
-            margin: 0;
-        }
-
-        /* Page Header */
-        .page-header {
-            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
-            color: white;
-            padding: 8rem 0 4rem;
-            text-align: center;
-            margin-top: 70px;
-        }
-
-        .page-header h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .page-header p {
+        .opportunities-header p {
             font-size: 1.2rem;
             max-width: 600px;
             margin: 0 auto;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding: 3rem 0;
-            margin-top: -4rem;
+            opacity: 0.95;
         }
 
         /* Filters Section */
         .filters-section {
             background: white;
             border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--spacing-xl);
+            margin-top: calc(var(--spacing-2xl) * -1);
+            position: relative;
+            z-index: 10;
         }
 
         .filters-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: var(--spacing-lg);
         }
 
         .filters-header h2 {
-            color: #155588;
+            color: var(--color-deep);
             font-size: 1.3rem;
         }
 
         .results-count {
-            color: #666;
+            color: var(--color-gray);
             font-size: 0.95rem;
         }
 
         .filters-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+            gap: var(--spacing-md);
         }
 
         .filter-group {
@@ -267,59 +76,60 @@
         }
 
         .filter-group label {
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #666;
+            margin-bottom: var(--spacing-sm);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-gray-dark);
             font-size: 0.9rem;
         }
 
         .filter-group input,
         .filter-group select {
             padding: 0.75rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 5px;
-            transition: border-color 0.3s;
-            font-family: inherit;
+            border: 2px solid var(--color-border);
+            border-radius: 8px;
+            transition: border-color var(--transition-fast);
+            font-family: var(--font-primary);
         }
 
         .filter-group input:focus,
         .filter-group select:focus {
             outline: none;
-            border-color: #155588;
+            border-color: var(--color-deep);
+            box-shadow: 0 0 0 3px rgba(21, 84, 135, 0.1);
         }
 
         .filter-buttons {
             display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
         }
 
-        /* Opportunities Grid */
+        /* Opportunity Cards */
         .opportunities-container {
             display: grid;
-            gap: 1.5rem;
+            gap: var(--spacing-lg);
         }
 
         .opportunity-card {
             background: white;
             border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s;
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-normal);
             border: 2px solid transparent;
         }
 
         .opportunity-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-            border-color: #155588;
+            box-shadow: var(--shadow-lg);
+            border-color: var(--color-deep);
         }
 
         .opportunity-header {
             display: flex;
             justify-content: space-between;
             align-items: start;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
         }
 
         .opportunity-title-section {
@@ -328,13 +138,13 @@
 
         .opportunity-title {
             font-size: 1.3rem;
-            color: #155588;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-sm);
+            font-weight: var(--font-weight-bold);
         }
 
         .opportunity-org {
-            color: #666;
+            color: var(--color-gray);
             font-size: 0.95rem;
             margin-bottom: 0.25rem;
         }
@@ -342,63 +152,63 @@
         .opportunity-location {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            color: #666;
+            gap: var(--spacing-sm);
+            color: var(--color-gray);
             font-size: 0.9rem;
         }
 
         .opportunity-badge {
-            padding: 0.5rem 1rem;
+            padding: var(--spacing-sm) var(--spacing-md);
             border-radius: 20px;
             font-size: 0.85rem;
-            font-weight: bold;
+            font-weight: var(--font-weight-bold);
             text-align: center;
         }
 
         .badge-new {
             background: #d4edda;
-            color: #27ae60;
+            color: var(--color-success);
         }
 
         .badge-urgent {
             background: #f8d7da;
-            color: #e74c3c;
+            color: var(--color-danger);
         }
 
         .badge-featured {
             background: #fff3cd;
-            color: #f2b236;
+            color: var(--color-warning);
         }
 
         .opportunity-details {
-            margin: 1.5rem 0;
+            margin: var(--spacing-lg) 0;
         }
 
         .opportunity-description {
-            color: #555;
+            color: var(--color-gray-dark);
             line-height: 1.6;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
         }
 
         .opportunity-info {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            padding: 1rem;
-            background: #f8f9fa;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: var(--color-foam);
             border-radius: 10px;
-            margin-top: 1rem;
+            margin-top: var(--spacing-md);
         }
 
         .info-item {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: var(--spacing-sm);
         }
 
         .info-label {
-            font-weight: 600;
-            color: #666;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-gray);
             font-size: 0.9rem;
         }
 
@@ -410,13 +220,13 @@
         .opportunity-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
-            margin: 1rem 0;
+            gap: var(--spacing-sm);
+            margin: var(--spacing-md) 0;
         }
 
         .tag {
             background: #e8f4fd;
-            color: #155588;
+            color: var(--color-deep);
             padding: 0.25rem 0.75rem;
             border-radius: 15px;
             font-size: 0.85rem;
@@ -426,158 +236,110 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 1rem;
-            border-top: 1px solid #e1e8ed;
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--color-border);
         }
 
         .deadline-info {
-            color: #666;
+            color: var(--color-gray);
             font-size: 0.9rem;
         }
 
         .deadline-urgent {
-            color: #e74c3c;
-            font-weight: bold;
+            color: var(--color-danger);
+            font-weight: var(--font-weight-bold);
         }
 
         .opportunity-actions {
             display: flex;
-            gap: 1rem;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-
-        .empty-state h3 {
-            color: #666;
-            margin-bottom: 0.5rem;
-        }
-
-        .empty-state p {
-            color: #999;
-        }
-
-        /* Loading State */
-        .loading-container {
-            text-align: center;
-            padding: 4rem;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #155588;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .hidden {
-            display: none !important;
+            gap: var(--spacing-md);
         }
 
         /* Auth Required Message */
         .auth-required {
             background: #fff3cd;
             color: #856404;
-            padding: 1rem;
+            padding: var(--spacing-md);
             border-radius: 10px;
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: var(--spacing-xl);
         }
 
-        /* Responsive */
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
+            .opportunities-header {
+                padding: var(--spacing-2xl) var(--spacing-lg);
+                margin-top: var(--header-height-mobile);
             }
 
-            .page-header h1 {
-                font-size: 2rem;
+            .opportunities-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .filters-section {
+                margin-top: calc(var(--spacing-xl) * -1);
+                padding: var(--spacing-lg);
             }
 
             .filters-grid {
                 grid-template-columns: 1fr;
             }
 
+            .filters-header {
+                flex-direction: column;
+                gap: var(--spacing-sm);
+                align-items: flex-start;
+            }
+
+            .filter-buttons {
+                flex-direction: column;
+            }
+
+            .filter-buttons .btn {
+                width: 100%;
+            }
+
             .opportunity-header {
                 flex-direction: column;
-                gap: 1rem;
+                gap: var(--spacing-md);
             }
 
             .opportunity-footer {
                 flex-direction: column;
-                gap: 1rem;
-                align-items: start;
+                gap: var(--spacing-md);
+                align-items: flex-start;
             }
 
             .opportunity-actions {
                 width: 100%;
+                flex-direction: column;
             }
 
             .opportunity-actions .btn {
-                flex: 1;
+                width: 100%;
+            }
+
+            .opportunity-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .opportunities-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .opportunities-header p {
+                font-size: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="nav-container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
-                </a>
-                
-                <!-- Navigation links will be dynamically inserted here -->
-                <ul class="nav-links" id="navLinks">
-                    <!-- Default logged out navigation -->
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
+    <!-- Header will be auto-injected by header.js -->
     
-                <div class="nav-right">
-                    <!-- Auth buttons (shown when logged out) -->
-                    <div class="auth-buttons" id="authButtons">
-                        <a href="register.html" class="btn btn-secondary">Join</a>
-                        <a href="login.html" class="btn btn-primary">Login</a>
-                    </div>
-                    
-                    <!-- User menu (shown when logged in) -->
-                    <div class="user-menu hidden" id="userMenu">
-                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
-                        <div class="dropdown-menu" id="dropdownMenu">
-                            <a href="inbox.html">Inbox</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="settings.html">Settings</a>
-                            <a href="billing.html">Billing</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" onclick="logout(); return false;">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
-
     <!-- Page Header -->
-    <div class="page-header">
+    <div class="opportunities-header">
         <div class="container">
             <h1>Speaking Opportunities</h1>
             <p>Find your next speaking engagement and share your expertise</p>
@@ -590,7 +352,7 @@
             <!-- Auth Required Message (shown when not logged in) -->
             <div id="authRequired" class="auth-required hidden">
                 <strong>Note:</strong> You must be logged in as a speaker to apply for opportunities. 
-                <a href="login.html">Login</a> or <a href="register.html">Register</a> to get started.
+                <a href="/login.html">Login</a> or <a href="/register.html">Register</a> to get started.
             </div>
 
             <!-- Filters Section -->
@@ -603,12 +365,12 @@
                 <div class="filters-grid">
                     <div class="filter-group">
                         <label for="locationFilter">Location</label>
-                        <input type="text" id="locationFilter" placeholder="City, State, or Remote">
+                        <input type="text" id="locationFilter" placeholder="City, State, or Remote" class="form-control">
                     </div>
                     
                     <div class="filter-group">
                         <label for="formatFilter">Event Format</label>
-                        <select id="formatFilter">
+                        <select id="formatFilter" class="form-control">
                             <option value="">All Formats</option>
                             <option value="In-Person">In-Person</option>
                             <option value="Virtual">Virtual</option>
@@ -618,7 +380,7 @@
                     
                     <div class="filter-group">
                         <label for="compensationFilter">Compensation</label>
-                        <select id="compensationFilter">
+                        <select id="compensationFilter" class="form-control">
                             <option value="">Any</option>
                             <option value="paid">Paid Only</option>
                             <option value="volunteer">Volunteer</option>
@@ -627,7 +389,7 @@
                     
                     <div class="filter-group">
                         <label for="topicFilter">Topic</label>
-                        <input type="text" id="topicFilter" placeholder="Search topics...">
+                        <input type="text" id="topicFilter" placeholder="Search topics..." class="form-control">
                     </div>
                 </div>
                 
@@ -642,136 +404,90 @@
 
             <!-- Opportunities List -->
             <div class="opportunities-container" id="opportunitiesList">
-                <div class="loading-container">
+                <div class="loading">
                     <div class="loading-spinner"></div>
-                    <p>Loading opportunities...</p>
+                    Loading opportunities...
                 </div>
             </div>
         </div>
     </main>
+    
+    <!-- Footer will be auto-injected by footer.js -->
 
     <!-- Load Supabase from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <!-- Load config and Supabase client -->
-    <script src="js/config.js"></script>
-    <script src="js/supabase-client.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
     
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
     <script>
         // Page state
         let currentUser = null;
         let isAuthenticated = false;
         let allOpportunities = [];
         let userApplications = [];
-        let initAttempts = 0;
-        const MAX_INIT_ATTEMPTS = 10;
-
-        // Wait for Supabase client to be ready
-        function waitForSupabase(callback) {
-            initAttempts++;
-            
-            if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
-                callback();
-            } else if (initAttempts < MAX_INIT_ATTEMPTS) {
-                setTimeout(() => waitForSupabase(callback), 500);
-            } else {
-                console.error('[Opportunities] Failed to load Supabase client');
-                showError('Failed to initialize. Please refresh the page.');
-            }
-        }
-
-        // Update navigation based on user type
-        function updateNavigation(user) {
-            const navLinks = document.getElementById('navLinks');
-            const authButtons = document.getElementById('authButtons');
-            const userMenu = document.getElementById('userMenu');
-            const userAvatar = document.getElementById('userAvatar');
-            const authRequired = document.getElementById('authRequired');
-            
-            if (user) {
-                // Hide auth buttons, show user menu
-                authButtons.classList.add('hidden');
-                userMenu.classList.remove('hidden');
-                authRequired.classList.add('hidden');
-                
-                // Update avatar with user initials
-                const initials = user.name ? 
-                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
-                    'U';
-                userAvatar.textContent = initials;
-                
-                // Update navigation links based on user type
-                if (user.member_type === 'Organization') {
-                    navLinks.innerHTML = `
-                        <li><a href="organization-dashboard.html">Dashboard</a></li>
-                        <li><a href="members.html">Find Speakers</a></li>
-                        <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                        <li><a href="my-opportunities.html">My Opportunities</a></li>
-                        <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                    `;
-                } else {
-                    // Speaker navigation
-                    navLinks.innerHTML = `
-                        <li><a href="dashboard.html">Dashboard</a></li>
-                        <li><a href="members.html">Find Speakers</a></li>
-                        <li><a href="opportunities.html" class="active">Opportunities</a></li>
-                        <li><a href="bookings.html">My Bookings</a></li>
-                        <li><a href="profile.html">Profile</a></li>
-                    `;
-                }
-            } else {
-                // Show default logged out navigation
-                authButtons.classList.remove('hidden');
-                userMenu.classList.add('hidden');
-                authRequired.classList.remove('hidden');
-                
-                navLinks.innerHTML = `
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="opportunities.html" class="active">Opportunities</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                `;
-            }
-        }
 
         // Initialize page
         async function initializePage() {
             console.log('[Opportunities] Initializing page');
             
-            // Wait for Supabase client
-            waitForSupabase(async () => {
-                try {
-                    // Check authentication status
-                    const session = await window.covetalks.checkAuth();
-                    if (session) {
-                        isAuthenticated = true;
-                        currentUser = await window.covetalks.getMemberProfile(session.user.id);
-                        
-                        // Load user's applications to check which opportunities they've applied to
-                        if (currentUser && currentUser.member_type === 'Speaker') {
-                            await loadUserApplications();
-                        }
-                    } else {
-                        isAuthenticated = false;
+            try {
+                // Wait for Supabase
+                await waitForSupabase();
+                
+                // Check authentication status
+                const session = await window.covetalks.checkAuth();
+                if (session) {
+                    isAuthenticated = true;
+                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                    
+                    // Load user's applications to check which opportunities they've applied to
+                    if (currentUser && currentUser.member_type === 'Speaker') {
+                        await loadUserApplications();
                     }
                     
-                    // Update navigation with user info
-                    updateNavigation(currentUser);
-                    
-                } catch (error) {
-                    console.error('[Opportunities] Auth check error:', error);
+                    document.getElementById('authRequired').classList.add('hidden');
+                } else {
                     isAuthenticated = false;
-                    updateNavigation(null);
+                    document.getElementById('authRequired').classList.remove('hidden');
                 }
                 
-                // Load opportunities (available to all users)
-                await loadOpportunities();
+            } catch (error) {
+                console.error('[Opportunities] Auth check error:', error);
+                isAuthenticated = false;
+            }
+            
+            // Load opportunities (available to all users)
+            await loadOpportunities();
+        }
+
+        // Wait for Supabase client
+        function waitForSupabase() {
+            return new Promise((resolve) => {
+                let attempts = 0;
+                const maxAttempts = 20;
+                
+                function check() {
+                    attempts++;
+                    if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                        resolve();
+                    } else if (attempts < maxAttempts) {
+                        setTimeout(check, 250);
+                    } else {
+                        showError('Failed to initialize. Please refresh the page.');
+                    }
+                }
+                check();
             });
         }
 
-        // Load user's applications using client method
+        // Load user's applications
         async function loadUserApplications() {
             try {
                 if (!currentUser) return;
@@ -784,14 +500,14 @@
             }
         }
 
-        // Load opportunities from Supabase using client wrapper
+        // Load opportunities
         async function loadOpportunities(filters = {}) {
             try {
                 console.log('[Opportunities] Loading opportunities with filters:', filters);
                 
                 // Map UI filters to client method filters
                 const searchFilters = {
-                    status: 'Open', // Always show open opportunities
+                    status: 'Open',
                     location: filters.location || null,
                     format: filters.format || null,
                     compensation: filters.compensation || null,
@@ -805,7 +521,6 @@
                     }
                 });
                 
-                // Use the optimized search method from the client
                 const opportunities = await window.covetalks.searchOpportunitiesOptimized(searchFilters);
                 
                 if (!opportunities || opportunities.length === 0) {
@@ -821,8 +536,8 @@
                 displayOpportunities(allOpportunities);
                 
             } catch (error) {
-                console.error('[Opportunities] Unexpected error:', error);
-                displaySampleOpportunities();
+                console.error('[Opportunities] Error:', error);
+                displayError();
             }
         }
 
@@ -835,6 +550,7 @@
             if (opportunities.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
                         <h3>No opportunities found</h3>
                         <p>Try adjusting your filters or check back later for new opportunities</p>
                     </div>
@@ -843,11 +559,9 @@
             }
             
             container.innerHTML = opportunities.map(opp => {
-                // Check if user has applied to this opportunity
                 const hasApplied = userApplications.some(app => app.opportunity_id === opp.id);
                 const applicationStatus = userApplications.find(app => app.opportunity_id === opp.id)?.status;
                 
-                // Calculate days until deadline
                 const daysUntilDeadline = opp.application_deadline ? 
                     Math.ceil((new Date(opp.application_deadline) - new Date()) / (1000 * 60 * 60 * 24)) : null;
                 
@@ -909,7 +623,7 @@
                                     'Open until filled'}
                             </div>
                             <div class="opportunity-actions">
-                                <a href="opportunity-details.html?id=${opp.id}" class="btn btn-secondary">View Details</a>
+                                <a href="/opportunity-details.html?id=${opp.id}" class="btn btn-secondary">View Details</a>
                                 ${getApplyButton(opp, hasApplied, applicationStatus)}
                             </div>
                         </div>
@@ -932,10 +646,10 @@
             return '';
         }
 
-        // Get apply button based on status
+        // Get apply button
         function getApplyButton(opp, hasApplied, applicationStatus) {
             if (!isAuthenticated) {
-                return `<a href="login.html?redirect=${encodeURIComponent(window.location.href)}" class="btn btn-primary">Login to Apply</a>`;
+                return `<a href="/login.html?redirect=${encodeURIComponent(window.location.href)}" class="btn btn-primary">Login to Apply</a>`;
             }
             
             if (currentUser && currentUser.member_type === 'Organization') {
@@ -955,73 +669,9 @@
             return `<button class="btn btn-primary" onclick="quickApply('${opp.id}')">Apply Now</button>`;
         }
 
-        // Quick apply (redirects to opportunity details)
+        // Quick apply
         function quickApply(opportunityId) {
-            window.location.href = `opportunity-details.html?id=${opportunityId}#apply`;
-        }
-
-        // Display sample opportunities (fallback)
-        function displaySampleOpportunities() {
-            const container = document.getElementById('opportunitiesList');
-            container.innerHTML = `
-                <div class="opportunity-card">
-                    <div class="opportunity-header">
-                        <div class="opportunity-title-section">
-                            <h3 class="opportunity-title">Keynote Speaker - Annual Business Summit 2025</h3>
-                            <div class="opportunity-org">Phoenix Chamber of Commerce</div>
-                            <div class="opportunity-location">
-                                📍 Phoenix Convention Center, AZ
-                            </div>
-                        </div>
-                        <div class="opportunity-badge badge-new">NEW</div>
-                    </div>
-                    
-                    <div class="opportunity-details">
-                        <p class="opportunity-description">
-                            We're seeking an experienced business leader to deliver a 45-minute keynote on digital transformation and innovation in the post-pandemic era.
-                        </p>
-                        
-                        <div class="opportunity-info">
-                            <div class="info-item">
-                                <span class="info-label">📅 Date:</span>
-                                <span class="info-value">March 15, 2025</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">💻 Format:</span>
-                                <span class="info-value">In-Person</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">👥 Audience:</span>
-                                <span class="info-value">500+ attendees</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">💰 Compensation:</span>
-                                <span class="info-value">$5,000</span>
-                            </div>
-                        </div>
-                        
-                        <div class="opportunity-tags">
-                            <span class="tag">Business Leadership</span>
-                            <span class="tag">Digital Transformation</span>
-                            <span class="tag">Keynote</span>
-                        </div>
-                    </div>
-                    
-                    <div class="opportunity-footer">
-                        <div class="deadline-info">
-                            Application deadline: <span class="deadline-urgent">5 days left</span>
-                        </div>
-                        <div class="opportunity-actions">
-                            <a href="opportunity-details.html" class="btn btn-secondary">View Details</a>
-                            ${!isAuthenticated ? 
-                                '<a href="login.html" class="btn btn-primary">Login to Apply</a>' :
-                                '<button class="btn btn-primary">Apply Now</button>'}
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('resultsCount').textContent = 'Showing sample opportunities';
+            window.location.href = `/opportunity-details.html?id=${opportunityId}#apply`;
         }
 
         // Apply filters
@@ -1033,13 +683,10 @@
                 topic: document.getElementById('topicFilter').value.trim()
             };
             
-            // Show loading state
             document.getElementById('filterBtnText').textContent = 'Applying...';
-            document.getElementById('filterLoader').classList.remove('hidden');
             
             loadOpportunities(filters).finally(() => {
                 document.getElementById('filterBtnText').textContent = 'Apply Filters';
-                document.getElementById('filterLoader').classList.add('hidden');
             });
         }
 
@@ -1053,7 +700,20 @@
             loadOpportunities();
         }
 
-        // Format date helper
+        // Display error
+        function displayError() {
+            const container = document.getElementById('opportunitiesList');
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <h3>Unable to load opportunities</h3>
+                    <p>Please try refreshing the page</p>
+                    <button onclick="location.reload()" class="btn btn-primary mt-3">Refresh Page</button>
+                </div>
+            `;
+        }
+
+        // Format date
         function formatDate(dateString) {
             if (!dateString) return 'Date TBD';
             const date = new Date(dateString);
@@ -1064,40 +724,19 @@
             });
         }
 
-        // Toggle dropdown menu
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-
-        // Logout function
-        async function logout() {
-            if (window.covetalks) {
-                await window.covetalks.logout();
-            }
-        }
-
-        // Show error message
+        // Show error
         function showError(message) {
             const container = document.getElementById('opportunitiesList');
             container.innerHTML = `
-                <div style="text-align: center; padding: 2rem; color: #dc2626;">
-                    ${message}
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <h3>Error</h3>
+                    <p>${message}</p>
                 </div>
             `;
         }
 
-        // Initialize when DOM is ready
+        // Initialize on load
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initializePage);
         } else {

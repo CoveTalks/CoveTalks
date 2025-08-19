@@ -4,884 +4,689 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CoveTalks - Where Connections Ignite Opportunities</title>
-    <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
-    <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        line-height: 1.6;
-        color: #333;
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-    }
-
-    /* Header Styles */
-    header {
-        background: white;
-        color: #333;
-        padding: 1rem 0;
-        position: fixed;
-        width: 100%;
-        top: 0;
-        z-index: 1000;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .logo {
-        display: inline-flex;
-        align-items: center;
-        text-decoration: none;
-    }
     
-    .logo-img {
-        height: 70px;
-        width: auto;
-        display: block;
-    }
-
-    .nav-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-    }
-
-    .nav-links {
-        display: flex;
-        list-style: none;
-        gap: 2rem;
-    }
-
-    .nav-links a {
-        color: #333;
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.3s;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-        color: #155588;
-    }
-
-    .nav-right {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .auth-buttons {
-        display: flex;
-        gap: 1rem;
-    }
-
-    .btn {
-        padding: 0.75rem 1.5rem;
-        border: none;
-        border-radius: 25px;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-block;
-        transition: all 0.3s;
-        font-weight: 500;
-        text-align: center;
-    }
-
-    .btn-primary {
-        background: #155588;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background: #1e3d6f;
-        transform: translateY(-2px);
-    }
-
-    .btn-secondary {
-        background: white;
-        color: #155588;
-        border: 2px solid #155588;
-    }
-
-    .btn-secondary:hover {
-        background: #155588;
-        color: white;
-    }
-
-    /* User Menu */
-    .user-menu {
-        position: relative;
-    }
-
-    .user-avatar {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #667eea, #1e93b7);
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        cursor: pointer;
-        font-size: 1.1rem;
-        transition: transform 0.2s;
-    }
-
-    .user-avatar:hover {
-        transform: scale(1.05);
-    }
-
-    .dropdown-menu {
-        position: absolute;
-        top: calc(100% + 10px);
-        right: 0;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        min-width: 200px;
-        display: none;
-        z-index: 1000;
-        overflow: hidden;
-    }
-
-    .dropdown-menu.show {
-        display: block;
-    }
-
-    .dropdown-menu a {
-        display: block;
-        padding: 0.75rem 1.25rem;
-        color: #333;
-        text-decoration: none;
-        transition: background 0.2s;
-    }
-
-    .dropdown-menu a:hover {
-        background: #f8f9fa;
-    }
-
-    .dropdown-divider {
-        height: 1px;
-        background: #e1e8ed;
-        margin: 0;
-    }
-
-    /* Hero Section */
-    .hero {
-        background: linear-gradient(135deg, #155588 0%, #1e93b7 100%);
-        color: white;
-        padding: 8rem 0 4rem;
-        text-align: center;
-        min-height: 80vh;
-        display: flex;
-        align-items: center;
-    }
-
-    .hero-content {
-        width: 100%;
-    }
-
-    .hero h1 {
-        font-size: 3.5rem;
-        margin-bottom: 1rem;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-
-    .hero .subtitle {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-        opacity: 0.9;
-    }
-
-    .hero p {
-        font-size: 1.2rem;
-        margin-bottom: 2rem;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .hero-cta {
-        margin-top: 2rem;
-    }
-
-    /* Two Ways Section */
-    .two-ways {
-        padding: 4rem 0;
-        background: #f8f9fa;
-    }
-
-    .section-title {
-        text-align: center;
-        margin-bottom: 3rem;
-    }
-
-    .section-title h2 {
-        font-size: 2.5rem;
-        color: #2c3e50;
-        margin-bottom: 1rem;
-    }
-
-    .ways-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 3rem;
-        margin-top: 3rem;
-    }
-
-    .way-card {
-        background: white;
-        padding: 2rem;
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        text-align: center;
-        transition: transform 0.3s;
-    }
-
-    .way-card:hover {
-        transform: translateY(-5px);
-    }
-
-    .way-card h3 {
-        color: #155588;
-        margin-bottom: 1rem;
-        font-size: 1.5rem;
-    }
-
-    /* Enhanced Featured Speakers Section */
-    .featured-speakers {
-        padding: 4rem 0;
-        background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
-    }
-
-    .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2.5rem;
-    }
-
-    .section-header h2 {
-        font-size: 2.5rem;
-        color: #2c3e50;
-    }
-
-    .view-all-link {
-        color: #155588;
-        text-decoration: none;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        transition: color 0.3s;
-    }
-
-    .view-all-link:hover {
-        color: #1e3d6f;
-    }
-
-    .speakers-showcase {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 1.5rem;
-        margin-top: 2rem;
-    }
-
-    .speaker-showcase-card {
-        background: white;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        transition: all 0.3s ease;
-        position: relative;
-        cursor: pointer;
-    }
-
-    .speaker-showcase-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.12);
-    }
-
-    .speaker-image-container {
-        position: relative;
-        height: 200px;
-        background: linear-gradient(135deg, #667eea, #1e93b7);
-        overflow: hidden;
-    }
-
-    .speaker-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .speaker-initials-large {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 3rem;
-        font-weight: bold;
-        color: white;
-        background: linear-gradient(135deg, #155588, #1e93b7);
-    }
-
-    .speaker-badge {
-        position: absolute;
-        top: 0.75rem;
-        left: 0.75rem;
-        padding: 0.35rem 0.75rem;
-        border-radius: 15px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: white;
-    }
-
-    .badge-featured {
-        background: linear-gradient(135deg, #f2b236, #ff8c42);
-    }
-
-    .badge-new {
-        background: linear-gradient(135deg, #00c9ff, #92fe9d);
-    }
-
-    .badge-verified {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-    }
-
-    .speaker-info {
-        padding: 1.25rem;
-    }
-
-    .speaker-name {
-        font-size: 1.25rem;
-        font-weight: bold;
-        color: #155588;
-        margin-bottom: 0.35rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .speaker-tagline {
-        color: #666;
-        font-size: 0.85rem;
-        margin-bottom: 0.75rem;
-        line-height: 1.3;
-        min-height: 2.2rem;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .speaker-location {
-        display: flex;
-        align-items: center;
-        gap: 0.35rem;
-        color: #999;
-        font-size: 0.8rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .speaker-location::before {
-        content: "📍";
-        font-size: 0.9rem;
-    }
-
-    .speaker-specialties {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.35rem;
-        margin-bottom: 0.75rem;
-        min-height: 2rem;
-    }
-
-    .specialty-tag {
-        background: #e8f4fd;
-        color: #155588;
-        padding: 0.5rem 0.5rem;
-        border-radius: 12px;
-        font-size: 0.7rem;
-        font-weight: 500;
-        border: 1px solid rgba(21, 85, 136, 0.1);
-        transition: all 0.2s;
-    }
-
-    .specialty-tag:hover {
-        background: #155588;
-        color: white;
-    }
-
-    .more-tags {
-        background: #f0f0f0;
-        color: #666;
-        padding: 0.25rem 0.5rem;
-        border-radius: 12px;
-        font-size: 0.7rem;
-        font-weight: 500;
-    }
-
-    .speaker-rating {
-        display: flex;
-        align-items: center;
-        gap: 0.35rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .stars {
-        display: flex;
-        gap: 0.1rem;
-    }
-
-    .star {
-        color: #f2b236;
-        font-size: 0.85rem;
-    }
-
-    .star.empty {
-        color: #ddd;
-    }
-
-    .rating-count {
-        color: #999;
-        font-size: 0.75rem;
-    }
-
-    .speaker-footer {
-        padding: 0.75rem 1.25rem;
-        border-top: 1px solid #f0f0f0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .availability-status {
-        display: flex;
-        align-items: center;
-        gap: 0.35rem;
-        font-size: 0.75rem;
-        color: #666;
-    }
-
-    .status-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: #4caf50;
-    }
-
-    .status-dot.busy {
-        background: #ff9800;
-    }
-
-    .status-dot.unavailable {
-        background: #f44336;
-    }
-
-    .view-profile-btn {
-        padding: 0.4rem 1rem;
-        background: #155588;
-        color: white;
-        border: none;
-        border-radius: 15px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-
-    .view-profile-btn:hover {
-        background: #1e3d6f;
-        transform: translateY(-1px);
-    }
-
-    /* Loading skeleton */
-    .speaker-skeleton {
-        background: white;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-    }
-
-    .skeleton-image {
-        height: 200px;
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-        background-size: 200% 100%;
-        animation: loading 1.5s infinite;
-    }
-
-    .skeleton-content {
-        padding: 1.25rem;
-    }
-
-    .skeleton-line {
-        height: 16px;
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-        background-size: 200% 100%;
-        animation: loading 1.5s infinite;
-        margin-bottom: 0.5rem;
-        border-radius: 4px;
-    }
-
-    .skeleton-line.short {
-        width: 60%;
-    }
-
-    @keyframes loading {
-        0% {
-            background-position: 200% 0;
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- Page-specific styles ONLY for unique elements -->
+    <style>
+        /* Hero Section - Unique to homepage */
+        .hero {
+            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
+            color: white;
+            padding: 8rem 0 4rem;
+            text-align: center;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            margin-top: calc(var(--header-height) * -1);
+            padding-top: calc(var(--header-height) + 8rem);
         }
-        100% {
-            background-position: -200% 0;
-        }
-    }
 
-    /* Organizations Section with Tabs */
-    .organizations {
-        padding: 4rem 0;
-        background: #f8f9fa;
-    }
-
-    .tab-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        margin-bottom: 2rem;
-        flex-wrap: wrap;
-    }
-
-    .tab-btn {
-        padding: 1rem 2rem;
-        background: white;
-        border: 2px solid #e1e8ed;
-        border-radius: 30px;
-        color: #666;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-
-    .tab-btn:hover {
-        border-color: #155588;
-        color: #155588;
-    }
-
-    .tab-btn.active {
-        background: #155588;
-        color: white;
-        border-color: #155588;
-    }
-
-    .tab-content {
-        background: white;
-        border-radius: 20px;
-        padding: 3rem;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    }
-
-    .tab-pane {
-        display: none;
-    }
-
-    .tab-pane.active {
-        display: block;
-    }
-
-    .tab-inner {
-        text-align: center;
-        max-width: 800px;
-        margin: 0 auto;
-    }
-
-    .tab-icon {
-        font-size: 4rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .tab-inner h3 {
-        color: #155588;
-        font-size: 2rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .tab-inner p {
-        line-height: 1.8;
-        margin-bottom: 2rem;
-        color: #666;
-    }
-
-    /* Steps Section */
-    .steps-section {
-        padding: 4rem 0;
-        background: white;
-    }
-
-    .steps-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2rem;
-        margin-top: 2rem;
-    }
-
-    .step {
-        text-align: center;
-        padding: 2rem;
-    }
-
-    .step-number {
-        width: 60px;
-        height: 60px;
-        background: #155588;
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin: 0 auto 1rem;
-    }
-
-    .step h3 {
-        color: #155588;
-        margin-bottom: 1rem;
-    }
-
-    /* Footer */
-    footer {
-        background: #2c3e50;
-        color: white;
-        padding: 3rem 0 1rem;
-    }
-
-    .footer-content {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 2rem;
-        margin-bottom: 2rem;
-    }
-
-    .footer-section h3 {
-        margin-bottom: 1rem;
-        color: #f2b236;
-    }
-
-    .footer-section p,
-    .footer-section a {
-        color: #bdc3c7;
-        text-decoration: none;
-        display: block;
-        margin-bottom: 0.5rem;
-        transition: color 0.3s;
-    }
-
-    .footer-section a:hover {
-        color: #f2b236;
-    }
-
-    .footer-bottom {
-        border-top: 1px solid #34495e;
-        padding-top: 1rem;
-        text-align: center;
-        color: #bdc3c7;
-    }
-
-    .hidden {
-        display: none;
-    }
-
-    /* Responsive - Featured Speakers */
-    @media (max-width: 1200px) {
-        .speakers-showcase {
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.25rem;
-        }
-    }
-
-    @media (max-width: 992px) {
-        .speakers-showcase {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.25rem;
-        }
-        
-        .speaker-image-container {
-            height: 180px;
-        }
-        
-        .speaker-initials-large {
-            font-size: 2.5rem;
-        }
-    }
-
-    /* General Responsive */
-    @media (max-width: 768px) {
-        .nav-links {
-            display: none;
+        .hero-content {
+            width: 100%;
         }
 
         .hero h1 {
-            font-size: 2.5rem;
+            font-size: 3.5rem;
+            margin-bottom: var(--spacing-md);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-weight: var(--font-weight-black);
         }
 
-        .ways-grid,
-        .steps-grid {
-            grid-template-columns: 1fr;
+        .hero .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: var(--spacing-md);
+            opacity: 0.9;
+            font-weight: var(--font-weight-medium);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-xl);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+
+        .hero-cta {
+            margin-top: var(--spacing-xl);
+        }
+
+        /* Two Ways Section */
+        .two-ways {
+            padding: var(--spacing-3xl) 0;
+            background: var(--color-foam);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--color-dark);
+            margin-bottom: var(--spacing-md);
+            font-weight: var(--font-weight-black);
+        }
+
+        .section-title h3 {
+            color: var(--color-deep);
+            font-size: 1.5rem;
+            margin-top: var(--spacing-xl);
+            font-weight: var(--font-weight-bold);
+        }
+
+        .section-title p {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--color-gray);
+            line-height: 1.8;
+        }
+
+        .ways-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-2xl);
+            margin-top: var(--spacing-2xl);
+        }
+
+        .way-card {
+            background: white;
+            padding: var(--spacing-xl);
+            border-radius: 15px;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            transition: transform var(--transition-normal);
+        }
+
+        .way-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .way-card h3 {
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-md);
+            font-size: 1.5rem;
+            font-weight: var(--font-weight-black);
+        }
+
+        .way-card p {
+            margin-bottom: var(--spacing-lg);
+            color: var(--color-gray);
+            line-height: 1.8;
+        }
+
+        /* Featured Speakers Section */
+        .featured-speakers {
+            padding: var(--spacing-3xl) 0;
+            background: linear-gradient(180deg, #ffffff 0%, var(--color-foam) 100%);
         }
 
         .section-header {
-            flex-direction: column;
-            align-items: start;
-            gap: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-xl);
         }
 
         .section-header h2 {
-            font-size: 2rem;
+            font-size: 2.5rem;
+            color: var(--color-dark);
+            font-weight: var(--font-weight-black);
+        }
+
+        .section-header p {
+            color: var(--color-gray);
+            margin-top: var(--spacing-sm);
+        }
+
+        .view-all-link {
+            color: var(--color-deep);
+            text-decoration: none;
+            font-weight: var(--font-weight-bold);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            transition: color var(--transition-normal);
+        }
+
+        .view-all-link:hover {
+            color: var(--color-deep-dark);
         }
 
         .speakers-showcase {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+        }
+
+        .speaker-showcase-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-normal);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .speaker-showcase-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
         }
 
         .speaker-image-container {
-            height: 160px;
-        }
-
-        .speaker-info {
-            padding: 1rem;
-        }
-
-        .speaker-name {
-            font-size: 1.1rem;
-        }
-
-        .speaker-footer {
-            padding: 0.75rem 1rem;
-        }
-
-        .logo-img {
-            height: 50px;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .speakers-showcase {
-            grid-template-columns: 1fr;
-            gap: 1.25rem;
-        }
-
-        .speaker-image-container {
+            position: relative;
             height: 200px;
+            background: linear-gradient(135deg, var(--color-deep), var(--color-calm));
+            overflow: hidden;
+        }
+
+        .speaker-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .speaker-initials-large {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 3rem;
+            font-weight: var(--font-weight-bold);
+            color: white;
+            background: linear-gradient(135deg, var(--color-deep), var(--color-calm));
+        }
+
+        .speaker-badge {
+            position: absolute;
+            top: var(--spacing-md);
+            left: var(--spacing-md);
+            padding: 0.35rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: var(--font-weight-bold);
+            color: white;
+        }
+
+        .badge-featured {
+            background: linear-gradient(135deg, var(--color-sand), #ff8c42);
+        }
+
+        .badge-new {
+            background: linear-gradient(135deg, #00c9ff, #92fe9d);
+        }
+
+        .badge-verified {
+            background: linear-gradient(135deg, #667eea, #764ba2);
         }
 
         .speaker-info {
-            padding: 1.25rem;
+            padding: var(--spacing-lg);
         }
 
         .speaker-name {
             font-size: 1.25rem;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-deep);
+            margin-bottom: 0.35rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .speaker-tagline {
-            font-size: 0.9rem;
+            color: var(--color-gray);
+            font-size: 0.85rem;
+            margin-bottom: var(--spacing-md);
+            line-height: 1.3;
+            min-height: 2.2rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .speaker-location {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            color: var(--color-gray-light);
+            font-size: 0.8rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .speaker-location::before {
+            content: "📍";
+            font-size: 0.9rem;
+        }
+
+        .speaker-specialties {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            margin-bottom: var(--spacing-md);
+            min-height: 2rem;
+        }
+
+        .specialty-tag {
+            background: #e8f4fd;
+            color: var(--color-deep);
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: var(--font-weight-medium);
+            border: 1px solid rgba(21, 85, 136, 0.1);
+            transition: all var(--transition-fast);
+        }
+
+        .specialty-tag:hover {
+            background: var(--color-deep);
+            color: white;
+        }
+
+        .more-tags {
+            background: var(--color-bg-light);
+            color: var(--color-gray);
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: var(--font-weight-medium);
+        }
+
+        .speaker-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .stars {
+            display: flex;
+            gap: 0.1rem;
+        }
+
+        .star {
+            color: var(--color-sand);
             font-size: 0.85rem;
         }
 
-        .specialty-tag,
-        .more-tags {
+        .star.empty {
+            color: #ddd;
+        }
+
+        .rating-count {
+            color: var(--color-gray-light);
             font-size: 0.75rem;
-            padding: 0.3rem 0.6rem;
         }
 
         .speaker-footer {
-            padding: 1rem 1.25rem;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-top: 1px solid var(--color-bg-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .availability-status {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.75rem;
+            color: var(--color-gray);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--color-success);
+        }
+
+        .status-dot.busy {
+            background: var(--color-warning);
+        }
+
+        .status-dot.unavailable {
+            background: var(--color-danger);
         }
 
         .view-profile-btn {
-            padding: 0.5rem 1.2rem;
-            font-size: 0.8rem;
-        }
-    }
-
-    @media (max-width: 400px) {
-        .featured-speakers {
-            padding: 3rem 0;
-        }
-
-        .section-header h2 {
-            font-size: 1.75rem;
+            padding: 0.4rem 1rem;
+            background: var(--color-deep);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: var(--font-weight-bold);
+            cursor: pointer;
+            transition: all var(--transition-normal);
         }
 
-        .speaker-image-container {
-            height: 180px;
+        .view-profile-btn:hover {
+            background: var(--color-deep-dark);
+            transform: translateY(-1px);
         }
-    }
-</style>
+
+        /* Loading skeleton */
+        .speaker-skeleton {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .skeleton-image {
+            height: 200px;
+            background: linear-gradient(90deg, var(--color-bg-light) 25%, #e0e0e0 50%, var(--color-bg-light) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        .skeleton-content {
+            padding: var(--spacing-lg);
+        }
+
+        .skeleton-line {
+            height: 16px;
+            background: linear-gradient(90deg, var(--color-bg-light) 25%, #e0e0e0 50%, var(--color-bg-light) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            margin-bottom: var(--spacing-sm);
+            border-radius: 4px;
+        }
+
+        .skeleton-line.short {
+            width: 60%;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Organizations Section with Tabs */
+        .organizations {
+            padding: var(--spacing-3xl) 0;
+            background: var(--color-foam);
+        }
+
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: var(--spacing-md) var(--spacing-xl);
+            background: white;
+            border: 2px solid var(--color-border);
+            border-radius: 30px;
+            color: var(--color-gray);
+            font-weight: var(--font-weight-medium);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            font-family: var(--font-primary);
+        }
+
+        .tab-btn:hover {
+            border-color: var(--color-deep);
+            color: var(--color-deep);
+        }
+
+        .tab-btn.active {
+            background: var(--color-deep);
+            color: white;
+            border-color: var(--color-deep);
+        }
+
+        .tab-content {
+            background: white;
+            border-radius: 20px;
+            padding: var(--spacing-2xl);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        .tab-inner {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .tab-icon {
+            font-size: 4rem;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .tab-inner h3 {
+            color: var(--color-deep);
+            font-size: 2rem;
+            margin-bottom: var(--spacing-lg);
+            font-weight: var(--font-weight-black);
+        }
+
+        .tab-inner p {
+            line-height: 1.8;
+            margin-bottom: var(--spacing-xl);
+            color: var(--color-gray);
+        }
+
+        /* Steps Section */
+        .steps-section {
+            padding: var(--spacing-3xl) 0;
+            background: white;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-xl);
+            margin-top: var(--spacing-xl);
+        }
+
+        .step {
+            text-align: center;
+            padding: var(--spacing-xl);
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--color-deep);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: var(--font-weight-bold);
+            margin: 0 auto var(--spacing-md);
+        }
+
+        .step h3 {
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-md);
+            font-weight: var(--font-weight-black);
+        }
+
+        .step p {
+            color: var(--color-gray);
+            line-height: 1.8;
+        }
+
+        /* Mobile Responsive Overrides */
+        @media (max-width: 1200px) {
+            .speakers-showcase {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .speakers-showcase {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .ways-grid {
+                gap: var(--spacing-lg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 6rem 0 3rem;
+                min-height: 60vh;
+                padding-top: calc(var(--header-height-mobile) + 6rem);
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .ways-grid,
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: start;
+                gap: var(--spacing-md);
+            }
+
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .speakers-showcase {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--spacing-md);
+            }
+
+            .speaker-image-container {
+                height: 160px;
+            }
+
+            .speaker-info {
+                padding: var(--spacing-md);
+            }
+
+            .speaker-name {
+                font-size: 1.1rem;
+            }
+
+            .speaker-footer {
+                padding: var(--spacing-sm) var(--spacing-md);
+            }
+
+            .tab-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .tab-btn {
+                width: 100%;
+            }
+
+            .tab-content {
+                padding: var(--spacing-lg);
+            }
+
+            .tab-inner h3 {
+                font-size: 1.5rem;
+            }
+
+            .steps-grid {
+                gap: var(--spacing-lg);
+            }
+
+            .step {
+                padding: var(--spacing-md);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+
+            .speakers-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .speaker-image-container {
+                height: 200px;
+            }
+
+            .speaker-initials-large {
+                font-size: 2.5rem;
+            }
+
+            .speaker-info {
+                padding: var(--spacing-lg);
+            }
+
+            .speaker-name {
+                font-size: 1.25rem;
+            }
+
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+
+            .section-title h3 {
+                font-size: 1.25rem;
+            }
+
+            .way-card h3 {
+                font-size: 1.25rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .featured-speakers {
+                padding: var(--spacing-xl) 0;
+            }
+
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .speaker-image-container {
+                height: 180px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="nav-container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
-                </a>
-                
-                <!-- Navigation links will be dynamically updated -->
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="index.html" class="active">Home</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
-    
-                <div class="nav-right">
-                    <!-- Auth buttons (shown when logged out) -->
-                    <div class="auth-buttons" id="authButtons">
-                        <a href="register.html" class="btn btn-secondary">Join</a>
-                        <a href="login.html" class="btn btn-primary">Login</a>
-                    </div>
-                    
-                    <!-- User menu (shown when logged in) -->
-                    <div class="user-menu hidden" id="userMenu">
-                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
-                        <div class="dropdown-menu" id="dropdownMenu">
-                            <a href="inbox.html">Inbox</a>
-                            <a href="settings.html">Settings</a>
-                            <a href="billing.html">Billing</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" onclick="logout(); return false;">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <!-- Header will be auto-injected by header.js -->
 
     <!-- Hero Section -->
     <section id="home" class="hero">
@@ -891,7 +696,7 @@
                 <div class="subtitle">Community Outreach. Voices everywhere.</div>
                 <p>CoveTalks fulfills the speaking needs of charitable, service, educational, philanthropic and religious organizations around the world.</p>
                 <div class="hero-cta">
-                    <a href="register.html" class="btn btn-primary">Join the Community</a>
+                    <a href="/register.html" class="btn btn-primary btn-lg">Join the Community</a>
                 </div>
             </div>
         </div>
@@ -903,9 +708,6 @@
             <div class="section-title">
                 <h2>Find your voice. Inspire your audience.</h2>
                 <p>Unlock the unique power of authentic and inspiring industry expert speakers. COVETALKS connects Subject Matter Experts and industry experts directly with the organizations that need their unique voice and knowledge.</p>
-            </div>
-            
-            <div class="section-title">
                 <h3>TWO WAYS TO UTILIZE COVETALKS:</h3>
             </div>
             
@@ -913,26 +715,26 @@
                 <div class="way-card">
                     <h3>BECOME A REGISTERED COVETALKER</h3>
                     <p>Our registered members can take advantage of our extensive database of CoveTalking opportunities. From nonprofits to Fortune 500 companies, everyone needs an expert to come and speak about something.</p>
-                    <a href="register.html" class="btn btn-primary">Become a CoveTalker</a>
+                    <a href="/register.html" class="btn btn-primary">Become a CoveTalker</a>
                 </div>
                 <div class="way-card">
                     <h3>LIST YOUR NEED FOR A COVETALKER</h3>
                     <p>Organizations of all sizes can utilize COVETALKS to post speaking opportunities as the need arises. Our members quickly submit their proposal for consideration, and a speaker is quickly and easily booked.</p>
-                    <a href="register.html" class="btn btn-primary">List Your Need</a>
+                    <a href="/register.html" class="btn btn-primary">List Your Need</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Enhanced Featured Speakers Section -->
+    <!-- Featured Speakers Section -->
     <section class="featured-speakers">
         <div class="container">
             <div class="section-header">
                 <div>
                     <h2>Featured Speakers</h2>
-                    <p style="color: #666; margin-top: 0.5rem;">Discover expert speakers ready to inspire your audience</p>
+                    <p>Discover expert speakers ready to inspire your audience</p>
                 </div>
-                <a href="members.html" class="view-all-link">
+                <a href="/members.html" class="view-all-link">
                     View all speakers
                     <span style="font-size: 1.2rem;">→</span>
                 </a>
@@ -999,7 +801,7 @@
                             <div class="tab-icon">🏢</div>
                             <h3>Non-Profits</h3>
                             <p>Non-profits and Classrooms gain substantial advantages by engaging external experts for training and development, as these specialists bring new perspectives and targeted expertise that may not be readily available within the organization. Experts can introduce staff to the latest strategies in fundraising, volunteer management, community outreach, and digital tools that improve operational efficiency and expand impact.</p>
-                            <a href="register.html" class="btn btn-primary">Register Your Non-Profit</a>
+                            <a href="/register.html" class="btn btn-primary">Register Your Non-Profit</a>
                         </div>
                     </div>
                     
@@ -1008,7 +810,7 @@
                             <div class="tab-icon">🎓</div>
                             <h3>Education/Schools</h3>
                             <p>Schools and educational institutions benefit immensely from bringing in external experts for training and professional development, as these professionals offer fresh perspectives and specialized knowledge that may not be present within the institution. Experts can introduce educators to the latest research-based teaching strategies, classroom management techniques, and technology tools that enhance student engagement and learning outcomes.</p>
-                            <a href="register.html" class="btn btn-primary">Register Your School</a>
+                            <a href="/register.html" class="btn btn-primary">Register Your School</a>
                         </div>
                     </div>
                     
@@ -1017,7 +819,7 @@
                             <div class="tab-icon">⛪</div>
                             <h3>Religious/Churches</h3>
                             <p>Religious organizations and churches benefit significantly from bringing in external experts for training and development, as these professionals offer fresh insights and specialized knowledge that may not be available within the congregation. Experts can introduce ministry teams to effective community outreach strategies, volunteer engagement techniques, and technology tools that enhance worship and communication.</p>
-                            <a href="register.html" class="btn btn-primary">Register Your Organization</a>
+                            <a href="/register.html" class="btn btn-primary">Register Your Organization</a>
                         </div>
                     </div>
                     
@@ -1026,7 +828,7 @@
                             <div class="tab-icon">👥</div>
                             <h3>Youth Groups</h3>
                             <p>Youth groups gain tremendous value from bringing in external experts for training and skill development, as these professionals provide fresh perspectives and expertise that complement the organization's mission. Experts can introduce leaders to innovative approaches in youth mentoring, team-building exercises, outdoor skills, and safety practices that enhance program quality and engagement.</p>
-                            <a href="register.html" class="btn btn-primary">Register Your Youth Group</a>
+                            <a href="/register.html" class="btn btn-primary">Register Your Youth Group</a>
                         </div>
                     </div>
                 </div>
@@ -1061,150 +863,72 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>CoveTalks</h3>
-                    <p>Connecting speakers with organizations worldwide to create meaningful opportunities and lasting relationships.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <a href="index.html">Home</a>
-                    <a href="members.html">Members</a>
-                    <a href="register.html">Register</a>
-                    <a href="pricing.html">Pricing</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Support</h3>
-                    <a href="help.html">Help Center</a>
-                    <a href="contact.html">Contact Us</a>
-                    <a href="privacy.html">Privacy Policy</a>
-                    <a href="terms.html">Terms of Service</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Connect</h3>
-                    <a href="https://www.linkedin.com/company/108118017">LinkedIn</a>
-                    <a href="contact.html">Email</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; <script>document.write(new Date().getFullYear());</script> CoveTalks. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    <!-- Footer will be auto-injected by footer.js -->
 
     <!-- Load Supabase from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <!-- Load config and Supabase client -->
-    <script src="js/config.js"></script>
-    <script src="js/supabase-client.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
     
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
     <script>
         // Page state
         let currentUser = null;
         let featuredSpeakers = [];
 
-        // Wait for Supabase client
-        function waitForSupabase(callback) {
-            let attempts = 0;
-            const maxAttempts = 10;
-            
-            function check() {
-                attempts++;
-                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
-                    callback();
-                } else if (attempts < maxAttempts) {
-                    setTimeout(check, 500);
-                } else {
-                    console.error('Failed to initialize Supabase client');
-                    displayEnhancedFallbackSpeakers();
-                }
-            }
-            check();
-        }
-
         // Initialize page
         async function initializePage() {
-            waitForSupabase(async () => {
-                try {
-                    // Check authentication
-                    const session = await window.covetalks.checkAuth();
-                    if (session) {
-                        currentUser = await window.covetalks.getMemberProfile(session.user.id);
-                        updateNavigation(currentUser);
-                    } else {
-                        updateNavigation(null);
-                    }
-
-                    // Load featured speakers
-                    await loadFeaturedSpeakers();
-
-                    // Setup tabs
-                    setupTabs();
-
-                } catch (error) {
-                    console.error('Initialization error:', error);
-                    displayEnhancedFallbackSpeakers();
+            try {
+                // Wait for Supabase
+                await waitForSupabase();
+                
+                // Check authentication (header component will handle nav updates)
+                const session = await window.covetalks.checkAuth();
+                if (session) {
+                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
                 }
+
+                // Load featured speakers
+                await loadFeaturedSpeakers();
+
+                // Setup tabs
+                setupTabs();
+
+            } catch (error) {
+                console.error('Initialization error:', error);
+                displayEnhancedFallbackSpeakers();
+            }
+        }
+
+        // Wait for Supabase client
+        function waitForSupabase() {
+            return new Promise((resolve) => {
+                let attempts = 0;
+                const maxAttempts = 20;
+                
+                function check() {
+                    attempts++;
+                    if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                        resolve();
+                    } else if (attempts < maxAttempts) {
+                        setTimeout(check, 250);
+                    } else {
+                        console.error('Failed to initialize Supabase client');
+                        displayEnhancedFallbackSpeakers();
+                        resolve();
+                    }
+                }
+                check();
             });
         }
 
-        // Update navigation based on user
-        function updateNavigation(user) {
-            const navLinks = document.getElementById('navLinks');
-            const authButtons = document.getElementById('authButtons');
-            const userMenu = document.getElementById('userMenu');
-            const userAvatar = document.getElementById('userAvatar');
-            
-            if (user) {
-                // Hide auth buttons, show user menu
-                authButtons.classList.add('hidden');
-                userMenu.classList.remove('hidden');
-                
-                // Update avatar with user initials
-                const initials = user.name ? 
-                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
-                    'U';
-                userAvatar.textContent = initials;
-                
-                // Update navigation links based on user type
-                if (user.member_type === 'Organization') {
-                    navLinks.innerHTML = `
-                        <li><a href="organization-dashboard.html">Dashboard</a></li>
-                        <li><a href="members.html">Find Speakers</a></li>
-                        <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                        <li><a href="my-opportunities.html">My Opportunities</a></li>
-                        <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                    `;
-                } else {
-                    // Speaker navigation
-                    navLinks.innerHTML = `
-                        <li><a href="dashboard.html">Dashboard</a></li>
-                        <li><a href="members.html">Find Speakers</a></li>
-                        <li><a href="opportunities.html">Opportunities</a></li>
-                        <li><a href="bookings.html">My Bookings</a></li>
-                        <li><a href="profile.html">Profile</a></li>
-                    `;
-                }
-            } else {
-                // Show default logged out navigation
-                authButtons.classList.remove('hidden');
-                userMenu.classList.add('hidden');
-                
-                navLinks.innerHTML = `
-                    <li><a href="index.html" class="active">Home</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                `;
-            }
-        }
-
-        // Enhanced speaker loading function
+        // Load featured speakers
         async function loadFeaturedSpeakers() {
             try {
                 const { data: speakers, error } = await window.covetalks.supabase
@@ -1227,7 +951,7 @@
             }
         }
 
-        // Enhanced speaker display function
+        // Display speakers
         function displayEnhancedSpeakers(speakers) {
             const showcase = document.getElementById('speakersShowcase');
             
@@ -1257,7 +981,7 @@
                 const starsHtml = generateStars(rating);
                 const reviewCount = speaker.total_reviews || Math.floor(Math.random() * 20) + 5;
                 
-                // Tagline - use bio or generate one
+                // Tagline
                 const tagline = speaker.bio ? 
                     speaker.bio.substring(0, 80) + (speaker.bio.length > 80 ? '...' : '') :
                     'Inspiring speaker ready to engage your audience';
@@ -1301,7 +1025,7 @@
             }).join('');
         }
 
-        // Enhanced fallback speakers
+        // Display fallback speakers
         function displayEnhancedFallbackSpeakers() {
             const fallbackSpeakers = [
                 {
@@ -1349,7 +1073,7 @@
             displayEnhancedSpeakers(fallbackSpeakers);
         }
 
-        // Helper function to generate star HTML
+        // Generate star HTML
         function generateStars(rating) {
             const fullStars = Math.floor(rating);
             const hasHalfStar = rating % 1 >= 0.5;
@@ -1368,7 +1092,7 @@
             return starsHtml;
         }
 
-        // Check if speaker is new (joined within last 30 days)
+        // Check if speaker is new
         function isNewSpeaker(createdAt) {
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -1378,13 +1102,13 @@
         // View speaker profile
         function viewSpeaker(speakerId) {
             if (currentUser) {
-                window.location.href = `speaker-profile.html?id=${speakerId}`;
+                window.location.href = `/speaker-profile.html?id=${speakerId}`;
             } else {
-                window.location.href = 'register.html';
+                window.location.href = '/register.html';
             }
         }
 
-        // Setup tabs functionality
+        // Setup tabs
         function setupTabs() {
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabPanes = document.querySelectorAll('.tab-pane');
@@ -1393,38 +1117,15 @@
                 button.addEventListener('click', () => {
                     const targetTab = button.dataset.tab;
 
-                    // Remove active class from all buttons and panes
+                    // Remove active class from all
                     tabButtons.forEach(btn => btn.classList.remove('active'));
                     tabPanes.forEach(pane => pane.classList.remove('active'));
 
-                    // Add active class to clicked button and corresponding pane
+                    // Add active class to clicked
                     button.classList.add('active');
                     document.getElementById(targetTab).classList.add('active');
                 });
             });
-        }
-
-        // Toggle dropdown
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-
-        // Logout
-        async function logout() {
-            if (window.covetalks) {
-                await window.covetalks.logout();
-            }
         }
 
         // Smooth scrolling for anchor links
