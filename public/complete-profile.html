@@ -25,6 +25,16 @@
             margin-bottom: var(--spacing-md);
         }
         
+        .success-badge {
+            background: var(--color-success);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            display: inline-block;
+            margin-bottom: var(--spacing-md);
+            font-weight: bold;
+        }
+        
         .progress-bar {
             background: var(--color-bg-light);
             height: 8px;
@@ -53,6 +63,12 @@
             margin-bottom: var(--spacing-lg);
         }
         
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+        }
+        
         .skip-btn {
             background: transparent;
             color: var(--color-gray);
@@ -62,14 +78,51 @@
         .skip-btn:hover {
             background: var(--color-bg-light);
         }
+        
+        .saving-indicator {
+            display: none;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: var(--color-deep);
+            font-weight: bold;
+        }
+        
+        .saving-indicator.show {
+            display: flex;
+        }
+        
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--color-border);
+            border-top-color: var(--color-deep);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Header will be auto-injected by header.js -->
+    
     <main class="main-content">
         <div class="container profile-completion">
             <div class="welcome-header">
-                <h1>Welcome to CoveTalks! 🎉</h1>
-                <p>Your subscription is active. Let's complete your profile to help you get discovered.</p>
+                <div id="successBadge" class="success-badge" style="display: none;">
+                    ✓ Payment Successful
+                </div>
+                <h1 id="welcomeTitle">Welcome to CoveTalks! 🎉</h1>
+                <p id="welcomeMessage">Your subscription is active. Let's complete your profile to help you get discovered.</p>
             </div>
             
             <div class="progress-bar">
@@ -78,35 +131,42 @@
             
             <div class="completion-card">
                 <h2>Complete Your Speaker Profile</h2>
+                <p style="color: var(--color-gray); margin-bottom: var(--spacing-lg);">
+                    The more complete your profile, the more likely you are to be discovered and booked.
+                </p>
+                
                 <form id="profileForm">
                     <div class="form-group">
                         <label class="form-label">Professional Title</label>
                         <input type="text" class="form-control" id="title" 
-                               placeholder="e.g., Leadership Coach, Technology Expert">
+                               placeholder="e.g., Leadership Coach, Technology Expert, Motivational Speaker">
                     </div>
                     
                     <div class="form-group">
                         <label class="form-label">Years of Speaking Experience</label>
-                        <input type="number" class="form-control" id="experience" 
-                               placeholder="How many years have you been speaking?">
+                        <input type="number" class="form-control" id="experience" min="0" max="50"
+                               placeholder="How many years have you been speaking professionally?">
                     </div>
                     
                     <div class="form-group">
                         <label class="form-label">Speaking Topics (separate with commas)</label>
                         <input type="text" class="form-control" id="topics" 
-                               placeholder="Leadership, Innovation, Technology, Health...">
+                               placeholder="Leadership, Innovation, Technology, Health, Wellness...">
+                        <small style="color: var(--color-gray);">Add 3-5 topics you're most passionate about</small>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Minimum Speaking Fee ($)</label>
-                            <input type="number" class="form-control" id="minFee" 
+                            <input type="number" class="form-control" id="minFee" min="0" step="100"
                                    placeholder="0 for volunteer">
+                            <small style="color: var(--color-gray);">Enter 0 if you do volunteer speaking</small>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Maximum Speaking Fee ($)</label>
-                            <input type="number" class="form-control" id="maxFee" 
+                            <input type="number" class="form-control" id="maxFee" min="0" step="100"
                                    placeholder="Your typical maximum">
+                            <small style="color: var(--color-gray);">Your standard highest fee</small>
                         </div>
                     </div>
                     
@@ -122,8 +182,13 @@
                                placeholder="https://yourwebsite.com">
                     </div>
                     
+                    <div class="saving-indicator" id="savingIndicator">
+                        <div class="spinner"></div>
+                        <span>Saving your profile...</span>
+                    </div>
+                    
                     <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl);">
-                        <button type="submit" class="btn btn-primary" style="flex: 1;">
+                        <button type="submit" class="btn btn-primary" style="flex: 1;" id="saveBtn">
                             Save & Continue to Dashboard
                         </button>
                         <button type="button" class="btn skip-btn" onclick="skipProfile()">
@@ -132,65 +197,185 @@
                     </div>
                 </form>
             </div>
+            
+            <div style="text-align: center; color: var(--color-gray);">
+                <p>You can always update your profile later in Settings</p>
+            </div>
         </div>
     </main>
+    
+    <!-- Footer will be auto-injected by footer.js -->
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/config.js"></script>
     <script src="/js/supabase-client.js"></script>
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
     
     <script>
         let currentUser = null;
+        let planType = null;
         
         async function init() {
-            // Check authentication
-            const session = await window.covetalks.checkAuth();
-            if (!session) {
-                window.location.href = '/login.html';
-                return;
+            try {
+                // Wait for Supabase
+                await waitForSupabase();
+                
+                // Check for URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const isNewSubscription = urlParams.get('subscription') === 'success';
+                const sessionId = urlParams.get('session_id');
+                planType = urlParams.get('plan');
+                
+                // Check authentication
+                const session = await window.covetalks.checkAuth();
+                if (!session) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+                
+                currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                
+                // If coming from successful subscription, show special message
+                if (isNewSubscription) {
+                    document.getElementById('successBadge').style.display = 'inline-block';
+                    document.getElementById('welcomeTitle').innerHTML = 'Subscription Activated! 🎉';
+                    document.getElementById('welcomeMessage').innerHTML = 
+                        `Your ${planType ? planType.charAt(0).toUpperCase() + planType.slice(1) : ''} plan is now active. Let's complete your profile to maximize your visibility to organizations.`;
+                    
+                    // Log the session for tracking
+                    if (sessionId) {
+                        console.log('[Profile Completion] Stripe session:', sessionId);
+                    }
+                    
+                    // Clean up URL
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+                
+                // Pre-fill any existing data
+                prefillForm();
+                updateProgress();
+                
+            } catch (error) {
+                console.error('[Profile Completion] Error:', error);
+                alert('Error loading profile. Please refresh the page.');
             }
+        }
+        
+        function waitForSupabase() {
+            return new Promise((resolve) => {
+                let attempts = 0;
+                const maxAttempts = 20;
+                
+                const check = () => {
+                    attempts++;
+                    if (window.covetalks && window.covetalks.supabase) {
+                        resolve();
+                    } else if (attempts < maxAttempts) {
+                        setTimeout(check, 250);
+                    } else {
+                        console.error('Failed to initialize');
+                        resolve();
+                    }
+                };
+                check();
+            });
+        }
+        
+        function prefillForm() {
+            if (!currentUser) return;
             
-            currentUser = await window.covetalks.getMemberProfile(session.user.id);
-            updateProgress();
+            // Pre-fill any existing data
+            if (currentUser.title) {
+                document.getElementById('title').value = currentUser.title;
+            }
+            if (currentUser.years_experience) {
+                document.getElementById('experience').value = currentUser.years_experience;
+            }
+            if (currentUser.specialties && currentUser.specialties.length > 0) {
+                document.getElementById('topics').value = currentUser.specialties.join(', ');
+            }
+            if (currentUser.speaking_fee_range) {
+                if (currentUser.speaking_fee_range.min !== undefined) {
+                    document.getElementById('minFee').value = currentUser.speaking_fee_range.min;
+                }
+                if (currentUser.speaking_fee_range.max !== undefined) {
+                    document.getElementById('maxFee').value = currentUser.speaking_fee_range.max;
+                }
+            }
+            if (currentUser.linkedin) {
+                document.getElementById('linkedin').value = currentUser.linkedin;
+            }
+            if (currentUser.website) {
+                document.getElementById('website').value = currentUser.website;
+            }
         }
         
         function updateProgress() {
-            let progress = 25; // Base for having account
-            if (currentUser.bio) progress += 25;
-            if (currentUser.specialties?.length > 0) progress += 25;
-            if (currentUser.profile_image_url) progress += 25;
+            if (!currentUser) return;
             
-            document.getElementById('progressBar').style.width = `${progress}%`;
+            let progress = 25; // Base for having account
+            if (currentUser.bio) progress += 15;
+            if (currentUser.specialties?.length > 0) progress += 15;
+            if (currentUser.profile_image_url) progress += 15;
+            if (currentUser.title) progress += 10;
+            if (currentUser.years_experience) progress += 10;
+            if (currentUser.website || currentUser.linkedin) progress += 10;
+            
+            document.getElementById('progressBar').style.width = `${Math.min(progress, 100)}%`;
         }
         
         document.getElementById('profileForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const updates = {
-                title: document.getElementById('title').value,
-                years_experience: parseInt(document.getElementById('experience').value) || null,
-                specialties: document.getElementById('topics').value.split(',').map(t => t.trim()).filter(t => t),
-                speaking_fee_range: {
-                    min: parseInt(document.getElementById('minFee').value) || 0,
-                    max: parseInt(document.getElementById('maxFee').value) || 0
-                },
-                linkedin: document.getElementById('linkedin').value,
-                website: document.getElementById('website').value
-            };
+            const saveBtn = document.getElementById('saveBtn');
+            const savingIndicator = document.getElementById('savingIndicator');
+            
+            // Show saving state
+            saveBtn.disabled = true;
+            savingIndicator.classList.add('show');
             
             try {
+                const updates = {
+                    title: document.getElementById('title').value.trim(),
+                    years_experience: parseInt(document.getElementById('experience').value) || null,
+                    specialties: document.getElementById('topics').value
+                        .split(',')
+                        .map(t => t.trim())
+                        .filter(t => t),
+                    speaking_fee_range: {
+                        min: parseInt(document.getElementById('minFee').value) || 0,
+                        max: parseInt(document.getElementById('maxFee').value) || 0
+                    },
+                    linkedin: document.getElementById('linkedin').value.trim(),
+                    website: document.getElementById('website').value.trim()
+                };
+                
                 await window.covetalks.updateProfile(updates);
-                window.location.href = '/dashboard.html?welcome=true';
+                
+                // Success! Redirect to dashboard with welcome message
+                window.location.href = '/dashboard.html?welcome=true&profile_completed=true';
+                
             } catch (error) {
+                console.error('[Profile Completion] Save error:', error);
                 alert('Error saving profile. Please try again.');
+                saveBtn.disabled = false;
+                savingIndicator.classList.remove('show');
             }
         });
         
         function skipProfile() {
-            window.location.href = '/dashboard.html?welcome=true';
+            if (confirm('You can complete your profile anytime from Settings. Continue to dashboard?')) {
+                window.location.href = '/dashboard.html?welcome=true&profile_skipped=true';
+            }
         }
         
-        init();
+        // Initialize on load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
     </script>
 </body>
 </html>

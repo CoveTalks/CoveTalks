@@ -841,6 +841,7 @@
         }
 
         // Select a plan
+        // Select a plan and create Stripe checkout
         async function selectPlan(plan, period) {
             // Check if user is logged in
             if (!currentUser) {
@@ -870,10 +871,22 @@
             btn.disabled = true;
             
             try {
+                // Check if user already has a subscription
+                const existingSubscription = await window.covetalks.getSubscriptionStatus(currentUser.id);
+                
                 // Map plan names to price IDs
                 const priceId = `${plan}_${period}`; // e.g., "plus_monthly"
                 
                 console.log('Creating checkout session for:', priceId);
+                console.log('User has existing subscription:', !!existingSubscription);
+                
+                // Determine success URL based on subscription status
+                // New subscribers go to profile completion, existing go to dashboard
+                const successUrl = existingSubscription && existingSubscription.status === 'Active' ? 
+                    `${window.location.origin}/dashboard.html?subscription=updated&session_id={CHECKOUT_SESSION_ID}` :
+                    `${window.location.origin}/complete-profile.html?subscription=success&plan=${plan}&session_id={CHECKOUT_SESSION_ID}`;
+                
+                console.log('Success URL will be:', successUrl);
                 
                 // Call Netlify function to create Stripe checkout session
                 const response = await fetch('/.netlify/functions/stripe-create-checkout', {
@@ -887,7 +900,7 @@
                         priceId: priceId,
                         planType: plan.charAt(0).toUpperCase() + plan.slice(1), // Capitalize plan name
                         billingPeriod: period,
-                        successUrl: `${window.location.origin}/dashboard.html?subscription=success&session_id={CHECKOUT_SESSION_ID}`,
+                        successUrl: successUrl,
                         cancelUrl: `${window.location.origin}/pricing.html?canceled=true`
                     })
                 });
