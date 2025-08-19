@@ -13,19 +13,46 @@
     
     <!-- Page-specific styles ONLY for unique elements -->
     <style>
-        /* Page Header - Unique to pricing page */
-        .page-header {
+        /* Shared Hero Section Styles */
+        .main-content{
+            padding-top: 1rem;
+        }
+        .hero-section {
             background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Add subtle pattern overlay for depth */
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Page Header */
+        .page-header {
             padding: 8rem 0 var(--spacing-2xl);
             text-align: center;
             margin-bottom: var(--spacing-2xl);
+            position: relative;
+            z-index: 1;
         }
 
         .page-header h1 {
             font-size: 3rem;
             margin-bottom: var(--spacing-md);
             color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .page-header p {
@@ -113,6 +140,7 @@
             border-radius: 25px;
             font-size: 0.9rem;
             font-weight: var(--font-weight-bold);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
         .plan-name {
@@ -173,43 +201,57 @@
 
         /* Organization Section */
         .organization-section {
-            background: linear-gradient(135deg, var(--color-deep), var(--color-deep-dark));
-            color: white;
             padding: var(--spacing-3xl) 0;
             text-align: center;
             margin-top: var(--spacing-3xl);
+            position: relative;
+            z-index: 1;
         }
 
         .organization-card {
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.2);
             border-radius: 20px;
             padding: var(--spacing-2xl);
             max-width: 600px;
             margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all var(--transition-normal);
+        }
+
+        .organization-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            border-color: rgba(255,255,255,0.3);
         }
 
         .organization-card h2 {
             font-size: 2.5rem;
             margin-bottom: var(--spacing-md);
             color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .organization-card p {
             font-size: 1.2rem;
             margin-bottom: var(--spacing-xl);
+            opacity: 0.95;
         }
 
         .btn-white {
             background: white;
             color: var(--color-deep);
             border: none;
+            font-weight: var(--font-weight-bold);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
         .btn-white:hover {
             background: var(--color-foam);
             color: var(--color-deep);
             transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.15);
         }
 
         /* FAQ Section */
@@ -227,6 +269,7 @@
             text-align: center;
             margin-bottom: var(--spacing-2xl);
             color: var(--color-deep);
+            font-size: 2.5rem;
         }
 
         .faq-item {
@@ -234,6 +277,12 @@
             border: 1px solid var(--color-border);
             border-radius: 10px;
             overflow: hidden;
+            transition: all var(--transition-fast);
+        }
+
+        .faq-item:hover {
+            border-color: var(--color-deep);
+            box-shadow: var(--shadow-sm);
         }
 
         .faq-question {
@@ -254,6 +303,7 @@
         .faq-answer {
             padding: var(--spacing-lg);
             display: none;
+            animation: fadeIn 0.3s ease;
         }
 
         .faq-answer.active {
@@ -265,8 +315,19 @@
             transition: transform var(--transition-fast);
         }
 
-        .faq-answer.active + .faq-question .faq-toggle {
+        .faq-item.active .faq-toggle {
             transform: rotate(45deg);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Loading state for buttons */
@@ -290,6 +351,26 @@
             animation: spin 1s linear infinite;
         }
 
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success message */
+        .message-box {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+            color: #155724;
+        }
+
+        .message-box h4 {
+            margin-bottom: var(--spacing-sm);
+            color: #155724;
+        }
+
         /* Mobile Responsive Overrides */
         @media (max-width: 992px) {
             .pricing-grid {
@@ -304,15 +385,24 @@
             .pricing-card.popular:hover {
                 transform: translateY(-5px);
             }
+
+            .organization-card h2 {
+                font-size: 2rem;
+            }
         }
 
         @media (max-width: 768px) {
+            .page-header {
+                padding: 6rem 0 var(--spacing-xl);
+            }
+
             .page-header h1 {
                 font-size: 2rem;
             }
 
             .page-header p {
                 font-size: 1rem;
+                padding: 0 var(--spacing-md);
             }
 
             .price {
@@ -328,6 +418,14 @@
                 font-size: 0.9rem;
             }
 
+            .organization-section {
+                padding: var(--spacing-2xl) 0;
+            }
+
+            .organization-card {
+                margin: 0 var(--spacing-md);
+            }
+
             .organization-card h2 {
                 font-size: 1.75rem;
             }
@@ -335,14 +433,41 @@
             .organization-card p {
                 font-size: 1rem;
             }
+
+            .faq-section h2 {
+                font-size: 2rem;
+            }
+
+            .faq-question {
+                padding: var(--spacing-md);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-header h1 {
+                font-size: 1.75rem;
+            }
+
+            .price {
+                font-size: 2rem;
+            }
+
+            .features {
+                font-size: 0.9rem;
+            }
+
+            .features li {
+                padding: 0.5rem 0;
+                padding-left: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Header will be auto-injected by header.js -->
     
-    <!-- Page Header -->
-    <div class="page-header">
+    <!-- Page Header Hero Section -->
+    <div class="hero-section page-header">
         <div class="container">
             <h1>Simple, Transparent Pricing</h1>
             <p>Join the world's largest network of speakers for a low monthly cost</p>
@@ -460,80 +585,80 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </main>
 
-            <!-- Organization Section -->
-            <div class="organization-section" id="organizations">
-                <div class="container">
-                    <div class="organization-card">
-                        <h2>Organizations Get Free Access!</h2>
-                        <p>Non-profits, schools, churches, and other organizations can access our speaker database completely free. No subscription required.</p>
-                        <a href="/register.html?type=organization" class="btn btn-white btn-lg">
-                            Register Your Organization Free
-                        </a>
+    <!-- Organization Section -->
+    <div class="hero-section organization-section" id="organizations">
+        <div class="container">
+            <div class="organization-card">
+                <h2>Organizations Get Free Access!</h2>
+                <p>Non-profits, schools, churches, and other organizations can access our speaker database completely free. No subscription required.</p>
+                <a href="/register.html?type=organization" class="btn btn-white btn-lg">
+                    Register Your Organization Free
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section">
+        <div class="container">
+            <div class="faq-container">
+                <h2>Frequently Asked Questions</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What's the difference between the plans?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>All plans include access to our speaker database and contact information. Plus adds advanced search filters and booking tools, while Premium includes unlimited bookings, API access, and dedicated support.</p>
                     </div>
                 </div>
-            </div>
 
-            <!-- FAQ Section -->
-            <div class="faq-section">
-                <div class="container">
-                    <div class="faq-container">
-                        <h2>Frequently Asked Questions</h2>
-                        
-                        <div class="faq-item">
-                            <div class="faq-question" onclick="toggleFAQ(this)">
-                                <span>What's the difference between the plans?</span>
-                                <span class="faq-toggle">+</span>
-                            </div>
-                            <div class="faq-answer">
-                                <p>All plans include access to our speaker database and contact information. Plus adds advanced search filters and booking tools, while Premium includes unlimited bookings, API access, and dedicated support.</p>
-                            </div>
-                        </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Is there really no cost for organizations?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Correct! Non-profits, schools, churches, and similar organizations get completely free access to our platform. This is part of our mission to connect speakers with meaningful causes.</p>
+                    </div>
+                </div>
 
-                        <div class="faq-item">
-                            <div class="faq-question" onclick="toggleFAQ(this)">
-                                <span>Is there really no cost for organizations?</span>
-                                <span class="faq-toggle">+</span>
-                            </div>
-                            <div class="faq-answer">
-                                <p>Correct! Non-profits, schools, churches, and similar organizations get completely free access to our platform. This is part of our mission to connect speakers with meaningful causes.</p>
-                            </div>
-                        </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Can I cancel my subscription anytime?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, you can cancel your subscription at any time. Your access will continue until the end of your current billing period.</p>
+                    </div>
+                </div>
 
-                        <div class="faq-item">
-                            <div class="faq-question" onclick="toggleFAQ(this)">
-                                <span>Can I cancel my subscription anytime?</span>
-                                <span class="faq-toggle">+</span>
-                            </div>
-                            <div class="faq-answer">
-                                <p>Yes, you can cancel your subscription at any time. Your access will continue until the end of your current billing period.</p>
-                            </div>
-                        </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Do you offer discounts for annual billing?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! When you choose annual billing, you save approximately 25% compared to monthly billing. This equals about 2-3 months free per year.</p>
+                    </div>
+                </div>
 
-                        <div class="faq-item">
-                            <div class="faq-question" onclick="toggleFAQ(this)">
-                                <span>Do you offer discounts for annual billing?</span>
-                                <span class="faq-toggle">+</span>
-                            </div>
-                            <div class="faq-answer">
-                                <p>Yes! When you choose annual billing, you save approximately 25% compared to monthly billing. This equals about 2-3 months free per year.</p>
-                            </div>
-                        </div>
-
-                        <div class="faq-item">
-                            <div class="faq-question" onclick="toggleFAQ(this)">
-                                <span>Can I upgrade or downgrade my plan?</span>
-                                <span class="faq-toggle">+</span>
-                            </div>
-                            <div class="faq-answer">
-                                <p>Absolutely! You can upgrade or downgrade your plan at any time. Changes take effect at the next billing cycle, and we'll prorate any differences.</p>
-                            </div>
-                        </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Can I upgrade or downgrade my plan?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Absolutely! You can upgrade or downgrade your plan at any time. Changes take effect at the next billing cycle, and we'll prorate any differences.</p>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
     
     <!-- Footer will be auto-injected by footer.js -->
 
@@ -705,11 +830,16 @@
 
         // Toggle FAQ
         function toggleFAQ(element) {
+            const faqItem = element.parentElement;
             const answer = element.nextElementSibling;
             const icon = element.querySelector('.faq-toggle');
             
+            // Toggle active class on item and answer
+            faqItem.classList.toggle('active');
             answer.classList.toggle('active');
-            icon.textContent = answer.classList.contains('active') ? '−' : '+';
+            
+            // Update icon
+            icon.textContent = faqItem.classList.contains('active') ? '−' : '+';
         }
 
         // Show organization message
@@ -733,7 +863,6 @@
             const container = document.querySelector('.main-content .container');
             const message = document.createElement('div');
             message.className = 'message-box success';
-            message.style.marginBottom = '2rem';
             message.innerHTML = `
                 <h4>Subscription Successful!</h4>
                 <p>Thank you for subscribing to CoveTalks. You now have full access to all features.</p>
