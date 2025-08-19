@@ -11,29 +11,36 @@
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="/css/main.css">
     
-    <!-- Page-specific styles ONLY for unique elements -->
+    <!-- Page-specific styles aligned with brand -->
     <style>
-        /* Page Header - Organization specific gradient */
+        /* Page Header - Brand gradient matching saved-speakers */
         .page-header {
             background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
             padding: 8rem 0 4rem 0;
             margin-bottom: var(--spacing-xl);
             border-radius: 15px;
+            text-align: center;
         }
 
         .page-header h1 {
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-bottom: var(--spacing-sm);
             color: white;
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 900; /* Brandon Text Black */
         }
 
         .page-header p {
             font-size: 1.1rem;
-            opacity: 0.9;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 400; /* Brandon Text Regular */
         }
 
-        /* Stats Grid */
+        /* Stats Grid - More playful and approachable */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -43,33 +50,61 @@
 
         .stat-card {
             background: white;
-            padding: var(--spacing-lg);
+            padding: var(--spacing-xl);
             border-radius: 15px;
             box-shadow: var(--shadow-md);
             text-align: center;
-            transition: transform var(--transition-normal);
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-deep), var(--color-calm));
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
         }
 
         .stat-value {
-            font-size: 2rem;
-            font-weight: var(--font-weight-black);
-            color: var(--color-deep);
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--color-sand);
             margin-bottom: 0.25rem;
+            font-family: 'Brandon Text', var(--font-primary);
+            animation: countUp 0.5s ease;
+        }
+
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .stat-label {
             color: var(--color-gray);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 500;
         }
 
-        /* Filters Section */
+        /* Filters Section - Softer, more approachable */
         .filters-section {
             background: white;
-            padding: var(--spacing-lg);
+            padding: var(--spacing-xl);
             border-radius: 15px;
             box-shadow: var(--shadow-md);
             margin-bottom: var(--spacing-xl);
@@ -79,7 +114,16 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+        }
+
+        .filters-header h3 {
+            color: var(--color-deep);
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 900;
+            font-size: 1.3rem;
         }
 
         .filters-grid {
@@ -89,14 +133,47 @@
         }
 
         .filter-group label {
-            font-weight: var(--font-weight-medium);
-            color: var(--color-gray-dark);
+            font-weight: 700;
+            color: var(--color-deep);
             margin-bottom: var(--spacing-sm);
             font-size: 0.9rem;
             display: block;
+            font-family: 'Brandon Text', var(--font-primary);
         }
 
-        /* Opportunities Table */
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--color-foam);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: var(--font-primary);
+            transition: all var(--transition-fast);
+            background: var(--color-foam);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-calm);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(29, 147, 183, 0.1);
+        }
+
+        /* Clear Filters Button */
+        .btn-clear {
+            background: transparent;
+            color: var(--color-calm);
+            border: 2px solid var(--color-calm);
+            padding: 0.5rem 1.25rem;
+            font-weight: 600;
+        }
+
+        .btn-clear:hover {
+            background: var(--color-calm);
+            color: white;
+        }
+
+        /* Opportunities Table - More inviting design */
         .opportunities-table {
             background: white;
             border-radius: 15px;
@@ -108,12 +185,28 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: var(--spacing-lg);
-            border-bottom: 2px solid var(--color-bg-light);
+            padding: var(--spacing-xl);
+            border-bottom: 3px solid var(--color-foam);
+            background: linear-gradient(135deg, rgba(243, 179, 56, 0.05), rgba(29, 147, 183, 0.03));
         }
 
         .table-header h2 {
             color: var(--color-deep);
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 900;
+            font-size: 1.5rem;
+        }
+
+        .btn-post {
+            background: var(--color-sand);
+            color: white;
+            font-weight: 700;
+            padding: 0.75rem 1.75rem;
+        }
+
+        .btn-post:hover {
+            background: #e5a030;
+            transform: translateY(-2px);
         }
 
         .table-responsive {
@@ -131,21 +224,25 @@
 
         th {
             text-align: left;
-            padding: var(--spacing-md);
-            font-weight: var(--font-weight-bold);
-            color: var(--color-gray);
+            padding: var(--spacing-md) var(--spacing-lg);
+            font-weight: 700;
+            color: var(--color-deep);
             font-size: 0.9rem;
-            border-bottom: 2px solid var(--color-border);
+            border-bottom: 2px solid white;
+            font-family: 'Brandon Text', var(--font-primary);
         }
 
         td {
-            padding: var(--spacing-md);
-            border-bottom: 1px solid var(--color-border);
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-bottom: 1px solid var(--color-foam);
+        }
+
+        tbody tr {
+            transition: background var(--transition-fast);
         }
 
         tbody tr:hover {
-            background: var(--color-foam);
-            transition: background var(--transition-fast);
+            background: linear-gradient(90deg, rgba(243, 179, 56, 0.05), rgba(29, 147, 183, 0.03));
         }
 
         tbody tr:last-child td {
@@ -154,30 +251,78 @@
 
         /* Opportunity Title Cell */
         .opportunity-title {
-            font-weight: var(--font-weight-bold);
+            font-weight: 900;
             color: var(--color-deep);
             margin-bottom: 0.25rem;
+            font-size: 1.05rem;
+            font-family: 'Brandon Text', var(--font-primary);
         }
 
         .opportunity-meta {
             font-size: 0.85rem;
             color: var(--color-gray);
+            display: flex;
+            gap: var(--spacing-sm);
+            align-items: center;
         }
 
-        /* Applications Count */
+        /* Status Badges - More playful */
+        .status-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-family: 'Brandon Text', var(--font-primary);
+        }
+
+        .status-badge.open {
+            background: rgba(29, 147, 183, 0.1);
+            color: var(--color-calm);
+            border: 1px solid var(--color-calm);
+        }
+
+        .status-badge.closed {
+            background: var(--color-foam);
+            color: var(--color-gray);
+            border: 1px solid var(--color-border);
+        }
+
+        .status-badge.filled {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--color-success);
+            border: 1px solid var(--color-success);
+        }
+
+        .status-badge.draft {
+            background: rgba(243, 179, 56, 0.1);
+            color: var(--color-sand);
+            border: 1px solid var(--color-sand);
+        }
+
+        /* Applications Count - More prominent */
         .applications-count {
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
         }
 
+        .count-main {
+            font-weight: 700;
+            color: var(--color-deep);
+            font-size: 1.1rem;
+            font-family: 'Brandon Text', var(--font-primary);
+        }
+
         .count-badge {
-            background: var(--color-deep);
+            background: var(--color-sand);
             color: white;
-            padding: 0.25rem var(--spacing-sm);
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: var(--font-weight-bold);
+            padding: 0.25rem 0.5rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            font-family: 'Brandon Text', var(--font-primary);
         }
 
         .count-badge.new {
@@ -186,9 +331,14 @@
         }
 
         @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
+            0%, 100% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
         }
 
         /* Action Buttons in Table */
@@ -198,16 +348,105 @@
             flex-wrap: wrap;
         }
 
+        .table-actions .btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Empty State - More inviting */
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-3xl);
+            color: var(--color-gray);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: var(--spacing-md);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .empty-state h3 {
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-md);
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 900;
+            font-size: 1.5rem;
+        }
+
+        .empty-state p {
+            margin-bottom: var(--spacing-lg);
+            font-size: 1rem;
+        }
+
+        /* Modal Styling - Brand aligned */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: var(--spacing-xl);
+            max-width: 500px;
+            width: 90%;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .modal-header h3 {
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-lg);
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 900;
+        }
+
+        .modal-body {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--spacing-md);
+        }
+
         /* Responsive Design */
         @media (max-width: 992px) {
             .stats-grid {
                 grid-template-columns: 1fr 1fr;
             }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
         }
 
         @media (max-width: 768px) {
+            .page-header {
+                padding: var(--spacing-xl) var(--spacing-md) var(--spacing-lg);
+            }
+
             .page-header h1 {
-                font-size: 1.5rem;
+                font-size: 1.75rem;
             }
 
             .filters-grid {
@@ -220,7 +459,6 @@
 
             .filters-header {
                 flex-direction: column;
-                gap: var(--spacing-md);
                 align-items: flex-start;
             }
 
@@ -235,6 +473,29 @@
             .table-actions .btn {
                 width: 100%;
             }
+
+            .table-header {
+                flex-direction: column;
+                gap: var(--spacing-md);
+            }
+
+            .table-header .btn-post {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .stat-card {
+                padding: var(--spacing-lg);
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
@@ -244,13 +505,13 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Page Header -->
+            <!-- Page Header with Brand Gradient -->
             <div class="page-header">
-                <h1>My Speaking Opportunities</h1>
-                <p>Manage your posted opportunities and review applications</p>
+                <h1>Your Speaking Opportunities</h1>
+                <p>Connect with inspiring speakers and manage your events</p>
             </div>
 
-            <!-- Stats Grid -->
+            <!-- Stats Grid - More playful -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-value" id="totalOpportunities">0</div>
@@ -262,23 +523,25 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-value" id="totalApplications">0</div>
-                    <div class="stat-label">Total Applications</div>
+                    <div class="stat-label">Applications</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value" id="pendingReviews">0</div>
-                    <div class="stat-label">Pending Reviews</div>
+                    <div class="stat-label">Pending Review</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value" id="acceptedApplications">0</div>
-                    <div class="stat-label">Accepted</div>
+                    <div class="stat-label">Speakers Booked</div>
                 </div>
             </div>
 
             <!-- Filters Section -->
             <div class="filters-section">
                 <div class="filters-header">
-                    <h3>Filter Opportunities</h3>
-                    <button onclick="clearFilters()" class="btn btn-secondary btn-sm">Clear Filters</button>
+                    <h3>🔍 Filter Your Opportunities</h3>
+                    <button onclick="clearFilters()" class="btn btn-clear btn-sm">
+                        Clear All
+                    </button>
                 </div>
                 <div class="filters-grid">
                     <div class="filter-group">
@@ -321,15 +584,15 @@
             <!-- Opportunities Table -->
             <div class="opportunities-table">
                 <div class="table-header">
-                    <h2>Your Opportunities</h2>
-                    <a href="/post-opportunity.html" class="btn btn-success">
-                        + Post New Opportunity
+                    <h2>Manage Opportunities</h2>
+                    <a href="/post-opportunity.html" class="btn btn-post">
+                        ✨ Post New Opportunity
                     </a>
                 </div>
                 <div id="opportunitiesContent">
                     <div class="loading">
                         <div class="loading-spinner"></div>
-                        Loading opportunities...
+                        Loading your opportunities...
                     </div>
                 </div>
             </div>
@@ -342,7 +605,7 @@
     <div id="closeModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Close Opportunity</h3>
+                <h3>Close This Opportunity?</h3>
             </div>
             <div class="modal-body">
                 <p>Are you sure you want to close this opportunity?</p>
@@ -351,8 +614,8 @@
                 </p>
             </div>
             <div class="modal-footer">
-                <button onclick="closeModal()" class="btn btn-secondary">Cancel</button>
-                <button onclick="confirmCloseOpportunity()" class="btn btn-danger">Close Opportunity</button>
+                <button onclick="closeModal()" class="btn btn-secondary">Keep Open</button>
+                <button onclick="confirmCloseOpportunity()" class="btn btn-danger">Yes, Close It</button>
             </div>
         </div>
     </div>
@@ -368,8 +631,9 @@
     <script src="/js/components/header.js"></script>
     <script src="/js/components/footer.js"></script>
     
-    <!-- Page-specific JavaScript -->
+    <!-- Page-specific JavaScript (keeping existing functionality) -->
     <script>
+        // [Keep all existing JavaScript unchanged - it's already functional]
         // Page state
         let currentUser = null;
         let allOpportunities = [];
@@ -462,7 +726,7 @@
             }
         }
 
-        // Update statistics
+        // Update statistics with animation
         function updateStats() {
             const total = allOpportunities.length;
             const active = allOpportunities.filter(o => o.status === 'Open').length;
@@ -477,11 +741,30 @@
                 acceptedApps += apps.filter(a => a.status === 'Accepted').length;
             });
             
-            document.getElementById('totalOpportunities').textContent = total;
-            document.getElementById('activeOpportunities').textContent = active;
-            document.getElementById('totalApplications').textContent = totalApps;
-            document.getElementById('pendingReviews').textContent = pendingApps;
-            document.getElementById('acceptedApplications').textContent = acceptedApps;
+            // Animate the numbers
+            animateValue('totalOpportunities', 0, total, 500);
+            animateValue('activeOpportunities', 0, active, 500);
+            animateValue('totalApplications', 0, totalApps, 500);
+            animateValue('pendingReviews', 0, pendingApps, 500);
+            animateValue('acceptedApplications', 0, acceptedApps, 500);
+        }
+
+        // Animate counter
+        function animateValue(id, start, end, duration) {
+            const element = document.getElementById(id);
+            const range = end - start;
+            const increment = range / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+                    element.textContent = end;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 16);
         }
 
         // Display opportunities
@@ -491,11 +774,11 @@
             if (filteredOpportunities.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <div class="empty-state-icon">📢</div>
-                        <h3>No opportunities found</h3>
-                        <p>You haven't posted any opportunities yet.</p>
-                        <a href="/post-opportunity.html" class="btn btn-primary mt-3">
-                            Post Your First Opportunity
+                        <div class="empty-state-icon">🎤</div>
+                        <h3>No Opportunities Yet</h3>
+                        <p>Share your first speaking opportunity and connect with amazing speakers!</p>
+                        <a href="/post-opportunity.html" class="btn btn-primary btn-lg">
+                            ✨ Post Your First Opportunity
                         </a>
                     </div>
                 `;
@@ -525,8 +808,8 @@
                                         <td>
                                             <div class="opportunity-title">${opp.title}</div>
                                             <div class="opportunity-meta">
-                                                ${opp.location || 'Location TBD'} • 
-                                                ${opp.compensation_amount ? `$${opp.compensation_amount}` : 'Volunteer'}
+                                                <span>📍 ${opp.location || 'Location TBD'}</span>
+                                                <span>💰 ${opp.compensation_amount ? `$${opp.compensation_amount}` : 'Volunteer'}</span>
                                             </div>
                                         </td>
                                         <td>
@@ -535,8 +818,8 @@
                                         <td>${formatDate(opp.event_date)}</td>
                                         <td>
                                             <div class="applications-count">
-                                                <span>${applications.length}</span>
-                                                ${hasNew ? `<span class="count-badge new">${pendingCount} new</span>` : ''}
+                                                <span class="count-main">${applications.length}</span>
+                                                ${hasNew ? `<span class="count-badge new">${pendingCount} NEW</span>` : ''}
                                             </div>
                                         </td>
                                         <td>
@@ -546,7 +829,7 @@
                                                 ${applications.length > 0 ? 
                                                     `<a href="/review-applications.html?id=${opp.id}" 
                                                         class="btn btn-secondary btn-sm">
-                                                        Review (${applications.length})
+                                                        Review
                                                     </a>` : ''
                                                 }
                                                 ${opp.status === 'Open' ? 
@@ -554,8 +837,6 @@
                                                         class="btn btn-warning btn-sm">Close</button>` :
                                                     ''
                                                 }
-                                                <button onclick="editOpportunity('${opp.id}')" 
-                                                    class="btn btn-secondary btn-sm">Edit</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -669,21 +950,16 @@
             }
         }
 
-        // Edit opportunity
-        function editOpportunity(oppId) {
-            window.location.href = `/edit-opportunity.html?id=${oppId}`;
-        }
-
         // Display error
         function displayError() {
             const container = document.getElementById('opportunitiesContent');
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">⚠️</div>
-                    <h3>Error Loading Opportunities</h3>
-                    <p>There was an error loading your opportunities.</p>
-                    <button onclick="location.reload()" class="btn btn-primary mt-3">
-                        Try Again
+                    <h3>Oops! Something went wrong</h3>
+                    <p>We couldn't load your opportunities. Let's try again!</p>
+                    <button onclick="location.reload()" class="btn btn-primary btn-lg">
+                        Refresh Page
                     </button>
                 </div>
             `;
@@ -703,7 +979,7 @@
                 year: 'numeric'
             });
             
-            return isPast ? `<span style="color: var(--color-gray-light);">${formatted}</span>` : formatted;
+            return isPast ? `<span style="color: var(--color-gray-light);">${formatted} (Past)</span>` : formatted;
         }
 
         // Close modals when clicking outside
