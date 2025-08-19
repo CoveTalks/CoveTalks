@@ -22,20 +22,6 @@ class CoveTalksFooter {
         const footerHTML = `
             <footer id="main-footer">
                 <div class="container">
-                    <div class="footer-brand">
-                        <div class="footer-brand-content">
-                            <h3>CoveTalks</h3>
-                            <p>Connecting speakers with organizations worldwide to create meaningful opportunities and lasting relationships.</p>
-                            <div class="social-links">
-                                <a href="https://www.linkedin.com/company/108118017" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    
                     <div class="footer-content">
                         <div class="footer-section">
                             <h3>Quick Links</h3>
@@ -77,8 +63,31 @@ class CoveTalksFooter {
                     </div>
                     
                     <div class="footer-bottom">
-                        <p>&copy; ${this.currentYear} CoveTalks. All rights reserved.</p>
-                        <p class="footer-tagline">Where Connections Ignite Opportunities</p>
+                        <div class="footer-copyright">
+                            <p>&copy; ${this.currentYear} CoveTalks. All rights reserved.</p>
+                        </div>
+                        <div class="footer-social">
+                            <a href="https://www.linkedin.com/company/108118017" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                </svg>
+                            </a>
+                            <!-- Add more social icons here as needed -->
+                            <!-- Example for Twitter/X:
+                            <a href="https://twitter.com/covetalks" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="..."/>
+                                </svg>
+                            </a>
+                            -->
+                            <!-- Example for Facebook:
+                            <a href="https://facebook.com/covetalks" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="..."/>
+                                </svg>
+                            </a>
+                            -->
+                        </div>
                     </div>
                 </div>
             </footer>
@@ -100,99 +109,88 @@ class CoveTalksFooter {
         
         const styles = `
             <style id="footer-styles">
-                /* Footer Brand Section */
-                .footer-brand {
-                    padding: var(--spacing-xl) 0 var(--spacing-2xl);
-                    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                    margin-bottom: var(--spacing-2xl);
-                }
-                
-                .footer-brand-content {
-                    text-align: center;
-                    max-width: 600px;
-                    margin: 0 auto;
-                }
-                
-                .footer-brand h3 {
-                    color: var(--color-sand);
-                    font-size: 1.75rem;
-                    margin-bottom: var(--spacing-md);
-                    font-weight: var(--font-weight-bold);
-                }
-                
-                .footer-brand p {
-                    color: rgba(255, 255, 255, 0.7);
-                    margin-bottom: var(--spacing-lg);
-                    line-height: 1.6;
-                    font-size: 0.95rem;
-                }
-                
-                /* Social Links */
-                .social-links {
-                    display: flex;
-                    gap: 0.75rem;
-                    justify-content: center;
-                    margin-top: var(--spacing-lg);
-                }
-                
-                .social-links a {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: 42px;
-                    height: 42px;
-                    background: rgba(255, 255, 255, 0.05);
-                    border: 1px solid rgba(255, 255, 255, 0.1);
-                    border-radius: 50%;
-                    transition: all 0.3s ease;
-                    color: rgba(255, 255, 255, 0.7);
-                }
-                
-                .social-links a:hover {
-                    border-color: rgba(243, 179, 56, 0.3);
-                    background: rgba(255, 255, 255, 0.08);
-                    transform: translateY(-3px);
-                    color: var(--color-sand);
-                }
-                
-                .social-links svg {
-                    width: 20px;
-                    height: 20px;
-                    fill: currentColor;
-                    transition: fill 0.3s ease;
+                /* Main Footer */
+                footer {
+                    background: var(--color-dark);
+                    color: white;
+                    padding: var(--spacing-xl) 0 var(--spacing-md);
+                    margin-top: auto;
                 }
                 
                 /* Footer Content - 4 columns */
                 .footer-content {
-                    padding-bottom: var(--spacing-xl);
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: var(--spacing-xl);
+                    padding-bottom: var(--spacing-lg);
+                    margin-bottom: var(--spacing-lg);
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
                 }
                 
-                /* Footer Bottom */
+                .footer-section h3 {
+                    margin-bottom: var(--spacing-md);
+                    color: var(--color-sand);
+                    font-size: 1.1rem;
+                }
+                
+                .footer-section a {
+                    color: var(--color-gray-lighter);
+                    text-decoration: none;
+                    display: block;
+                    margin-bottom: var(--spacing-sm);
+                    transition: color var(--transition-normal);
+                    font-size: 0.9rem;
+                }
+                
+                .footer-section a:hover {
+                    color: var(--color-sand);
+                }
+                
+                /* Footer Bottom - Two column layout */
                 .footer-bottom {
-                    border-top: 1px solid rgba(255, 255, 255, 0.1);
-                    padding-top: var(--spacing-lg);
-                    margin-top: var(--spacing-xl);
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding-top: var(--spacing-md);
                 }
                 
-                /* Footer Tagline */
-                .footer-tagline {
-                    font-style: italic;
-                    opacity: 0.8;
-                    margin-top: 0.5rem;
+                .footer-copyright p {
+                    margin: 0;
+                    color: var(--color-gray-lighter);
+                    font-size: 0.9rem;
                 }
                 
-                /* Notification Badge */
-                .notification-badge {
-                    display: inline-block;
-                    background: var(--color-danger);
-                    color: white;
-                    font-size: 0.75rem;
-                    font-weight: bold;
-                    padding: 2px 6px;
-                    border-radius: 10px;
-                    margin-left: 0.5rem;
-                    min-width: 20px;
-                    text-align: center;
+                /* Social Links - Horizontal layout */
+                .footer-social {
+                    display: flex;
+                    gap: var(--spacing-md);
+                    align-items: center;
+                }
+                
+                .footer-social a {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 36px;
+                    height: 36px;
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 50%;
+                    transition: all 0.3s ease;
+                    color: var(--color-gray-lighter);
+                }
+                
+                .footer-social a:hover {
+                    border-color: var(--color-sand);
+                    background: rgba(243, 179, 56, 0.1);
+                    color: var(--color-sand);
+                    transform: translateY(-2px);
+                }
+                
+                .footer-social svg {
+                    width: 18px;
+                    height: 18px;
+                    fill: currentColor;
                 }
                 
                 /* Responsive adjustments */
@@ -207,27 +205,49 @@ class CoveTalksFooter {
                     .footer-content {
                         grid-template-columns: repeat(2, 1fr);
                     }
-                    
-                    .footer-brand {
-                        padding: var(--spacing-lg) 0 var(--spacing-xl);
-                        margin-bottom: var(--spacing-xl);
-                    }
                 }
                 
-                @media (max-width: 576px) {
+                @media (max-width: 768px) {
                     .footer-content {
                         grid-template-columns: 1fr;
                         text-align: left;
                     }
                     
-                    .footer-brand {
-                        padding: var(--spacing-lg) 0 var(--spacing-lg);
-                        margin-bottom: var(--spacing-lg);
+                    .footer-section {
+                        padding-bottom: var(--spacing-md);
+                        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
                     }
                     
+                    .footer-section:last-child {
+                        border-bottom: none;
+                    }
+                    
+                    /* Stack footer bottom on mobile */
                     .footer-bottom {
-                        padding-top: var(--spacing-lg);
+                        flex-direction: column;
+                        gap: var(--spacing-md);
                         text-align: center;
+                    }
+                    
+                    .footer-copyright {
+                        order: 2;
+                    }
+                    
+                    .footer-social {
+                        order: 1;
+                        justify-content: center;
+                    }
+                }
+                
+                @media (max-width: 576px) {
+                    .footer-social a {
+                        width: 32px;
+                        height: 32px;
+                    }
+                    
+                    .footer-social svg {
+                        width: 16px;
+                        height: 16px;
                     }
                 }
             </style>
