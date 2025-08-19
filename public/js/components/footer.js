@@ -22,7 +22,8 @@ class CoveTalksFooter {
         const footerHTML = `
             <footer id="main-footer">
                 <div class="container">
-                    <div class="footer-brand-content">
+                    <div class="footer-brand">
+                        <div class="footer-brand-content">
                             <h3>CoveTalks</h3>
                             <p>Connecting speakers with organizations worldwide to create meaningful opportunities and lasting relationships.</p>
                             <div class="social-links">
@@ -33,9 +34,9 @@ class CoveTalksFooter {
                                 </a>
                             </div>
                         </div>
+                    </div>
                     
-                    <div class="footer-brand">                        
-                        <div class="footer-content">
+                    <div class="footer-content">
                         <div class="footer-section">
                             <h3>Quick Links</h3>
                             <a href="/index.html">Home</a>
@@ -74,7 +75,6 @@ class CoveTalksFooter {
                             <a href="/accessibility.html">Accessibility</a>
                         </div>
                     </div>
-                    </div>
                     
                     <div class="footer-bottom">
                         <p>&copy; ${this.currentYear} CoveTalks. All rights reserved.</p>
@@ -102,9 +102,9 @@ class CoveTalksFooter {
             <style id="footer-styles">
                 /* Footer Brand Section */
                 .footer-brand {
-                    padding: var(--spacing-xl) 0 var(--spacing-lg);
-                    border-top: 1px solid rgba(255, 255, 255, 0.1);
-                    margin-top: var(--spacing-2xl);
+                    padding: var(--spacing-xl) 0 var(--spacing-2xl);
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                    margin-bottom: var(--spacing-2xl);
                 }
                 
                 .footer-brand-content {
@@ -162,6 +162,18 @@ class CoveTalksFooter {
                     transition: fill 0.3s ease;
                 }
                 
+                /* Footer Content - 4 columns */
+                .footer-content {
+                    padding-bottom: var(--spacing-xl);
+                }
+                
+                /* Footer Bottom */
+                .footer-bottom {
+                    border-top: 1px solid rgba(255, 255, 255, 0.1);
+                    padding-top: var(--spacing-lg);
+                    margin-top: var(--spacing-xl);
+                }
+                
                 /* Footer Tagline */
                 .footer-tagline {
                     font-style: italic;
@@ -195,6 +207,11 @@ class CoveTalksFooter {
                     .footer-content {
                         grid-template-columns: repeat(2, 1fr);
                     }
+                    
+                    .footer-brand {
+                        padding: var(--spacing-lg) 0 var(--spacing-xl);
+                        margin-bottom: var(--spacing-xl);
+                    }
                 }
                 
                 @media (max-width: 576px) {
@@ -204,8 +221,8 @@ class CoveTalksFooter {
                     }
                     
                     .footer-brand {
-                        padding: var(--spacing-xl) 0;
-                        margin-top: var(--spacing-xl);
+                        padding: var(--spacing-lg) 0 var(--spacing-lg);
+                        margin-bottom: var(--spacing-lg);
                     }
                     
                     .footer-bottom {
