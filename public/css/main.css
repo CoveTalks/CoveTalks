@@ -260,7 +260,7 @@ nav {
 .hamburger span {
     display: block;
     height: 3px;
-    background: #333;
+    background: var(--color-sand);
     border-radius: 2px;
     transition: all var(--transition-normal);
     transform-origin: center;
