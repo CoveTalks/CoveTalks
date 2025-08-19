@@ -417,7 +417,7 @@
 
         /* Organizations Section with Tabs */
         .organizations {
-            padding: var(--spacing-3xl) 0;
+            padding: var(--spacing-md) 0;
             background: var(--color-foam);
         }
 
@@ -493,7 +493,7 @@
 
         /* Steps Section */
         .steps-section {
-            padding: var(--spacing-3xl) 0;
+            padding: var(--spacing-md) 0;
             background: white;
         }
 
@@ -714,12 +714,12 @@
             <div class="ways-grid">
                 <div class="way-card">
                     <h3>BECOME A REGISTERED COVETALKER</h3>
-                    <p>Our registered members can take advantage of our extensive database of CoveTalking opportunities. From nonprofits to Fortune 500 companies, everyone needs an expert to come and speak about something.</p>
+                    <p>Our registered members can take advantage of our extensive database of CoveTalking opportunities. From nonprofits to Fortune 500 companies, everyone needs an expert to come &amp; speak about something.</p>
                     <a href="/register.html" class="btn btn-primary">Become a CoveTalker</a>
                 </div>
                 <div class="way-card">
                     <h3>LIST YOUR NEED FOR A COVETALKER</h3>
-                    <p>Organizations of all sizes can utilize COVETALKS to post speaking opportunities as the need arises. Our members quickly submit their proposal for consideration, and a speaker is quickly and easily booked.</p>
+                    <p>Organizations of all sizes can utilize <strong>COVE</strong>TALKS to post speaking opportunities as the need arises. Our members quickly submit their proposal for consideration, and a speaker is quickly &amp; easily booked.</p>
                     <a href="/register.html" class="btn btn-primary">List Your Need</a>
                 </div>
             </div>
@@ -798,7 +798,7 @@
                 <div class="tab-content">
                     <div id="nonprofits" class="tab-pane active">
                         <div class="tab-inner">
-                            <div class="tab-icon">🏢</div>
+                            <div class="tab-icon"><img src="/Images/non_profit_icon.png" alt="nonprofits" class="icon-md"></div>
                             <h3>Non-Profits</h3>
                             <p>Non-profits and Classrooms gain substantial advantages by engaging external experts for training and development, as these specialists bring new perspectives and targeted expertise that may not be readily available within the organization. Experts can introduce staff to the latest strategies in fundraising, volunteer management, community outreach, and digital tools that improve operational efficiency and expand impact.</p>
                             <a href="/register.html" class="btn btn-primary">Register Your Non-Profit</a>
@@ -806,8 +806,7 @@
                     </div>
                     
                     <div id="education" class="tab-pane">
-                        <div class="tab-inner">
-                            <div class="tab-icon">🎓</div>
+                        <div class="tab-inner"><img src="/Images/education_icon.png" alt="nonprofits" class="icon-md"></div>
                             <h3>Education/Schools</h3>
                             <p>Schools and educational institutions benefit immensely from bringing in external experts for training and professional development, as these professionals offer fresh perspectives and specialized knowledge that may not be present within the institution. Experts can introduce educators to the latest research-based teaching strategies, classroom management techniques, and technology tools that enhance student engagement and learning outcomes.</p>
                             <a href="/register.html" class="btn btn-primary">Register Your School</a>
@@ -816,7 +815,7 @@
                     
                     <div id="religious" class="tab-pane">
                         <div class="tab-inner">
-                            <div class="tab-icon">⛪</div>
+                            <div class="tab-icon"><img src="/Images/church_icon.png" alt="nonprofits" class="icon-md"></div>
                             <h3>Religious/Churches</h3>
                             <p>Religious organizations and churches benefit significantly from bringing in external experts for training and development, as these professionals offer fresh insights and specialized knowledge that may not be available within the congregation. Experts can introduce ministry teams to effective community outreach strategies, volunteer engagement techniques, and technology tools that enhance worship and communication.</p>
                             <a href="/register.html" class="btn btn-primary">Register Your Organization</a>
@@ -825,7 +824,7 @@
                     
                     <div id="youth" class="tab-pane">
                         <div class="tab-inner">
-                            <div class="tab-icon">👥</div>
+                            <div class="tab-icon"><img src="/Images/youth_icon.png" alt="nonprofits" class="icon-md"></div>
                             <h3>Youth Groups</h3>
                             <p>Youth groups gain tremendous value from bringing in external experts for training and skill development, as these professionals provide fresh perspectives and expertise that complement the organization's mission. Experts can introduce leaders to innovative approaches in youth mentoring, team-building exercises, outdoor skills, and safety practices that enhance program quality and engagement.</p>
                             <a href="/register.html" class="btn btn-primary">Register Your Youth Group</a>
@@ -1102,7 +1101,7 @@
         // View speaker profile
         function viewSpeaker(speakerId) {
             if (currentUser) {
-                window.location.href = `/speaker-profile.html?id=${speakerId}`;
+                window.location.href = `/profile.html?id=${speakerId}`;
             } else {
                 window.location.href = '/register.html';
             }

@@ -913,7 +913,36 @@ textarea.form-control {
 }
 
 /* ==============================================
-   15. RESPONSIVE DESIGN
+   15. ICON CLASSES
+   ============================================== */
+
+/* Icons */
+.icon-xs {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
+.icon-sm {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.icon-md {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.icon-lg {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+/* ==============================================
+   16. RESPONSIVE DESIGN
    ============================================== */
 
 /* Tablet Styles */
