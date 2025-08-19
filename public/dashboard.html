@@ -4,234 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - CoveTalks</title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- Page-specific styles ONLY for unique dashboard elements -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header */
-        header {
-            background: white;
-            color: #333;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        
-        .logo-img {
-            height: 70px;
-            width: auto;
-            display: block;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #155588;
-        }
-
-        .nav-links a.active {
-            color: #155588;
-            border-bottom: 2px solid #155588;
-            padding-bottom: 2px;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1e3d6f;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #155588;
-            border: 2px solid #155588;
-        }
-
-        .btn-secondary:hover {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-white {
-            background: white;
-            color: #155588;
-        }
-
-        .btn-white:hover {
-            background: #f8f9fa;
-            transform: translateY(-2px);
-        }
-
-        .btn-outline-white {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn-outline-white:hover {
-            background: white;
-            color: #155588;
-        }
-
-        /* User Menu Styles */
-        .user-menu {
-            position: relative;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: transform 0.2s;
-            position: relative;
-        }
-
-        .user-avatar.has-image {
-            background: none;
-            padding: 0;
-        }
-
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.05);
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.75rem 1.25rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #e1e8ed;
-            margin: 0;
-        }
-
-        /* Dashboard Layout */
-        .dashboard-container {
-            padding-top: 6rem;
-            min-height: 100vh;
-        }
-
+        /* Dashboard Header - Unique gradient */
         .dashboard-header {
-            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
+            padding: var(--spacing-xl) 0;
+            margin-bottom: var(--spacing-xl);
         }
 
         .dashboard-header-content {
@@ -242,7 +29,8 @@
 
         .welcome-section h1 {
             font-size: 2rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: var(--spacing-sm);
+            color: white;
         }
 
         .welcome-section p {
@@ -251,28 +39,28 @@
 
         .header-actions {
             display: flex;
-            gap: 1rem;
+            gap: var(--spacing-md);
         }
 
-        /* Stats Cards */
+        /* Stats Grid - Dashboard specific */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
         }
 
         .stat-card {
             background: white;
-            padding: 1.5rem;
+            padding: var(--spacing-lg);
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow-md);
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: var(--spacing-md);
             position: relative;
             overflow: hidden;
-            transition: transform 0.3s;
+            transition: transform var(--transition-normal);
         }
 
         .stat-card:hover {
@@ -286,7 +74,7 @@
             left: 0;
             width: 4px;
             height: 100%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
+            background: linear-gradient(135deg, var(--color-deep), var(--color-calm));
         }
 
         .stat-icon {
@@ -301,32 +89,32 @@
 
         .stat-icon.blue {
             background: #e8f4fd;
-            color: #155588;
+            color: var(--color-deep);
         }
 
         .stat-icon.green {
             background: #d4edda;
-            color: #27ae60;
+            color: var(--color-success);
         }
 
         .stat-icon.purple {
             background: #f3e5f5;
-            color: #1e93b7;
+            color: var(--color-calm);
         }
 
         .stat-icon.orange {
             background: #fff3e0;
-            color: #f2b236;
+            color: var(--color-sand);
         }
 
         .stat-content h3 {
             font-size: 2rem;
-            color: #155588;
-            margin-bottom: 0.25rem;
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-xs);
         }
 
         .stat-content p {
-            color: #666;
+            color: var(--color-gray);
             font-size: 0.9rem;
         }
 
@@ -334,73 +122,73 @@
             display: inline-block;
             width: 20px;
             height: 20px;
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid #155588;
+            border: 2px solid var(--color-bg-light);
+            border-top: 2px solid var(--color-deep);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
-        /* Main Dashboard Content */
+        /* Dashboard Main Layout */
         .dashboard-main {
             display: grid;
             grid-template-columns: 1fr 350px;
-            gap: 2rem;
+            gap: var(--spacing-xl);
         }
 
         .dashboard-content {
             display: flex;
             flex-direction: column;
-            gap: 2rem;
+            gap: var(--spacing-xl);
         }
 
         .dashboard-sidebar {
             display: flex;
             flex-direction: column;
-            gap: 2rem;
+            gap: var(--spacing-xl);
         }
 
         /* Dashboard Cards */
         .dashboard-card {
             background: white;
             border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 2px solid var(--color-bg-light);
         }
 
         .card-header h2 {
-            color: #155588;
+            color: var(--color-deep);
             font-size: 1.3rem;
         }
 
         .card-header a {
-            color: #155588;
+            color: var(--color-deep);
             text-decoration: none;
             font-size: 0.9rem;
         }
 
-        /* Recent Activity */
+        /* Activity List */
         .activity-list {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: var(--spacing-md);
         }
 
         .activity-item {
             display: flex;
-            gap: 1rem;
-            padding: 1rem;
-            background: #f8f9fa;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: var(--color-foam);
             border-radius: 10px;
-            transition: background 0.3s;
+            transition: background var(--transition-normal);
             position: relative;
         }
 
@@ -414,21 +202,22 @@
         
         .activity-item .view-btn {
             position: absolute;
-            right: 1rem;
+            right: var(--spacing-md);
             top: 50%;
             transform: translateY(-50%);
-            padding: 0.5rem 1rem;
-            background: #155588;
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--color-deep);
             color: white;
             border-radius: 20px;
             text-decoration: none;
             font-size: 0.85rem;
-            transition: all 0.3s;
+            transition: all var(--transition-normal);
         }
         
         .activity-item .view-btn:hover {
-            background: #1e3d6f;
+            background: var(--color-deep-dark);
             transform: translateY(-50%) translateX(-2px);
+            color: white;
         }
 
         .activity-icon {
@@ -443,56 +232,50 @@
 
         .activity-icon.view {
             background: #e8f4fd;
-            color: #155588;
+            color: var(--color-deep);
         }
 
         .activity-icon.booking {
             background: #d4edda;
-            color: #27ae60;
+            color: var(--color-success);
         }
 
         .activity-icon.message {
             background: #fff3e0;
-            color: #f2b236;
+            color: var(--color-sand);
         }
 
         .activity-icon.application {
             background: #f3e5f5;
-            color: #1e93b7;
+            color: var(--color-calm);
         }
 
         .activity-content {
             flex: 1;
             padding-right: 5rem;
         }
-        
-        @media (max-width: 768px) {
-            .activity-content {
-                padding-right: 0;
-            }
-        }
 
         .activity-content h4 {
             color: #333;
-            margin-bottom: 0.25rem;
+            margin-bottom: var(--spacing-xs);
         }
 
         .activity-content p {
-            color: #666;
+            color: var(--color-gray);
             font-size: 0.9rem;
         }
 
         .activity-time {
-            color: #999;
+            color: var(--color-gray-light);
             font-size: 0.8rem;
         }
 
-        /* Real-time notification */
+        /* Real-time notification badge */
         .real-time-badge {
             position: absolute;
             top: -5px;
             right: -5px;
-            background: #dc3545;
+            background: var(--color-danger);
             color: white;
             border-radius: 10px;
             padding: 2px 8px;
@@ -508,38 +291,38 @@
 
         /* Profile Completion */
         .profile-completion {
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
         }
 
         .completion-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 0.5rem;
+            margin-bottom: var(--spacing-sm);
         }
 
         .completion-bar {
-            background: #e1e8ed;
+            background: var(--color-border);
             height: 10px;
             border-radius: 5px;
             overflow: hidden;
         }
 
         .completion-progress {
-            background: linear-gradient(90deg, #667eea, #1e93b7);
+            background: linear-gradient(90deg, var(--color-deep), var(--color-calm));
             height: 100%;
             transition: width 0.5s;
         }
 
         .completion-tips {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: #f8f9fa;
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: var(--color-foam);
             border-radius: 10px;
         }
 
         .completion-tips h4 {
-            color: #155588;
-            margin-bottom: 0.5rem;
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-sm);
         }
 
         .completion-tips ul {
@@ -549,102 +332,89 @@
         }
 
         .completion-tips li {
-            padding: 0.5rem 0;
-            color: #666;
+            padding: var(--spacing-sm) 0;
+            color: var(--color-gray);
             font-size: 0.9rem;
         }
 
         .completion-tips li:before {
             content: "→";
-            color: #155588;
-            margin-right: 0.5rem;
+            color: var(--color-deep);
+            margin-right: var(--spacing-sm);
         }
 
         .completion-complete {
-            color: #27ae60;
-            font-weight: 500;
-            padding: 1rem;
+            color: var(--color-success);
+            font-weight: var(--font-weight-medium);
+            padding: var(--spacing-md);
             text-align: center;
         }
 
-        /* Subscription Status */
+        /* Subscription Status Card */
         .subscription-card {
-            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
-            padding: 1.5rem;
+            padding: var(--spacing-lg);
         }
 
         .subscription-card h3 {
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
+            color: white;
         }
 
         .plan-name {
             font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--spacing-sm);
         }
 
         .plan-details {
             opacity: 0.9;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .btn-outline-white {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-outline-white:hover {
+            background: white;
+            color: var(--color-deep);
         }
 
         /* Quick Actions */
         .quick-actions {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            gap: var(--spacing-md);
         }
 
         .action-btn {
-            padding: 1rem;
-            background: #f8f9fa;
-            border: 2px solid #e1e8ed;
+            padding: var(--spacing-md);
+            background: var(--color-foam);
+            border: 2px solid var(--color-border);
             border-radius: 10px;
             text-align: center;
             color: #333;
             text-decoration: none;
-            transition: all 0.3s;
+            transition: all var(--transition-normal);
         }
 
         .action-btn:hover {
             background: white;
-            border-color: #155588;
+            border-color: var(--color-deep);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-md);
         }
 
         .action-btn i {
             display: block;
             font-size: 1.5rem;
-            color: #155588;
-            margin-bottom: 0.5rem;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #155588;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-left: 0.5rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: #666;
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-sm);
+            font-style: normal;
         }
 
         /* Notification Toast */
@@ -653,12 +423,12 @@
             bottom: 20px;
             right: 20px;
             background: white;
-            padding: 1rem 1.5rem;
+            padding: var(--spacing-md) var(--spacing-lg);
             border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            box-shadow: var(--shadow-xl);
             display: none;
             align-items: center;
-            gap: 1rem;
+            gap: var(--spacing-md);
             max-width: 400px;
             z-index: 2000;
             animation: slideIn 0.3s ease;
@@ -669,11 +439,11 @@
         }
 
         .notification-toast.success {
-            border-left: 4px solid #27ae60;
+            border-left: 4px solid var(--color-success);
         }
 
         .notification-toast.info {
-            border-left: 4px solid #155588;
+            border-left: 4px solid var(--color-deep);
         }
 
         @keyframes slideIn {
@@ -687,7 +457,7 @@
             }
         }
 
-        /* Responsive */
+        /* Mobile Responsive */
         @media (max-width: 992px) {
             .dashboard-main {
                 grid-template-columns: 1fr;
@@ -695,17 +465,17 @@
         }
 
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
             .stats-grid {
                 grid-template-columns: 1fr;
             }
 
             .dashboard-header-content {
                 flex-direction: column;
-                gap: 1rem;
+                gap: var(--spacing-md);
+            }
+
+            .welcome-section h1 {
+                font-size: 1.5rem;
             }
 
             .header-actions {
@@ -720,10 +490,14 @@
                 grid-template-columns: 1fr;
             }
             
+            .activity-content {
+                padding-right: 0;
+            }
+            
             .activity-item .view-btn {
                 position: static;
                 transform: none;
-                margin-top: 1rem;
+                margin-top: var(--spacing-md);
                 display: inline-block;
                 width: 100%;
                 text-align: center;
@@ -736,50 +510,10 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="nav-container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
-                </a>
-                
-                <!-- Navigation links will be dynamically inserted here -->
-                <ul class="nav-links" id="navLinks">
-                    <!-- Default logged out navigation -->
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
-    
-                <div class="nav-right">
-                    <!-- Auth buttons (shown when logged out) -->
-                    <div class="auth-buttons" id="authButtons">
-                        <a href="register.html" class="btn btn-secondary">Join</a>
-                        <a href="login.html" class="btn btn-primary">Login</a>
-                    </div>
-                    
-                    <!-- User menu (shown when logged in) -->
-                    <div class="user-menu hidden" id="userMenu">
-                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
-                        <div class="dropdown-menu" id="dropdownMenu">
-                            <a href="inbox.html">Inbox</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="settings.html">Settings</a>
-                            <a href="billing.html">Billing</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" onclick="logout(); return false;">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <!-- Header will be auto-injected by header.js -->
 
     <!-- Dashboard Container -->
-    <div class="dashboard-container">
+    <main class="main-content">
         <!-- Dashboard Header -->
         <div class="dashboard-header">
             <div class="container">
@@ -789,8 +523,8 @@
                         <p>Here's what's happening with your speaker profile today.</p>
                     </div>
                     <div class="header-actions">
-                        <a href="settings.html" class="btn btn-white">Edit Profile</a>
-                        <a href="opportunities.html" class="btn btn-white">Browse Opportunities</a>
+                        <a href="/settings.html" class="btn btn-white">Edit Profile</a>
+                        <a href="/opportunities.html" class="btn btn-white">Browse Opportunities</a>
                     </div>
                 </div>
             </div>
@@ -838,10 +572,10 @@
                     <div class="dashboard-card">
                         <div class="card-header">
                             <h2>Recent Activity</h2>
-                            <a href="activity.html">View All</a>
+                            <a href="/activity.html">View All</a>
                         </div>
                         <div class="activity-list" id="activityList">
-                            <p style="padding: 1rem; color: #666;">Loading...</p>
+                            <p style="padding: var(--spacing-md); color: var(--color-gray);">Loading...</p>
                         </div>
                     </div>
 
@@ -849,10 +583,10 @@
                     <div class="dashboard-card">
                         <div class="card-header">
                             <h2>Upcoming Bookings</h2>
-                            <a href="bookings.html">Manage All</a>
+                            <a href="/bookings.html">Manage All</a>
                         </div>
                         <div id="upcomingBookings">
-                            <p style="padding: 1rem; color: #666;">Loading...</p>
+                            <p style="padding: var(--spacing-md); color: var(--color-gray);">Loading...</p>
                         </div>
                     </div>
 
@@ -860,10 +594,10 @@
                     <div class="dashboard-card">
                         <div class="card-header">
                             <h2>New Speaking Opportunities</h2>
-                            <a href="opportunities.html">Browse All</a>
+                            <a href="/opportunities.html">Browse All</a>
                         </div>
                         <div id="opportunities">
-                            <p style="padding: 1rem; color: #666;">Loading...</p>
+                            <p style="padding: var(--spacing-md); color: var(--color-gray);">Loading...</p>
                         </div>
                     </div>
                 </div>
@@ -872,7 +606,7 @@
                 <div class="dashboard-sidebar">
                     <!-- Profile Completion -->
                     <div class="dashboard-card">
-                        <h3 style="color: #155588; margin-bottom: 1rem;">Profile Completion</h3>
+                        <h3 style="color: var(--color-deep); margin-bottom: var(--spacing-md);">Profile Completion</h3>
                         <div class="profile-completion">
                             <div class="completion-header">
                                 <span>Profile Strength</span>
@@ -895,18 +629,18 @@
                             <p id="planStatus">Loading...</p>
                             <p id="planBilling">Loading...</p>
                         </div>
-                        <a href="billing.html" class="btn btn-outline-white">Manage Billing</a>
+                        <a href="/billing.html" class="btn btn-outline-white">Manage Billing</a>
                     </div>
 
                     <!-- Quick Actions -->
                     <div class="dashboard-card">
-                        <h3 style="color: #155588; margin-bottom: 1rem;">Quick Actions</h3>
+                        <h3 style="color: var(--color-deep); margin-bottom: var(--spacing-md);">Quick Actions</h3>
                         <div class="quick-actions">
-                            <a href="settings.html" class="action-btn">
+                            <a href="/settings.html" class="action-btn">
                                 <i>✏️</i>
                                 Edit Profile
                             </a>
-                            <a href="reviews.html" class="action-btn">
+                            <a href="/reviews.html" class="action-btn">
                                 <i>⭐</i>
                                 Reviews
                             </a>
@@ -915,18 +649,18 @@
 
                     <!-- Resources -->
                     <div class="dashboard-card">
-                        <h3 style="color: #155588; margin-bottom: 1rem;">Resources</h3>
-                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                            <a href="speaking-tips.html" style="color: #155588; text-decoration: none;">📚 Speaking Tips & Best Practices</a>
-                            <a href="templates.html" style="color: #155588; text-decoration: none;">📝 Proposal Templates</a>
-                            <a href="help.html" style="color: #155588; text-decoration: none;">❓ Help Center</a>
-                            <a href="contact.html" style="color: #155588; text-decoration: none;">📧 Contact Support</a>
+                        <h3 style="color: var(--color-deep); margin-bottom: var(--spacing-md);">Resources</h3>
+                        <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+                            <a href="/speaking-tips.html" style="color: var(--color-deep); text-decoration: none;">📚 Speaking Tips & Best Practices</a>
+                            <a href="/templates.html" style="color: var(--color-deep); text-decoration: none;">📝 Proposal Templates</a>
+                            <a href="/help.html" style="color: var(--color-deep); text-decoration: none;">❓ Help Center</a>
+                            <a href="/contact.html" style="color: var(--color-deep); text-decoration: none;">📧 Contact Support</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <!-- Notification Toast -->
     <div class="notification-toast" id="notificationToast">
@@ -936,159 +670,98 @@
             <p id="notificationMessage">You have a new message</p>
         </div>
     </div>
+    
+    <!-- Footer will be auto-injected by footer.js -->
 
     <!-- Load Supabase from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <!-- Load config and Supabase client -->
-    <script src="js/config.js"></script>
-    <script src="js/supabase-client.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
     
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
     <script>
         // Page state
         let currentUser = null;
         let isAuthenticated = false;
-        let initAttempts = 0;
-        const MAX_INIT_ATTEMPTS = 10;
         let realtimeChannel = null;
-
-        // Wait for Supabase client to be ready
-        function waitForSupabase(callback) {
-            initAttempts++;
-            
-            if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
-                callback();
-            } else if (initAttempts < MAX_INIT_ATTEMPTS) {
-                setTimeout(() => waitForSupabase(callback), 500);
-            } else {
-                console.error('[Dashboard] Failed to load Supabase client');
-                showError('Failed to initialize. Please refresh the page.');
-            }
-        }
-
-        // Update navigation based on user type
-        function updateNavigation(user) {
-            const navLinks = document.getElementById('navLinks');
-            const authButtons = document.getElementById('authButtons');
-            const userMenu = document.getElementById('userMenu');
-            const userAvatar = document.getElementById('userAvatar');
-            
-            if (user) {
-                // Hide auth buttons, show user menu
-                authButtons.classList.add('hidden');
-                userMenu.classList.remove('hidden');
-                
-                // Update avatar with user image or initials
-                if (user.profile_image_url) {
-                    userAvatar.classList.add('has-image');
-                    userAvatar.innerHTML = `<img src="${user.profile_image_url}" alt="${user.name}" />`;
-                } else {
-                    const initials = user.name ? 
-                        user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
-                        'U';
-                    userAvatar.textContent = initials;
-                }
-                
-                // Update navigation links based on user type
-                if (user.member_type === 'Organization') {
-                    // Redirect to organization dashboard
-                    window.location.href = '/organization-dashboard.html';
-                    return;
-                } else {
-                    // Speaker navigation
-                    navLinks.innerHTML = `
-                        <li><a href="dashboard.html" class="active">Dashboard</a></li>
-                        <li><a href="members.html">Find Speakers</a></li>
-                        <li><a href="opportunities.html">Opportunities</a></li>
-                        <li><a href="bookings.html">My Bookings</a></li>
-                        <li><a href="profile.html">Profile</a></li>
-                    `;
-                }
-            } else {
-                // Show default logged out navigation
-                authButtons.classList.remove('hidden');
-                userMenu.classList.add('hidden');
-                
-                navLinks.innerHTML = `
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                `;
-            }
-        }
-
-        // Toggle dropdown menu
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
 
         // Initialize page
         async function initializePage() {
             console.log('[Dashboard] Initializing page');
             
-            // Wait for Supabase client
-            waitForSupabase(async () => {
-                try {
-                    // Check authentication status
-                    const session = await window.covetalks.checkAuth();
-                    
-                    if (!session) {
-                        // Not authenticated, redirect to login
-                        console.log('[Dashboard] Not authenticated, redirecting to login');
-                        sessionStorage.setItem('redirectUrl', window.location.href);
-                        window.location.href = '/login.html';
-                        return;
-                    }
-                    
-                    isAuthenticated = true;
-                    
-                    // Get current user profile
-                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
-                    
-                    if (!currentUser) {
-                        console.error('[Dashboard] Failed to load user profile');
-                        showError('Failed to load user profile. Please try again.');
-                        return;
-                    }
-                    
-                    console.log('[Dashboard] User loaded:', currentUser);
-                    
-                    // Check if organization user
-                    if (currentUser.member_type === 'Organization') {
-                        window.location.href = '/organization-dashboard.html';
-                        return;
-                    }
-                    
-                    // Update navigation with user info
-                    updateNavigation(currentUser);
-                    
-                    // Update welcome message
-                    document.getElementById('userName').textContent = 
-                        currentUser.name?.split(' ')[0] || 'Speaker';
-                    
-                    // Load all dashboard data
-                    await loadDashboardData();
-                    
-                    // Set up real-time subscriptions
-                    setupRealtimeSubscriptions();
-                    
-                } catch (error) {
-                    console.error('[Dashboard] Initialization error:', error);
-                    showError('Failed to load dashboard. Please refresh the page.');
+            try {
+                // Wait for Supabase
+                await waitForSupabase();
+                
+                // Check authentication status
+                const session = await window.covetalks.checkAuth();
+                
+                if (!session) {
+                    // Not authenticated, redirect to login
+                    console.log('[Dashboard] Not authenticated, redirecting to login');
+                    sessionStorage.setItem('redirectUrl', window.location.href);
+                    window.location.href = '/login.html';
+                    return;
                 }
+                
+                isAuthenticated = true;
+                
+                // Get current user profile
+                currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                
+                if (!currentUser) {
+                    console.error('[Dashboard] Failed to load user profile');
+                    showError('Failed to load user profile. Please try again.');
+                    return;
+                }
+                
+                console.log('[Dashboard] User loaded:', currentUser);
+                
+                // Check if organization user
+                if (currentUser.member_type === 'Organization') {
+                    window.location.href = '/organization-dashboard.html';
+                    return;
+                }
+                
+                // Update welcome message
+                document.getElementById('userName').textContent = 
+                    currentUser.name?.split(' ')[0] || 'Speaker';
+                
+                // Load all dashboard data
+                await loadDashboardData();
+                
+                // Set up real-time subscriptions
+                setupRealtimeSubscriptions();
+                
+            } catch (error) {
+                console.error('[Dashboard] Initialization error:', error);
+                showError('Failed to load dashboard. Please refresh the page.');
+            }
+        }
+
+        // Wait for Supabase client
+        function waitForSupabase() {
+            return new Promise((resolve) => {
+                let attempts = 0;
+                const maxAttempts = 20;
+                
+                function check() {
+                    attempts++;
+                    if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                        resolve();
+                    } else if (attempts < maxAttempts) {
+                        setTimeout(check, 250);
+                    } else {
+                        showError('Failed to initialize. Please refresh the page.');
+                    }
+                }
+                check();
             });
         }
 
@@ -1102,7 +775,7 @@
             // Load all data in parallel for better performance
             const [subscription, stats, activity, applications, opportunities] = await Promise.all([
                 loadSubscriptionStatus(),
-                loadDashboardStatsOptimized(), // Using optimized method
+                loadDashboardStatsOptimized(),
                 loadRecentActivity(),
                 loadApplications(),
                 loadOpportunities()
@@ -1202,7 +875,6 @@
         // Load dashboard stats using optimized method
         async function loadDashboardStatsOptimized() {
             try {
-                // Use the optimized method that runs queries in parallel
                 const stats = await window.covetalks.getDashboardStatsOptimized(currentUser.id);
                 
                 document.getElementById('profileViews').textContent = stats.profileViews || '0';
@@ -1246,7 +918,7 @@
                                 title = 'New Application';
                                 description = 'You submitted an application';
                                 if (activity.metadata?.application_id) {
-                                    viewLink = `application-status.html?id=${activity.metadata.application_id}`;
+                                    viewLink = `/application-status.html?id=${activity.metadata.application_id}`;
                                 }
                                 break;
                             case 'application_accepted':
@@ -1255,7 +927,7 @@
                                 title = 'Application Accepted';
                                 description = 'Your application was accepted';
                                 if (activity.metadata?.application_id) {
-                                    viewLink = `booking-details.html?id=${activity.metadata.application_id}`;
+                                    viewLink = `/booking-details.html?id=${activity.metadata.application_id}`;
                                 }
                                 break;
                             case 'application_rejected':
@@ -1264,7 +936,7 @@
                                 title = 'Application Update';
                                 description = 'Your application status was updated';
                                 if (activity.metadata?.application_id) {
-                                    viewLink = `application-status.html?id=${activity.metadata.application_id}`;
+                                    viewLink = `/application-status.html?id=${activity.metadata.application_id}`;
                                 }
                                 break;
                             case 'review_received':
@@ -1272,7 +944,7 @@
                                 iconClass = 'message';
                                 title = 'New Review';
                                 description = 'You received a new review';
-                                viewLink = 'reviews.html';
+                                viewLink = '/reviews.html';
                                 break;
                             case 'opportunity_posted':
                                 icon = '🎤';
@@ -1280,7 +952,7 @@
                                 title = 'New Opportunity';
                                 description = 'A new speaking opportunity was posted';
                                 if (activity.metadata?.opportunity_id) {
-                                    viewLink = `opportunity-details.html?id=${activity.metadata.opportunity_id}`;
+                                    viewLink = `/opportunity-details.html?id=${activity.metadata.opportunity_id}`;
                                 }
                                 break;
                         }
@@ -1305,12 +977,12 @@
                     document.getElementById('activityList').innerHTML = activityHtml;
                 } else {
                     document.getElementById('activityList').innerHTML = 
-                        '<p style="padding: 1rem; color: #666;">No recent activity</p>';
+                        '<p style="padding: var(--spacing-md); color: var(--color-gray);">No recent activity</p>';
                 }
             } catch (error) {
                 console.error('[Dashboard] Error loading activity:', error);
                 document.getElementById('activityList').innerHTML = 
-                    '<p style="padding: 1rem; color: #666;">No recent activity</p>';
+                    '<p style="padding: var(--spacing-md); color: var(--color-gray);">No recent activity</p>';
             }
         }
 
@@ -1333,18 +1005,18 @@
                                 <p>${formatDate(app.opportunity?.event_date)} • ${app.opportunity?.location || 'Location TBD'}</p>
                                 <span class="activity-time">Format: ${app.opportunity?.event_format || 'TBD'}</span>
                             </div>
-                            <a href="booking-details.html?id=${app.id}" class="view-btn">View Details</a>
+                            <a href="/booking-details.html?id=${app.id}" class="view-btn">View Details</a>
                         </div>
                     `).join('');
                     
                     bookingsContainer.innerHTML = `<div class="activity-list">${bookingsHtml}</div>`;
                 } else {
-                    bookingsContainer.innerHTML = '<p style="padding: 1rem; color: #666;">No upcoming bookings</p>';
+                    bookingsContainer.innerHTML = '<p style="padding: var(--spacing-md); color: var(--color-gray);">No upcoming bookings</p>';
                 }
             } catch (error) {
                 console.error('[Dashboard] Error loading applications:', error);
                 document.getElementById('upcomingBookings').innerHTML = 
-                    '<p style="padding: 1rem; color: #666;">No upcoming bookings</p>';
+                    '<p style="padding: var(--spacing-md); color: var(--color-gray);">No upcoming bookings</p>';
             }
         }
 
@@ -1365,7 +1037,7 @@
                                     Posted ${formatTimeAgo(opp.created_at)}
                                 </span>
                             </div>
-                            <a href="opportunity-details.html?id=${opp.id}" class="view-btn">View & Apply</a>
+                            <a href="/opportunity-details.html?id=${opp.id}" class="view-btn">View & Apply</a>
                         </div>
                     `).join('');
                     
@@ -1373,12 +1045,12 @@
                         `<div class="activity-list">${opportunitiesHtml}</div>`;
                 } else {
                     document.getElementById('opportunities').innerHTML = 
-                        '<p style="padding: 1rem; color: #666;">No new opportunities</p>';
+                        '<p style="padding: var(--spacing-md); color: var(--color-gray);">No new opportunities</p>';
                 }
             } catch (error) {
                 console.error('[Dashboard] Error loading opportunities:', error);
                 document.getElementById('opportunities').innerHTML = 
-                    '<p style="padding: 1rem; color: #666;">No new opportunities</p>';
+                    '<p style="padding: var(--spacing-md); color: var(--color-gray);">No new opportunities</p>';
             }
         }
 
@@ -1446,18 +1118,6 @@
         // Show error message
         function showError(message) {
             showNotification('Error', message, 'error');
-        }
-
-        // Logout function
-        async function logout() {
-            // Clean up real-time subscriptions
-            if (realtimeChannel) {
-                window.covetalks.unsubscribeChannel(realtimeChannel);
-            }
-            
-            if (window.covetalks) {
-                await window.covetalks.logout();
-            }
         }
 
         // Cleanup on page unload

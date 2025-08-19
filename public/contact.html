@@ -4,194 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - CoveTalks</title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- Page-specific styles ONLY for unique elements -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header Styles - Matching inbox.html */
-        header {
-            background: white;
-            color: #333;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        
-        .logo-img {
-            height: 70px;
-            width: auto;
-            display: block;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #155588;
-        }
-
-        .nav-links a.active {
-            color: #155588;
-            border-bottom: 2px solid #155588;
-            padding-bottom: 2px;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1e3d6f;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #155588;
-            border: 2px solid #155588;
-        }
-
-        .btn-secondary:hover {
-            background: #155588;
-            color: white;
-        }
-
-        /* User Menu */
-        .user-menu {
-            position: relative;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: transform 0.2s;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.05);
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.75rem 1.25rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #e1e8ed;
-            margin: 0;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding-top: 6rem;
-            padding-bottom: 3rem;
-            min-height: 100vh;
-        }
-
-        /* Page Header */
+        /* Page Header - Unique gradient style */
         .page-header {
-            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
             padding: 8rem 0 4rem;
             text-align: center;
@@ -200,7 +24,8 @@
 
         .page-header h1 {
             font-size: 3rem;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
+            color: white;
         }
 
         .page-header p {
@@ -210,40 +35,41 @@
             opacity: 0.9;
         }
 
-        /* Contact Section */
+        /* Contact Section Layout */
         .contact-section {
             display: grid;
             grid-template-columns: 1fr 2fr;
-            gap: 3rem;
-            margin-top: 3rem;
+            gap: var(--spacing-2xl);
+            margin-top: var(--spacing-2xl);
         }
 
+        /* Contact Info Card */
         .contact-info-card {
             background: white;
             border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
             height: fit-content;
             position: sticky;
             top: 100px;
         }
 
         .contact-info-card h2 {
-            color: #155588;
-            margin-bottom: 2rem;
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-xl);
         }
 
         .contact-item {
             display: flex;
             align-items: start;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
         }
 
         .contact-icon {
             width: 50px;
             height: 50px;
-            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -254,51 +80,58 @@
         }
 
         .contact-details h3 {
-            color: #155588;
-            margin-bottom: 0.5rem;
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-sm);
         }
 
         .contact-details p {
-            color: #666;
-            margin-bottom: 0.25rem;
+            color: var(--color-gray);
+            margin-bottom: var(--spacing-xs);
         }
 
         .contact-details a {
-            color: #155588;
+            color: var(--color-deep);
             text-decoration: none;
-            transition: color 0.3s;
+            transition: color var(--transition-normal);
         }
 
         .contact-details a:hover {
-            color: #1e3d6f;
+            color: var(--color-deep-dark);
         }
 
-        /* Contact Form */
+        /* Contact Form Card */
         .contact-form-card {
             background: white;
             border-radius: 15px;
             padding: 2.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow-md);
         }
 
         .contact-form-card h2 {
-            color: #155588;
-            margin-bottom: 1rem;
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-md);
         }
 
         .form-subtitle {
-            color: #666;
-            margin-bottom: 2rem;
+            color: var(--color-gray);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        /* Form Specific Styles */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: var(--spacing-lg);
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
+            margin-bottom: var(--spacing-sm);
+            font-weight: var(--font-weight-medium);
             color: #333;
         }
 
@@ -306,11 +139,11 @@
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #e1e8ed;
+            padding: var(--spacing-md);
+            border: 2px solid var(--color-border);
             border-radius: 5px;
-            transition: border-color 0.3s;
-            font-family: inherit;
+            transition: border-color var(--transition-normal);
+            font-family: var(--font-primary);
             font-size: 0.95rem;
         }
 
@@ -318,7 +151,7 @@
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #155588;
+            border-color: var(--color-deep);
         }
 
         .form-group textarea {
@@ -326,26 +159,21 @@
             resize: vertical;
         }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
         .required {
-            color: #e74c3c;
+            color: var(--color-danger);
         }
 
         .submit-btn {
             width: 100%;
-            padding: 1rem;
+            padding: var(--spacing-md);
             font-size: 1.1rem;
         }
 
+        /* Alert Messages */
         .alert {
-            padding: 1rem;
+            padding: var(--spacing-md);
             border-radius: 5px;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
         }
 
         .alert-success {
@@ -362,23 +190,29 @@
 
         /* FAQ Section */
         .faq-section {
-            margin-top: 1rem;
-            padding: 1rem 0;
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-md) 0;
+        }
+
+        .faq-section h2 {
+            text-align: center;
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-xl);
         }
 
         .faq-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-            margin-top: 2rem;
+            gap: var(--spacing-xl);
+            margin-top: var(--spacing-xl);
         }
 
         .faq-card {
             background: white;
-            padding: 2rem;
+            padding: var(--spacing-xl);
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
+            box-shadow: var(--shadow-md);
+            transition: transform var(--transition-normal);
         }
 
         .faq-card:hover {
@@ -386,83 +220,27 @@
         }
 
         .faq-card h3 {
-            color: #155588;
-            margin-bottom: 1rem;
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-md);
         }
 
         .faq-card p {
-            color: #666;
+            color: var(--color-gray);
             line-height: 1.8;
         }
 
-        /* Footer */
-        footer {
-            background: #2c3e50;
-            color: white;
-            padding: 3rem 0 1rem;
-            margin-top: 4rem;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h3 {
-            margin-bottom: 1rem;
-            color: #f2b236;
-        }
-
-        .footer-section p,
-        .footer-section a {
-            color: #bdc3c7;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.5rem;
-            transition: color 0.3s;
-        }
-
-        .footer-section a:hover {
-            color: #f2b236;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #34495e;
-            padding-top: 1rem;
-            text-align: center;
-            color: #bdc3c7;
-        }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #155588;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-left: 10px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Responsive */
+        /* Mobile Responsive Styles */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
+            .page-header {
+                padding: 4rem 0 2rem;
             }
 
             .page-header h1 {
                 font-size: 2rem;
+            }
+
+            .page-header p {
+                font-size: 1rem;
             }
 
             .contact-section {
@@ -480,53 +258,26 @@
             .faq-grid {
                 grid-template-columns: 1fr;
             }
+        }
 
-            .logo-img {
-                height: 50px;
+        @media (max-width: 576px) {
+            .page-header h1 {
+                font-size: 1.75rem;
+            }
+
+            .contact-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .contact-icon {
+                margin: 0 auto;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="nav-container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
-                </a>
-                
-                <!-- Navigation links will be dynamically updated -->
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="contact.html" class="active">Contact</a></li>
-                </ul>
-    
-                <div class="nav-right">
-                    <!-- Auth buttons (shown when logged out) -->
-                    <div class="auth-buttons" id="authButtons">
-                        <a href="register.html" class="btn btn-secondary">Join</a>
-                        <a href="login.html" class="btn btn-primary">Login</a>
-                    </div>
-                    
-                    <!-- User menu (shown when logged in) -->
-                    <div class="user-menu hidden" id="userMenu">
-                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
-                        <div class="dropdown-menu" id="dropdownMenu">
-                            <a href="inbox.html">Inbox</a>
-                            <a href="settings.html">Settings</a>
-                            <a href="billing.html">Billing</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" onclick="logout(); return false;">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <!-- Header will be auto-injected by header.js -->
 
     <!-- Page Header -->
     <div class="page-header">
@@ -638,7 +389,7 @@
 
             <!-- FAQ Section -->
             <div class="faq-section">
-                <h2 style="text-align: center; color: #155588; margin-bottom: 2rem;">Frequently Asked Questions</h2>
+                <h2>Frequently Asked Questions</h2>
                 <div class="faq-grid">
                     <div class="faq-card">
                         <h3>How do I become a speaker?</h3>
@@ -661,147 +412,67 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>CoveTalks</h3>
-                    <p>Connecting speakers with organizations worldwide to create meaningful opportunities and lasting relationships.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <a href="index.html">Home</a>
-                    <a href="members.html">Members</a>
-                    <a href="register.html">Register</a>
-                    <a href="pricing.html">Pricing</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Support</h3>
-                    <a href="help.html">Help Center</a>
-                    <a href="contact.html">Contact Us</a>
-                    <a href="privacy.html">Privacy Policy</a>
-                    <a href="terms.html">Terms of Service</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Connect</h3>
-                    <a href="https://www.linkedin.com/company/108118017">LinkedIn</a>
-                    <a href="contact.html">Email</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; <script>document.write(new Date().getFullYear());</script> CoveTalks. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    <!-- Footer will be auto-injected by footer.js -->
 
     <!-- Load Supabase from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <!-- Load config and Supabase client -->
-    <script src="js/config.js"></script>
-    <script src="js/supabase-client.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
     
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
     <script>
         // Page state
         let currentUser = null;
 
-        // Wait for Supabase client
-        function waitForSupabase(callback) {
-            let attempts = 0;
-            const maxAttempts = 10;
-            
-            function check() {
-                attempts++;
-                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
-                    callback();
-                } else if (attempts < maxAttempts) {
-                    setTimeout(check, 500);
-                } else {
-                    console.error('Failed to initialize Supabase client');
-                    // Page can still work without auth
-                }
-            }
-            check();
-        }
-
         // Initialize page
         async function initializePage() {
-            waitForSupabase(async () => {
-                try {
-                    // Check authentication
-                    const session = await window.covetalks.checkAuth();
-                    if (session) {
-                        currentUser = await window.covetalks.getMemberProfile(session.user.id);
-                        updateNavigation(currentUser);
-                        
-                        // Pre-fill form if user is logged in
-                        if (currentUser) {
-                            prefillForm(currentUser);
-                        }
-                    } else {
-                        updateNavigation(null);
+            try {
+                // Wait for Supabase
+                await waitForSupabase();
+                
+                // Check authentication
+                const session = await window.covetalks.checkAuth();
+                if (session) {
+                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                    
+                    // Pre-fill form if user is logged in
+                    if (currentUser) {
+                        prefillForm(currentUser);
                     }
-                } catch (error) {
-                    console.error('Initialization error:', error);
-                    updateNavigation(null);
                 }
-            });
+            } catch (error) {
+                console.error('Initialization error:', error);
+            }
 
             // Setup form submission
             setupContactForm();
         }
 
-        // Update navigation
-        function updateNavigation(user) {
-            const navLinks = document.getElementById('navLinks');
-            const authButtons = document.getElementById('authButtons');
-            const userMenu = document.getElementById('userMenu');
-            const userAvatar = document.getElementById('userAvatar');
-            
-            if (user) {
-                // Hide auth buttons, show user menu
-                authButtons.classList.add('hidden');
-                userMenu.classList.remove('hidden');
+        // Wait for Supabase client
+        function waitForSupabase() {
+            return new Promise((resolve) => {
+                let attempts = 0;
+                const maxAttempts = 20;
                 
-                // Update avatar with user initials
-                const initials = user.name ? 
-                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
-                    'U';
-                userAvatar.textContent = initials;
-                
-                // Update navigation links based on user type
-                if (user.member_type === 'Organization') {
-                    navLinks.innerHTML = `
-                        <li><a href="organization-dashboard.html">Dashboard</a></li>
-                        <li><a href="members.html">Find Speakers</a></li>
-                        <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                        <li><a href="my-opportunities.html">My Opportunities</a></li>
-                        <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                    `;
-                } else {
-                    // Speaker navigation
-                    navLinks.innerHTML = `
-                        <li><a href="dashboard.html">Dashboard</a></li>
-                        <li><a href="members.html">Find Speakers</a></li>
-                        <li><a href="opportunities.html">Opportunities</a></li>
-                        <li><a href="bookings.html">My Bookings</a></li>
-                        <li><a href="profile.html">Profile</a></li>
-                    `;
-                }
-            } else {
-                // Show default logged out navigation
-                authButtons.classList.remove('hidden');
-                userMenu.classList.add('hidden');
-                
-                navLinks.innerHTML = `
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="contact.html" class="active">Contact</a></li>
-                `;
-            }
+                const check = () => {
+                    attempts++;
+                    if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                        resolve();
+                    } else if (attempts < maxAttempts) {
+                        setTimeout(check, 250);
+                    } else {
+                        console.warn('Supabase client not available');
+                        resolve();
+                    }
+                };
+                check();
+            });
         }
 
         // Pre-fill form for logged in users
@@ -872,7 +543,7 @@
                             console.log('No admin found for assignment:', adminError);
                         }
                         
-                        // Prepare submission data matching the contact_submissions table structure
+                        // Prepare submission data
                         const submissionData = {
                             member_id: currentUser?.id || null,
                             name: `${firstName} ${lastName}`,
@@ -883,11 +554,11 @@
                             message: messageContent,
                             submission_type: 'contact_form',
                             status: 'new',
-                            assigned_to: assignedAdminId, // Auto-assign to admin
+                            assigned_to: assignedAdminId,
                             response_sent: false,
                             response_text: null,
                             responded_at: null,
-                            ip_address: null, // Can be captured server-side if needed
+                            ip_address: null,
                             user_agent: navigator.userAgent,
                             referrer: document.referrer || null,
                             created_at: new Date().toISOString()
@@ -902,15 +573,14 @@
                         
                         if (error) throw error;
                         
-                        // Send email notification using Supabase Edge Function
+                        // Send email notification
                         try {
-                            // Call the Edge Function to send email
-                            const { data: emailResult, error: emailError } = await window.covetalks.supabase.functions.invoke(
+                            await window.covetalks.supabase.functions.invoke(
                                 'send-contact-notification',
                                 {
                                     body: {
                                         submission_id: data.id,
-                                        to_email: 'support@covetalks.com', // Admin email
+                                        to_email: 'support@covetalks.com',
                                         from_name: `${firstName} ${lastName}`,
                                         from_email: email,
                                         subject: subject,
@@ -920,19 +590,11 @@
                                     }
                                 }
                             );
-                            
-                            if (emailError) {
-                                console.error('Email notification failed:', emailError);
-                                // Don't throw - submission was still saved successfully
-                            } else {
-                                console.log('Email notification sent:', emailResult);
-                            }
                         } catch (emailError) {
-                            console.error('Failed to send email notification:', emailError);
-                            // Continue anyway - the submission was saved
+                            console.error('Email notification failed:', emailError);
                         }
                         
-                        // Also create a message in the inbox for better integration
+                        // Create inbox message
                         if (assignedAdminId) {
                             try {
                                 const messageData = {
@@ -951,29 +613,11 @@
                                     }
                                 };
                                 
-                                // Insert message directly
-                                const { data: msgData, error: msgError } = await window.covetalks.supabase
+                                await window.covetalks.supabase
                                     .from('messages')
-                                    .insert(messageData)
-                                    .select()
-                                    .single();
-                                
-                                if (!msgError && msgData) {
-                                    console.log('Inbox message created:', msgData.id);
-                                    
-                                    // Send inbox email notification
-                                    try {
-                                        await window.covetalks.supabase.functions.invoke(
-                                            'send-message-email',
-                                            { body: { message_id: msgData.id } }
-                                        );
-                                    } catch (inboxEmailError) {
-                                        console.log('Inbox email notification failed:', inboxEmailError);
-                                    }
-                                }
+                                    .insert(messageData);
                             } catch (msgError) {
                                 console.log('Failed to create inbox message:', msgError);
-                                // Continue - main submission was successful
                             }
                         }
                         
@@ -993,7 +637,7 @@
                         // Show success message
                         showAlert('success', 'Thank you for your message! We\'ve received your submission and will get back to you within 24 hours. You should receive a confirmation email shortly.');
                         
-                        // Send confirmation email to the sender
+                        // Send confirmation email
                         try {
                             await window.covetalks.supabase.functions.invoke(
                                 'send-contact-confirmation',
@@ -1019,11 +663,7 @@
                             prefillForm(currentUser);
                         }
                         
-                        // Log submission ID for reference
-                        console.log('Contact submission created:', data.id);
-                        
                     } else {
-                        // Fallback if Supabase isn't available
                         throw new Error('Unable to connect to database. Please try again later.');
                     }
                     
@@ -1065,29 +705,6 @@
             
             // Scroll to alert
             alertContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-
-        // Toggle dropdown
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-
-        // Logout
-        async function logout() {
-            if (window.covetalks) {
-                await window.covetalks.logout();
-            }
         }
 
         // Initialize on load
