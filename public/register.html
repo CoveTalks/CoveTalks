@@ -4,182 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - CoveTalks</title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- Page-specific styles ONLY for unique elements -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header */
-        header {
-            background: white;
-            color: #333;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        
-        .logo-img {
-            height: 70px;
-            width: auto;
-            display: block;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #155588;
-        }
-
-        .nav-links a.active {
-            color: #155588;
-            border-bottom: 2px solid #155588;
-            padding-bottom: 2px;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            background: #1e3d6f;
-            transform: translateY(-2px);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #155588;
-            border: 2px solid #155588;
-        }
-
-        .btn-secondary:hover {
-            background: #155588;
-            color: white;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding-top: 1rem;
-            min-height: 80vh;
-            background: #f8f9fa;
-        }
-
+        /* Page Header - Register specific */
         .page-header {
-            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
-            padding: 10rem 0 5rem 0;
+            padding: var(--spacing-3xl) 0 var(--spacing-2xl);
             text-align: center;
         }
 
         .page-header h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-sm);
+            color: white;
         }
 
-        /* Registration Section */
-        .registration-section {
-            padding: 4rem 0;
-        }
-
+        /* Registration Grid */
         .registration-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 3rem;
-            margin-top: 2rem;
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
         }
 
         .registration-card {
             background: white;
             border-radius: 15px;
-            padding: 3rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-lg);
             text-align: center;
-            transition: transform 0.3s;
+            transition: transform var(--transition-normal);
+            position: relative;
         }
 
         .registration-card:hover {
             transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
         }
 
         .registration-card.featured {
-            border: 3px solid #f2b236;
-            position: relative;
+            border: 3px solid var(--color-sand);
         }
 
         .featured-badge {
@@ -187,126 +58,120 @@
             top: -15px;
             left: 50%;
             transform: translateX(-50%);
-            background: #f2b236;
+            background: var(--color-sand);
             color: white;
-            padding: 0.5rem 2rem;
+            padding: var(--spacing-sm) var(--spacing-lg);
             border-radius: 25px;
-            font-weight: bold;
+            font-weight: var(--font-weight-bold);
+            font-size: 0.9rem;
         }
 
         .card-icon {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
+            background: linear-gradient(135deg, var(--color-deep), var(--color-calm));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 2rem;
+            margin: 0 auto var(--spacing-lg);
             font-size: 2rem;
             color: white;
         }
 
         .card-title {
             font-size: 2rem;
-            color: #155588;
-            margin-bottom: 1rem;
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-md);
+            font-weight: var(--font-weight-black);
         }
 
         .card-description {
-            margin-bottom: 2rem;
+            margin-bottom: var(--spacing-lg);
             font-size: 1.1rem;
+            color: var(--color-gray);
         }
 
         .card-features {
             list-style: none;
-            margin-bottom: 2rem;
+            margin-bottom: var(--spacing-lg);
             text-align: left;
+            padding: 0;
         }
 
         .card-features li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #f0f0f0;
+            padding: var(--spacing-sm) 0;
+            border-bottom: 1px solid var(--color-bg-light);
             position: relative;
-            padding-left: 2rem;
+            padding-left: var(--spacing-lg);
+        }
+
+        .card-features li:last-child {
+            border-bottom: none;
         }
 
         .card-features li:before {
             content: "✓";
             position: absolute;
             left: 0;
-            color: #27ae60;
-            font-weight: bold;
+            color: var(--color-success);
+            font-weight: var(--font-weight-bold);
         }
 
         .price-display {
             font-size: 2.5rem;
-            font-weight: bold;
-            color: #155588;
-            margin-bottom: 1rem;
+            font-weight: var(--font-weight-black);
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-sm);
         }
 
         .price-note {
-            color: #666;
+            color: var(--color-gray);
             font-size: 0.9rem;
-            margin-bottom: 2rem;
+            margin-bottom: var(--spacing-lg);
         }
 
-        /* Form Styles */
+        /* Registration Form */
         .registration-form {
             background: white;
-            padding: 2rem;
+            padding: var(--spacing-xl);
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-top: 2rem;
+            box-shadow: var(--shadow-md);
+            margin-top: var(--spacing-xl);
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 5px;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #155588;
-        }
-
-        .form-group textarea {
-            height: 100px;
-            resize: vertical;
-        }
-
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            gap: var(--spacing-md);
+        }
+
+        /* Password strength indicator */
+        .password-strength {
+            margin-top: var(--spacing-xs);
+            font-size: 0.875rem;
+        }
+
+        .password-strength.weak {
+            color: var(--color-danger);
+        }
+
+        .password-strength.medium {
+            color: var(--color-warning);
+        }
+
+        .password-strength.strong {
+            color: var(--color-success);
         }
 
         /* Messages */
         .message {
-            padding: 1rem;
+            padding: var(--spacing-md);
             border-radius: 5px;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
             display: none;
         }
 
@@ -326,54 +191,16 @@
             border: 1px solid #c3e6cb;
         }
 
-        /* Footer */
-        footer {
-            background: #2c3e50;
-            color: white;
-            padding: 3rem 0 1rem;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h3 {
-            margin-bottom: 1rem;
-            color: #f2b236;
-        }
-
-        .footer-section a {
-            color: #bdc3c7;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.5rem;
-            transition: color 0.3s;
-        }
-
-        .footer-section a:hover {
-            color: #f2b236;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #34495e;
-            padding-top: 1rem;
-            text-align: center;
-            color: #bdc3c7;
-        }
-
-        /* Loading */
+        /* Loading spinner for buttons */
         .loading {
             display: inline-block;
             width: 20px;
             height: 20px;
             border: 3px solid #f3f3f3;
-            border-top: 3px solid #155588;
+            border-top: 3px solid var(--color-deep);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-left: 0.5rem;
+            margin-left: var(--spacing-sm);
         }
 
         @keyframes spin {
@@ -381,34 +208,8 @@
             100% { transform: rotate(360deg); }
         }
 
-        .hidden {
-            display: none;
-        }
-
-        /* Password strength */
-        .password-strength {
-            margin-top: 0.25rem;
-            font-size: 0.875rem;
-        }
-
-        .password-strength.weak {
-            color: #ef4444;
-        }
-
-        .password-strength.medium {
-            color: #f59e0b;
-        }
-
-        .password-strength.strong {
-            color: #22c55e;
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
             .registration-grid {
                 grid-template-columns: 1fr;
             }
@@ -418,45 +219,36 @@
             }
 
             .registration-card {
-                padding: 2rem;
+                padding: var(--spacing-lg);
             }
 
-            .logo-img {
-                height: 50px;
+            .card-title {
+                font-size: 1.5rem;
             }
 
-            .page-header h1 {
+            .price-display {
                 font-size: 2rem;
+            }
+
+            .registration-form {
+                padding: var(--spacing-lg);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .featured-badge {
+                font-size: 0.8rem;
+                padding: var(--spacing-xs) var(--spacing-md);
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="nav-container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img">
-                </a>
-                
-                <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="register.html" class="active">Register</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
-    
-                <div class="nav-right">
-                    <div class="auth-buttons">
-                        <a href="register.html" class="btn btn-secondary">Join</a>
-                        <a href="login.html" class="btn btn-primary">Login</a>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <!-- Header will be auto-injected by header.js -->
 
     <!-- Page Header -->
     <div class="page-header">
@@ -469,535 +261,236 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <div class="registration-section">
-                <!-- Messages -->
-                <div id="errorMessage" class="message error-message"></div>
-                <div id="successMessage" class="message success-message"></div>
+            <!-- Messages -->
+            <div id="errorMessage" class="message error-message"></div>
+            <div id="successMessage" class="message success-message"></div>
 
-                <div class="registration-grid">
-                    <!-- Speaker Registration -->
-                    <div class="registration-card">
-                        <div class="card-icon">🎤</div>
-                        <h2 class="card-title">Join as Speaker</h2>
-                        <p class="card-description">
-                            Share your expertise and connect with organizations seeking speakers
-                        </p>
-                        <ul class="card-features">
-                            <li>Access to speaking opportunities</li>
-                            <li>Profile in member directory</li>
-                            <li>Direct contact with organizations</li>
-                            <li>Booking management tools</li>
-                            <li>Review and rating system</li>
-                        </ul>
-                        <div class="price-display">Subscription Required</div>
-                        <p class="price-note">Choose from Standard, Plus, or Premium plans</p>
-                        <button class="btn btn-primary" onclick="showSpeakerForm()">
-                            Register as Speaker
+            <div class="registration-grid">
+                <!-- Speaker Registration -->
+                <div class="registration-card">
+                    <div class="card-icon">🎤</div>
+                    <h2 class="card-title">Join as Speaker</h2>
+                    <p class="card-description">
+                        Share your expertise and connect with organizations seeking speakers
+                    </p>
+                    <ul class="card-features">
+                        <li>Access to speaking opportunities</li>
+                        <li>Profile in member directory</li>
+                        <li>Direct contact with organizations</li>
+                        <li>Booking management tools</li>
+                        <li>Review and rating system</li>
+                    </ul>
+                    <div class="price-display">Subscription Required</div>
+                    <p class="price-note">Choose from Standard, Plus, or Premium plans</p>
+                    <button class="btn btn-primary" onclick="showSpeakerForm()">
+                        Register as Speaker
+                    </button>
+                </div>
+
+                <!-- Organization Registration -->
+                <div class="registration-card featured">
+                    <div class="featured-badge">FREE FOR ORGANIZATIONS</div>
+                    <div class="card-icon">🏢</div>
+                    <h2 class="card-title">Join as Organization</h2>
+                    <p class="card-description">
+                        Find expert speakers for your events completely free
+                    </p>
+                    <ul class="card-features">
+                        <li>Free access to speaker database</li>
+                        <li>Post speaking opportunities</li>
+                        <li>Contact speakers directly</li>
+                        <li>Event management tools</li>
+                        <li>Review speakers</li>
+                    </ul>
+                    <div class="price-display">FREE</div>
+                    <p class="price-note">Always free for non-profits, schools, and organizations</p>
+                    <button class="btn btn-primary" onclick="showOrganizationForm()">
+                        Register Free
+                    </button>
+                </div>
+            </div>
+
+            <!-- Speaker Registration Form -->
+            <div id="speakerForm" class="registration-form hidden">
+                <h3>Speaker Registration</h3>
+                <p style="color: var(--color-gray); margin-bottom: var(--spacing-lg);">
+                    Create your account to get started. You'll select a subscription plan after registration.
+                </p>
+                <form id="speakerRegForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="speakerFirstName">First Name *</label>
+                            <input type="text" class="form-control" id="speakerFirstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="speakerLastName">Last Name *</label>
+                            <input type="text" class="form-control" id="speakerLastName" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="speakerEmail">Email Address *</label>
+                            <input type="email" class="form-control" id="speakerEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="speakerPhone">Phone Number</label>
+                            <input type="tel" class="form-control" id="speakerPhone" placeholder="+1 (555) 123-4567">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="speakerPassword">Password *</label>
+                            <input type="password" class="form-control" id="speakerPassword" required minlength="8" placeholder="Minimum 8 characters">
+                            <div id="speakerPasswordStrength" class="password-strength"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="speakerConfirmPassword">Confirm Password *</label>
+                            <input type="password" class="form-control" id="speakerConfirmPassword" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="speakerLocation">Location (City, State/Country)</label>
+                        <input type="text" class="form-control" id="speakerLocation" placeholder="Phoenix, AZ, USA">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="speakerBio">Brief Bio</label>
+                        <textarea class="form-control" id="speakerBio" placeholder="Tell us about your expertise and speaking experience..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="speakerTopics">Areas of Expertise</label>
+                        <input type="text" class="form-control" id="speakerTopics" placeholder="Business, Leadership, Technology, Health...">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block" id="speakerSubmitBtn">
+                        <span id="speakerSubmitText">Create Account & Continue to Pricing</span>
+                        <span id="speakerSubmitLoader" class="loading hidden"></span>
+                    </button>
+                    
+                    <div style="text-align: center; margin-top: var(--spacing-md);">
+                        <button type="button" onclick="hideAllForms()" style="background: none; border: none; color: var(--color-gray); cursor: pointer; text-decoration: underline;">
+                            Back to options
                         </button>
                     </div>
+                </form>
+            </div>
 
-                    <!-- Organization Registration -->
-                    <div class="registration-card featured">
-                        <div class="featured-badge">FREE FOR ORGANIZATIONS</div>
-                        <div class="card-icon">🏢</div>
-                        <h2 class="card-title">Join as Organization</h2>
-                        <p class="card-description">
-                            Find expert speakers for your events completely free
-                        </p>
-                        <ul class="card-features">
-                            <li>Free access to speaker database</li>
-                            <li>Post speaking opportunities</li>
-                            <li>Contact speakers directly</li>
-                            <li>Event management tools</li>
-                            <li>Review speakers</li>
-                        </ul>
-                        <div class="price-display">FREE</div>
-                        <p class="price-note">Always free for non-profits, schools, and organizations</p>
-                        <button class="btn btn-primary" onclick="showOrganizationForm()">
-                            Register Free
+            <!-- Organization Registration Form -->
+            <div id="organizationForm" class="registration-form hidden">
+                <h3>Organization Registration</h3>
+                <p style="color: var(--color-gray); margin-bottom: var(--spacing-lg);">
+                    Register your organization for free access to our speaker network.
+                </p>
+                <form id="orgForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="orgName">Organization Name *</label>
+                            <input type="text" class="form-control" id="orgName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="orgType">Organization Type *</label>
+                            <select class="form-control" id="orgType" required>
+                                <option value="">Select Type</option>
+                                <option value="Non-Profit">Non-Profit</option>
+                                <option value="Educational">School/Educational</option>
+                                <option value="Religious">Religious/Church</option>
+                                <option value="Community">Community Group</option>
+                                <option value="Corporate">Corporate</option>
+                                <option value="Government">Government</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="contactFirstName">Contact First Name *</label>
+                            <input type="text" class="form-control" id="contactFirstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="contactLastName">Contact Last Name *</label>
+                            <input type="text" class="form-control" id="contactLastName" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="contactEmail">Contact Email *</label>
+                            <input type="email" class="form-control" id="contactEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="contactPhone">Contact Phone</label>
+                            <input type="tel" class="form-control" id="contactPhone" placeholder="+1 (555) 123-4567">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="orgPassword">Password *</label>
+                            <input type="password" class="form-control" id="orgPassword" required minlength="8" placeholder="Minimum 8 characters">
+                            <div id="orgPasswordStrength" class="password-strength"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="orgConfirmPassword">Confirm Password *</label>
+                            <input type="password" class="form-control" id="orgConfirmPassword" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="orgWebsite">Website</label>
+                            <input type="url" class="form-control" id="orgWebsite" placeholder="https://www.example.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="orgLocation">Location (City, State/Country) *</label>
+                            <input type="text" class="form-control" id="orgLocation" required placeholder="Phoenix, AZ, USA">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="orgDescription">About Your Organization</label>
+                        <textarea class="form-control" id="orgDescription" placeholder="Brief description of your organization and the types of events you host..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="speakingTopics">Speaking Topics of Interest</label>
+                        <input type="text" class="form-control" id="speakingTopics" placeholder="Business, Health, Technology, Education...">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block" id="orgSubmitBtn">
+                        <span id="orgSubmitText">Complete Free Registration</span>
+                        <span id="orgSubmitLoader" class="loading hidden"></span>
+                    </button>
+                    
+                    <div style="text-align: center; margin-top: var(--spacing-md);">
+                        <button type="button" onclick="hideAllForms()" style="background: none; border: none; color: var(--color-gray); cursor: pointer; text-decoration: underline;">
+                            Back to options
                         </button>
                     </div>
-                </div>
-
-                <!-- Speaker Registration Form -->
-                <div id="speakerForm" class="registration-form hidden">
-                    <h3>Speaker Registration</h3>
-                    <p style="color: #666; margin-bottom: 1.5rem;">Create your account to get started. You'll select a subscription plan after registration.</p>
-                    <form id="speakerRegForm">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="speakerFirstName">First Name *</label>
-                                <input type="text" id="speakerFirstName" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="speakerLastName">Last Name *</label>
-                                <input type="text" id="speakerLastName" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="speakerEmail">Email Address *</label>
-                                <input type="email" id="speakerEmail" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="speakerPhone">Phone Number</label>
-                                <input type="tel" id="speakerPhone" placeholder="+1 (555) 123-4567">
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="speakerPassword">Password *</label>
-                                <input type="password" id="speakerPassword" required minlength="8" placeholder="Minimum 8 characters">
-                                <div id="speakerPasswordStrength" class="password-strength"></div>
-                            </div>
-                            <div class="form-group">
-                                <label for="speakerConfirmPassword">Confirm Password *</label>
-                                <input type="password" id="speakerConfirmPassword" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="speakerLocation">Location (City, State/Country)</label>
-                            <input type="text" id="speakerLocation" placeholder="Phoenix, AZ, USA">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="speakerBio">Brief Bio</label>
-                            <textarea id="speakerBio" placeholder="Tell us about your expertise and speaking experience..."></textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="speakerTopics">Areas of Expertise</label>
-                            <input type="text" id="speakerTopics" placeholder="Business, Leadership, Technology, Health...">
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary" style="width: 100%;" id="speakerSubmitBtn">
-                            <span id="speakerSubmitText">Create Account & Continue to Pricing</span>
-                            <span id="speakerSubmitLoader" class="loading hidden"></span>
-                        </button>
-                        
-                        <div style="text-align: center; margin-top: 1rem;">
-                            <button type="button" onclick="hideAllForms()" style="background: none; border: none; color: #666; cursor: pointer; text-decoration: underline;">
-                                Back to options
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Organization Registration Form -->
-                <div id="organizationForm" class="registration-form hidden">
-                    <h3>Organization Registration</h3>
-                    <p style="color: #666; margin-bottom: 1.5rem;">Register your organization for free access to our speaker network.</p>
-                    <form id="orgForm">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="orgName">Organization Name *</label>
-                                <input type="text" id="orgName" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="orgType">Organization Type *</label>
-                                <select id="orgType" required>
-                                    <option value="">Select Type</option>
-                                    <option value="Non-Profit">Non-Profit</option>
-                                    <option value="Educational">School/Educational</option>
-                                    <option value="Religious">Religious/Church</option>
-                                    <option value="Community">Community Group</option>
-                                    <option value="Corporate">Corporate</option>
-                                    <option value="Government">Government</option>
-                                    <option value="Healthcare">Healthcare</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="contactFirstName">Contact First Name *</label>
-                                <input type="text" id="contactFirstName" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="contactLastName">Contact Last Name *</label>
-                                <input type="text" id="contactLastName" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="contactEmail">Contact Email *</label>
-                                <input type="email" id="contactEmail" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="contactPhone">Contact Phone</label>
-                                <input type="tel" id="contactPhone" placeholder="+1 (555) 123-4567">
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="orgPassword">Password *</label>
-                                <input type="password" id="orgPassword" required minlength="8" placeholder="Minimum 8 characters">
-                                <div id="orgPasswordStrength" class="password-strength"></div>
-                            </div>
-                            <div class="form-group">
-                                <label for="orgConfirmPassword">Confirm Password *</label>
-                                <input type="password" id="orgConfirmPassword" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="orgWebsite">Website</label>
-                                <input type="url" id="orgWebsite" placeholder="https://www.example.com">
-                            </div>
-                            <div class="form-group">
-                                <label for="orgLocation">Location (City, State/Country) *</label>
-                                <input type="text" id="orgLocation" required placeholder="Phoenix, AZ, USA">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="orgDescription">About Your Organization</label>
-                            <textarea id="orgDescription" placeholder="Brief description of your organization and the types of events you host..."></textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="speakingTopics">Speaking Topics of Interest</label>
-                            <input type="text" id="speakingTopics" placeholder="Business, Health, Technology, Education...">
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary" style="width: 100%;" id="orgSubmitBtn">
-                            <span id="orgSubmitText">Complete Free Registration</span>
-                            <span id="orgSubmitLoader" class="loading hidden"></span>
-                        </button>
-                        
-                        <div style="text-align: center; margin-top: 1rem;">
-                            <button type="button" onclick="hideAllForms()" style="background: none; border: none; color: #666; cursor: pointer; text-decoration: underline;">
-                                Back to options
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
     </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>CoveTalks</h3>
-                    <p>Connecting speakers with organizations worldwide</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <a href="index.html">Home</a>
-                    <a href="members.html">Members</a>
-                    <a href="register.html">Register</a>
-                    <a href="pricing.html">Pricing</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Support</h3>
-                    <a href="#">Help Center</a>
-                    <a href="#">Contact Us</a>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Connect</h3>
-                    <a href="#">LinkedIn</a>
-                    <a href="#">Twitter</a>
-                    <a href="#">Facebook</a>
-                    <a href="#">Email</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 CoveTalks. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Load Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/config.js"></script>
-    <script src="js/supabase-client.js"></script>
     
-    <script>
-        // Wait for Supabase client
-        function waitForSupabase(callback) {
-            let attempts = 0;
-            const maxAttempts = 10;
-            
-            const checkClient = () => {
-                attempts++;
-                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
-                    callback();
-                } else if (attempts < maxAttempts) {
-                    setTimeout(checkClient, 500);
-                } else {
-                    console.error('Failed to load Supabase client');
-                    showMessage('error', 'Application failed to load. Please refresh the page.');
-                }
-            };
-            
-            checkClient();
-        }
+    <!-- Footer will be auto-injected by footer.js -->
 
-        // Check if already logged in
-        document.addEventListener('DOMContentLoaded', function() {
-            waitForSupabase(async () => {
-                const session = await window.covetalks.checkAuth();
-                if (session) {
-                    // Already logged in, redirect
-                    const member = await window.covetalks.getMemberProfile(session.user.id);
-                    if (member) {
-                        if (member.member_type === 'Organization') {
-                            window.location.href = 'organization-dashboard.html';
-                        } else {
-                            window.location.href = 'dashboard.html';
-                        }
-                    }
-                }
-            });
-        });
-
-        // Show/Hide Forms
-        function showSpeakerForm() {
-            document.getElementById('speakerForm').classList.remove('hidden');
-            document.getElementById('organizationForm').classList.add('hidden');
-            document.getElementById('speakerForm').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function showOrganizationForm() {
-            document.getElementById('organizationForm').classList.remove('hidden');
-            document.getElementById('speakerForm').classList.add('hidden');
-            document.getElementById('organizationForm').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function hideAllForms() {
-            document.getElementById('speakerForm').classList.add('hidden');
-            document.getElementById('organizationForm').classList.add('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Speaker Registration
-        document.getElementById('speakerRegForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const firstName = document.getElementById('speakerFirstName').value.trim();
-            const lastName = document.getElementById('speakerLastName').value.trim();
-            const email = document.getElementById('speakerEmail').value.trim();
-            const phone = document.getElementById('speakerPhone').value.trim();
-            const password = document.getElementById('speakerPassword').value;
-            const confirmPassword = document.getElementById('speakerConfirmPassword').value;
-            const location = document.getElementById('speakerLocation').value.trim();
-            const bio = document.getElementById('speakerBio').value.trim();
-            const topics = document.getElementById('speakerTopics').value.trim();
-            
-            // Validate passwords
-            if (password !== confirmPassword) {
-                showMessage('error', 'Passwords do not match');
-                return;
-            }
-            
-            if (password.length < 8) {
-                showMessage('error', 'Password must be at least 8 characters long');
-                return;
-            }
-            
-            // Show loading
-            const submitBtn = document.getElementById('speakerSubmitBtn');
-            submitBtn.disabled = true;
-            document.getElementById('speakerSubmitText').classList.add('hidden');
-            document.getElementById('speakerSubmitLoader').classList.remove('hidden');
-            
-            try {
-                // Register with Supabase
-                const result = await window.covetalks.signup({
-                    email: email,
-                    password: password,
-                    name: `${firstName} ${lastName}`,
-                    memberType: 'Speaker',
-                    phone: phone,
-                    location: location,
-                    bio: bio,
-                    specialties: topics ? topics.split(',').map(t => t.trim()) : []
-                });
-                
-                if (result && result.user) {
-                    showMessage('success', 'Account created successfully! Redirecting to pricing...');
-                    
-                    // Auto-login and redirect to pricing
-                    setTimeout(() => {
-                        window.location.href = 'pricing.html';
-                    }, 1500);
-                } else {
-                    throw new Error('Registration failed');
-                }
-            } catch (error) {
-                console.error('Registration error:', error);
-                showMessage('error', error.message || 'Registration failed. Please try again.');
-            } finally {
-                submitBtn.disabled = false;
-                document.getElementById('speakerSubmitText').classList.remove('hidden');
-                document.getElementById('speakerSubmitLoader').classList.add('hidden');
-            }
-        });
-
-        // Organization Registration
-        document.getElementById('orgForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const orgName = document.getElementById('orgName').value.trim();
-            const orgType = document.getElementById('orgType').value;
-            const firstName = document.getElementById('contactFirstName').value.trim();
-            const lastName = document.getElementById('contactLastName').value.trim();
-            const email = document.getElementById('contactEmail').value.trim();
-            const phone = document.getElementById('contactPhone').value.trim();
-            const password = document.getElementById('orgPassword').value;
-            const confirmPassword = document.getElementById('orgConfirmPassword').value;
-            const website = document.getElementById('orgWebsite').value.trim();
-            const location = document.getElementById('orgLocation').value.trim();
-            const description = document.getElementById('orgDescription').value.trim();
-            const speakingTopics = document.getElementById('speakingTopics').value.trim();
-            
-            // Validate passwords
-            if (password !== confirmPassword) {
-                showMessage('error', 'Passwords do not match');
-                return;
-            }
-            
-            if (password.length < 8) {
-                showMessage('error', 'Password must be at least 8 characters long');
-                return;
-            }
-            
-            // Show loading
-            const submitBtn = document.getElementById('orgSubmitBtn');
-            submitBtn.disabled = true;
-            document.getElementById('orgSubmitText').classList.add('hidden');
-            document.getElementById('orgSubmitLoader').classList.remove('hidden');
-            
-            try {
-                // Register with Supabase
-                const result = await window.covetalks.signup({
-                    email: email,
-                    password: password,
-                    name: `${firstName} ${lastName}`,
-                    memberType: 'Organization',
-                    phone: phone,
-                    location: location,
-                    bio: description,
-                    organizationData: {
-                        Organization_Name: orgName,
-                        Organization_Type: orgType,
-                        website: website,
-                        description: description,
-                        Speaking_Topics: speakingTopics ? speakingTopics.split(',').map(t => t.trim()) : []
-                    }
-                });
-                
-                if (result && result.user) {
-                    showMessage('success', 'Organization registered successfully! Redirecting to dashboard...');
-                    
-                    // Auto-login and redirect to organization dashboard
-                    setTimeout(() => {
-                        window.location.href = 'organization-dashboard.html';
-                    }, 1500);
-                } else {
-                    throw new Error('Registration failed');
-                }
-            } catch (error) {
-                console.error('Registration error:', error);
-                showMessage('error', error.message || 'Registration failed. Please try again.');
-            } finally {
-                submitBtn.disabled = false;
-                document.getElementById('orgSubmitText').classList.remove('hidden');
-                document.getElementById('orgSubmitLoader').classList.add('hidden');
-            }
-        });
-
-        // Password strength checker
-        function checkPasswordStrength(password, strengthElementId) {
-            const strengthElement = document.getElementById(strengthElementId);
-            let strength = 0;
-            
-            if (password.length >= 8) strength++;
-            if (password.length >= 12) strength++;
-            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
-            if (/[0-9]/.test(password)) strength++;
-            if (/[^a-zA-Z0-9]/.test(password)) strength++;
-            
-            if (password.length === 0) {
-                strengthElement.textContent = '';
-                strengthElement.className = 'password-strength';
-            } else if (strength < 2) {
-                strengthElement.textContent = 'Weak password';
-                strengthElement.className = 'password-strength weak';
-            } else if (strength < 4) {
-                strengthElement.textContent = 'Medium strength';
-                strengthElement.className = 'password-strength medium';
-            } else {
-                strengthElement.textContent = 'Strong password';
-                strengthElement.className = 'password-strength strong';
-            }
-        }
-
-        // Add password strength listeners
-        document.getElementById('speakerPassword').addEventListener('input', function() {
-            checkPasswordStrength(this.value, 'speakerPasswordStrength');
-        });
-
-        document.getElementById('orgPassword').addEventListener('input', function() {
-            checkPasswordStrength(this.value, 'orgPasswordStrength');
-        });
-
-        // Password confirmation validation
-        document.getElementById('speakerConfirmPassword').addEventListener('input', function() {
-            const password = document.getElementById('speakerPassword').value;
-            if (this.value && password !== this.value) {
-                this.setCustomValidity('Passwords do not match');
-            } else {
-                this.setCustomValidity('');
-            }
-        });
-
-        document.getElementById('orgConfirmPassword').addEventListener('input', function() {
-            const password = document.getElementById('orgPassword').value;
-            if (this.value && password !== this.value) {
-                this.setCustomValidity('Passwords do not match');
-            } else {
-                this.setCustomValidity('');
-            }
-        });
-
-        // Show message
-        function showMessage(type, message) {
-            const errorDiv = document.getElementById('errorMessage');
-            const successDiv = document.getElementById('successMessage');
-            
-            // Hide all messages first
-            errorDiv.classList.remove('show');
-            successDiv.classList.remove('show');
-            
-            if (type === 'error') {
-                errorDiv.textContent = message;
-                errorDiv.classList.add('show');
-                errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            } else {
-                successDiv.textContent = message;
-                successDiv.classList.add('show');
-                successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-            
-            // Auto-hide after 5 seconds
-            setTimeout(() => {
-                errorDiv.classList.remove('show');
-                successDiv.classList.remove('show');
-            }, 5000);
-        }
-    </script>
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load config and Supabase client -->
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
+    
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
+    <script src="/js/pages/register.js"></script>
 </body>
 </html>

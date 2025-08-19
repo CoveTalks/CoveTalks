@@ -4,380 +4,129 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms of Service - CoveTalks</title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- Page-specific styles ONLY for unique elements -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header Styles */
-        header {
-            background: white;
-            color: #333;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        
-        .logo-img {
-            height: 70px;
-            width: auto;
-            display: block;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #155588;
-        }
-
-        .nav-links a.active {
-            color: #155588;
-            border-bottom: 2px solid #155588;
-            padding-bottom: 2px;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: #155588;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1e3d6f;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #155588;
-            border: 2px solid #155588;
-        }
-
-        .btn-secondary:hover {
-            background: #155588;
-            color: white;
-        }
-
-        /* User Menu */
-        .user-menu {
-            position: relative;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: transform 0.2s;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.05);
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.75rem 1.25rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #e1e8ed;
-            margin: 0;
-        }
-
-        /* Page Header */
+        /* Page Header - Legal specific */
         .page-header {
-            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
-            padding: 8rem 0 4rem;
+            padding: var(--spacing-3xl) 0 var(--spacing-xl);
             text-align: center;
         }
 
         .page-header h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0;
+            color: white;
         }
 
-        /* Main Content */
-        .main-content {
-            padding: 1rem 0;
-            background: #f8f9fa;
-            min-height: 60vh;
-        }
-
+        /* Legal Content */
         .legal-content {
             max-width: 800px;
             margin: 0 auto;
             background: white;
-            padding: 3rem;
+            padding: var(--spacing-2xl);
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-md);
         }
 
         .legal-content h2 {
-            color: #155588;
-            margin: 2rem 0 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #e1e8ed;
+            color: var(--color-deep);
+            margin: var(--spacing-xl) 0 var(--spacing-md);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 2px solid var(--color-border);
         }
 
         .legal-content h3 {
-            color: #155588;
+            color: var(--color-deep);
+            margin: var(--spacing-lg) 0 var(--spacing-md);
         }
 
         .legal-content p {
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
             line-height: 1.8;
-            color: #555;
+            color: var(--color-gray-dark);
         }
 
         .legal-content ul, .legal-content ol {
-            margin: 1rem 0 1rem 2rem;
-            color: #555;
+            margin: var(--spacing-md) 0 var(--spacing-md) var(--spacing-xl);
+            color: var(--color-gray-dark);
         }
 
         .legal-content li {
-            margin-bottom: 0.5rem;
+            margin-bottom: var(--spacing-sm);
             line-height: 1.8;
-            padding: 0 1rem 0 0;
         }
 
         .effective-date {
             background: #e8f4fd;
-            padding: 1rem 0 0 0;
+            padding: var(--spacing-md);
             border-radius: 5px;
-            color: #155588;
-            font-weight: 500;
+            color: var(--color-deep);
+            font-weight: var(--font-weight-medium);
+            margin-bottom: var(--spacing-xl);
         }
 
         .table-of-contents {
-            background: #f8f9fa;
-            padding: 1.5rem 0 0 0;
+            background: var(--color-foam);
+            padding: var(--spacing-lg);
             border-radius: 10px;
-            margin-bottom: 2rem;
+            margin-bottom: var(--spacing-xl);
         }
 
         .table-of-contents h3 {
-            color: #155588;
-            margin-bottom: 1rem;
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-md);
         }
 
         .table-of-contents a {
-            color: #155588;
+            color: var(--color-deep);
             text-decoration: none;
             display: block;
-            padding: 0.5rem 0;
-            transition: color 0.3s;
+            padding: var(--spacing-sm) 0;
+            transition: color var(--transition-fast);
         }
 
         .table-of-contents a:hover {
-            color: #1e3d6f;
+            color: var(--color-deep-dark);
+            padding-left: var(--spacing-sm);
         }
 
-        /* Footer */
-        footer {
-            background: #2c3e50;
-            color: white;
-            padding: 3rem 0 1rem;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h3 {
-            margin-bottom: 1rem;
-            color: #f2b236;
-        }
-
-        .footer-section p,
-        .footer-section a {
-            color: #bdc3c7;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.5rem;
-            transition: color 0.3s;
-        }
-
-        .footer-section a:hover {
-            color: #f2b236;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #34495e;
-            padding-top: 1rem;
-            text-align: center;
-            color: #bdc3c7;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
             .legal-content {
-                padding: 2rem 1.5rem;
+                padding: var(--spacing-lg);
             }
 
             .page-header h1 {
                 font-size: 2rem;
             }
+        }
 
-            .logo-img {
-                height: 50px;
+        @media (max-width: 576px) {
+            .legal-content {
+                padding: var(--spacing-md);
+                border-radius: 0;
+            }
+
+            .page-header {
+                padding: var(--spacing-2xl) 0 var(--spacing-lg);
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="nav-container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <img src="/Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
-                </a>
-                
-                <!-- Navigation links will be dynamically updated -->
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
-    
-                <div class="nav-right">
-                    <!-- Auth buttons (shown when logged out) -->
-                    <div class="auth-buttons" id="authButtons">
-                        <a href="register.html" class="btn btn-secondary">Join</a>
-                        <a href="login.html" class="btn btn-primary">Login</a>
-                    </div>
-                    
-                    <!-- User menu (shown when logged in) -->
-                    <div class="user-menu hidden" id="userMenu">
-                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
-                        <div class="dropdown-menu" id="dropdownMenu">
-                            <a href="inbox.html">Inbox</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="settings.html">Settings</a>
-                            <a href="billing.html">Billing</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" onclick="logout(); return false;">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <!-- Header will be auto-injected by header.js -->
 
     <!-- Page Header -->
     <div class="page-header">
@@ -492,7 +241,7 @@
                 <h2 id="contact">12. Contact Information</h2>
                 <p>If you have any questions about these Terms, please contact us at:</p>
                 <p>
-                    CoveTalks<br>
+                    <strong>CoveTalks</strong><br>
                     Email: legal@covetalks.com<br>
                     Phone: 1-800-COVE-TALK<br>
                     Address: Phoenix, Arizona, United States
@@ -500,41 +249,8 @@
             </div>
         </div>
     </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>CoveTalks</h3>
-                    <p>Connecting speakers with organizations worldwide</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <a href="index.html">Home</a>
-                    <a href="members.html">Members</a>
-                    <a href="register.html">Register</a>
-                    <a href="pricing.html">Pricing</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Legal</h3>
-                    <a href="terms.html">Terms of Service</a>
-                    <a href="privacy.html">Privacy Policy</a>
-                    <a href="cookies.html">Cookie Policy</a>
-                    <a href="refund.html">Refund Policy</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Support</h3>
-                    <a href="contact.html">Contact Us</a>
-                    <a href="help.html">Help Center</a>
-                    <a href="faq.html">FAQ</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 CoveTalks. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    
+    <!-- Footer will be auto-injected by footer.js -->
 
     <!-- Load Supabase from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -543,113 +259,8 @@
     <script src="/js/config.js"></script>
     <script src="/js/supabase-client.js"></script>
     
-    <script>
-        // Page state
-        let currentUser = null;
-        let isAuthenticated = false;
-
-        // Wait for Supabase client
-        function waitForSupabase(callback) {
-            let attempts = 0;
-            const maxAttempts = 10;
-            
-            function check() {
-                attempts++;
-                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
-                    callback();
-                } else if (attempts < maxAttempts) {
-                    setTimeout(check, 500);
-                } else {
-                    console.log('Supabase not loaded, continuing as public page');
-                }
-            }
-            check();
-        }
-
-        // Update navigation
-        function updateNavigation(user) {
-            const navLinks = document.getElementById('navLinks');
-            const authButtons = document.getElementById('authButtons');
-            const userMenu = document.getElementById('userMenu');
-            const userAvatar = document.getElementById('userAvatar');
-            
-            if (user) {
-                authButtons.classList.add('hidden');
-                userMenu.classList.remove('hidden');
-                
-                const initials = user.name ? 
-                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
-                    'U';
-                userAvatar.textContent = initials;
-                
-                if (user.member_type === 'Organization') {
-                    navLinks.innerHTML = `
-                        <li><a href="organization-dashboard.html">Dashboard</a></li>
-                        <li><a href="members.html">Find Speakers</a></li>
-                        <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                        <li><a href="my-opportunities.html">My Opportunities</a></li>
-                        <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                    `;
-                } else {
-                    navLinks.innerHTML = `
-                        <li><a href="dashboard.html">Dashboard</a></li>
-                        <li><a href="members.html">Find Speakers</a></li>
-                        <li><a href="opportunities.html">Opportunities</a></li>
-                        <li><a href="bookings.html">My Bookings</a></li>
-                        <li><a href="profile.html">Profile</a></li>
-                    `;
-                }
-            } else {
-                authButtons.classList.remove('hidden');
-                userMenu.classList.add('hidden');
-            }
-        }
-
-        // Initialize page
-        async function initializePage() {
-            waitForSupabase(async () => {
-                try {
-                    const session = await window.covetalks.checkAuth();
-                    if (session) {
-                        isAuthenticated = true;
-                        currentUser = await window.covetalks.getMemberProfile(session.user.id);
-                        updateNavigation(currentUser);
-                    }
-                } catch (error) {
-                    console.log('Not authenticated, showing public navigation');
-                }
-            });
-        }
-
-        // Toggle dropdown
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (dropdown && avatar && !avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-
-        // Logout
-        async function logout() {
-            if (window.covetalks) {
-                await window.covetalks.logout();
-            }
-        }
-
-        // Initialize on load
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializePage);
-        } else {
-            initializePage();
-        }
-    </script>
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
 </body>
 </html>
