@@ -3,250 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Application Status - CoveTalks</title>    
+    <title>Application Status - CoveTalks</title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- Page-specific styles ONLY for unique elements -->
     <style>
-        /* Brandon Text Font Declarations */
-        /* Brandon Text Font Declaration - Single File */
-        @font-face {
-            font-family: 'Brandon Text';
-            src: url('/fonts/brandontext.woff2') format('woff2'),
-                url('/fonts/brandontext.woff') format('woff');
-            font-weight: 300 900; /* Allows browser to handle all weights */
-            font-style: normal;
-            font-display: swap;
-        }
-
-        /* Brand colors from CoveTalks guidelines */
-        :root {
-            --color-sand: #f3b338;  /* Gold/beach color */
-            --color-calm: #1d93b7;  /* Cool blue */
-            --color-deep: #155487;  /* Deep blue */
-            --color-foam: #f8f9fa;  /* Grey/smooth */
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Brandon Text', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-weight: 400; /* Regular */
-            line-height: 1.6;
-            color: #333;
-            background: var(--color-foam);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header Styles */
-        header {
-            background: white;
-            color: #333;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        
-        .logo-img {
-            height: 70px;
-            width: auto;
-            display: block;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500; /* Medium weight */
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--color-deep);
-        }
-
-        .nav-links a.active {
-            color: var(--color-deep);
-            border-bottom: 2px solid var(--color-deep);
-            padding-bottom: 2px;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        /* Headlines using Brandon Text Black */
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Brandon Text', sans-serif;
-            font-weight: 900; /* Black weight */
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            font-weight: 500; /* Medium weight */
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: var(--color-deep);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1e3d6f;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--color-deep);
-            border: 2px solid var(--color-deep);
-        }
-
-        .btn-secondary:hover {
-            background: var(--color-deep);
-            color: white;
-        }
-
-        .btn-success {
-            background: #27ae60;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #229954;
-            transform: translateY(-2px);
-        }
-
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #c82333;
-            transform: translateY(-2px);
-        }
-
-        /* User Menu */
-        .user-menu {
-            position: relative;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, var(--color-calm));
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700; /* Bold */
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: transform 0.2s;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.05);
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 0.75rem 1.25rem;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .dropdown-menu a:hover {
-            background: var(--color-foam);
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #e1e8ed;
-            margin: 0;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding-top: 6rem;
-            padding-bottom: 3rem;
-            min-height: 100vh;
-        }
-
-        /* Status Header */
+        /* Status Header - Unique to this page */
         .status-header {
             background: linear-gradient(135deg, #667eea 0%, var(--color-calm) 100%);
             color: white;
-            padding: 3rem;
-            margin: 2rem 0;
+            padding: var(--spacing-2xl);
+            margin: var(--spacing-xl) 0;
             border-radius: 15px;
         }
 
         .status-header h1 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
+            color: white;
         }
 
         .status-badge-large {
@@ -254,9 +31,10 @@
             padding: 0.75rem 2rem;
             border-radius: 30px;
             font-size: 1.1rem;
-            font-weight: 700; /* Bold */
+            font-weight: var(--font-weight-bold);
             background: rgba(255, 255, 255, 0.2);
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
+            text-transform: uppercase;
         }
 
         .status-badge-large.pending {
@@ -265,12 +43,12 @@
         }
 
         .status-badge-large.accepted {
-            background: #27ae60;
+            background: var(--color-success);
             color: white;
         }
 
         .status-badge-large.rejected {
-            background: #dc3545;
+            background: var(--color-danger);
             color: white;
         }
 
@@ -282,14 +60,14 @@
         .application-meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 2rem;
+            gap: var(--spacing-xl);
             opacity: 0.95;
         }
 
         .meta-item {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: var(--spacing-sm);
         }
 
         .meta-icon {
@@ -298,35 +76,7 @@
             object-fit: contain;
         }
 
-        /* Content Grid */
-        .content-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 1rem;
-        }
-
-        /* Card Styles */
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 1rem;
-        }
-
-        .card h2 {
-            color: var(--color-deep);
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        .card h3 {
-            color: var(--color-deep);
-            margin-bottom: 1rem;
-        }
-
-        /* Timeline - FIXED ALIGNMENT */
+        /* Timeline - Unique to application tracking */
         .timeline {
             position: relative;
             padding-left: 50px;
@@ -339,12 +89,12 @@
             top: 20px;
             bottom: 0;
             width: 2px;
-            background: #e1e8ed;
+            background: var(--color-border);
         }
 
         .timeline-item {
             position: relative;
-            padding-bottom: 2rem;
+            padding-bottom: var(--spacing-xl);
         }
 
         .timeline-item:last-child {
@@ -359,14 +109,14 @@
             height: 40px;
             border-radius: 50%;
             background: white;
-            border: 3px solid #e1e8ed;
+            border: 3px solid var(--color-border);
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .timeline-marker.submitted {
-            border-color: #3498db;
+            border-color: var(--color-info);
         }
 
         .timeline-marker.pending {
@@ -374,11 +124,11 @@
         }
 
         .timeline-marker.accepted {
-            border-color: #27ae60;
+            border-color: var(--color-success);
         }
 
         .timeline-marker.rejected {
-            border-color: #dc3545;
+            border-color: var(--color-danger);
         }
 
         .timeline-marker.withdrawn {
@@ -390,7 +140,6 @@
             border-color: var(--color-deep);
         }
 
-        /* Timeline icon styling */
         .timeline-marker img {
             width: 20px;
             height: 20px;
@@ -399,53 +148,31 @@
 
         .timeline-content {
             background: var(--color-foam);
-            padding: 1rem;
+            padding: var(--spacing-md);
             border-radius: 10px;
             margin-left: 10px;
         }
 
         .timeline-date {
             font-size: 0.85rem;
-            color: #999;
+            color: var(--color-gray-light);
             margin-bottom: 0.25rem;
         }
 
         .timeline-title {
-            font-weight: 700; /* Bold */
+            font-weight: var(--font-weight-bold);
             color: #333;
             margin-bottom: 0.25rem;
         }
 
         .timeline-description {
-            color: #666;
+            color: var(--color-gray);
             font-size: 0.9rem;
         }
 
-        /* Detail Rows */
-        .detail-row {
-            display: flex;
-            padding: 1rem 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .detail-row:last-child {
-            border-bottom: none;
-        }
-
-        .detail-label {
-            font-weight: 700; /* Bold */
-            color: #555;
-            flex: 0 0 150px;
-        }
-
-        .detail-value {
-            flex: 1;
-            color: #333;
-        }
-
-        /* Application Content */
+        /* Application-specific sections */
         .application-section {
-            margin-bottom: 1.5rem;
+            margin-bottom: var(--spacing-lg);
         }
 
         .application-section h4 {
@@ -456,45 +183,22 @@
 
         .cover-letter-box {
             background: var(--color-foam);
-            padding: 1.5rem;
+            padding: var(--spacing-lg);
             border-radius: 10px;
-            line-height: 1.6;
+            line-height: 1.8;
             white-space: pre-wrap;
         }
 
-        /* Message Box */
-        .message-box {
-            background: #e8f4fd;
-            border-left: 4px solid var(--color-deep);
-            padding: 1rem;
-            border-radius: 5px;
-            margin-top: 1rem;
-        }
-
-        .message-box.success {
-            background: #d4edda;
-            border-color: #27ae60;
-        }
-
-        .message-box.error {
-            background: #f8d7da;
-            border-color: #dc3545;
-        }
-
-        .message-box h4 {
-            margin-bottom: 0.5rem;
-        }
-
-        /* Next Steps */
+        /* Next Steps Box */
         .next-steps {
             background: var(--color-foam);
-            padding: 1.5rem;
+            padding: var(--spacing-lg);
             border-radius: 10px;
         }
 
         .next-steps h4 {
             color: var(--color-deep);
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
         }
 
         .next-steps ul {
@@ -503,8 +207,8 @@
         }
 
         .next-steps li {
-            padding: 0.5rem 0;
-            padding-left: 1.5rem;
+            padding: var(--spacing-sm) 0;
+            padding-left: var(--spacing-lg);
             position: relative;
         }
 
@@ -512,113 +216,14 @@
             content: '✓';
             position: absolute;
             left: 0;
-            color: #27ae60;
-            font-weight: 700;
+            color: var(--color-success);
+            font-weight: var(--font-weight-bold);
         }
 
-        /* Action Buttons */
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: #666;
-        }
-
-        .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        /* Loading */
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 3rem;
-            color: #666;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--color-deep);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 1rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            max-width: 500px;
-            width: 90%;
-        }
-
-        .modal-header {
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-header h3 {
-            color: var(--color-deep);
-        }
-
-        .modal-body {
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
+        /* Mobile Responsive Overrides */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
+            .status-header {
+                padding: var(--spacing-lg);
             }
 
             .status-header h1 {
@@ -627,55 +232,14 @@
 
             .application-meta {
                 flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .detail-row {
-                flex-direction: column;
-            }
-
-            .detail-label {
-                margin-bottom: 0.5rem;
+                gap: var(--spacing-sm);
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="nav-container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <img src="Images/CoveTalks_logo.svg" alt="CoveTalks" class="logo-img" onerror="this.style.display='none'">
-                </a>
-                
-                <!-- Navigation links will be dynamically updated -->
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="members.html">Find Speakers</a></li>
-                    <li><a href="opportunities.html">Opportunities</a></li>
-                    <li><a href="bookings.html">My Bookings</a></li>
-                    <li><a href="profile.html">Profile</a></li>
-                </ul>
+    <!-- Header will be auto-injected by header.js -->
     
-                <div class="nav-right">
-                    <!-- User menu -->
-                    <div class="user-menu" id="userMenu">
-                        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
-                        <div class="dropdown-menu" id="dropdownMenu">
-                            <a href="inbox.html">Inbox</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="settings.html">Settings</a>
-                            <a href="billing.html">Billing</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" onclick="logout(); return false;">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
-
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
@@ -691,7 +255,7 @@
                     <div class="empty-state-icon">⚠️</div>
                     <h3>Application Not Found</h3>
                     <p id="errorMessage">We couldn't find this application or you don't have permission to view it.</p>
-                    <a href="dashboard.html" class="btn btn-primary" style="margin-top: 1rem;">
+                    <a href="/dashboard.html" class="btn btn-primary mt-3">
                         Back to Dashboard
                     </a>
                 </div>
@@ -825,9 +389,11 @@
                         </div>
                     </div>
                 </div>
-            </div> <!-- Closing applicationContent div - CORRECTED POSITION -->
+            </div>
         </div>
     </main>
+    
+    <!-- Footer will be auto-injected by footer.js -->
 
     <!-- Withdraw Modal -->
     <div id="withdrawModal" class="modal">
@@ -852,9 +418,14 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <!-- Load config and Supabase client -->
-    <script src="js/config.js"></script>
-    <script src="js/supabase-client.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
     
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
     <script>
         // Page state
         let currentUser = null;
@@ -865,87 +436,58 @@
         const urlParams = new URLSearchParams(window.location.search);
         applicationId = urlParams.get('id');
 
-        // Wait for Supabase client
-        function waitForSupabase(callback) {
-            let attempts = 0;
-            const maxAttempts = 10;
-            
-            function check() {
-                attempts++;
-                if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
-                    callback();
-                } else if (attempts < maxAttempts) {
-                    setTimeout(check, 500);
-                } else {
-                    showError('Failed to initialize. Please refresh the page.');
-                }
-            }
-            check();
-        }
-
         // Initialize page
         async function initializePage() {
-            waitForSupabase(async () => {
-                try {
-                    // Check if application ID provided
-                    if (!applicationId) {
-                        showError('No application ID provided');
-                        return;
-                    }
-
-                    // Check authentication
-                    const session = await window.covetalks.checkAuth();
-                    if (!session) {
-                        window.location.href = `/login.html?redirect=${encodeURIComponent(window.location.href)}`;
-                        return;
-                    }
-
-                    // Get user profile
-                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
-                    updateNavigation(currentUser);
-
-                    // Load application details
-                    await loadApplicationDetails();
-
-                    // Load timeline
-                    await loadApplicationTimeline();
-
-                } catch (error) {
-                    console.error('Initialization error:', error);
-                    showError('Failed to load application details');
+            try {
+                // Check if application ID provided
+                if (!applicationId) {
+                    showError('No application ID provided');
+                    return;
                 }
-            });
+
+                // Wait for Supabase
+                await waitForSupabase();
+
+                // Check authentication
+                const session = await window.covetalks.checkAuth();
+                if (!session) {
+                    window.location.href = `/login.html?redirect=${encodeURIComponent(window.location.href)}`;
+                    return;
+                }
+
+                // Get user profile
+                currentUser = await window.covetalks.getMemberProfile(session.user.id);
+
+                // Load application details
+                await loadApplicationDetails();
+
+                // Load timeline
+                await loadApplicationTimeline();
+
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showError('Failed to load application details');
+            }
         }
 
-        // Update navigation
-        function updateNavigation(user) {
-            const navLinks = document.getElementById('navLinks');
-            const userAvatar = document.getElementById('userAvatar');
-            
-            if (user) {
-                const initials = user.name ? 
-                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
-                    'U';
-                userAvatar.textContent = initials;
+        // Wait for Supabase client
+        function waitForSupabase() {
+            return new Promise((resolve) => {
+                let attempts = 0;
+                const maxAttempts = 20;
                 
-                if (user.member_type === 'Organization') {
-                    navLinks.innerHTML = `
-                        <li><a href="organization-dashboard.html">Dashboard</a></li>
-                        <li><a href="members.html">Find Speakers</a></li>
-                        <li><a href="post-opportunity.html">Post Opportunity</a></li>
-                        <li><a href="my-opportunities.html">My Opportunities</a></li>
-                        <li><a href="saved-speakers.html">Saved Speakers</a></li>
-                    `;
-                } else {
-                    navLinks.innerHTML = `
-                        <li><a href="dashboard.html">Dashboard</a></li>
-                        <li><a href="members.html">Find Speakers</a></li>
-                        <li><a href="opportunities.html">Opportunities</a></li>
-                        <li><a href="bookings.html">My Bookings</a></li>
-                        <li><a href="profile.html">Profile</a></li>
-                    `;
+                function check() {
+                    attempts++;
+                    if (typeof window.covetalks !== 'undefined' && window.covetalks.supabase) {
+                        resolve();
+                    } else if (attempts < maxAttempts) {
+                        setTimeout(check, 250);
+                    } else {
+                        showError('Failed to initialize. Please refresh the page.');
+                    }
                 }
-            }
+                check();
+            });
         }
 
         // Load application details
@@ -1031,7 +573,7 @@
 
             // View opportunity button
             document.getElementById('viewOpportunityBtn').href = 
-                `opportunity-details.html?id=${opportunity.id}`;
+                `/opportunity-details.html?id=${opportunity.id}`;
 
             // Display next steps and actions based on status
             displayNextSteps();
@@ -1045,7 +587,6 @@
                 displayTimeline(timeline);
             } catch (error) {
                 console.error('Error loading timeline:', error);
-                // Display basic timeline if advanced timeline not available
                 displayBasicTimeline();
             }
         }
@@ -1054,7 +595,6 @@
         function displayTimeline(timeline) {
             const container = document.getElementById('timeline');
             
-            // If no timeline data, use basic timeline
             if (!timeline || timeline.length === 0) {
                 displayBasicTimeline();
                 return;
@@ -1179,24 +719,24 @@
             
             if (status === 'Pending') {
                 actionsHtml = `
-                    <button onclick="showWithdrawModal()" class="btn btn-danger" style="width: 100%;">
+                    <button onclick="showWithdrawModal()" class="btn btn-danger btn-block">
                         Withdraw Application
                     </button>
                 `;
             } else if (status === 'Accepted') {
                 actionsHtml = `
-                    <a href="contact-organization.html?id=${applicationData.opportunity.organization_id}" 
-                       class="btn btn-primary" style="width: 100%; margin-bottom: 0.5rem;">
+                    <a href="/contact-organization.html?id=${applicationData.opportunity.organization_id}" 
+                       class="btn btn-primary btn-block mb-2">
                         Contact Organization
                     </a>
-                    <a href="booking-details.html?id=${applicationData.id}" 
-                       class="btn btn-success" style="width: 100%;">
+                    <a href="/booking-details.html?id=${applicationData.id}" 
+                       class="btn btn-success btn-block">
                         View Booking Details
                     </a>
                 `;
             } else if (status === 'Rejected') {
                 actionsHtml = `
-                    <a href="opportunities.html" class="btn btn-primary" style="width: 100%;">
+                    <a href="/opportunities.html" class="btn btn-primary btn-block">
                         Browse More Opportunities
                     </a>
                 `;
@@ -1205,7 +745,7 @@
             container.innerHTML = actionsHtml;
         }
 
-        // Get status icon - Using images for all statuses
+        // Get status icon
         function getStatusIcon(status) {
             const icons = {
                 'Submitted': 'mail_icon.png',
@@ -1244,12 +784,9 @@
         // Confirm withdraw
         async function confirmWithdraw() {
             try {
-                // Update application status to Withdrawn
                 await window.covetalks.updateApplicationStatus(applicationId, 'Withdrawn');
-                
                 alert('Application withdrawn successfully');
-                window.location.href = 'dashboard.html';
-                
+                window.location.href = '/dashboard.html';
             } catch (error) {
                 console.error('Error withdrawing application:', error);
                 alert('Failed to withdraw application. Please try again.');
@@ -1287,35 +824,12 @@
             });
         }
 
-        // Toggle dropdown
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.getElementById('userAvatar');
-            
-            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-
         // Close modal when clicking outside
         document.addEventListener('click', function(event) {
             if (event.target.classList.contains('modal')) {
                 closeModal();
             }
         });
-
-        // Logout
-        async function logout() {
-            if (window.covetalks) {
-                await window.covetalks.logout();
-            }
-        }
 
         // Initialize on load
         if (document.readyState === 'loading') {

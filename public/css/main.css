@@ -1,0 +1,988 @@
+/* ==============================================
+   COVETALKS MAIN STYLESHEET
+   Version: 1.0
+   ============================================== */
+
+/* ==============================================
+   1. CUSTOM FONTS
+   ============================================== */
+@font-face {
+    font-family: 'Brandon Text';
+    src: url('/fonts/brandontext.woff2') format('woff2'),
+         url('/fonts/brandontext.woff') format('woff');
+    font-weight: 300 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ==============================================
+   2. CSS VARIABLES / BRAND COLORS
+   ============================================== */
+:root {
+    /* Brand Colors */
+    --color-sand: #f3b338;
+    --color-calm: #1d93b7;
+    --color-deep: #155487;
+    --color-foam: #f8f9fa;
+    --color-deep-dark: #1e3d6f;
+    
+    /* Neutral Colors */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-dark: #2c3e50;
+    --color-gray-dark: #555555;
+    --color-gray: #666666;
+    --color-gray-light: #999999;
+    --color-gray-lighter: #bdc3c7;
+    --color-border: #e1e8ed;
+    --color-bg-light: #f0f0f0;
+    
+    /* Status Colors */
+    --color-success: #27ae60;
+    --color-success-hover: #229954;
+    --color-danger: #dc3545;
+    --color-danger-hover: #c82333;
+    --color-warning: #f2b236;
+    --color-info: #3498db;
+    
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    --spacing-3xl: 4rem;
+    
+    /* Typography */
+    --font-primary: 'Brandon Text', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-bold: 700;
+    --font-weight-black: 900;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 5px 15px rgba(0,0,0,0.08);
+    --shadow-lg: 0 10px 30px rgba(0,0,0,0.1);
+    --shadow-xl: 0 15px 40px rgba(0,0,0,0.15);
+    
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* Breakpoints for JS reference */
+    --breakpoint-xs: 400px;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    
+    /* Header Height */
+    --header-height: 80px;
+    --header-height-mobile: 60px;
+}
+
+/* ==============================================
+   3. RESET & BASE STYLES
+   ============================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-regular);
+    line-height: 1.6;
+    color: #333;
+    background: var(--color-foam);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==============================================
+   4. TYPOGRAPHY
+   ============================================== */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-black);
+    line-height: 1.2;
+    margin-bottom: var(--spacing-md);
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+h5 { font-size: 1.1rem; }
+h6 { font-size: 1rem; }
+
+p {
+    margin-bottom: var(--spacing-md);
+}
+
+a {
+    color: var(--color-deep);
+    text-decoration: none;
+    transition: color var(--transition-normal);
+}
+
+a:hover {
+    color: var(--color-deep-dark);
+}
+
+/* ==============================================
+   5. CONTAINER & LAYOUT
+   ============================================== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+}
+
+.main-content {
+    padding-top: calc(var(--header-height) + var(--spacing-xl));
+    padding-bottom: var(--spacing-2xl);
+    min-height: calc(100vh - var(--header-height));
+    flex: 1;
+}
+
+/* ==============================================
+   6. HEADER & NAVIGATION
+   ============================================== */
+header {
+    background: var(--color-white);
+    color: #333;
+    padding: var(--spacing-md) 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--shadow-md);
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    z-index: 1001;
+}
+
+.logo-img {
+    height: 50px;
+    width: auto;
+    display: block;
+}
+
+/* Desktop Navigation */
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: var(--spacing-xl);
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    color: #333;
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    transition: color var(--transition-normal);
+    padding: var(--spacing-xs) 0;
+    position: relative;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--color-deep);
+}
+
+.nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--color-deep);
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    z-index: 1001;
+}
+
+.hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 25px;
+    height: 20px;
+}
+
+.hamburger span {
+    display: block;
+    height: 3px;
+    background: #333;
+    border-radius: 2px;
+    transition: all var(--transition-normal);
+    transform-origin: center;
+}
+
+.mobile-menu-toggle.active .hamburger span:nth-child(1) {
+    transform: translateY(8.5px) rotate(45deg);
+}
+
+.mobile-menu-toggle.active .hamburger span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-toggle.active .hamburger span:nth-child(3) {
+    transform: translateY(-8.5px) rotate(-45deg);
+}
+
+/* Mobile Navigation Overlay */
+.mobile-nav {
+    display: none;
+    position: fixed;
+    top: var(--header-height-mobile);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--color-white);
+    z-index: 999;
+    overflow-y: auto;
+}
+
+.mobile-nav.active {
+    display: block;
+}
+
+.mobile-nav-content {
+    padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+.mobile-nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mobile-nav-links li {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.mobile-nav-links a {
+    display: block;
+    padding: var(--spacing-md) 0;
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+}
+
+.mobile-nav-links a.active,
+.mobile-nav-links a:hover {
+    color: var(--color-deep);
+}
+
+.mobile-auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-xl);
+    border-top: 1px solid var(--color-border);
+}
+
+/* User Menu */
+.user-menu {
+    position: relative;
+}
+
+.user-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, var(--color-calm));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-weight-bold);
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: transform var(--transition-fast);
+}
+
+.user-avatar:hover {
+    transform: scale(1.05);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow-xl);
+    min-width: 200px;
+    display: none;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 0.75rem 1.25rem;
+    color: #333;
+    text-decoration: none;
+    transition: background var(--transition-fast);
+}
+
+.dropdown-menu a:hover {
+    background: var(--color-foam);
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: var(--color-border);
+    margin: 0;
+}
+
+/* ==============================================
+   7. BUTTONS
+   ============================================== */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all var(--transition-normal);
+    font-weight: var(--font-weight-medium);
+    text-align: center;
+    font-family: var(--font-primary);
+    font-size: 1rem;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: var(--color-deep);
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--color-deep-dark);
+    transform: translateY(-2px);
+    color: white;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--color-deep);
+    border: 2px solid var(--color-deep);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: var(--color-deep);
+    color: white;
+}
+
+.btn-success {
+    background: var(--color-success);
+    color: white;
+}
+
+.btn-success:hover:not(:disabled) {
+    background: var(--color-success-hover);
+    transform: translateY(-2px);
+    color: white;
+}
+
+.btn-danger {
+    background: var(--color-danger);
+    color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: var(--color-danger-hover);
+    transform: translateY(-2px);
+    color: white;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+/* ==============================================
+   8. CARDS
+   ============================================== */
+.card {
+    background: white;
+    padding: var(--spacing-xl);
+    border-radius: 15px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.card h2 {
+    color: var(--color-deep);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--color-bg-light);
+}
+
+.card h3 {
+    color: var(--color-deep);
+    margin-bottom: var(--spacing-md);
+}
+
+/* ==============================================
+   9. FOOTER
+   ============================================== */
+footer {
+    background: var(--color-dark);
+    color: white;
+    padding: var(--spacing-2xl) 0 var(--spacing-md);
+    margin-top: auto;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+}
+
+.footer-section h3 {
+    margin-bottom: var(--spacing-md);
+    color: var(--color-sand);
+    font-size: 1.2rem;
+}
+
+.footer-section p,
+.footer-section a {
+    color: var(--color-gray-lighter);
+    text-decoration: none;
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    transition: color var(--transition-normal);
+}
+
+.footer-section a:hover {
+    color: var(--color-sand);
+}
+
+.footer-bottom {
+    border-top: 1px solid #34495e;
+    padding-top: var(--spacing-md);
+    text-align: center;
+    color: var(--color-gray-lighter);
+}
+
+/* ==============================================
+   10. STATUS BADGES & STATES
+   ============================================== */
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+}
+
+.status-badge.pending {
+    background: var(--color-sand);
+    color: #333;
+}
+
+.status-badge.accepted {
+    background: var(--color-success);
+    color: white;
+}
+
+.status-badge.rejected {
+    background: var(--color-danger);
+    color: white;
+}
+
+.status-badge.withdrawn {
+    background: var(--color-gray);
+    color: white;
+}
+
+.status-badge.open {
+    background: var(--color-info);
+    color: white;
+}
+
+.status-badge.closed {
+    background: var(--color-gray-light);
+    color: white;
+}
+
+/* Detail Rows (common pattern) */
+.detail-row {
+    display: flex;
+    padding: var(--spacing-md) 0;
+    border-bottom: 1px solid var(--color-bg-light);
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-dark);
+    flex: 0 0 150px;
+}
+
+.detail-value {
+    flex: 1;
+    color: #333;
+}
+
+/* Message Boxes */
+.message-box {
+    background: #e8f4fd;
+    border-left: 4px solid var(--color-deep);
+    padding: var(--spacing-md);
+    border-radius: 5px;
+    margin-top: var(--spacing-md);
+}
+
+.message-box.success {
+    background: #d4edda;
+    border-color: var(--color-success);
+}
+
+.message-box.error {
+    background: #f8d7da;
+    border-color: var(--color-danger);
+}
+
+.message-box.warning {
+    background: #fff3cd;
+    border-color: var(--color-warning);
+}
+
+.message-box h4 {
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Empty States */
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-3xl) var(--spacing-xl);
+    color: var(--color-gray);
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    color: var(--color-gray-dark);
+    margin-bottom: var(--spacing-md);
+}
+
+.empty-state p {
+    max-width: 500px;
+    margin: 0 auto var(--spacing-lg);
+}
+
+/* Action Buttons Group */
+.action-buttons {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.action-buttons .btn {
+    flex: 1;
+}
+
+/* ==============================================
+   11. UTILITY CLASSES
+   ============================================== */
+.hidden {
+    display: none !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.mt-1 { margin-top: var(--spacing-sm); }
+.mt-2 { margin-top: var(--spacing-md); }
+.mt-3 { margin-top: var(--spacing-lg); }
+.mt-4 { margin-top: var(--spacing-xl); }
+
+.mb-1 { margin-bottom: var(--spacing-sm); }
+.mb-2 { margin-bottom: var(--spacing-md); }
+.mb-3 { margin-bottom: var(--spacing-lg); }
+.mb-4 { margin-bottom: var(--spacing-xl); }
+
+.p-1 { padding: var(--spacing-sm); }
+.p-2 { padding: var(--spacing-md); }
+.p-3 { padding: var(--spacing-lg); }
+.p-4 { padding: var(--spacing-xl); }
+
+/* ==============================================
+   11. LOADING STATES
+   ============================================== */
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-2xl);
+    color: var(--color-gray);
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 3px solid var(--color-bg-light);
+    border-top: 3px solid var(--color-deep);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: var(--spacing-md);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ==============================================
+   12. MODALS
+   ============================================== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 15px;
+    padding: var(--spacing-xl);
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    margin-bottom: var(--spacing-lg);
+}
+
+.modal-header h3 {
+    color: var(--color-deep);
+}
+
+.modal-body {
+    margin-bottom: var(--spacing-lg);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+}
+
+/* ==============================================
+   13. GRIDS & LAYOUTS
+   ============================================== */
+.content-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-lg);
+}
+
+.grid-2-cols {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+}
+
+.grid-3-cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+}
+
+.grid-4-cols {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-lg);
+}
+
+@media (max-width: 992px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .grid-4-cols {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .grid-2-cols,
+    .grid-3-cols,
+    .grid-4-cols {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==============================================
+   14. FORMS
+   ============================================== */
+.form-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-gray-dark);
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: var(--font-primary);
+    transition: border-color var(--transition-fast);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--color-deep);
+    box-shadow: 0 0 0 3px rgba(21, 84, 135, 0.1);
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* ==============================================
+   15. RESPONSIVE DESIGN
+   ============================================== */
+
+/* Tablet Styles */
+@media (max-width: 992px) {
+    :root {
+        --header-height: 70px;
+    }
+    
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.75rem; }
+    h3 { font-size: 1.35rem; }
+    
+    .container {
+        padding: 0 15px;
+    }
+    
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    :root {
+        --header-height: var(--header-height-mobile);
+    }
+    
+    header {
+        height: var(--header-height-mobile);
+        padding: var(--spacing-sm) 0;
+    }
+    
+    .logo-img {
+        height: 40px;
+    }
+    
+    /* Hide desktop nav, show mobile toggle */
+    .nav-links {
+        display: none;
+    }
+    
+    .mobile-menu-toggle {
+        display: block;
+    }
+    
+    .auth-buttons {
+        display: none;
+    }
+    
+    .main-content {
+        padding-top: calc(var(--header-height-mobile) + var(--spacing-lg));
+        padding-bottom: var(--spacing-xl);
+    }
+    
+    h1 { font-size: 1.75rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.25rem; }
+    
+    .card {
+        padding: var(--spacing-lg);
+        border-radius: 10px;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+    
+    .modal-content {
+        width: 95%;
+        padding: var(--spacing-lg);
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+    }
+    
+    /* Mobile buttons */
+    .btn {
+        padding: 0.75rem 1.25rem;
+    }
+    
+    .btn-sm {
+        padding: 0.5rem 0.875rem;
+        font-size: 0.875rem;
+    }
+    
+    /* Detail rows stack on mobile */
+    .detail-row {
+        flex-direction: column;
+    }
+    
+    .detail-label {
+        margin-bottom: var(--spacing-xs);
+        flex: unset;
+    }
+    
+    /* Action buttons stack on mobile */
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .action-buttons .btn {
+        width: 100%;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 576px) {
+    .container {
+        padding: 0 10px;
+    }
+    
+    h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.35rem; }
+    h3 { font-size: 1.15rem; }
+    
+    .main-content {
+        padding-top: calc(var(--header-height-mobile) + var(--spacing-md));
+    }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 400px) {
+    .logo-img {
+        height: 35px;
+    }
+    
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+}
