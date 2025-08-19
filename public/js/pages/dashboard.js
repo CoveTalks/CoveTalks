@@ -50,6 +50,9 @@ class UnifiedDashboard {
             // Update welcome message
             this.updateWelcomeSection();
             
+            // Check for special URL parameters (welcome, subscription success, etc.)
+            this.handleUrlParameters();
+            
             // Load dashboard content based on user type
             if (this.userType === 'Organization') {
                 await this.loadOrganizationDashboard();
@@ -68,7 +71,7 @@ class UnifiedDashboard {
             let attempts = 0;
             const maxAttempts = 20;
             
-            function check() {
+            const check = () => {
                 attempts++;
                 if (window.covetalks && window.covetalks.supabase) {
                     resolve();
@@ -77,9 +80,153 @@ class UnifiedDashboard {
                 } else {
                     this.showError('Failed to initialize. Please refresh the page.');
                 }
-            }
+            };
             check();
         });
+    }
+
+    handleUrlParameters() {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Check for welcome parameter (new user)
+        if (urlParams.get('welcome') === 'true') {
+            this.showWelcomeMessage();
+            // Clean up URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+        
+        // Check for subscription success
+        if (urlParams.get('subscription') === 'success') {
+            this.showSubscriptionSuccessMessage();
+            // Clean up URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+        
+        // Check for specific session ID (from Stripe)
+        const sessionId = urlParams.get('session_id');
+        if (sessionId) {
+            console.log('[Dashboard] Stripe session ID:', sessionId);
+            // You could fetch session details here if needed
+        }
+    }
+
+    showWelcomeMessage() {
+        const banner = document.createElement('div');
+        banner.className = 'welcome-banner';
+        banner.style.cssText = `
+            background: linear-gradient(135deg, var(--color-deep), var(--color-calm));
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            text-align: center;
+            animation: slideDown 0.5s ease;
+        `;
+        banner.innerHTML = `
+            <h2>Welcome to CoveTalks! 🎉</h2>
+            <p style="font-size: 1.1rem; margin: 1rem 0;">
+                Your account is all set up. Start exploring speaking opportunities or complete your profile for better visibility.
+            </p>
+            <div style="margin-top: 1.5rem;">
+                <a href="/opportunities.html" class="btn btn-white" style="margin-right: 1rem;">
+                    Browse Opportunities
+                </a>
+                <a href="/settings.html" class="btn btn-white">
+                    Complete Profile
+                </a>
+            </div>
+            <button onclick="this.parentElement.style.display='none'" 
+                    style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">
+                ×
+            </button>
+        `;
+        
+        // Add animation styles if not present
+        if (!document.getElementById('dashboard-animations')) {
+            const style = document.createElement('style');
+            style.id = 'dashboard-animations';
+            style.textContent = `
+                @keyframes slideDown {
+                    from {
+                        opacity: 0;
+                        transform: translateY(-20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        const mainContent = document.getElementById('mainContent');
+        if (mainContent) {
+            mainContent.insertBefore(banner, mainContent.firstChild);
+            
+            // Auto-hide after 30 seconds
+            setTimeout(() => {
+                if (banner.parentElement) {
+                    banner.style.transition = 'opacity 0.5s';
+                    banner.style.opacity = '0';
+                    setTimeout(() => {
+                        if (banner.parentElement) {
+                            banner.remove();
+                        }
+                    }, 500);
+                }
+            }, 30000);
+        }
+    }
+
+    showSubscriptionSuccessMessage() {
+        const banner = document.createElement('div');
+        banner.className = 'success-banner';
+        banner.style.cssText = `
+            background: #d4edda;
+            color: #155724;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            border: 1px solid #c3e6cb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: slideDown 0.5s ease;
+        `;
+        banner.innerHTML = `
+            <div>
+                <h3 style="margin: 0 0 0.5rem 0;">✅ Subscription Activated!</h3>
+                <p style="margin: 0;">
+                    Your subscription is now active. You have full access to all CoveTalks features.
+                    <a href="/billing.html" style="color: #155724; text-decoration: underline; margin-left: 1rem;">
+                        View billing details
+                    </a>
+                </p>
+            </div>
+            <button onclick="this.parentElement.style.display='none'" 
+                    style="background: none; border: none; color: #155724; font-size: 1.5rem; cursor: pointer; padding: 0 1rem;">
+                ×
+            </button>
+        `;
+        
+        const mainContent = document.getElementById('mainContent');
+        if (mainContent) {
+            mainContent.insertBefore(banner, mainContent.firstChild);
+            
+            // Auto-hide after 10 seconds
+            setTimeout(() => {
+                if (banner.parentElement) {
+                    banner.style.transition = 'opacity 0.5s';
+                    banner.style.opacity = '0';
+                    setTimeout(() => {
+                        if (banner.parentElement) {
+                            banner.remove();
+                        }
+                    }, 500);
+                }
+            }, 10000);
+        }
     }
 
     applyUserTypeStyling() {
@@ -88,8 +235,10 @@ class UnifiedDashboard {
         
         if (this.userType === 'Organization') {
             body.classList.add('org-view');
-            header.classList.remove('speaker-gradient');
-            header.classList.add('org-gradient');
+            if (header) {
+                header.classList.remove('speaker-gradient');
+                header.classList.add('org-gradient');
+            }
             
             // Add org-stat class to stat cards
             document.querySelectorAll('.stat-card').forEach(card => {
@@ -103,21 +252,31 @@ class UnifiedDashboard {
         const welcomeMessage = document.getElementById('welcomeMessage');
         const headerActions = document.getElementById('headerActions');
         
-        userName.textContent = this.currentUser.name?.split(' ')[0] || this.userType;
+        if (userName) {
+            userName.textContent = this.currentUser.name?.split(' ')[0] || this.userType;
+        }
         
         if (this.userType === 'Organization') {
-            welcomeMessage.textContent = 'Manage your speaking opportunities and connect with speakers';
-            headerActions.innerHTML = `
-                <a href="/post-opportunity.html" class="btn btn-white">Post Opportunity</a>
-                <a href="/members.html" class="btn btn-white">Find Speakers</a>
-                <a href="/my-opportunities.html" class="btn btn-white">My Opportunities</a>
-            `;
+            if (welcomeMessage) {
+                welcomeMessage.textContent = 'Manage your speaking opportunities and connect with speakers';
+            }
+            if (headerActions) {
+                headerActions.innerHTML = `
+                    <a href="/post-opportunity.html" class="btn btn-white">Post Opportunity</a>
+                    <a href="/members.html" class="btn btn-white">Find Speakers</a>
+                    <a href="/my-opportunities.html" class="btn btn-white">My Opportunities</a>
+                `;
+            }
         } else {
-            welcomeMessage.textContent = "Here's what's happening with your speaker profile today.";
-            headerActions.innerHTML = `
-                <a href="/settings.html" class="btn btn-white">Edit Profile</a>
-                <a href="/opportunities.html" class="btn btn-white">Browse Opportunities</a>
-            `;
+            if (welcomeMessage) {
+                welcomeMessage.textContent = "Here's what's happening with your speaker profile today.";
+            }
+            if (headerActions) {
+                headerActions.innerHTML = `
+                    <a href="/settings.html" class="btn btn-white">Edit Profile</a>
+                    <a href="/opportunities.html" class="btn btn-white">Browse Opportunities</a>
+                `;
+            }
         }
     }
 
@@ -147,6 +306,8 @@ class UnifiedDashboard {
 
     renderSpeakerStats() {
         const statsGrid = document.getElementById('statsGrid');
+        if (!statsGrid) return;
+        
         statsGrid.innerHTML = `
             <div class="stat-card">
                 <div class="stat-icon blue">👁️</div>
@@ -181,6 +342,7 @@ class UnifiedDashboard {
 
     renderSpeakerMainContent() {
         const mainContent = document.getElementById('mainContent');
+        if (!mainContent) return;
         
         // Recent Activity
         const activityHTML = this.data.activity.length > 0 ? 
@@ -241,6 +403,7 @@ class UnifiedDashboard {
 
     renderSpeakerSidebar() {
         const sidebar = document.getElementById('sidebarContent');
+        if (!sidebar) return;
         
         // Profile completion
         const completion = this.calculateProfileCompletion();
@@ -355,6 +518,8 @@ class UnifiedDashboard {
         const pendingApps = this.data.applications.filter(a => a.status === 'Pending').length;
         
         const statsGrid = document.getElementById('statsGrid');
+        if (!statsGrid) return;
+        
         statsGrid.innerHTML = `
             <div class="stat-card org-stat">
                 <div class="stat-icon orange">📢</div>
@@ -389,6 +554,7 @@ class UnifiedDashboard {
 
     renderOrganizationMainContent() {
         const mainContent = document.getElementById('mainContent');
+        if (!mainContent) return;
         
         // Recent Applications Table
         const applicationsHTML = this.renderApplicationsTable();
@@ -428,6 +594,7 @@ class UnifiedDashboard {
 
     renderOrganizationSidebar() {
         const sidebar = document.getElementById('sidebarContent');
+        if (!sidebar) return;
         
         // Monthly stats
         const now = new Date();
@@ -750,6 +917,8 @@ class UnifiedDashboard {
 
     showError(message) {
         const mainContent = document.getElementById('mainContent');
+        if (!mainContent) return;
+        
         mainContent.innerHTML = `
             <div class="dashboard-card">
                 <div class="empty-state">

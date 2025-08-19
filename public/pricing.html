@@ -690,6 +690,9 @@
                 // Initialize Stripe
                 if (window.STRIPE_CONFIG && window.STRIPE_CONFIG.PUBLISHABLE_KEY) {
                     stripe = Stripe(window.STRIPE_CONFIG.PUBLISHABLE_KEY);
+                    console.log('Stripe initialized');
+                } else {
+                    console.error('Stripe configuration not found');
                 }
 
                 // Wait for Supabase
@@ -704,17 +707,65 @@
                     if (currentUser && currentUser.member_type === 'Organization') {
                         showOrganizationMessage();
                     }
+                    
+                    // Check if user already has a subscription
+                    const subscription = await window.covetalks.getSubscriptionStatus(currentUser.id);
+                    if (subscription && subscription.status === 'Active') {
+                        showExistingSubscriptionMessage(subscription);
+                    }
                 }
 
-                // Check for subscription success
+                // Check for various return states
                 const urlParams = new URLSearchParams(window.location.search);
+                
+                // Success from checkout
                 if (urlParams.get('subscription') === 'success') {
                     showSuccessMessage();
+                }
+                
+                // Canceled checkout
+                handleCheckoutReturn();
+                
+                // Check for saved plan from registration flow
+                const savedPlan = sessionStorage.getItem('selectedPlan');
+                if (savedPlan && currentUser) {
+                    const { plan, period } = JSON.parse(savedPlan);
+                    sessionStorage.removeItem('selectedPlan');
+                    
+                    // Auto-select the plan they chose before registering
+                    setTimeout(() => {
+                        if (confirm(`Continue with ${plan} plan (${period})?`)) {
+                            togglePeriod(period);
+                            // Find and click the appropriate button
+                            const btnSelector = `.pricing-card:has(.plan-name:contains("${plan.charAt(0).toUpperCase() + plan.slice(1)}")) .${period}-btn`;
+                            const btn = document.querySelector(btnSelector);
+                            if (btn) {
+                                btn.click();
+                            }
+                        }
+                    }, 1000);
                 }
 
             } catch (error) {
                 console.error('Initialization error:', error);
             }
+        }
+
+        // Show existing subscription message
+        function showExistingSubscriptionMessage(subscription) {
+            const container = document.querySelector('.main-content .container');
+            const message = document.createElement('div');
+            message.className = 'message-box info';
+            message.style.background = '#d1ecf1';
+            message.style.border = '1px solid #bee5eb';
+            message.style.color = '#0c5460';
+            message.innerHTML = `
+                <h4>You have an active ${subscription.plan_type} subscription</h4>
+                <p>You're already subscribed! Manage your subscription or update payment methods in your billing settings.</p>
+                <a href="/billing.html" class="btn btn-primary" style="margin-top: 1rem;">Go to Billing</a>
+            `;
+            
+            container.insertBefore(message, container.firstChild);
         }
 
         // Wait for Supabase client
@@ -793,10 +844,22 @@
         async function selectPlan(plan, period) {
             // Check if user is logged in
             if (!currentUser) {
-                // Save selected plan and redirect to login
+                // Save selected plan and redirect to register/login
                 sessionStorage.setItem('selectedPlan', JSON.stringify({ plan, period }));
-                alert('Please login or register to continue with subscription');
-                window.location.href = `/login.html?redirect=${encodeURIComponent(window.location.href)}`;
+                
+                // Show a choice modal or redirect to registration
+                if (confirm('Please create an account to continue with your subscription. Click OK to register as a speaker.')) {
+                    window.location.href = '/register.html';
+                } else {
+                    window.location.href = `/login.html?redirect=${encodeURIComponent(window.location.href)}`;
+                }
+                return;
+            }
+            
+            // Check if user is an organization (they get free access)
+            if (currentUser.member_type === 'Organization') {
+                alert('Organizations have free access to CoveTalks! No subscription needed.');
+                window.location.href = '/organization-dashboard.html';
                 return;
             }
             
@@ -807,24 +870,101 @@
             btn.disabled = true;
             
             try {
-                // In production, this would create a Stripe checkout session
-                // For now, show a message
-                await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
+                // Map plan names to price IDs
+                const priceId = `${plan}_${period}`; // e.g., "plus_monthly"
                 
-                alert(`Selected: ${plan} plan (${period})\n\nStripe integration would handle checkout here.`);
+                console.log('Creating checkout session for:', priceId);
                 
-                // You would typically:
-                // 1. Call a serverless function to create a Stripe checkout session
-                // 2. Redirect to Stripe Checkout
-                // 3. Handle success/cancel callbacks
+                // Call Netlify function to create Stripe checkout session
+                const response = await fetch('/.netlify/functions/stripe-create-checkout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: currentUser.id,
+                        userEmail: currentUser.email,
+                        priceId: priceId,
+                        planType: plan.charAt(0).toUpperCase() + plan.slice(1), // Capitalize plan name
+                        billingPeriod: period,
+                        successUrl: `${window.location.origin}/dashboard.html?subscription=success&session_id={CHECKOUT_SESSION_ID}`,
+                        cancelUrl: `${window.location.origin}/pricing.html?canceled=true`
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.error || 'Failed to create checkout session');
+                }
+                
+                if (result.success && result.url) {
+                    // Redirect to Stripe Checkout
+                    console.log('Redirecting to Stripe Checkout...');
+                    window.location.href = result.url;
+                } else if (result.sessionId && stripe) {
+                    // Alternative: Use Stripe.js to redirect
+                    console.log('Redirecting using Stripe.js...');
+                    const { error } = await stripe.redirectToCheckout({
+                        sessionId: result.sessionId
+                    });
+                    
+                    if (error) {
+                        throw error;
+                    }
+                } else {
+                    throw new Error('No checkout URL or session ID received');
+                }
                 
             } catch (error) {
-                console.error('Error selecting plan:', error);
-                alert('An error occurred. Please try again.');
+                console.error('Error creating checkout session:', error);
+                
+                // Show user-friendly error messages
+                let errorMessage = 'Unable to start checkout process. ';
+                
+                if (error.message.includes('already have an active subscription')) {
+                    errorMessage = 'You already have an active subscription. Please manage it from your billing page.';
+                    setTimeout(() => {
+                        window.location.href = '/billing.html';
+                    }, 2000);
+                } else if (error.message.includes('network')) {
+                    errorMessage += 'Please check your internet connection and try again.';
+                } else {
+                    errorMessage += error.message || 'Please try again or contact support.';
+                }
+                
+                alert(errorMessage);
+                
             } finally {
                 btn.classList.remove('btn-loading');
                 btn.disabled = false;
                 btn.textContent = originalText;
+            }
+        }
+
+        // Handle returning from canceled checkout
+        function handleCheckoutReturn() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Check for canceled checkout
+            if (urlParams.get('canceled') === 'true') {
+                const message = document.createElement('div');
+                message.className = 'message-box info';
+                message.style.background = '#fff3cd';
+                message.style.border = '1px solid #ffc107';
+                message.style.color = '#856404';
+                message.innerHTML = `
+                    <h4>Checkout Canceled</h4>
+                    <p>Your checkout was canceled. No charges were made. Feel free to select a plan when you're ready.</p>
+                `;
+                
+                const container = document.querySelector('.main-content .container');
+                container.insertBefore(message, container.firstChild);
+                
+                // Auto-hide after 10 seconds
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 10000);
             }
         }
 

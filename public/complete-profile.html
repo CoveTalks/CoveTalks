@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Profile - CoveTalks</title>
+    
+    <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <style>
+        .profile-completion {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--spacing-2xl) 0;
+        }
+        
+        .welcome-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+        
+        .welcome-header h1 {
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .progress-bar {
+            background: var(--color-bg-light);
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: var(--spacing-2xl);
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: var(--color-success);
+            height: 100%;
+            width: 25%;
+            transition: width 0.3s ease;
+        }
+        
+        .completion-card {
+            background: white;
+            padding: var(--spacing-2xl);
+            border-radius: 15px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .completion-card h2 {
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .skip-btn {
+            background: transparent;
+            color: var(--color-gray);
+            border: 1px solid var(--color-border);
+        }
+        
+        .skip-btn:hover {
+            background: var(--color-bg-light);
+        }
+    </style>
+</head>
+<body>
+    <main class="main-content">
+        <div class="container profile-completion">
+            <div class="welcome-header">
+                <h1>Welcome to CoveTalks! 🎉</h1>
+                <p>Your subscription is active. Let's complete your profile to help you get discovered.</p>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            
+            <div class="completion-card">
+                <h2>Complete Your Speaker Profile</h2>
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label class="form-label">Professional Title</label>
+                        <input type="text" class="form-control" id="title" 
+                               placeholder="e.g., Leadership Coach, Technology Expert">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Years of Speaking Experience</label>
+                        <input type="number" class="form-control" id="experience" 
+                               placeholder="How many years have you been speaking?">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Speaking Topics (separate with commas)</label>
+                        <input type="text" class="form-control" id="topics" 
+                               placeholder="Leadership, Innovation, Technology, Health...">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Minimum Speaking Fee ($)</label>
+                            <input type="number" class="form-control" id="minFee" 
+                                   placeholder="0 for volunteer">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Maximum Speaking Fee ($)</label>
+                            <input type="number" class="form-control" id="maxFee" 
+                                   placeholder="Your typical maximum">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">LinkedIn Profile</label>
+                        <input type="url" class="form-control" id="linkedin" 
+                               placeholder="https://linkedin.com/in/yourprofile">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Website</label>
+                        <input type="url" class="form-control" id="website" 
+                               placeholder="https://yourwebsite.com">
+                    </div>
+                    
+                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl);">
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">
+                            Save & Continue to Dashboard
+                        </button>
+                        <button type="button" class="btn skip-btn" onclick="skipProfile()">
+                            Skip for Now
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
+    
+    <script>
+        let currentUser = null;
+        
+        async function init() {
+            // Check authentication
+            const session = await window.covetalks.checkAuth();
+            if (!session) {
+                window.location.href = '/login.html';
+                return;
+            }
+            
+            currentUser = await window.covetalks.getMemberProfile(session.user.id);
+            updateProgress();
+        }
+        
+        function updateProgress() {
+            let progress = 25; // Base for having account
+            if (currentUser.bio) progress += 25;
+            if (currentUser.specialties?.length > 0) progress += 25;
+            if (currentUser.profile_image_url) progress += 25;
+            
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+        
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const updates = {
+                title: document.getElementById('title').value,
+                years_experience: parseInt(document.getElementById('experience').value) || null,
+                specialties: document.getElementById('topics').value.split(',').map(t => t.trim()).filter(t => t),
+                speaking_fee_range: {
+                    min: parseInt(document.getElementById('minFee').value) || 0,
+                    max: parseInt(document.getElementById('maxFee').value) || 0
+                },
+                linkedin: document.getElementById('linkedin').value,
+                website: document.getElementById('website').value
+            };
+            
+            try {
+                await window.covetalks.updateProfile(updates);
+                window.location.href = '/dashboard.html?welcome=true';
+            } catch (error) {
+                alert('Error saving profile. Please try again.');
+            }
+        });
+        
+        function skipProfile() {
+            window.location.href = '/dashboard.html?welcome=true';
+        }
+        
+        init();
+    </script>
+</body>
+</html>
