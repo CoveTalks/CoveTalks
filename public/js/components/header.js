@@ -84,14 +84,12 @@ class CoveTalksHeader {
                     </div>
                     
                     <!-- Mobile user menu (when logged in) -->
-                    <div class="mobile-user-section hidden" id="mobileUserSection">
-                        <ul class="mobile-user-links">
-                            <li><a href="/inbox.html">Inbox</a></li>
-                            <li><a href="/settings.html">Settings</a></li>
-                            <li><a href="/billing.html">Billing</a></li>
-                            <li><a href="#" id="mobileLogoutBtn">Logout</a></li>
-                        </ul>
-                    </div>
+                    <ul class="mobile-nav-links mobile-user-section hidden" id="mobileUserSection">
+                        <li><a href="/inbox.html">Inbox</a></li>
+                        <li><a href="/settings.html">Settings</a></li>
+                        <li><a href="/billing.html">Billing</a></li>
+                        <li><a href="#" id="mobileLogoutBtn">Logout</a></li>
+                    </ul>
                 </div>
             </div>
         `;
@@ -126,19 +124,11 @@ class CoveTalksHeader {
             }
         });
 
-        // Logout buttons
+        // Logout button (desktop only now)
         const logoutBtn = document.getElementById('logoutBtn');
-        const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
         
         if (logoutBtn) {
             logoutBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.logout();
-            });
-        }
-        
-        if (mobileLogoutBtn) {
-            mobileLogoutBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.logout();
             });
@@ -147,8 +137,12 @@ class CoveTalksHeader {
         // Close mobile menu when clicking a link
         const mobileNavLinks = document.querySelectorAll('.mobile-nav-links a');
         mobileNavLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (!link.id || !link.id.includes('logout')) {
+            link.addEventListener('click', (e) => {
+                // Don't close menu for logout (it will redirect anyway)
+                if (link.id === 'mobileLogoutBtn') {
+                    e.preventDefault();
+                    this.logout();
+                } else {
                     this.closeMobileMenu();
                 }
             });
@@ -213,6 +207,7 @@ class CoveTalksHeader {
     updateNavigation(user) {
         const navLinks = document.getElementById('navLinks');
         const mobileNavLinks = document.getElementById('mobileNavLinks');
+        const mobileNav = document.getElementById('mobileNav');
         const authButtons = document.getElementById('authButtons');
         const mobileAuthButtons = document.getElementById('mobileAuthButtons');
         const userMenu = document.getElementById('userMenu');
@@ -225,6 +220,9 @@ class CoveTalksHeader {
             if (mobileAuthButtons) mobileAuthButtons.classList.add('hidden');
             if (userMenu) userMenu.classList.remove('hidden');
             if (mobileUserSection) mobileUserSection.classList.remove('hidden');
+            
+            // Add logged-in class to mobile nav for CSS styling
+            if (mobileNav) mobileNav.classList.add('logged-in');
             
             // Update avatar with user initials (only the header avatar)
             const initials = user.name ? 
@@ -265,6 +263,10 @@ class CoveTalksHeader {
             if (mobileAuthButtons) mobileAuthButtons.classList.remove('hidden');
             if (userMenu) userMenu.classList.add('hidden');
             if (mobileUserSection) mobileUserSection.classList.add('hidden');
+            
+            // Remove logged-in class from mobile nav
+            const mobileNav = document.getElementById('mobileNav');
+            if (mobileNav) mobileNav.classList.remove('logged-in');
             
             let currentPath = window.location.pathname;
             const defaultNavHTML = `

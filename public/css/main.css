@@ -309,11 +309,17 @@ nav {
     border-bottom: 1px solid var(--color-border);
 }
 
+.mobile-nav-links li:last-child {
+    border-bottom: none;
+}
+
+/* Ensure all mobile nav links have exactly the same styling */
 .mobile-nav-links a {
     display: block;
     padding: var(--spacing-md) 0;
     color: #333;
-    font-size: 1.1rem;
+    font-size: 1.1rem !important; /* Force consistent font size */
+    line-height: 1.4;
     font-weight: var(--font-weight-medium);
     text-decoration: none;
 }
@@ -321,6 +327,17 @@ nav {
 .mobile-nav-links a.active,
 .mobile-nav-links a:hover {
     color: var(--color-deep);
+}
+
+/* Mobile user section - styled as continuation */
+.mobile-user-section {
+    margin-top: var(--spacing-md);
+    padding-top: 0;
+}
+
+/* When logged in, Profile should keep its bottom border */
+.logged-in #mobileNavLinks li:last-child {
+    border-bottom: 1px solid var(--color-border);
 }
 
 .mobile-auth-buttons {
