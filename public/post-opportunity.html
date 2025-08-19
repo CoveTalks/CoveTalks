@@ -11,22 +11,23 @@
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="/css/main.css">
     
-    <!-- Page-specific styles ONLY for unique elements -->
+    <!-- Page-specific styles aligned with brand -->
     <style>
-        /* ==============================================
-           PAGE HEADER - Following brand sand/calm gradient
-           ============================================== */
+        /* Page Header - Brand gradient */
         .page-header {
             background: linear-gradient(135deg, var(--color-sand) 0%, var(--color-calm) 100%);
             color: white;
             padding: 8rem 0 4rem 0;
             margin-bottom: var(--spacing-xl);
+            border-radius: 15px;
             text-align: center;
         }
 
         .page-header h1 {
             color: white;
             margin-bottom: var(--spacing-sm);
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 900; /* Brandon Text Black */
             font-size: 2.5rem;
         }
 
@@ -35,23 +36,21 @@
             opacity: 0.95;
             max-width: 600px;
             margin: 0 auto;
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 400; /* Brandon Text Regular */
         }
 
-        /* ==============================================
-           CONTENT CONTAINER - Centralized like other pages
-           ============================================== */
+        /* Content Wrapper */
         .content-wrapper {
             max-width: 900px;
             margin: 0 auto;
         }
 
-        /* ==============================================
-           PROGRESS INDICATOR - Mobile optimized
-           ============================================== */
+        /* Progress Indicator - More playful and approachable */
         .progress-container {
             background: white;
             border-radius: 15px;
-            padding: var(--spacing-lg);
+            padding: var(--spacing-xl);
             box-shadow: var(--shadow-md);
             margin-bottom: var(--spacing-xl);
         }
@@ -66,11 +65,11 @@
         .progress-track::before {
             content: '';
             position: absolute;
-            top: 20px;
-            left: 40px;
-            right: 40px;
-            height: 2px;
-            background: var(--color-border);
+            top: 25px;
+            left: 60px;
+            right: 60px;
+            height: 3px;
+            background: var(--color-foam);
             z-index: 0;
         }
 
@@ -82,18 +81,20 @@
         }
 
         .step-indicator {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background: white;
-            border: 2px solid var(--color-border);
+            border: 3px solid var(--color-foam);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto var(--spacing-xs);
-            font-weight: var(--font-weight-bold);
+            margin: 0 auto var(--spacing-sm);
+            font-weight: 700;
             color: var(--color-gray);
             transition: all var(--transition-normal);
+            font-family: 'Brandon Text', var(--font-primary);
+            font-size: 1.1rem;
         }
 
         .progress-step.active .step-indicator {
@@ -101,6 +102,7 @@
             border-color: var(--color-sand);
             color: white;
             transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(243, 179, 56, 0.3);
         }
 
         .progress-step.completed .step-indicator {
@@ -110,35 +112,37 @@
         }
 
         .step-title {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--color-gray);
-            font-weight: var(--font-weight-medium);
+            font-weight: 500;
+            font-family: 'Brandon Text', var(--font-primary);
         }
 
         .progress-step.active .step-title {
-            color: var(--color-sand);
-            font-weight: var(--font-weight-bold);
+            color: var(--color-deep);
+            font-weight: 700;
         }
 
         .progress-step.completed .step-title {
             color: var(--color-calm);
         }
 
-        /* ==============================================
-           TIPS BANNER - Brand colors
-           ============================================== */
+        /* Tips Banner - More inviting */
         .tips-banner {
-            background: linear-gradient(135deg, var(--color-calm) 0%, var(--color-deep) 100%);
-            color: white;
+            background: linear-gradient(135deg, rgba(29, 147, 183, 0.1), rgba(21, 84, 135, 0.05));
+            border: 2px solid var(--color-calm);
+            color: var(--color-deep);
             border-radius: 15px;
-            padding: var(--spacing-lg);
+            padding: var(--spacing-xl);
             margin-bottom: var(--spacing-xl);
         }
 
         .tips-banner h3 {
-            color: white;
+            color: var(--color-deep);
             margin-bottom: var(--spacing-md);
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 900;
         }
 
         .tips-list {
@@ -154,18 +158,17 @@
 
         .tip-icon {
             color: var(--color-sand);
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             flex-shrink: 0;
         }
 
         .tip-text {
-            line-height: 1.5;
+            line-height: 1.6;
             font-size: 0.95rem;
+            color: var(--color-gray-dark);
         }
 
-        /* ==============================================
-           FORM SECTIONS - Clean card-based design
-           ============================================== */
+        /* Form Sections */
         .form-step {
             background: white;
             border-radius: 15px;
@@ -182,40 +185,63 @@
             color: var(--color-deep);
             margin-bottom: var(--spacing-xl);
             padding-bottom: var(--spacing-md);
-            border-bottom: 2px solid var(--color-foam);
+            border-bottom: 3px solid var(--color-foam);
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 900;
+            font-size: 1.8rem;
         }
 
-        /* Form Groups */
-        .form-grid {
-            display: grid;
-            gap: var(--spacing-lg);
-        }
-
-        .form-grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-lg);
+        /* Form Elements - Softer, more approachable */
+        .form-group {
+            margin-bottom: var(--spacing-lg);
         }
 
         .form-label {
             display: block;
             margin-bottom: var(--spacing-sm);
-            font-weight: var(--font-weight-medium);
-            color: var(--color-gray-dark);
+            font-weight: 700;
+            color: var(--color-deep);
+            font-family: 'Brandon Text', var(--font-primary);
+            font-size: 0.95rem;
         }
 
         .required-mark {
-            color: var(--color-danger);
+            color: var(--color-sand);
             margin-left: 2px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--color-foam);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: var(--font-primary);
+            transition: all var(--transition-fast);
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-calm);
+            box-shadow: 0 0 0 3px rgba(29, 147, 183, 0.1);
+            background: white;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.6;
         }
 
         .form-hint {
             font-size: 0.85rem;
             color: var(--color-gray);
             margin-top: var(--spacing-xs);
+            font-style: italic;
         }
 
-        /* Character counter */
+        /* Character Counter */
         .char-counter {
             text-align: right;
             font-size: 0.85rem;
@@ -225,18 +251,18 @@
 
         .char-counter.warning {
             color: var(--color-sand);
+            font-weight: 500;
         }
 
         .char-counter.error {
             color: var(--color-danger);
+            font-weight: 700;
         }
 
-        /* ==============================================
-           TOPICS INPUT - Clean tag system
-           ============================================== */
+        /* Topics Input - Brand colored tags */
         .topics-input-wrapper {
-            border: 2px solid var(--color-border);
-            border-radius: 8px;
+            border: 2px solid var(--color-foam);
+            border-radius: 10px;
             padding: var(--spacing-sm);
             min-height: 50px;
             display: flex;
@@ -244,15 +270,16 @@
             gap: var(--spacing-xs);
             align-items: center;
             transition: all var(--transition-fast);
+            background: white;
         }
 
         .topics-input-wrapper:focus-within {
-            border-color: var(--color-sand);
-            box-shadow: 0 0 0 3px rgba(243, 179, 56, 0.1);
+            border-color: var(--color-calm);
+            box-shadow: 0 0 0 3px rgba(29, 147, 183, 0.1);
         }
 
         .topic-tag {
-            background: var(--color-sand);
+            background: var(--color-calm);
             color: white;
             padding: 0.35rem 0.75rem;
             border-radius: 20px;
@@ -261,6 +288,7 @@
             align-items: center;
             gap: var(--spacing-xs);
             animation: tagAdd 0.3s ease;
+            font-weight: 500;
         }
 
         @keyframes tagAdd {
@@ -276,9 +304,10 @@
 
         .topic-remove {
             cursor: pointer;
-            font-weight: var(--font-weight-bold);
-            opacity: 0.8;
+            font-weight: 700;
+            opacity: 0.9;
             transition: opacity var(--transition-fast);
+            margin-left: 0.25rem;
         }
 
         .topic-remove:hover {
@@ -294,12 +323,10 @@
             font-family: var(--font-primary);
         }
 
-        /* ==============================================
-           PREVIEW SECTION - Clean presentation
-           ============================================== */
+        /* Preview Section */
         .preview-section {
-            background: var(--color-foam);
-            border: 2px dashed var(--color-sand);
+            background: linear-gradient(135deg, rgba(243, 179, 56, 0.05), rgba(29, 147, 183, 0.03));
+            border: 2px solid var(--color-sand);
             border-radius: 15px;
             padding: var(--spacing-xl);
             margin-top: var(--spacing-xl);
@@ -316,8 +343,9 @@
 
         .preview-title {
             color: var(--color-deep);
-            font-size: 1.2rem;
-            font-weight: var(--font-weight-bold);
+            font-size: 1.3rem;
+            font-weight: 900;
+            font-family: 'Brandon Text', var(--font-primary);
         }
 
         .preview-content {
@@ -327,29 +355,35 @@
 
         .preview-item {
             display: flex;
-            gap: var(--spacing-sm);
+            gap: var(--spacing-md);
+            padding: var(--spacing-sm) 0;
+            border-bottom: 1px solid var(--color-foam);
+        }
+
+        .preview-item:last-child {
+            border-bottom: none;
         }
 
         .preview-label {
-            font-weight: var(--font-weight-bold);
+            font-weight: 700;
             color: var(--color-deep);
             min-width: 140px;
+            font-family: 'Brandon Text', var(--font-primary);
         }
 
         .preview-value {
             color: var(--color-gray-dark);
+            flex: 1;
         }
 
-        /* ==============================================
-           FORM NAVIGATION - Mobile-friendly buttons
-           ============================================== */
+        /* Form Navigation */
         .form-navigation {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: var(--spacing-xl);
             padding-top: var(--spacing-xl);
-            border-top: 2px solid var(--color-foam);
+            border-top: 3px solid var(--color-foam);
             gap: var(--spacing-md);
         }
 
@@ -359,15 +393,39 @@
             gap: var(--spacing-md);
         }
 
-        /* ==============================================
-           ALERTS - Success/Error messages
-           ============================================== */
+        /* Buttons - More prominent */
+        .btn {
+            padding: 0.875rem 1.75rem;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: var(--color-deep);
+        }
+
+        .btn-primary:hover {
+            background: var(--color-deep-dark);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-calm);
+            border: 2px solid var(--color-calm);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-calm);
+            color: white;
+        }
+
+        /* Alerts */
         .alert {
             padding: var(--spacing-md) var(--spacing-lg);
             border-radius: 10px;
             margin-bottom: var(--spacing-lg);
             display: none;
             animation: slideDown 0.3s ease;
+            font-weight: 500;
         }
 
         @keyframes slideDown {
@@ -386,27 +444,25 @@
         }
 
         .alert-success {
-            background: #d4edda;
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(46, 204, 113, 0.05));
             color: var(--color-success);
-            border: 1px solid #c3e6cb;
+            border: 2px solid var(--color-success);
         }
 
         .alert-error {
-            background: #f8d7da;
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.1), rgba(255, 107, 107, 0.05));
             color: var(--color-danger);
-            border: 1px solid #f5c6cb;
+            border: 2px solid var(--color-danger);
         }
 
-        /* ==============================================
-           LOADING OVERLAY
-           ============================================== */
+        /* Loading Overlay */
         .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             display: none;
             align-items: center;
             justify-content: center;
@@ -422,11 +478,28 @@
             padding: var(--spacing-xl);
             border-radius: 15px;
             text-align: center;
+            box-shadow: var(--shadow-xl);
         }
 
-        /* ==============================================
-           MOBILE RESPONSIVE - Following pattern of other pages
-           ============================================== */
+        .loading-content p {
+            margin-top: var(--spacing-md);
+            color: var(--color-deep);
+            font-weight: 500;
+        }
+
+        /* Form Grid Layouts */
+        .form-grid {
+            display: grid;
+            gap: var(--spacing-lg);
+        }
+
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        /* Mobile Responsive */
         @media (max-width: 992px) {
             .content-wrapper {
                 max-width: 100%;
@@ -435,57 +508,44 @@
         }
 
         @media (max-width: 768px) {
-            /* Header adjustments */
             .page-header h1 {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
 
-            .page-header p {
-                font-size: 1rem;
+            .page-header {
+                padding: var(--spacing-xl) 0 var(--spacing-lg) 0;
             }
 
-            /* Progress indicator mobile */
             .progress-track::before {
                 display: none;
             }
 
-            .progress-track {
-                gap: var(--spacing-sm);
-            }
-
             .step-indicator {
-                width: 35px;
-                height: 35px;
-                font-size: 0.9rem;
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
             }
 
             .step-title {
-                font-size: 0.75rem;
+                font-size: 0.8rem;
             }
 
-            /* Form sections */
             .form-step {
                 padding: var(--spacing-lg);
+            }
+
+            .section-header {
+                font-size: 1.5rem;
             }
 
             .form-grid-2 {
                 grid-template-columns: 1fr;
             }
 
-            /* Tips banner mobile */
             .tips-banner {
-                padding: var(--spacing-md);
+                padding: var(--spacing-lg);
             }
 
-            .tips-banner h3 {
-                font-size: 1.1rem;
-            }
-
-            .tip-text {
-                font-size: 0.9rem;
-            }
-
-            /* Preview mobile */
             .preview-header {
                 flex-direction: column;
                 gap: var(--spacing-md);
@@ -498,9 +558,9 @@
 
             .preview-label {
                 min-width: unset;
+                margin-bottom: var(--spacing-xs);
             }
 
-            /* Navigation mobile */
             .form-navigation {
                 flex-direction: column;
             }
@@ -508,6 +568,7 @@
             .nav-left,
             .nav-right {
                 width: 100%;
+                justify-content: center;
             }
 
             .nav-left .btn,
@@ -517,31 +578,20 @@
         }
 
         @media (max-width: 576px) {
-            /* Further mobile optimizations */
-            .page-header {
-                padding: var(--spacing-lg) 0;
-            }
-
             .page-header h1 {
-                font-size: 1.5rem;
+                font-size: 1.75rem;
             }
 
             .form-step {
                 padding: var(--spacing-md);
-                border-radius: 10px;
             }
 
             .section-header {
                 font-size: 1.3rem;
             }
 
-            /* Compact progress on small screens */
             .progress-container {
                 padding: var(--spacing-md);
-            }
-
-            .progress-step {
-                flex: initial;
             }
 
             .step-title {
@@ -551,49 +601,15 @@
             .progress-step.active .step-title {
                 display: block;
                 position: absolute;
-                top: 50px;
+                top: 60px;
                 left: 50%;
                 transform: translateX(-50%);
                 white-space: nowrap;
+                font-size: 0.75rem;
             }
 
-            /* Buttons full width on mobile */
             .btn {
                 width: 100%;
-                text-align: center;
-            }
-        }
-
-        /* ==============================================
-           ACCESSIBILITY & FOCUS STATES
-           ============================================== */
-        .form-control:focus,
-        select:focus,
-        textarea:focus {
-            border-color: var(--color-sand);
-            box-shadow: 0 0 0 3px rgba(243, 179, 56, 0.1);
-        }
-
-        .btn:focus {
-            outline: 2px solid var(--color-sand);
-            outline-offset: 2px;
-        }
-
-        /* High contrast mode support */
-        @media (prefers-contrast: high) {
-            .form-control,
-            select,
-            textarea {
-                border-width: 2px;
-            }
-        }
-
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
             }
         }
     </style>
@@ -604,8 +620,8 @@
     <!-- Page Header -->
     <div class="page-header">
         <div class="container">
-            <h1>Post a Speaking Opportunity</h1>
-            <p>Find the perfect speaker for your event</p>
+            <h1>Share Your Speaking Opportunity</h1>
+            <p>Connect with amazing speakers who can inspire your audience</p>
         </div>
     </div>
 
@@ -615,11 +631,11 @@
             <div class="content-wrapper">
                 <!-- Alert Messages -->
                 <div class="alert alert-success" id="successAlert">
-                    ✅ Your opportunity has been posted successfully!
+                    ✨ Success! Your opportunity is now live!
                 </div>
                 
                 <div class="alert alert-error" id="errorAlert">
-                    ⚠️ Please fill in all required fields
+                    ⚠️ Please check the highlighted fields
                 </div>
 
                 <!-- Progress Indicator -->
@@ -631,34 +647,34 @@
                         </div>
                         <div class="progress-step" id="progress2">
                             <div class="step-indicator">2</div>
-                            <div class="step-title">Requirements</div>
+                            <div class="step-title">Speaker Needs</div>
                         </div>
                         <div class="progress-step" id="progress3">
                             <div class="step-indicator">3</div>
-                            <div class="step-title">Review</div>
+                            <div class="step-title">Review & Post</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Tips Banner -->
                 <div class="tips-banner">
-                    <h3>💡 Create a Great Opportunity Post</h3>
+                    <h3>💡 Tips for a Great Opportunity Post</h3>
                     <div class="tips-list">
                         <div class="tip-item">
-                            <span class="tip-icon">✓</span>
-                            <span class="tip-text">Be specific about your event and audience</span>
+                            <span class="tip-icon">🎯</span>
+                            <span class="tip-text">Be specific about your event goals and what you hope speakers will achieve</span>
                         </div>
                         <div class="tip-item">
-                            <span class="tip-icon">✓</span>
-                            <span class="tip-text">Include the event date and duration</span>
+                            <span class="tip-icon">👥</span>
+                            <span class="tip-text">Describe your audience - speakers want to know who they'll be inspiring</span>
                         </div>
                         <div class="tip-item">
-                            <span class="tip-icon">✓</span>
-                            <span class="tip-text">Mention any travel or expense coverage</span>
+                            <span class="tip-icon">💰</span>
+                            <span class="tip-text">Be transparent about compensation and what you can offer</span>
                         </div>
                         <div class="tip-item">
-                            <span class="tip-icon">✓</span>
-                            <span class="tip-text">Describe the impact speakers can make</span>
+                            <span class="tip-icon">🌟</span>
+                            <span class="tip-text">Highlight what makes your event special and impactful</span>
                         </div>
                     </div>
                 </div>
@@ -667,21 +683,21 @@
                 <form id="opportunityForm">
                     <!-- Step 1: Event Details -->
                     <div class="form-step active" id="step1">
-                        <h2 class="section-header">Event Details</h2>
+                        <h2 class="section-header">Tell Us About Your Event</h2>
                         
                         <div class="form-grid">
                             <div class="form-group">
                                 <label class="form-label" for="title">
-                                    Event Title <span class="required-mark">*</span>
+                                    What's your event called? <span class="required-mark">*</span>
                                 </label>
                                 <input type="text" id="title" name="title" class="form-control" required 
-                                       placeholder="e.g., Annual Business Summit 2025">
-                                <div class="form-hint">Choose a clear, descriptive title</div>
+                                       placeholder="e.g., Annual Innovation Summit 2025">
+                                <div class="form-hint">Choose a title that excites speakers</div>
                             </div>
                             
                             <div class="form-group">
                                 <label class="form-label" for="speaker_type">
-                                    Speaker Role <span class="required-mark">*</span>
+                                    What type of speaker do you need? <span class="required-mark">*</span>
                                 </label>
                                 <select id="speaker_type" name="speaker_type" class="form-control" required>
                                     <option value="">Select a role</option>
@@ -697,24 +713,24 @@
                             
                             <div class="form-group">
                                 <label class="form-label" for="description">
-                                    Event Description <span class="required-mark">*</span>
+                                    Describe your event and opportunity <span class="required-mark">*</span>
                                 </label>
                                 <textarea id="description" name="description" class="form-control" required 
-                                          rows="4" placeholder="Describe your event and what you're looking for..."></textarea>
+                                          rows="5" placeholder="Tell speakers about your event, audience, and the impact they can make..."></textarea>
                                 <div class="char-counter" id="descCounter">0 / 500</div>
                             </div>
                             
                             <div class="form-grid-2">
                                 <div class="form-group">
                                     <label class="form-label" for="event_date">
-                                        Event Date <span class="required-mark">*</span>
+                                        When is your event? <span class="required-mark">*</span>
                                     </label>
                                     <input type="date" id="event_date" name="event_date" class="form-control" required>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label class="form-label" for="event_time">
-                                        Event Time <span class="required-mark">*</span>
+                                        What time? <span class="required-mark">*</span>
                                     </label>
                                     <input type="time" id="event_time" name="event_time" class="form-control" required>
                                 </div>
@@ -722,7 +738,7 @@
                             
                             <div class="form-grid-2">
                                 <div class="form-group">
-                                    <label class="form-label" for="duration">Duration</label>
+                                    <label class="form-label" for="duration">How long is the session?</label>
                                     <select id="duration" name="duration" class="form-control">
                                         <option value="">Select duration</option>
                                         <option value="0.25">15 minutes</option>
@@ -738,35 +754,36 @@
                                 
                                 <div class="form-group">
                                     <label class="form-label" for="event_format">
-                                        Format <span class="required-mark">*</span>
+                                        How will it be delivered? <span class="required-mark">*</span>
                                     </label>
                                     <select id="event_format" name="event_format" class="form-control" required>
                                         <option value="">Select format</option>
                                         <option value="In-Person">In-Person</option>
                                         <option value="Virtual">Virtual/Online</option>
-                                        <option value="Hybrid">Hybrid</option>
+                                        <option value="Hybrid">Hybrid (Both)</option>
                                     </select>
                                 </div>
                             </div>
                             
                             <div class="form-group">
                                 <label class="form-label" for="location">
-                                    Location <span class="required-mark">*</span>
+                                    Where is your event? <span class="required-mark">*</span>
                                 </label>
                                 <input type="text" id="location" name="location" class="form-control" required 
-                                       placeholder="e.g., Phoenix, AZ or Virtual">
+                                       placeholder="e.g., Phoenix Convention Center, Phoenix, AZ">
+                                <div class="form-hint">For virtual events, just write "Virtual" or "Online"</div>
                             </div>
                         </div>
                         
                         <div class="form-navigation">
                             <div class="nav-left">
                                 <button type="button" class="btn btn-secondary" onclick="saveDraft()">
-                                    Save Draft
+                                    💾 Save Draft
                                 </button>
                             </div>
                             <div class="nav-right">
                                 <button type="button" class="btn btn-primary" onclick="nextStep(2)">
-                                    Next: Requirements →
+                                    Continue →
                                 </button>
                             </div>
                         </div>
@@ -774,93 +791,96 @@
 
                     <!-- Step 2: Requirements -->
                     <div class="form-step" id="step2">
-                        <h2 class="section-header">Speaker Requirements</h2>
+                        <h2 class="section-header">What You're Looking For</h2>
                         
                         <div class="form-grid">
                             <div class="form-grid-2">
                                 <div class="form-group">
-                                    <label class="form-label" for="audience_size">Audience Size</label>
+                                    <label class="form-label" for="audience_size">How many attendees?</label>
                                     <input type="number" id="audience_size" name="audience_size" class="form-control"
-                                           placeholder="e.g., 100">
+                                           placeholder="e.g., 250">
+                                    <div class="form-hint">Helps speakers prepare appropriately</div>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label class="form-label" for="audience_type">Audience Type</label>
+                                    <label class="form-label" for="audience_type">Who's your audience?</label>
                                     <input type="text" id="audience_type" name="audience_type" class="form-control"
-                                           placeholder="e.g., Business executives">
+                                           placeholder="e.g., Healthcare professionals">
+                                    <div class="form-hint">Industry, role, or demographic</div>
                                 </div>
                             </div>
                             
                             <div class="form-group">
-                                <label class="form-label" for="topics">Topics (Max 5)</label>
+                                <label class="form-label" for="topics">What topics interest you? (Max 5)</label>
                                 <div class="topics-input-wrapper" id="topicsContainer">
                                     <input type="text" class="topic-input" id="topicInput" 
-                                           placeholder="Type and press Enter">
+                                           placeholder="Type a topic and press Enter...">
                                 </div>
-                                <div class="form-hint">Add topics like: Leadership, Technology, Health</div>
+                                <div class="form-hint">Examples: Leadership, Innovation, Wellness, Technology</div>
                             </div>
                             
                             <div class="form-group">
-                                <label class="form-label" for="requirements">Speaker Requirements</label>
+                                <label class="form-label" for="requirements">Any specific requirements?</label>
                                 <textarea id="requirements" name="requirements" class="form-control" rows="3"
-                                          placeholder="Any specific expertise needed?"></textarea>
+                                          placeholder="Special expertise, certifications, or experience needed..."></textarea>
                             </div>
                             
                             <div class="form-grid-2">
                                 <div class="form-group">
-                                    <label class="form-label" for="compensation_amount">Speaking Fee ($)</label>
+                                    <label class="form-label" for="compensation_amount">Speaker Fee ($)</label>
                                     <input type="number" id="compensation_amount" name="compensation_amount" 
-                                           class="form-control" placeholder="0 for volunteer" min="0" step="100">
+                                           class="form-control" placeholder="Enter 0 for volunteer" min="0" step="100">
+                                    <div class="form-hint">Be transparent about your budget</div>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label class="form-label" for="compensation_type">Compensation Type</label>
                                     <select id="compensation_type" name="compensation_type" class="form-control">
-                                        <option value="None">Volunteer</option>
+                                        <option value="None">Volunteer/Pro Bono</option>
                                         <option value="Fixed">Fixed Fee</option>
                                         <option value="Hourly">Hourly Rate</option>
-                                        <option value="Negotiable">Negotiable</option>
+                                        <option value="Negotiable">Open to Negotiation</option>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="form-grid-2">
                                 <div class="form-group">
-                                    <label class="form-label" for="travel_covered">Travel Covered?</label>
+                                    <label class="form-label" for="travel_covered">Will you cover travel?</label>
                                     <select id="travel_covered" name="travel_covered" class="form-control">
                                         <option value="false">No</option>
-                                        <option value="true">Yes</option>
+                                        <option value="true">Yes, we'll cover travel</option>
                                     </select>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label class="form-label" for="accommodation_covered">Accommodation?</label>
+                                    <label class="form-label" for="accommodation_covered">How about accommodation?</label>
                                     <select id="accommodation_covered" name="accommodation_covered" class="form-control">
                                         <option value="false">No</option>
-                                        <option value="true">Yes</option>
+                                        <option value="true">Yes, we'll cover lodging</option>
                                     </select>
                                 </div>
                             </div>
                             
                             <div class="form-group">
                                 <label class="form-label" for="application_deadline">
-                                    Application Deadline <span class="required-mark">*</span>
+                                    When do you need applications by? <span class="required-mark">*</span>
                                 </label>
                                 <input type="date" id="application_deadline" name="application_deadline" 
                                        class="form-control" required>
-                                <div class="form-hint">Give speakers at least 1-2 weeks to apply</div>
+                                <div class="form-hint">Give speakers at least 2 weeks to apply</div>
                             </div>
                         </div>
                         
                         <div class="form-navigation">
                             <div class="nav-left">
                                 <button type="button" class="btn btn-secondary" onclick="previousStep(1)">
-                                    ← Previous
+                                    ← Back
                                 </button>
                             </div>
                             <div class="nav-right">
                                 <button type="button" class="btn btn-secondary" onclick="saveDraft()">
-                                    Save Draft
+                                    💾 Save Draft
                                 </button>
                                 <button type="button" class="btn btn-primary" onclick="nextStep(3)">
                                     Review →
@@ -875,9 +895,9 @@
                         
                         <div class="preview-section">
                             <div class="preview-header">
-                                <div class="preview-title">Preview</div>
+                                <div class="preview-title">How It Will Look</div>
                                 <button type="button" class="btn btn-secondary btn-sm" onclick="editSection(1)">
-                                    Edit Details
+                                    ✏️ Edit Details
                                 </button>
                             </div>
                             
@@ -887,24 +907,24 @@
                         </div>
                         
                         <div class="form-group" style="margin-top: var(--spacing-xl);">
-                            <label>
-                                <input type="checkbox" id="agreeTerms" required>
-                                I agree to the <a href="/terms.html" target="_blank">Terms of Service</a>
+                            <label style="display: flex; align-items: center; gap: var(--spacing-sm); cursor: pointer;">
+                                <input type="checkbox" id="agreeTerms" required style="width: auto;">
+                                <span>I agree to CoveTalks' <a href="/terms.html" target="_blank" style="color: var(--color-calm);">Terms of Service</a></span>
                             </label>
                         </div>
                         
                         <div class="form-navigation">
                             <div class="nav-left">
                                 <button type="button" class="btn btn-secondary" onclick="previousStep(2)">
-                                    ← Previous
+                                    ← Back
                                 </button>
                             </div>
                             <div class="nav-right">
                                 <button type="button" class="btn btn-secondary" onclick="saveDraft()">
-                                    Save Draft
+                                    💾 Save Draft
                                 </button>
-                                <button type="submit" class="btn btn-primary" id="submitBtn">
-                                    Post Opportunity
+                                <button type="submit" class="btn btn-primary" id="submitBtn" style="background: var(--color-sand);">
+                                    🚀 Post Opportunity
                                 </button>
                             </div>
                         </div>
@@ -920,29 +940,27 @@
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-content">
             <div class="loading-spinner"></div>
-            <p style="margin-top: var(--spacing-md);">Posting your opportunity...</p>
+            <p>Creating your opportunity...</p>
         </div>
     </div>
 
-    <!-- Load Supabase from CDN -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- Load config and Supabase client -->
     <script src="/js/config.js"></script>
     <script src="/js/supabase-client.js"></script>
-    
-    <!-- Load header and footer components -->
     <script src="/js/components/header.js"></script>
     <script src="/js/components/footer.js"></script>
     
-    <!-- Page-specific JavaScript -->
+    <!-- Page JavaScript (keeping existing functionality) -->
     <script>
+        // [Keep all existing JavaScript unchanged - it's already functional]
         // Page state
         let currentUser = null;
         let organizationData = null;
         let currentStep = 1;
         let topics = [];
 
+        // [Rest of the JavaScript remains the same...]
         // Initialize page
         async function initializePage() {
             try {
@@ -1245,8 +1263,8 @@
                 <div class="preview-item">
                     <span class="preview-label">Travel/Accommodation:</span>
                     <span class="preview-value">
-                        Travel: ${travel ? 'Covered' : 'Not covered'} | 
-                        Accommodation: ${accommodation ? 'Covered' : 'Not covered'}
+                        Travel: ${travel ? '✅ Covered' : '❌ Not covered'} | 
+                        Accommodation: ${accommodation ? '✅ Covered' : '❌ Not covered'}
                     </span>
                 </div>
                 ${topics.length > 0 ? `
@@ -1385,7 +1403,7 @@
             errorAlert.classList.remove('show');
             
             if (type === 'success') {
-                successAlert.textContent = '✅ ' + message;
+                successAlert.textContent = '✨ ' + message;
                 successAlert.classList.add('show');
                 setTimeout(() => successAlert.classList.remove('show'), 5000);
             } else {
