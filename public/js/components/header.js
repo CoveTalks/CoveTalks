@@ -44,7 +44,10 @@ class CoveTalksHeader {
                             
                             <!-- User menu (shown when logged in) -->
                             <div class="user-menu hidden" id="userMenu">
-                                <div class="user-avatar" id="userAvatar">U</div>
+                                <div class="user-avatar" id="userAvatar">
+                                    <img class="user-avatar-image hidden" id="userAvatarImage" alt="">
+                                    <span class="user-avatar-text" id="userAvatarText">U</span>
+                                </div>
                                 <div class="dropdown-menu" id="dropdownMenu">
                                     <a href="/inbox.html">
                                         <span id="inboxBadge" class="notification-badge hidden"></span>
@@ -213,6 +216,8 @@ class CoveTalksHeader {
         const userMenu = document.getElementById('userMenu');
         const mobileUserSection = document.getElementById('mobileUserSection');
         const userAvatar = document.getElementById('userAvatar');
+        const userAvatarImage = document.getElementById('userAvatarImage');
+        const userAvatarText = document.getElementById('userAvatarText');
         
         if (user) {
             // Hide auth buttons, show user menu
@@ -224,12 +229,40 @@ class CoveTalksHeader {
             // Add logged-in class to mobile nav for CSS styling
             if (mobileNav) mobileNav.classList.add('logged-in');
             
-            // Update avatar with user initials (only the header avatar)
-            const initials = user.name ? 
-                user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
-                'U';
-            
-            if (userAvatar) userAvatar.textContent = initials;
+            // Update avatar with user profile image or initials
+            if (user.profile_image_url && userAvatarImage && userAvatarText) {
+                // User has a profile image
+                userAvatarImage.src = user.profile_image_url;
+                userAvatarImage.alt = user.name || 'User avatar';
+                userAvatarImage.classList.add('loading');
+                userAvatarImage.classList.remove('hidden');
+                userAvatarText.classList.add('hidden');
+                
+                // Remove loading class when image loads
+                userAvatarImage.onload = function() {
+                    this.classList.remove('loading');
+                };
+                
+                // Add error handler in case image fails to load
+                userAvatarImage.onerror = function() {
+                    this.classList.add('hidden');
+                    userAvatarText.classList.remove('hidden');
+                    // Restore initials on error
+                    const initials = user.name ? 
+                        user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                        'U';
+                    userAvatarText.textContent = initials;
+                };
+            } else if (userAvatarText) {
+                // No profile image, use initials
+                const initials = user.name ? 
+                    user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                    'U';
+                
+                userAvatarText.textContent = initials;
+                userAvatarText.classList.remove('hidden');
+                if (userAvatarImage) userAvatarImage.classList.add('hidden');
+            }
             
             // Update navigation links based on user type
             let navHTML = '';

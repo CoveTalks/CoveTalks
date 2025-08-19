@@ -24,18 +24,6 @@ class CoveTalksFooter {
                 <div class="container">
                     <div class="footer-content">
                         <div class="footer-section">
-                            <h3>CoveTalks</h3>
-                            <p>Connecting speakers with organizations worldwide to create meaningful opportunities and lasting relationships.</p>
-                            <div class="social-links">
-                                <a href="https://www.linkedin.com/company/108118017" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <div class="footer-section">
                             <h3>Quick Links</h3>
                             <a href="/index.html">Home</a>
                             <a href="/members.html">Find Speakers</a>
@@ -74,6 +62,20 @@ class CoveTalksFooter {
                         </div>
                     </div>
                     
+                    <div class="footer-brand">
+                        <div class="footer-brand-content">
+                            <h3>CoveTalks</h3>
+                            <p>Connecting speakers with organizations worldwide to create meaningful opportunities and lasting relationships.</p>
+                            <div class="social-links">
+                                <a href="https://www.linkedin.com/company/108118017" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="footer-bottom">
                         <p>&copy; ${this.currentYear} CoveTalks. All rights reserved.</p>
                         <p class="footer-tagline">Where Connections Ignite Opportunities</p>
@@ -98,33 +100,66 @@ class CoveTalksFooter {
         
         const styles = `
             <style id="footer-styles">
+                /* Footer Brand Section */
+                .footer-brand {
+                    padding: var(--spacing-xl) 0 var(--spacing-lg);
+                    border-top: 1px solid rgba(255, 255, 255, 0.1);
+                    margin-top: var(--spacing-2xl);
+                }
+                
+                .footer-brand-content {
+                    text-align: center;
+                    max-width: 600px;
+                    margin: 0 auto;
+                }
+                
+                .footer-brand h3 {
+                    color: var(--color-sand);
+                    font-size: 1.75rem;
+                    margin-bottom: var(--spacing-md);
+                    font-weight: var(--font-weight-bold);
+                }
+                
+                .footer-brand p {
+                    color: rgba(255, 255, 255, 0.7);
+                    margin-bottom: var(--spacing-lg);
+                    line-height: 1.6;
+                    font-size: 0.95rem;
+                }
+                
                 /* Social Links */
                 .social-links {
                     display: flex;
                     gap: 0.75rem;
-                    margin-top: 1rem;
+                    justify-content: center;
+                    margin-top: var(--spacing-lg);
                 }
                 
                 .social-links a {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    width: 36px;
-                    height: 36px;
-                    background: rgba(255, 255, 255, 0.1);
+                    width: 42px;
+                    height: 42px;
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
                     border-radius: 50%;
                     transition: all 0.3s ease;
+                    color: rgba(255, 255, 255, 0.7);
                 }
                 
                 .social-links a:hover {
-                    background: var(--color-sand);
-                    transform: translateY(-2px);
+                    border-color: rgba(243, 179, 56, 0.3);
+                    background: rgba(255, 255, 255, 0.08);
+                    transform: translateY(-3px);
+                    color: var(--color-sand);
                 }
                 
                 .social-links svg {
                     width: 20px;
                     height: 20px;
                     fill: currentColor;
+                    transition: fill 0.3s ease;
                 }
                 
                 /* Footer Tagline */
@@ -132,43 +167,6 @@ class CoveTalksFooter {
                     font-style: italic;
                     opacity: 0.8;
                     margin-top: 0.5rem;
-                }
-                
-                /* Mobile User Section Styles */
-                .mobile-user-section {
-                    padding-top: var(--spacing-lg);
-                    border-top: 1px solid var(--color-border);
-                    margin-top: var(--spacing-lg);
-                }
-                
-                .mobile-user-links {
-                    list-style: none;
-                    padding: 0;
-                    margin: 0;
-                }
-                
-                .mobile-user-links li {
-                    border-bottom: 1px solid var(--color-border);
-                }
-                
-                .mobile-user-links li:first-child {
-                    border-top: none;
-                }
-                
-                .mobile-user-links li:last-child {
-                    border-bottom: none;
-                }
-                
-                .mobile-user-links a {
-                    display: block;
-                    padding: var(--spacing-md) 0;
-                    color: #333;
-                    text-decoration: none;
-                    font-weight: var(--font-weight-medium);
-                }
-                
-                .mobile-user-links a:hover {
-                    color: var(--color-deep);
                 }
                 
                 /* Notification Badge */
@@ -186,17 +184,33 @@ class CoveTalksFooter {
                 }
                 
                 /* Responsive adjustments */
-                @media (max-width: 768px) {
+                @media (max-width: 1200px) {
                     .footer-content {
-                        text-align: center;
+                        grid-template-columns: repeat(4, 1fr);
+                        gap: var(--spacing-lg);
+                    }
+                }
+                
+                @media (max-width: 992px) {
+                    .footer-content {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+                
+                @media (max-width: 576px) {
+                    .footer-content {
+                        grid-template-columns: 1fr;
+                        text-align: left;
                     }
                     
-                    .social-links {
-                        justify-content: center;
+                    .footer-brand {
+                        padding: var(--spacing-xl) 0;
+                        margin-top: var(--spacing-xl);
                     }
                     
                     .footer-bottom {
                         padding-top: var(--spacing-lg);
+                        text-align: center;
                     }
                 }
             </style>
