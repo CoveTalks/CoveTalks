@@ -762,27 +762,89 @@ class UnifiedDashboard {
         let iconClass = 'view';
         let title = 'Activity';
         let description = '';
+        let actionLink = null;
+        
+        // Format the metadata for display
+        const meta = activity.metadata || {};
         
         switch (activity.activity_type) {
             case 'profile_view':
                 icon = '👁️';
                 iconClass = 'view';
                 title = 'Profile View';
-                description = 'Someone viewed your profile';
+                description = `Someone viewed your profile`;
+                if (meta.viewer_type === 'Organization') {
+                    description = `An organization viewed your profile`;
+                }
                 break;
+                
             case 'application_submitted':
                 icon = '🎯';
                 iconClass = 'application';
                 title = 'New Application';
-                description = 'You submitted an application';
+                if (this.userType === 'Organization') {
+                    description = `New application received for your opportunity`;
+                    actionLink = `/application-review.html?id=${meta.application_id}`;
+                } else {
+                    description = `You applied to a speaking opportunity`;
+                    actionLink = `/application-status.html?id=${meta.application_id}`;
+                }
                 break;
-            case 'application_accepted':
-                icon = '✅';
-                iconClass = 'booking';
-                title = 'Application Accepted';
-                description = 'Your application was accepted';
+                
+            case 'application_reviewed':
+                icon = activity.metadata?.status === 'Accepted' ? '✅' : '📝';
+                iconClass = activity.metadata?.status === 'Accepted' ? 'success' : 'review';
+                title = 'Application ' + (activity.metadata?.status || 'Reviewed');
+                description = `Your application was ${activity.metadata?.status?.toLowerCase() || 'reviewed'}`;
+                actionLink = `/application-status.html?id=${activity.target_id}`;
                 break;
-            // Add more cases as needed
+                
+            case 'opportunity_posted':
+                icon = '📢';
+                iconClass = 'opportunity';
+                title = 'Opportunity Posted';
+                description = `New opportunity: ${meta.title || 'Speaking Opportunity'}`;
+                if (meta.event_date) {
+                    description += ` - ${this.formatDate(meta.event_date)}`;
+                }
+                actionLink = `/opportunity-details.html?id=${activity.target_id}`;
+                break;
+                
+            case 'speaker_saved':
+                icon = '⭐';
+                iconClass = 'saved';
+                title = 'Speaker Saved';
+                if (this.userType === 'Speaker') {
+                    description = 'An organization saved your profile';
+                } else {
+                    description = 'You saved a speaker profile';
+                    actionLink = `/profile.html?id=${activity.target_id}`;
+                }
+                break;
+                
+            case 'review_posted':
+                icon = '⭐';
+                iconClass = 'review';
+                title = 'New Review';
+                description = `You received a ${meta.rating || 0}-star review`;
+                if (meta.would_recommend) {
+                    description += ' (Recommended!)';
+                }
+                actionLink = `/reviews.html`;
+                break;
+                
+            case 'message_sent':
+                icon = '💬';
+                iconClass = 'message';
+                title = 'Message Sent';
+                description = meta.subject || 'New message sent';
+                actionLink = `/inbox.html`;
+                break;
+                
+            default:
+                // Fallback for any unhandled activity types
+                title = activity.activity_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                description = 'Activity recorded';
         }
         
         return `
@@ -793,6 +855,11 @@ class UnifiedDashboard {
                     <p>${description}</p>
                     <span class="activity-time">${this.formatTimeAgo(activity.created_at)}</span>
                 </div>
+                ${actionLink ? `
+                    <a href="${actionLink}" class="view-btn">
+                        View
+                    </a>
+                ` : ''}
             </div>
         `;
     }

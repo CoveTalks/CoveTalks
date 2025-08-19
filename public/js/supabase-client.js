@@ -1,822 +1,452 @@
-// Supabase Client - Complete Version with All Methods
-// No import statement - we'll load Supabase from CDN in HTML
+/**
+ * CoveTalks Supabase Client - COMPLETE VERSION
+ * Full implementation with all features and activity tracking
+ */
 
-class CoveTalksClient {
-    constructor() {
-        // Make sure Supabase is loaded from CDN
-        if (typeof supabase === 'undefined') {
-            console.error('Supabase not loaded! Make sure to include the CDN script.');
-            return;
-        }
-        
-        // Initialize Supabase client
-        this.supabase = supabase.createClient(
-            window.APP_CONFIG.SUPABASE_URL,
-            window.APP_CONFIG.SUPABASE_ANON_KEY
-        );
-        
-        console.log('CoveTalks client initialized');
-        
-        // Check initial auth state
-        this.checkAuth();
-        
-        // Listen for auth changes
-        this.supabase.auth.onAuthStateChange((event, session) => {
-            console.log('Auth state changed:', event);
-            this.handleAuthChange(event, session);
-        });
-    }
-    
-    // ============================================
-    // AUTHENTICATION
-    // ============================================
+// Initialize Supabase client
+const supabaseUrl = window.CONFIG?.SUPABASE_URL;
+const supabaseAnonKey = window.CONFIG?.SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+    console.error('Supabase configuration missing');
+}
+
+const supabase = supabaseUrl && supabaseAnonKey ? 
+    window.supabase.createClient(supabaseUrl, supabaseAnonKey) : null;
+
+// Main CoveTalks object with all functions
+window.covetalks = {
+    supabase: supabase,
+
+    // ===========================================
+    // AUTHENTICATION FUNCTIONS
+    // ===========================================
     
     async checkAuth() {
-        try {
-            const { data: { session }, error } = await this.supabase.auth.getSession();
-            if (error) throw error;
-            return session;
-        } catch (error) {
-            console.error('Auth check failed:', error);
-            return null;
-        }
-    }
-    
-    async login(email, password) {
-        const startTime = performance.now();
-        
-        try {
-            const { data, error } = await this.supabase.auth.signInWithPassword({
-                email: email.trim(),
-                password: password
-            });
-            
-            const loginTime = performance.now() - startTime;
-            console.log(`Login completed in ${Math.round(loginTime)}ms`);
-            
-            if (error) throw error;
-            
-            // Fetch member details
-            if (data.user) {
-                const member = await this.getMemberProfile(data.user.id);
-                return { 
-                    user: data.user,
-                    session: data.session,
-                    member: member, 
-                    loginTime: loginTime 
-                };
-            }
-            
-            return data;
-        } catch (error) {
-            console.error('Login error:', error);
-            throw error;
-        }
-    }
-    
+        const { data: { session } } = await supabase.auth.getSession();
+        return session;
+    },
+
     async signup(userData) {
-    try {
-        const { 
-            email, 
-            password, 
-            name,
-            memberType,
-            ...profileData 
-        } = userData;
-        
-        console.log('Signing up user:', email, memberType);
-        
-        // Create auth user
-        const { data: authData, error: authError } = await this.supabase.auth.signUp({
-            email: email.trim(),
-            password: password,
+        const { data, error } = await supabase.auth.signUp({
+            email: userData.email,
+            password: userData.password,
             options: {
                 data: {
-                    name: name,
-                    member_type: memberType
-                },
-                emailRedirectTo: `${window.location.origin}/verify-email.html`
+                    name: userData.name,
+                    member_type: userData.memberType,
+                    phone: userData.phone,
+                    location: userData.location,
+                    bio: userData.bio,
+                    specialties: userData.specialties,
+                    organizationData: userData.organizationData
+                }
             }
         });
         
-        if (authError) throw authError;
+        if (error) throw error;
         
-        console.log('Auth user created:', authData.user?.id);
-        
-        // Check if we have a session (email verification disabled or not required)
-        if (authData.session) {
-            // We have a session, proceed normally
-            await this.supabase.auth.setSession(authData.session);
-            
-            if (authData.user) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                
-                // Update profile
-                const { error: updateError } = await this.supabase
-                    .from('members')
-                    .update({
-                        name: name,
-                        member_type: memberType,
-                        bio: profileData.bio || null,
-                        location: profileData.location || null,
-                        phone: profileData.phone || null,
-                        specialties: profileData.specialties || []
-                    })
-                    .eq('id', authData.user.id);
-                    
-                if (updateError) {
-                    console.error('Profile update error:', updateError);
-                }
-                
-                // For organizations, create organization record
-                if (memberType === 'Organization' && profileData.organizationData) {
-                    await this.createOrganization(authData.user.id, profileData.organizationData);
-                }
-            }
-        } else {
-            // No session - email verification is required
-            console.log('Email verification required');
-            // Store the additional data for later
-            if (authData.user) {
-                // You might want to store this data temporarily
-                localStorage.setItem('pendingProfileData', JSON.stringify({
-                    userId: authData.user.id,
-                    memberType: memberType,
-                    profileData: profileData
-                }));
-            }
+        // Track signup activity
+        if (data?.user) {
+            await this.trackActivity('signup', null, {
+                member_type: userData.memberType
+            });
         }
         
-        return authData;
-    } catch (error) {
-        console.error('Signup error:', error);
-        throw error;
-    }
-}
-    
+        return data;
+    },
+
+    async login(email, password) {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+        
+        if (error) throw error;
+        return data;
+    },
+
     async logout() {
-        try {
-            const { error } = await this.supabase.auth.signOut();
-            if (error) throw error;
-            window.location.href = '/login.html';
-        } catch (error) {
-            console.error('Logout error:', error);
-        }
-    }
-    
-    // ============================================
-    // PROFILE MANAGEMENT
-    // ============================================
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
+    },
+
+    async resetPassword(email) {
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+        if (error) throw error;
+        return data;
+    },
+
+    async updatePassword(newPassword) {
+        const { data, error } = await supabase.auth.updateUser({
+            password: newPassword
+        });
+        if (error) throw error;
+        return data;
+    },
+
+    // ===========================================
+    // PROFILE FUNCTIONS
+    // ===========================================
     
     async getMemberProfile(userId) {
-        try {
-            const { data, error } = await this.supabase
-                .from('members')
-                .select('*')
-                .eq('id', userId)
-                .single();
-                
-            if (error) throw error;
-            return data;
-        } catch (error) {
-            console.error('Get profile error:', error);
-            return null;
-        }
-    }
-    
+        const { data, error } = await supabase
+            .from('members')
+            .select('*')
+            .eq('id', userId)
+            .single();
+        
+        if (error) throw error;
+        return data;
+    },
+
     async getCurrentUser() {
-        try {
-            const { data: { user } } = await this.supabase.auth.getUser();
-            if (!user) return null;
-            
-            // Get full member profile
-            return await this.getMemberProfile(user.id);
-        } catch (error) {
-            console.error('Get current user error:', error);
-            return null;
-        }
-    }
-    
+        const session = await this.checkAuth();
+        if (!session) return null;
+        return await this.getMemberProfile(session.user.id);
+    },
+
     async updateProfile(updates) {
-        try {
-            const { data: { user } } = await this.supabase.auth.getUser();
-            if (!user) throw new Error('Not authenticated');
-            
-            const { data, error } = await this.supabase
-                .from('members')
-                .update(updates)
-                .eq('id', user.id)
-                .select()
-                .single();
-                
-            if (error) throw error;
-            return data;
-        } catch (error) {
-            console.error('Update profile error:', error);
-            throw error;
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const { data, error } = await supabase
+            .from('members')
+            .update(updates)
+            .eq('id', session.user.id)
+            .select()
+            .single();
+        
+        if (error) throw error;
+        return data;
+    },
+
+    async searchMembers(filters = {}) {
+        let query = supabase
+            .from('members')
+            .select(`
+                *,
+                reviews(rating)
+            `)
+            .eq('member_type', filters.memberType || 'Speaker');
+        
+        if (filters.specialties && filters.specialties.length > 0) {
+            query = query.contains('specialties', filters.specialties);
         }
-    }
+        
+        if (filters.location) {
+            query = query.ilike('location', `%${filters.location}%`);
+        }
+        
+        if (filters.minRating) {
+            query = query.gte('average_rating', filters.minRating);
+        }
+        
+        if (filters.search) {
+            query = query.or(`name.ilike.%${filters.search}%,bio.ilike.%${filters.search}%`);
+        }
+        
+        const { data, error } = await query;
+        if (error) throw error;
+        return data || [];
+    },
+
+    // ===========================================
+    // ACTIVITY TRACKING FUNCTIONS
+    // ===========================================
     
-    // ============================================
-    // ORGANIZATION MANAGEMENT
-    // ============================================
-    
-    async createOrganization(userId, orgData) {
+    async trackActivity(activityType, targetId = null, metadata = {}) {
         try {
-            // Create organization
-            const { data: org, error: orgError } = await this.supabase
-                .from('organizations')
-                .insert({
-                    name: orgData.Organization_Name,
-                    organization_type: orgData.Organization_Type,
-                    website: orgData.website || null,
-                    description: orgData.description || null,
-                    location: orgData.location || null,
-                    preferred_topics: orgData.Speaking_Topics || []
-                })
-                .select()
-                .single();
-                
-            if (orgError) throw orgError;
+            const session = await this.checkAuth();
+            if (!session) return; // Don't track if not logged in
             
-            // Link user to organization
-            const { error: linkError } = await this.supabase
-                .from('organization_members')
+            const { error } = await supabase
+                .from('activity')
                 .insert({
-                    organization_id: org.id,
-                    member_id: userId,
-                    role: 'Owner'
+                    actor_id: session.user.id,
+                    target_id: targetId,
+                    activity_type: activityType,
+                    metadata: metadata,
+                    is_public: false
                 });
-                
-            if (linkError) throw linkError;
             
-            return org;
-        } catch (error) {
-            console.error('Create organization error:', error);
-            throw error;
-        }
-    }
-    
-    // ============================================
-    // DASHBOARD DATA METHODS
-    // ============================================
-    
-    async getSubscriptionStatus(userId) {
-        try {
-            const targetUserId = userId || (await this.getCurrentUser())?.id;
-            if (!targetUserId) return null;
-            
-            const { data, error } = await this.supabase
-                .from('subscriptions')
-                .select('*')
-                .eq('member_id', targetUserId)
-                .eq('status', 'Active')
-                .single();
-                
-            if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
-                console.error('Get subscription error:', error);
+            if (error) {
+                console.error('Activity tracking error:', error);
             }
-            
-            return data || null;
-        } catch (error) {
-            console.error('Get subscription error:', error);
-            return null;
+        } catch (err) {
+            console.error('Activity tracking failed:', err);
         }
-    }
+    },
+
+    async trackProfileView(viewedUserId) {
+        const session = await this.checkAuth();
+        if (!session || session.user.id === viewedUserId) return;
+        
+        // Get viewer details for metadata
+        const viewer = await this.getMemberProfile(session.user.id);
+        
+        await this.trackActivity('profile_view', viewedUserId, {
+            viewer_name: viewer?.name,
+            viewer_type: viewer?.member_type,
+            viewer_id: session.user.id
+        });
+    },
+
+    async trackApplicationSubmitted(opportunityId, applicationId) {
+        const opportunity = await this.getOpportunityDetails(opportunityId);
+        
+        await this.trackActivity('application_submitted', applicationId, {
+            opportunity_id: opportunityId,
+            opportunity_title: opportunity?.title,
+            organization_id: opportunity?.organization_id,
+            application_id: applicationId
+        });
+    },
+
+    async trackApplicationReviewed(applicationId, status, speakerId) {
+        await this.trackActivity('application_reviewed', applicationId, {
+            status: status,
+            application_id: applicationId,
+            speaker_id: speakerId
+        });
+    },
+
+    async trackOpportunityPosted(opportunityId, opportunityData) {
+        await this.trackActivity('opportunity_posted', opportunityId, {
+            title: opportunityData.title,
+            event_date: opportunityData.event_date,
+            location: opportunityData.location,
+            opportunity_id: opportunityId
+        });
+    },
+
+    async trackSpeakerSaved(speakerId, notes = '') {
+        const session = await this.checkAuth();
+        const org = await this.getMemberProfile(session.user.id);
+        
+        await this.trackActivity('speaker_saved', speakerId, {
+            organization_name: org?.name,
+            organization_id: session.user.id,
+            notes: notes
+        });
+    },
+
+    async trackReviewPosted(reviewId, speakerId, rating) {
+        await this.trackActivity('review_posted', reviewId, {
+            speaker_id: speakerId,
+            rating: rating
+        });
+    },
+
+    async trackMessageSent(messageId, recipientId, subject) {
+        await this.trackActivity('message_sent', messageId, {
+            recipient_id: recipientId,
+            subject: subject
+        });
+    },
+
+    // ===========================================
+    // ACTIVITY FEED FUNCTIONS
+    // ===========================================
     
-    async getRecentActivity(userId, limit = 5) {
-        try {
-            const targetUserId = userId || (await this.getCurrentUser())?.id;
-            if (!targetUserId) return [];
-            
-            const { data, error } = await this.supabase
-                .from('activity')
-                .select('*')
-                .eq('target_id', targetUserId)
-                .order('created_at', { ascending: false })
-                .limit(limit);
-                
-            if (error) throw error;
-            return data || [];
-        } catch (error) {
-            console.error('Get activity error:', error);
-            return [];
+    async getActivityFeed(userId, limit = 50) {
+        // Get activities where user is actor or target
+        const { data, error } = await supabase
+            .from('activity')
+            .select(`
+                *,
+                actor:members!activity_actor_id_fkey(name, member_type, profile_image_url),
+                target:members!activity_target_id_fkey(name, member_type, profile_image_url)
+            `)
+            .or(`actor_id.eq.${userId},target_id.eq.${userId}`)
+            .order('created_at', { ascending: false })
+            .limit(limit);
+        
+        if (error) throw error;
+        
+        // For organizations, also get activities for their opportunities
+        const user = await this.getMemberProfile(userId);
+        if (user?.member_type === 'Organization') {
+            const orgActivities = await this.getOrganizationActivities(userId, limit);
+            return [...(data || []), ...orgActivities].sort((a, b) => 
+                new Date(b.created_at) - new Date(a.created_at)
+            ).slice(0, limit);
         }
-    }
-    
-    async getApplications(speakerId) {
-        try {
-            const targetUserId = speakerId || (await this.getCurrentUser())?.id;
-            if (!targetUserId) return [];
-            
-            const { data, error } = await this.supabase
-                .from('applications')
-                .select(`
-                    *,
-                    opportunity:speaking_opportunities(*)
-                `)
-                .eq('speaker_id', targetUserId)
-                .order('created_at', { ascending: false });
-                
-            if (error) throw error;
-            return data || [];
-        } catch (error) {
-            console.error('Get applications error:', error);
-            return [];
-        }
-    }
-    
-    async getActiveApplicationsCount(speakerId) {
-        try {
-            const targetUserId = speakerId || (await this.getCurrentUser())?.id;
-            if (!targetUserId) return 0;
-            
-            const { count, error } = await this.supabase
-                .from('applications')
-                .select('*', { count: 'exact', head: true })
-                .eq('speaker_id', targetUserId)
-                .eq('status', 'Pending');
-                
-            if (error) throw error;
-            return count || 0;
-        } catch (error) {
-            console.error('Get applications count error:', error);
-            return 0;
-        }
-    }
-    
-    async getUpcomingBookings(speakerId) {
-        try {
-            const targetUserId = speakerId || (await this.getCurrentUser())?.id;
-            if (!targetUserId) return [];
-            
-            // First get all accepted applications
-            const { data: applications, error } = await this.supabase
-                .from('applications')
-                .select(`
-                    *,
-                    opportunity:speaking_opportunities(*)
-                `)
-                .eq('speaker_id', targetUserId)
-                .eq('status', 'Accepted')
-                .order('created_at', { ascending: false });
-                
-            if (error) throw error;
-            
-            // Filter for future events in JavaScript
-            const now = new Date();
-            const upcomingBookings = (applications || []).filter(app => {
-                const eventDate = app.opportunity?.event_date;
-                return eventDate && new Date(eventDate) > now;
-            });
-            
-            // Sort by event date
-            upcomingBookings.sort((a, b) => {
-                const dateA = new Date(a.opportunity?.event_date || 0);
-                const dateB = new Date(b.opportunity?.event_date || 0);
-                return dateA - dateB;
-            });
-            
-            return upcomingBookings;
-        } catch (error) {
-            console.error('Get bookings error:', error);
-            return [];
-        }
-    }
-    
-    async getRecentOpportunities(limit = 3) {
-        try {
-            const { data, error } = await this.supabase
-                .from('speaking_opportunities')
-                .select('*')
-                .eq('status', 'Open')
-                .order('created_at', { ascending: false })
-                .limit(limit);
-                
-            if (error) throw error;
-            return data || [];
-        } catch (error) {
-            console.error('Get opportunities error:', error);
-            return [];
-        }
-    }
-    
-    async getDashboardStats(userId) {
-        try {
-            const targetUserId = userId || (await this.getCurrentUser())?.id;
-            if (!targetUserId) return { profileViews: 0, applications: 0, bookings: 0 };
-            
-            // Get profile views count (last 30 days)
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            
-            const { count: viewCount } = await this.supabase
-                .from('activity')
-                .select('*', { count: 'exact', head: true })
-                .eq('target_id', targetUserId)
-                .eq('activity_type', 'profile_view')
-                .gte('created_at', thirtyDaysAgo.toISOString());
-            
-            // Get active applications count
-            const { count: applicationsCount } = await this.supabase
-                .from('applications')
-                .select('*', { count: 'exact', head: true })
-                .eq('speaker_id', targetUserId)
-                .eq('status', 'Pending');
-            
-            // Get accepted bookings count
-            const { count: bookingsCount } = await this.supabase
-                .from('applications')
-                .select('*', { count: 'exact', head: true })
-                .eq('speaker_id', targetUserId)
-                .eq('status', 'Accepted');
-            
-            return {
-                profileViews: viewCount || 0,
-                applications: applicationsCount || 0,
-                bookings: bookingsCount || 0
-            };
-        } catch (error) {
-            console.error('Get dashboard stats error:', error);
-            return {
-                profileViews: 0,
-                applications: 0,
-                bookings: 0
-            };
-        }
-    }
-    
-    // ============================================
-    // IMPROVED DASHBOARD METHODS (More Efficient)
-    // ============================================
+        
+        return data || [];
+    },
+
+    async getOrganizationActivities(orgUserId, limit = 50) {
+        // Get activities related to organization's opportunities
+        const { data: opportunities } = await supabase
+            .from('speaking_opportunities')
+            .select('id')
+            .eq('posted_by', orgUserId);
+        
+        if (!opportunities || opportunities.length === 0) return [];
+        
+        const oppIds = opportunities.map(o => o.id);
+        
+        // Get applications to these opportunities
+        const { data: activities } = await supabase
+            .from('activity')
+            .select(`
+                *,
+                actor:members!activity_actor_id_fkey(name, member_type, profile_image_url)
+            `)
+            .in('metadata->>opportunity_id', oppIds)
+            .order('created_at', { ascending: false })
+            .limit(limit);
+        
+        return activities || [];
+    },
+
+    async getRecentActivity(userId, limit = 10) {
+        return await this.getActivityFeed(userId, limit);
+    },
+
+    // ===========================================
+    // DASHBOARD STATS
+    // ===========================================
     
     async getDashboardStatsOptimized(userId) {
-        try {
-            const targetUserId = userId || (await this.getCurrentUser())?.id;
-            if (!targetUserId) return { profileViews: 0, applications: 0, bookings: 0 };
-            
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            
-            // Use Promise.all for parallel queries
-            const [viewsResult, applicationsResult, bookingsResult] = await Promise.all([
-                // Profile views (last 30 days)
-                this.supabase
-                    .from('activity')
-                    .select('*', { count: 'exact', head: true })
-                    .eq('target_id', targetUserId)
-                    .eq('activity_type', 'profile_view')
-                    .gte('created_at', thirtyDaysAgo.toISOString()),
-                
-                // Active applications
-                this.supabase
-                    .from('applications')
-                    .select('*', { count: 'exact', head: true })
-                    .eq('speaker_id', targetUserId)
-                    .eq('status', 'Pending'),
-                
-                // Accepted bookings
-                this.supabase
-                    .from('applications')
-                    .select('*', { count: 'exact', head: true })
-                    .eq('speaker_id', targetUserId)
-                    .eq('status', 'Accepted')
-            ]);
-            
-            return {
-                profileViews: viewsResult.count || 0,
-                applications: applicationsResult.count || 0,
-                bookings: bookingsResult.count || 0
-            };
-        } catch (error) {
-            console.error('Get dashboard stats error:', error);
-            return { profileViews: 0, applications: 0, bookings: 0 };
-        }
-    }
-    
-    // ============================================
-    // OPPORTUNITIES METHODS
-    // ============================================
-    
-    async searchOpportunities(filters = {}) {
-        try {
-            let query = this.supabase
-                .from('speaking_opportunities')
-                .select(`
-                    *,
-                    organization:organizations(name, logo_url),
-                    posted_by_member:members!posted_by(name)
-                `);
-            
-            // Apply filters
-            if (filters.status) {
-                query = query.eq('status', filters.status);
-            }
-            if (filters.event_format) {
-                query = query.eq('event_format', filters.event_format);
-            }
-            if (filters.min_compensation) {
-                query = query.gte('compensation_amount', filters.min_compensation);
-            }
-            if (filters.max_compensation) {
-                query = query.lte('compensation_amount', filters.max_compensation);
-            }
-            if (filters.location) {
-                query = query.ilike('location', `%${filters.location}%`);
-            }
-            if (filters.after_date) {
-                query = query.gte('event_date', filters.after_date);
-            }
-            if (filters.before_date) {
-                query = query.lte('event_date', filters.before_date);
-            }
-            if (filters.topics && filters.topics.length > 0) {
-                query = query.contains('topics', filters.topics);
-            }
-            
-            // Add ordering
-            query = query.order('created_at', { ascending: false });
-            
-            // Add limit if specified
-            if (filters.limit) {
-                query = query.limit(filters.limit);
-            }
-            
-            const { data, error } = await query;
-            
-            if (error) throw error;
-            return data || [];
-        } catch (error) {
-            console.error('Search opportunities error:', error);
-            return [];
-        }
-    }
-    
-    async searchOpportunitiesOptimized(filters = {}) {
-        try {
-            let query = this.supabase
-                .from('speaking_opportunities')
-                .select(`
-                    *,
-                    organization:organizations(name, logo_url, organization_type),
-                    posted_by_member:members!posted_by(name)
-                `)
-                .eq('status', 'Open');
-            
-            // Apply filters efficiently
-            if (filters.location) {
-                query = query.or(`location.ilike.%${filters.location}%,location.eq.Remote`);
-            }
-            
-            if (filters.format && filters.format !== '') {
-                query = query.eq('event_format', filters.format);
-            }
-            
-            if (filters.compensation === 'paid') {
-                query = query.gt('compensation_amount', 0);
-            } else if (filters.compensation === 'volunteer') {
-                query = query.or('compensation_amount.is.null,compensation_amount.eq.0');
-            }
-            
-            if (filters.topic) {
-                // For array contains, use @> operator
-                query = query.contains('topics', [filters.topic]);
-            }
-            
-            if (filters.minCompensation) {
-                query = query.gte('compensation_amount', filters.minCompensation);
-            }
-            
-            if (filters.maxCompensation) {
-                query = query.lte('compensation_amount', filters.maxCompensation);
-            }
-            
-            if (filters.afterDate) {
-                query = query.gte('event_date', filters.afterDate);
-            }
-            
-            if (filters.beforeDate) {
-                query = query.lte('event_date', filters.beforeDate);
-            }
-            
-            // Add deadline filter
-            if (filters.urgentOnly) {
-                const threeDaysFromNow = new Date();
-                threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 3);
-                query = query.lte('application_deadline', threeDaysFromNow.toISOString());
-            }
-            
-            // Sorting
-            const sortBy = filters.sortBy || 'created_at';
-            const sortOrder = filters.sortOrder || 'desc';
-            query = query.order(sortBy, { ascending: sortOrder === 'asc' });
-            
-            // Pagination
-            if (filters.limit) {
-                query = query.limit(filters.limit);
-            }
-            
-            if (filters.offset) {
-                query = query.range(filters.offset, filters.offset + (filters.limit || 20) - 1);
-            }
-            
-            const { data, error } = await query;
-            
-            if (error) throw error;
-            return data || [];
-        } catch (error) {
-            console.error('Search opportunities error:', error);
-            return [];
-        }
-    }
-    
-    async applyToOpportunity(opportunityId, applicationData) {
-        try {
-            const user = await this.getCurrentUser();
-            if (!user) throw new Error('Not authenticated');
-            
-            const { data, error } = await this.supabase
-                .from('applications')
-                .insert({
-                    opportunity_id: opportunityId,
-                    speaker_id: user.id,
-                    cover_letter: applicationData.coverLetter,
-                    requested_fee: applicationData.requestedFee,
-                    status: 'Pending'
-                })
-                .select()
-                .single();
-                
-            if (error) throw error;
-            return data;
-        } catch (error) {
-            console.error('Apply to opportunity error:', error);
-            throw error;
-        }
-    }
-    
-    async getOpportunityById(opportunityId) {
-        try {
-            const { data, error } = await this.supabase
-                .from('speaking_opportunities')
-                .select(`
-                    *,
-                    organization:organizations(*),
-                    posted_by_member:members!posted_by(name, email)
-                `)
-                .eq('id', opportunityId)
-                .single();
-                
-            if (error) throw error;
-            return data;
-        } catch (error) {
-            console.error('Get opportunity error:', error);
-            return null;
-        }
-    }
-    
-    async getOpportunityWithRelations(opportunityId) {
-        try {
-            const { data, error } = await this.supabase
-                .from('speaking_opportunities')
-                .select(`
-                    *,
-                    organization:organizations(*),
-                    posted_by_member:members!posted_by(name, email)
-                `)
-                .eq('id', opportunityId)
-                .single();
-            
-            if (error) throw error;
-            return data;
-        } catch (error) {
-            console.error('Get opportunity with relations error:', error);
-            return null;
-        }
-    }
-
-    async postOpportunity(opportunityData) {
-    try {
-        const user = await this.getCurrentUser();
-        if (!user) throw new Error('Not authenticated');
-        
-        if (user.member_type !== 'Organization') {
-            throw new Error('Only organizations can post opportunities');
-        }
-        
-        // Get organization ID
-        const { data: orgMember } = await this.supabase
-            .from('organization_members')
-            .select('organization_id')
-            .eq('member_id', user.id)
-            .single();
-        
-        // Prepare the complete opportunity data
-        const completeData = {
-            ...opportunityData,
-            posted_by: user.id,
-            organization_id: orgMember?.organization_id || null,
-            status: opportunityData.status || 'Open',
-            created_at: new Date().toISOString(),
-            application_count: 0
+        const stats = {
+            profileViews: 0,
+            bookings: 0,
+            applications: 0,
+            messages: 0
         };
         
-        // Insert the opportunity
-        const { data, error } = await this.supabase
-            .from('speaking_opportunities')
-            .insert(completeData)
-            .select()
-            .single();
+        // Get profile views (last 30 days)
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         
-        if (error) throw error;
+        const { count: viewCount } = await supabase
+            .from('activity')
+            .select('*', { count: 'exact', head: true })
+            .eq('activity_type', 'profile_view')
+            .eq('target_id', userId)
+            .gte('created_at', thirtyDaysAgo.toISOString());
         
-        // Track activity
-        await this.trackActivity('opportunity_posted', data.id, {
-            title: data.title,
-            event_date: data.event_date
+        stats.profileViews = viewCount || 0;
+        
+        // Get accepted applications (bookings)
+        const { count: bookingCount } = await supabase
+            .from('applications')
+            .select('*', { count: 'exact', head: true })
+            .eq('speaker_id', userId)
+            .eq('status', 'Accepted');
+        
+        stats.bookings = bookingCount || 0;
+        
+        // Get active applications
+        const { count: applicationCount } = await supabase
+            .from('applications')
+            .select('*', { count: 'exact', head: true })
+            .eq('speaker_id', userId)
+            .eq('status', 'Pending');
+        
+        stats.applications = applicationCount || 0;
+        
+        // Get unread messages
+        const { count: messageCount } = await supabase
+            .from('messages')
+            .select('*', { count: 'exact', head: true })
+            .eq('recipient_id', userId)
+            .eq('status', 'unread');
+        
+        stats.messages = messageCount || 0;
+        
+        return stats;
+    },
+
+    async getAnalytics(userId, dateRange = 30) {
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - dateRange);
+        
+        // Profile views over time
+        const { data: viewsData } = await supabase
+            .from('activity')
+            .select('created_at')
+            .eq('activity_type', 'profile_view')
+            .eq('target_id', userId)
+            .gte('created_at', startDate.toISOString())
+            .order('created_at');
+        
+        // Applications over time
+        const { data: applicationsData } = await supabase
+            .from('applications')
+            .select('created_at, status')
+            .eq('speaker_id', userId)
+            .gte('created_at', startDate.toISOString())
+            .order('created_at');
+        
+        // Process data for charts
+        const analytics = {
+            profileViews: this.groupByDate(viewsData || []),
+            applications: this.groupByStatus(applicationsData || []),
+            totalViews: viewsData?.length || 0,
+            totalApplications: applicationsData?.length || 0,
+            acceptanceRate: this.calculateAcceptanceRate(applicationsData || [])
+        };
+        
+        return analytics;
+    },
+
+    groupByDate(data) {
+        const grouped = {};
+        data.forEach(item => {
+            const date = new Date(item.created_at).toLocaleDateString();
+            grouped[date] = (grouped[date] || 0) + 1;
         });
-        
-        return data;
-    } catch (error) {
-        console.error('Post opportunity error:', error);
-        throw error;
-    }
-}
+        return grouped;
+    },
 
-async updateOpportunity(opportunityId, updates) {
-    try {
-        const user = await this.getCurrentUser();
-        if (!user) throw new Error('Not authenticated');
-        
-        // Verify ownership
-        const { data: opportunity } = await this.supabase
+    groupByStatus(data) {
+        const grouped = {};
+        data.forEach(item => {
+            grouped[item.status] = (grouped[item.status] || 0) + 1;
+        });
+        return grouped;
+    },
+
+    calculateAcceptanceRate(applications) {
+        const reviewed = applications.filter(a => a.status !== 'Pending');
+        const accepted = applications.filter(a => a.status === 'Accepted');
+        return reviewed.length > 0 ? (accepted.length / reviewed.length) * 100 : 0;
+    },
+
+    // ===========================================
+    // OPPORTUNITIES
+    // ===========================================
+    
+    async getOpportunityDetails(opportunityId) {
+        const { data, error } = await supabase
             .from('speaking_opportunities')
-            .select('posted_by')
+            .select(`
+                *,
+                posted_by:members!speaking_opportunities_posted_by_fkey(name, email, member_type),
+                organization:organizations(name, organization_type, website),
+                applications(count)
+            `)
             .eq('id', opportunityId)
-            .single();
-        
-        if (!opportunity || opportunity.posted_by !== user.id) {
-            throw new Error('Unauthorized to update this opportunity');
-        }
-        
-        // Update the opportunity
-        const { data, error } = await this.supabase
-            .from('speaking_opportunities')
-            .update(updates)
-            .eq('id', opportunityId)
-            .select()
             .single();
         
         if (error) throw error;
         return data;
-    } catch (error) {
-        console.error('Update opportunity error:', error);
-        throw error;
-    }
-}
+    },
 
-async deleteOpportunity(opportunityId) {
-    try {
-        const user = await this.getCurrentUser();
-        if (!user) throw new Error('Not authenticated');
+    async getMyOpportunities(status = null) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
         
-        // Verify ownership
-        const { data: opportunity } = await this.supabase
-            .from('speaking_opportunities')
-            .select('posted_by')
-            .eq('id', opportunityId)
-            .single();
-        
-        if (!opportunity || opportunity.posted_by !== user.id) {
-            throw new Error('Unauthorized to delete this opportunity');
-        }
-        
-        // Soft delete by updating status
-        const { error } = await this.supabase
-            .from('speaking_opportunities')
-            .update({ status: 'Closed' })
-            .eq('id', opportunityId);
-        
-        if (error) throw error;
-        return true;
-    } catch (error) {
-        console.error('Delete opportunity error:', error);
-        throw error;
-    }
-}
-
-async getMyOpportunities(status = null) {
-    try {
-        const user = await this.getCurrentUser();
-        if (!user) throw new Error('Not authenticated');
-        
-        let query = this.supabase
+        let query = supabase
             .from('speaking_opportunities')
             .select(`
                 *,
                 applications(count)
             `)
-            .eq('posted_by', user.id)
+            .eq('posted_by', session.user.id)
             .order('created_at', { ascending: false });
         
         if (status) {
@@ -824,433 +454,403 @@ async getMyOpportunities(status = null) {
         }
         
         const { data, error } = await query;
-        
         if (error) throw error;
         return data || [];
-    } catch (error) {
-        console.error('Get my opportunities error:', error);
-        return [];
-    }
-}
+    },
 
-async getOpportunityApplications(opportunityId) {
-    try {
-        const user = await this.getCurrentUser();
-        if (!user) throw new Error('Not authenticated');
-        
-        // Verify ownership
-        const { data: opportunity } = await this.supabase
+    async getRecentOpportunities(limit = 5) {
+        const { data, error } = await supabase
             .from('speaking_opportunities')
-            .select('posted_by')
-            .eq('id', opportunityId)
-            .single();
-        
-        if (!opportunity || opportunity.posted_by !== user.id) {
-            throw new Error('Unauthorized to view these applications');
-        }
-        
-        // Get applications with speaker details
-        const { data, error } = await this.supabase
-            .from('applications')
             .select(`
                 *,
-                speaker:members!speaker_id(
-                    id,
-                    name,
-                    email,
-                    phone,
-                    bio,
-                    location,
-                    specialties,
-                    profile_image_url,
-                    average_rating,
-                    total_reviews
-                )
+                posted_by:members!speaking_opportunities_posted_by_fkey(name, member_type),
+                organization:organizations(name, organization_type)
             `)
-            .eq('opportunity_id', opportunityId)
-            .order('created_at', { ascending: false });
+            .eq('status', 'Open')
+            .gte('application_deadline', new Date().toISOString())
+            .order('created_at', { ascending: false })
+            .limit(limit);
         
         if (error) throw error;
         return data || [];
-    } catch (error) {
-        console.error('Get opportunity applications error:', error);
-        return [];
-    }
-}
+    },
 
-async updateApplicationStatus(applicationId, status, message = null) {
-    try {
-        const user = await this.getCurrentUser();
-        if (!user) throw new Error('Not authenticated');
-        
-        // Get application and verify ownership
-        const { data: application } = await this.supabase
-            .from('applications')
+    async searchOpportunities(filters = {}) {
+        let query = supabase
+            .from('speaking_opportunities')
             .select(`
                 *,
-                opportunity:speaking_opportunities!opportunity_id(posted_by)
+                posted_by:members!speaking_opportunities_posted_by_fkey(name, member_type),
+                organization:organizations(name, organization_type),
+                applications(count)
             `)
-            .eq('id', applicationId)
+            .eq('status', 'Open');
+        
+        if (filters.topics && filters.topics.length > 0) {
+            query = query.contains('topics', filters.topics);
+        }
+        
+        if (filters.location) {
+            query = query.or(`location.ilike.%${filters.location}%,event_format.eq.Virtual`);
+        }
+        
+        if (filters.eventFormat) {
+            query = query.eq('event_format', filters.eventFormat);
+        }
+        
+        if (filters.minCompensation) {
+            query = query.gte('compensation_amount', filters.minCompensation);
+        }
+        
+        if (filters.dateFrom) {
+            query = query.gte('event_date', filters.dateFrom);
+        }
+        
+        if (filters.dateTo) {
+            query = query.lte('event_date', filters.dateTo);
+        }
+        
+        if (filters.search) {
+            query = query.or(`title.ilike.%${filters.search}%,description.ilike.%${filters.search}%`);
+        }
+        
+        // Sorting
+        const sortBy = filters.sortBy || 'created_at';
+        const sortOrder = filters.sortOrder || 'desc';
+        query = query.order(sortBy, { ascending: sortOrder === 'asc' });
+        
+        // Pagination
+        if (filters.limit) {
+            query = query.limit(filters.limit);
+        }
+        if (filters.offset) {
+            query = query.range(filters.offset, filters.offset + (filters.limit || 10) - 1);
+        }
+        
+        const { data, error } = await query;
+        if (error) throw error;
+        return data || [];
+    },
+
+    async postOpportunity(opportunityData) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        // Get user's organization
+        const { data: orgMember } = await supabase
+            .from('organization_members')
+            .select('organization_id')
+            .eq('member_id', session.user.id)
             .single();
         
-        if (!application || application.opportunity.posted_by !== user.id) {
-            throw new Error('Unauthorized to update this application');
-        }
-        
-        // Update application status
-        const updateData = {
-            status: status,
-            reviewed_at: new Date().toISOString(),
-            reviewed_by: user.id
-        };
-        
-        if (message) {
-            updateData.review_message = message;
-        }
-        
-        const { data, error } = await this.supabase
-            .from('applications')
-            .update(updateData)
-            .eq('id', applicationId)
+        const { data, error } = await supabase
+            .from('speaking_opportunities')
+            .insert({
+                ...opportunityData,
+                posted_by: session.user.id,
+                organization_id: orgMember?.organization_id
+            })
             .select()
             .single();
         
         if (error) throw error;
         
         // Track activity
-        await this.trackActivity('application_reviewed', applicationId, {
-            status: status,
-            speaker_id: application.speaker_id
-        });
+        await this.trackOpportunityPosted(data.id, data);
         
         return data;
-    } catch (error) {
-        console.error('Update application status error:', error);
-        throw error;
-    }
-}
+    },
+
+    async updateOpportunity(opportunityId, updates) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const { data, error } = await supabase
+            .from('speaking_opportunities')
+            .update(updates)
+            .eq('id', opportunityId)
+            .eq('posted_by', session.user.id) // Ensure user owns this opportunity
+            .select()
+            .single();
+        
+        if (error) throw error;
+        return data;
+    },
+
+    async deleteOpportunity(opportunityId) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const { error } = await supabase
+            .from('speaking_opportunities')
+            .delete()
+            .eq('id', opportunityId)
+            .eq('posted_by', session.user.id);
+        
+        if (error) throw error;
+    },
+
+    // ===========================================
+    // APPLICATIONS
+    // ===========================================
     
-    // ============================================
-    // APPLICATION STATUS METHODS
-    // ============================================
-    
-    async checkApplicationStatus(opportunityId, speakerId) {
-        try {
-            const targetSpeakerId = speakerId || (await this.getCurrentUser())?.id;
-            if (!targetSpeakerId) return null;
-            
-            const { data, error } = await this.supabase
-                .from('applications')
-                .select('*')
-                .eq('opportunity_id', opportunityId)
-                .eq('speaker_id', targetSpeakerId)
-                .single();
-            
-            if (error && error.code !== 'PGRST116') { // PGRST116 = no rows
-                throw error;
-            }
-            
-            return data || null;
-        } catch (error) {
-            console.error('Check application status error:', error);
-            return null;
+    async getApplications(userId) {
+        const { data, error } = await supabase
+            .from('applications')
+            .select(`
+                *,
+                opportunity:speaking_opportunities(*),
+                timeline:application_timeline(*)
+            `)
+            .eq('speaker_id', userId)
+            .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getApplicationDetails(applicationId) {
+        const { data, error } = await supabase
+            .from('applications')
+            .select(`
+                *,
+                opportunity:speaking_opportunities(*),
+                speaker:members!applications_speaker_id_fkey(*),
+                timeline:application_timeline(*),
+                notes:application_notes(*)
+            `)
+            .eq('id', applicationId)
+            .single();
+        
+        if (error) throw error;
+        return data;
+    },
+
+    async submitApplication(opportunityId, applicationData) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        // Check if already applied
+        const { data: existing } = await supabase
+            .from('applications')
+            .select('id')
+            .eq('opportunity_id', opportunityId)
+            .eq('speaker_id', session.user.id)
+            .single();
+        
+        if (existing) {
+            throw new Error('You have already applied to this opportunity');
         }
-    }
-    
-    async getUserApplications(speakerId) {
-        try {
-            const targetSpeakerId = speakerId || (await this.getCurrentUser())?.id;
-            if (!targetSpeakerId) return [];
-            
-            const { data, error } = await this.supabase
-                .from('applications')
-                .select('opportunity_id, status, id')
-                .eq('speaker_id', targetSpeakerId);
-            
-            if (error) throw error;
-            return data || [];
-        } catch (error) {
-            console.error('Get user applications error:', error);
-            return [];
+        
+        const { data, error } = await supabase
+            .from('applications')
+            .insert({
+                opportunity_id: opportunityId,
+                speaker_id: session.user.id,
+                ...applicationData
+            })
+            .select()
+            .single();
+        
+        if (error) throw error;
+        
+        // Add to timeline
+        await this.addApplicationTimelineEntry(data.id, 'Submitted', 'Application submitted');
+        
+        // Track activity
+        await this.trackApplicationSubmitted(opportunityId, data.id);
+        
+        // Update opportunity application count
+        await supabase.rpc('increment_application_count', { opp_id: opportunityId });
+        
+        return data;
+    },
+
+    async withdrawApplication(applicationId) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const { data, error } = await supabase
+            .from('applications')
+            .update({ status: 'Withdrawn' })
+            .eq('id', applicationId)
+            .eq('speaker_id', session.user.id)
+            .select()
+            .single();
+        
+        if (error) throw error;
+        
+        // Add to timeline
+        await this.addApplicationTimelineEntry(applicationId, 'Withdrawn', 'Application withdrawn by speaker');
+        
+        return data;
+    },
+
+    async getOpportunityApplications(opportunityId) {
+        const { data, error } = await supabase
+            .from('applications')
+            .select(`
+                *,
+                speaker:members!applications_speaker_id_fkey(*)
+            `)
+            .eq('opportunity_id', opportunityId)
+            .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        return data || [];
+    },
+
+    async updateApplicationStatus(applicationId, status, message = null) {
+        const { data: application } = await supabase
+            .from('applications')
+            .select('speaker_id, opportunity_id')
+            .eq('id', applicationId)
+            .single();
+        
+        const session = await this.checkAuth();
+        
+        const { data, error } = await supabase
+            .from('applications')
+            .update({
+                status: status,
+                reviewed_by: session.user.id,
+                reviewed_at: new Date().toISOString(),
+                review_message: message
+            })
+            .eq('id', applicationId)
+            .select()
+            .single();
+        
+        if (error) throw error;
+        
+        // Add to timeline
+        await this.addApplicationTimelineEntry(applicationId, status, `Application ${status.toLowerCase()}`);
+        
+        // Track activity
+        await this.trackApplicationReviewed(applicationId, status, application.speaker_id);
+        
+        // If accepted, update opportunity status if needed
+        if (status === 'Accepted') {
+            await supabase
+                .from('speaking_opportunities')
+                .update({ status: 'Filled' })
+                .eq('id', application.opportunity_id);
         }
-    }
-    
-    // ============================================
-    // REVIEWS METHODS
-    // ============================================
-    
-    async getReviews(speakerId) {
-        try {
-            const targetUserId = speakerId || (await this.getCurrentUser())?.id;
-            if (!targetUserId) return [];
-            
-            const { data, error } = await this.supabase
-                .from('reviews')
-                .select(`
-                    *,
-                    organization:organizations(name, logo_url)
-                `)
-                .eq('speaker_id', targetUserId)
-                .order('created_at', { ascending: false });
-                
-            if (error) throw error;
-            return data || [];
-        } catch (error) {
-            console.error('Get reviews error:', error);
-            return [];
-        }
-    }
-    
-    async submitReview(reviewData) {
-        try {
-            const user = await this.getCurrentUser();
-            if (!user) throw new Error('Not authenticated');
-            
-            const { data, error } = await this.supabase
-                .from('reviews')
-                .insert({
-                    speaker_id: reviewData.speakerId,
-                    organization_id: reviewData.organizationId,
-                    opportunity_id: reviewData.opportunityId,
-                    rating: reviewData.rating,
-                    content_rating: reviewData.contentRating,
-                    delivery_rating: reviewData.deliveryRating,
-                    professionalism_rating: reviewData.professionalismRating,
-                    review_text: reviewData.reviewText,
-                    would_recommend: reviewData.wouldRecommend,
-                    verified: true
-                })
-                .select()
-                .single();
-                
-            if (error) throw error;
-            return data;
-        } catch (error) {
-            console.error('Submit review error:', error);
-            throw error;
-        }
-    }
-    
-    // ============================================
-    // ACTIVITY TRACKING
-    // ============================================
-    
-    async trackActivity(activityType, targetId, metadata = {}) {
-        try {
-            const user = await this.getCurrentUser();
-            if (!user) return;
-            
-            const { error } = await this.supabase
-                .from('activity')
-                .insert({
-                    actor_id: user.id,
-                    target_id: targetId,
-                    activity_type: activityType,
-                    metadata: metadata,
-                    is_public: true
-                });
-                
-            if (error) console.error('Track activity error:', error);
-        } catch (error) {
-            console.error('Track activity error:', error);
-        }
-    }
-    
-    async getActivityFeed(userId, limit = 20) {
-        try {
-            const targetUserId = userId || (await this.getCurrentUser())?.id;
-            if (!targetUserId) return [];
-            
-            const { data, error } = await this.supabase
-                .from('activity')
-                .select(`
-                    *,
-                    actor:members!actor_id(name, profile_image_url),
-                    target:members!target_id(name, profile_image_url)
-                `)
-                .or(`actor_id.eq.${targetUserId},target_id.eq.${targetUserId}`)
-                .order('created_at', { ascending: false })
-                .limit(limit);
-                
-            if (error) throw error;
-            return data || [];
-        } catch (error) {
-            console.error('Get activity feed error:', error);
-            return [];
-        }
-    }
-    
-    // ============================================
-    // SEARCH AND DISCOVERY
-    // ============================================
-    
-    async searchMembers(filters = {}) {
-        try {
-            let query = this.supabase
-                .from('members')
-                .select('*');
-            
-            // Apply filters
-            if (filters.memberType) {
-                query = query.eq('member_type', filters.memberType);
-            }
-            if (filters.search) {
-                query = query.or(`name.ilike.%${filters.search}%,bio.ilike.%${filters.search}%`);
-            }
-            if (filters.location) {
-                query = query.ilike('location', `%${filters.location}%`);
-            }
-            if (filters.specialty) {
-                query = query.contains('specialties', [filters.specialty]);
-            }
-            if (filters.minRating) {
-                query = query.gte('average_rating', filters.minRating);
-            }
-            
-            // Add ordering
-            if (filters.orderBy === 'rating') {
-                query = query.order('average_rating', { ascending: false });
-            } else if (filters.orderBy === 'reviews') {
-                query = query.order('total_reviews', { ascending: false });
-            } else {
-                query = query.order('created_at', { ascending: false });
-            }
-            
-            // Add limit if specified
-            if (filters.limit) {
-                query = query.limit(filters.limit);
-            }
-            
-            const { data, error } = await query;
-            
-            if (error) throw error;
-            return data || [];
-        } catch (error) {
-            console.error('Search members error:', error);
-            return [];
-        }
-    }
-    
-    // ============================================
-    // SAVED SPEAKERS (for Organizations)
-    // ============================================
-    
-    async saveSpeaker(speakerId, notes = '') {
-        try {
-            const user = await this.getCurrentUser();
-            if (!user || user.member_type !== 'Organization') {
-                throw new Error('Only organizations can save speakers');
-            }
-            
-            // Get organization ID
-            const { data: orgMember } = await this.supabase
-                .from('organization_members')
-                .select('organization_id')
-                .eq('member_id', user.id)
-                .single();
-                
-            if (!orgMember) throw new Error('Organization not found');
-            
-            const { data, error } = await this.supabase
-                .from('saved_speakers')
-                .insert({
-                    organization_id: orgMember.organization_id,
-                    speaker_id: speakerId,
-                    notes: notes
-                })
-                .select()
-                .single();
-                
-            if (error) throw error;
-            return data;
-        } catch (error) {
-            console.error('Save speaker error:', error);
-            throw error;
-        }
-    }
+        
+        return data;
+    },
+
+    async addApplicationTimelineEntry(applicationId, status, description) {
+        const { error } = await supabase
+            .from('application_timeline')
+            .insert({
+                application_id: applicationId,
+                status: status,
+                title: status,
+                description: description
+            });
+        
+        if (error) console.error('Timeline entry error:', error);
+    },
+
+    async addApplicationNote(applicationId, note, isInternal = true) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const { data, error } = await supabase
+            .from('application_notes')
+            .insert({
+                application_id: applicationId,
+                author_id: session.user.id,
+                note: note,
+                is_internal: isInternal
+            })
+            .select()
+            .single();
+        
+        if (error) throw error;
+        return data;
+    },
+
+    // ===========================================
+    // SAVED SPEAKERS
+    // ===========================================
     
     async getSavedSpeakers() {
-        try {
-            const user = await this.getCurrentUser();
-            if (!user || user.member_type !== 'Organization') return [];
-            
-            // Get organization ID
-            const { data: orgMember } = await this.supabase
-                .from('organization_members')
-                .select('organization_id')
-                .eq('member_id', user.id)
-                .single();
-                
-            if (!orgMember) return [];
-            
-            const { data, error } = await this.supabase
-                .from('saved_speakers')
-                .select(`
-                    *,
-                    speaker:members!speaker_id(*)
-                `)
-                .eq('organization_id', orgMember.organization_id)
-                .order('created_at', { ascending: false });
-                
-            if (error) throw error;
-            return data || [];
-        } catch (error) {
-            console.error('Get saved speakers error:', error);
-            return [];
-        }
-    }
-    
-    async removeSavedSpeaker(speakerId) {
-        try {
-            const user = await this.getCurrentUser();
-            if (!user || user.member_type !== 'Organization') {
-                throw new Error('Only organizations can remove saved speakers');
-            }
-            
-            // Get organization ID
-            const { data: orgMember } = await this.supabase
-                .from('organization_members')
-                .select('organization_id')
-                .eq('member_id', user.id)
-                .single();
-                
-            if (!orgMember) throw new Error('Organization not found');
-            
-            const { error } = await this.supabase
-                .from('saved_speakers')
-                .delete()
-                .eq('organization_id', orgMember.organization_id)
-                .eq('speaker_id', speakerId);
-                
-            if (error) throw error;
-            return true;
-        } catch (error) {
-            console.error('Remove saved speaker error:', error);
-            throw error;
-        }
-    }
-
-    // ============================================
-// SAVED SPEAKERS - ENHANCED METHODS
-// ============================================
-
-async updateSavedSpeakerNotes(speakerId, notes) {
-    try {
-        const user = await this.getCurrentUser();
-        if (!user || user.member_type !== 'Organization') {
-            throw new Error('Only organizations can update saved speaker notes');
-        }
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
         
-        // Get organization ID
-        const { data: orgMember } = await this.supabase
+        // Get user's organization
+        const { data: orgMember } = await supabase
             .from('organization_members')
             .select('organization_id')
-            .eq('member_id', user.id)
+            .eq('member_id', session.user.id)
             .single();
-            
-        if (!orgMember) throw new Error('Organization not found');
         
-        const { data, error } = await this.supabase
+        if (!orgMember) return [];
+        
+        const { data, error } = await supabase
+            .from('saved_speakers')
+            .select(`
+                *,
+                speaker:members!saved_speakers_speaker_id_fkey(*)
+            `)
+            .eq('organization_id', orgMember.organization_id)
+            .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        return data || [];
+    },
+
+    async saveSpeaker(speakerId, notes = '') {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        // Get user's organization
+        const { data: orgMember } = await supabase
+            .from('organization_members')
+            .select('organization_id')
+            .eq('member_id', session.user.id)
+            .single();
+        
+        if (!orgMember) throw new Error('No organization found');
+        
+        const { data, error } = await supabase
+            .from('saved_speakers')
+            .insert({
+                organization_id: orgMember.organization_id,
+                speaker_id: speakerId,
+                notes: notes
+            })
+            .select()
+            .single();
+        
+        if (error) {
+            // Check if already saved
+            if (error.code === '23505') {
+                throw new Error('Speaker already saved');
+            }
+            throw error;
+        }
+        
+        // Track activity
+        await this.trackSpeakerSaved(speakerId, notes);
+        
+        return data;
+    },
+
+    async updateSavedSpeakerNotes(speakerId, notes) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        // Get user's organization
+        const { data: orgMember } = await supabase
+            .from('organization_members')
+            .select('organization_id')
+            .eq('member_id', session.user.id)
+            .single();
+        
+        const { data, error } = await supabase
             .from('saved_speakers')
             .update({ 
                 notes: notes,
@@ -1260,30 +860,45 @@ async updateSavedSpeakerNotes(speakerId, notes) {
             .eq('speaker_id', speakerId)
             .select()
             .single();
-            
+        
         if (error) throw error;
         return data;
-    } catch (error) {
-        console.error('Update saved speaker notes error:', error);
-        throw error;
-    }
-}
+    },
 
-async checkIfSpeakerSaved(speakerId) {
-    try {
-        const user = await this.getCurrentUser();
-        if (!user || user.member_type !== 'Organization') return false;
+    async removeSavedSpeaker(speakerId) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
         
-        // Get organization ID
-        const { data: orgMember } = await this.supabase
+        // Get user's organization
+        const { data: orgMember } = await supabase
             .from('organization_members')
             .select('organization_id')
-            .eq('member_id', user.id)
+            .eq('member_id', session.user.id)
             .single();
-            
+        
+        const { error } = await supabase
+            .from('saved_speakers')
+            .delete()
+            .eq('organization_id', orgMember.organization_id)
+            .eq('speaker_id', speakerId);
+        
+        if (error) throw error;
+    },
+
+    async checkIfSpeakerSaved(speakerId) {
+        const session = await this.checkAuth();
+        if (!session) return false;
+        
+        // Get user's organization
+        const { data: orgMember } = await supabase
+            .from('organization_members')
+            .select('organization_id')
+            .eq('member_id', session.user.id)
+            .single();
+        
         if (!orgMember) return false;
         
-        const { data, error } = await this.supabase
+        const { data } = await supabase
             .from('saved_speakers')
             .select('id')
             .eq('organization_id', orgMember.organization_id)
@@ -1291,581 +906,2033 @@ async checkIfSpeakerSaved(speakerId) {
             .single();
         
         return !!data;
-    } catch (error) {
-        return false;
-    }
-}
+    },
 
-// ============================================
-// MESSAGING METHODS
-// ============================================
-
-// Updated sendMessage method in supabase-client.js
-async sendMessage(recipientId, subject, message, opportunityId = null) {
-    try {
-        const user = await this.getCurrentUser();
-        if (!user) throw new Error('Not authenticated');
-        
-        // Save message to database
-        const { data: messageData, error } = await this.supabase
-            .from('messages')
-            .insert({
-                sender_id: user.id,
-                recipient_id: recipientId,
-                subject: subject,
-                message: message,
-                opportunity_id: opportunityId,
-                status: 'unread',
-                created_at: new Date().toISOString()
-            })
-            .select()
-            .single();
-            
-        if (error) throw error;
-        
-        console.log('Message saved, now sending email for message ID:', messageData.id);
-        
-        // IMPORTANT: ADD THIS PART TO SEND EMAILS!
-        try {
-            const { data: emailResult, error: emailError } = await this.supabase.functions.invoke(
-                'send-message-email',
-                {
-                    body: { message_id: messageData.id }
-                }
-            );
-            
-            console.log('Email function result:', emailResult);
-            if (emailError) {
-                console.error('Email function error:', emailError);
-            }
-        } catch (emailError) {
-            console.error('Failed to call email function:', emailError);
-        }
-        
-        // Track activity
-        await this.trackActivity('message_sent', recipientId, {
-            subject: subject,
-            opportunity_id: opportunityId
-        });
-        
-        return messageData;
-    } catch (error) {
-        console.error('Send message error:', error);
-        throw error;
-    }
-}
-
-async getMessages(type = 'inbox') {
-    try {
-        const user = await this.getCurrentUser();
-        if (!user) return [];
-        
-        let query = this.supabase
-            .from('messages')
+    // ===========================================
+    // REVIEWS
+    // ===========================================
+    
+    async getReviews(speakerId) {
+        const { data, error } = await supabase
+            .from('reviews')
             .select(`
                 *,
-                sender:members!sender_id(name, email, profile_image_url),
-                recipient:members!recipient_id(name, email, profile_image_url),
-                opportunity:speaking_opportunities(title)
-            `);
-        
-        if (type === 'inbox') {
-            query = query.eq('recipient_id', user.id);
-        } else if (type === 'sent') {
-            query = query.eq('sender_id', user.id);
-        }
-        
-        query = query.order('created_at', { ascending: false });
-        
-        const { data, error } = await query;
+                organization:organizations(*)
+            `)
+            .eq('speaker_id', speakerId)
+            .order('created_at', { ascending: false });
         
         if (error) throw error;
         return data || [];
-    } catch (error) {
-        console.error('Get messages error:', error);
-        return [];
-    }
-}
+    },
 
-async markMessageAsRead(messageId) {
-    try {
-        const user = await this.getCurrentUser();
-        if (!user) throw new Error('Not authenticated');
+    async postReview(reviewData) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
         
-        const { data, error } = await this.supabase
+        // Get user's organization
+        const { data: orgMember } = await supabase
+            .from('organization_members')
+            .select('organization_id')
+            .eq('member_id', session.user.id)
+            .single();
+        
+        if (!orgMember) throw new Error('No organization found');
+        
+        const { data, error } = await supabase
+            .from('reviews')
+            .insert({
+                ...reviewData,
+                organization_id: orgMember.organization_id
+            })
+            .select()
+            .single();
+        
+        if (error) throw error;
+        
+        // Track activity
+        await this.trackReviewPosted(data.id, reviewData.speaker_id, reviewData.rating);
+        
+        // Update speaker's average rating
+        await this.updateSpeakerRating(reviewData.speaker_id);
+        
+        return data;
+    },
+
+    async updateSpeakerRating(speakerId) {
+        const { data: reviews } = await supabase
+            .from('reviews')
+            .select('rating')
+            .eq('speaker_id', speakerId);
+        
+        if (reviews && reviews.length > 0) {
+            const average = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+            
+            await supabase
+                .from('members')
+                .update({
+                    average_rating: Math.round(average * 10) / 10,
+                    total_reviews: reviews.length
+                })
+                .eq('id', speakerId);
+        }
+    },
+
+    async canReviewSpeaker(speakerId) {
+        const session = await this.checkAuth();
+        if (!session) return false;
+        
+        // Check if there's an accepted application between org and speaker
+        const { data } = await supabase
+            .from('applications')
+            .select(`
+                id,
+                opportunity:speaking_opportunities!inner(posted_by)
+            `)
+            .eq('speaker_id', speakerId)
+            .eq('status', 'Accepted')
+            .eq('opportunity.posted_by', session.user.id)
+            .single();
+        
+        return !!data;
+    },
+
+    // ===========================================
+    // MESSAGES
+    // ===========================================
+    
+    async sendMessage(recipientId, subject, message, opportunityId = null) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const { data, error } = await supabase
+            .from('messages')
+            .insert({
+                sender_id: session.user.id,
+                recipient_id: recipientId,
+                subject: subject,
+                message: message,
+                opportunity_id: opportunityId
+            })
+            .select()
+            .single();
+        
+        if (error) throw error;
+        
+        // Track activity
+        await this.trackMessageSent(data.id, recipientId, subject);
+        
+        // Trigger email notification
+        try {
+            await supabase.functions.invoke('send-message-email', {
+                body: { message_id: data.id }
+            });
+        } catch (err) {
+            console.error('Email notification failed:', err);
+        }
+        
+        return data;
+    },
+
+    async replyToMessage(originalMessageId, message) {
+        const { data: original } = await supabase
+            .from('messages')
+            .select('sender_id, subject, thread_id')
+            .eq('id', originalMessageId)
+            .single();
+        
+        const session = await this.checkAuth();
+        
+        const threadId = original.thread_id || originalMessageId;
+        
+        const { data, error } = await supabase
+            .from('messages')
+            .insert({
+                sender_id: session.user.id,
+                recipient_id: original.sender_id,
+                subject: `Re: ${original.subject}`,
+                message: message,
+                parent_message_id: originalMessageId,
+                thread_id: threadId
+            })
+            .select()
+            .single();
+        
+        if (error) throw error;
+        
+        // Track activity
+        await this.trackMessageSent(data.id, original.sender_id, `Re: ${original.subject}`);
+        
+        return data;
+    },
+
+    async getInbox(filter = 'all') {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        let query = supabase
+            .from('messages')
+            .select(`
+                *,
+                sender:members!messages_sender_id_fkey(name, email, profile_image_url),
+                opportunity:speaking_opportunities(title)
+            `)
+            .eq('recipient_id', session.user.id)
+            .order('created_at', { ascending: false });
+        
+        if (filter === 'unread') {
+            query = query.eq('status', 'unread');
+        } else if (filter === 'archived') {
+            query = query.eq('status', 'archived');
+        }
+        
+        const { data, error } = await query;
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getSentMessages() {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const { data, error } = await supabase
+            .from('messages')
+            .select(`
+                *,
+                recipient:members!messages_recipient_id_fkey(name, email, profile_image_url),
+                opportunity:speaking_opportunities(title)
+            `)
+            .eq('sender_id', session.user.id)
+            .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getMessageThread(threadId) {
+        const { data, error } = await supabase
+            .from('messages')
+            .select(`
+                *,
+                sender:members!messages_sender_id_fkey(name, email, profile_image_url)
+            `)
+            .or(`thread_id.eq.${threadId},id.eq.${threadId}`)
+            .order('created_at', { ascending: true });
+        
+        if (error) throw error;
+        return data || [];
+    },
+
+    async markMessageRead(messageId) {
+        const { error } = await supabase
             .from('messages')
             .update({ 
                 status: 'read',
                 read_at: new Date().toISOString()
             })
-            .eq('id', messageId)
-            .eq('recipient_id', user.id)
-            .select()
-            .single();
-            
-        if (error) throw error;
-        return data;
-    } catch (error) {
-        console.error('Mark message as read error:', error);
-        throw error;
-    }
-}
-
-async getUnreadMessageCount() {
-    try {
-        const user = await this.getCurrentUser();
-        if (!user) return 0;
+            .eq('id', messageId);
         
-        const { count, error } = await this.supabase
+        if (error) throw error;
+    },
+
+    async markAllMessagesRead() {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const { error } = await supabase
+            .from('messages')
+            .update({ 
+                status: 'read',
+                read_at: new Date().toISOString()
+            })
+            .eq('recipient_id', session.user.id)
+            .eq('status', 'unread');
+        
+        if (error) throw error;
+    },
+
+    async archiveMessage(messageId) {
+        const { error } = await supabase
+            .from('messages')
+            .update({ status: 'archived' })
+            .eq('id', messageId);
+        
+        if (error) throw error;
+    },
+
+    async deleteMessage(messageId) {
+        const { error } = await supabase
+            .from('messages')
+            .delete()
+            .eq('id', messageId);
+        
+        if (error) throw error;
+    },
+
+    async getUnreadMessageCount() {
+        const session = await this.checkAuth();
+        if (!session) return 0;
+        
+        const { count } = await supabase
             .from('messages')
             .select('*', { count: 'exact', head: true })
-            .eq('recipient_id', user.id)
+            .eq('recipient_id', session.user.id)
             .eq('status', 'unread');
-            
-        if (error) throw error;
+        
         return count || 0;
-    } catch (error) {
-        console.error('Get unread message count error:', error);
-        return 0;
-    }
-}
+    },
 
-// ============================================
-// APPLICATION TRACKING METHODS (Enhanced)
-// ============================================
+    // ===========================================
+    // BOOKINGS
+    // ===========================================
+    
+    async getUpcomingBookings(speakerId) {
+        const { data, error } = await supabase
+            .from('applications')
+            .select(`
+                *,
+                opportunity:speaking_opportunities(*)
+            `)
+            .eq('speaker_id', speakerId)
+            .eq('status', 'Accepted')
+            .gte('opportunity.event_date', new Date().toISOString())
+            .order('opportunity.event_date', { ascending: true });
+        
+        if (error) throw error;
+        return data || [];
+    },
 
-async getApplicationById(applicationId) {
-    try {
-        const { data, error } = await this.supabase
+    async getPastBookings(speakerId) {
+        const { data, error } = await supabase
             .from('applications')
             .select(`
                 *,
                 opportunity:speaking_opportunities(*),
-                speaker:members!speaker_id(name, email, phone, bio, location, specialties),
-                reviewer:members!reviewed_by(name)
+                review:reviews(*)
             `)
-            .eq('id', applicationId)
-            .single();
-            
-        if (error) throw error;
-        return data;
-    } catch (error) {
-        console.error('Get application by ID error:', error);
-        return null;
-    }
-}
-
-async getApplicationTimeline(applicationId) {
-    try {
-        const { data, error } = await this.supabase
-            .from('application_timeline')
-            .select('*')
-            .eq('application_id', applicationId)
-            .order('created_at', { ascending: true });
-            
+            .eq('speaker_id', speakerId)
+            .eq('status', 'Accepted')
+            .lt('opportunity.event_date', new Date().toISOString())
+            .order('opportunity.event_date', { ascending: false });
+        
         if (error) throw error;
         return data || [];
-    } catch (error) {
-        console.error('Get application timeline error:', error);
-        return [];
-    }
-}
+    },
 
-async addApplicationNote(applicationId, note, isInternal = true) {
-    try {
-        const user = await this.getCurrentUser();
-        if (!user) throw new Error('Not authenticated');
+    async getBookingDetails(bookingId) {
+        const { data, error } = await supabase
+            .from('applications')
+            .select(`
+                *,
+                opportunity:speaking_opportunities(*),
+                organization:opportunity.organization:organizations(*),
+                messages:messages(*)
+            `)
+            .eq('id', bookingId)
+            .eq('status', 'Accepted')
+            .single();
         
-        const { data, error } = await this.supabase
-            .from('application_notes')
+        if (error) throw error;
+        return data;
+    },
+
+    // ===========================================
+    // ORGANIZATIONS
+    // ===========================================
+    
+    async getOrganization(organizationId) {
+        const { data, error } = await supabase
+            .from('organizations')
+            .select(`
+                *,
+                members:organization_members(
+                    member:members(*)
+                )
+            `)
+            .eq('id', organizationId)
+            .single();
+        
+        if (error) throw error;
+        return data;
+    },
+
+    async createOrganization(orgData) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        // Create organization
+        const { data: org, error: orgError } = await supabase
+            .from('organizations')
+            .insert(orgData)
+            .select()
+            .single();
+        
+        if (orgError) throw orgError;
+        
+        // Add current user as owner
+        const { error: memberError } = await supabase
+            .from('organization_members')
             .insert({
-                application_id: applicationId,
-                author_id: user.id,
-                note: note,
-                is_internal: isInternal,
-                created_at: new Date().toISOString()
+                organization_id: org.id,
+                member_id: session.user.id,
+                role: 'Owner'
+            });
+        
+        if (memberError) throw memberError;
+        
+        return org;
+    },
+
+    async updateOrganization(organizationId, updates) {
+        const { data, error } = await supabase
+            .from('organizations')
+            .update(updates)
+            .eq('id', organizationId)
+            .select()
+            .single();
+        
+        if (error) throw error;
+        return data;
+    },
+
+    async addOrganizationMember(organizationId, memberId, role = 'Member') {
+        const { data, error } = await supabase
+            .from('organization_members')
+            .insert({
+                organization_id: organizationId,
+                member_id: memberId,
+                role: role
             })
             .select()
             .single();
-            
+        
         if (error) throw error;
         return data;
-    } catch (error) {
-        console.error('Add application note error:', error);
-        throw error;
-    }
-}
+    },
 
-// ============================================
-// ORGANIZATION STATS METHODS
-// ============================================
-
-async getOrganizationStats() {
-    try {
-        const user = await this.getCurrentUser();
-        if (!user || user.member_type !== 'Organization') return null;
-        
-        // Get organization ID
-        const { data: orgMember } = await this.supabase
+    async removeOrganizationMember(organizationId, memberId) {
+        const { error } = await supabase
             .from('organization_members')
-            .select('organization_id')
-            .eq('member_id', user.id)
+            .delete()
+            .eq('organization_id', organizationId)
+            .eq('member_id', memberId);
+        
+        if (error) throw error;
+    },
+
+    async getMyOrganization() {
+        const session = await this.checkAuth();
+        if (!session) return null;
+        
+        const { data } = await supabase
+            .from('organization_members')
+            .select(`
+                organization:organizations(*)
+            `)
+            .eq('member_id', session.user.id)
             .single();
-            
-        if (!orgMember) return null;
         
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        return data?.organization;
+    },
+
+    // ===========================================
+    // SUBSCRIPTION
+    // ===========================================
+    
+    async getSubscriptionStatus(userId) {
+        const { data, error } = await supabase
+            .from('subscriptions')
+            .select('*')
+            .eq('member_id', userId)
+            .eq('status', 'Active')
+            .single();
         
-        // Parallel queries for stats
-        const [opportunities, savedSpeakers, recentApplications, acceptedSpeakers] = await Promise.all([
-            // Total opportunities
-            this.supabase
-                .from('speaking_opportunities')
-                .select('*', { count: 'exact', head: true })
-                .eq('posted_by', user.id),
-            
-            // Saved speakers count
-            this.supabase
-                .from('saved_speakers')
-                .select('*', { count: 'exact', head: true })
-                .eq('organization_id', orgMember.organization_id),
-            
-            // Recent applications (last 30 days)
-            this.supabase
-                .from('applications')
-                .select('*', { count: 'exact', head: true })
-                .in('opportunity_id', 
-                    this.supabase
-                        .from('speaking_opportunities')
-                        .select('id')
-                        .eq('posted_by', user.id)
-                )
-                .gte('created_at', thirtyDaysAgo.toISOString()),
-            
-            // Accepted speakers count
-            this.supabase
-                .from('applications')
-                .select('*', { count: 'exact', head: true })
-                .eq('status', 'Accepted')
-                .in('opportunity_id',
-                    this.supabase
-                        .from('speaking_opportunities')
-                        .select('id')
-                        .eq('posted_by', user.id)
-                )
-        ]);
+        if (error && error.code !== 'PGRST116') throw error; // Ignore not found
+        return data;
+    },
+
+    async createCheckoutSession(priceId) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
         
-        return {
-            totalOpportunities: opportunities.count || 0,
-            savedSpeakers: savedSpeakers.count || 0,
-            recentApplications: recentApplications.count || 0,
-            acceptedSpeakers: acceptedSpeakers.count || 0
-        };
-    } catch (error) {
-        console.error('Get organization stats error:', error);
-        return null;
-    }
-}
-    
-    // ============================================
-    // PROFILE IMAGE UPLOAD
-    // ============================================
-    
-    async uploadProfileImage(file, userId) {
-        try {
-            const targetUserId = userId || (await this.getCurrentUser())?.id;
-            if (!targetUserId) throw new Error('User ID required');
-            
-            // Generate unique filename
-            const fileExt = file.name.split('.').pop();
-            const fileName = `members/${targetUserId}-${Date.now()}.${fileExt}`;
-            
-            // Upload file to storage
-            const { data: uploadData, error: uploadError } = await this.supabase.storage
-                .from('avatars')
-                .upload(fileName, file, {
-                    cacheControl: '3600',
-                    upsert: true
-                });
-            
-            if (uploadError) throw uploadError;
-            
-            // Get public URL
-            const { data: { publicUrl } } = this.supabase.storage
-                .from('avatars')
-                .getPublicUrl(fileName);
-            
-            // Update member profile with new URL
-            const { data: updateData, error: updateError } = await this.supabase
-                .from('members')
-                .update({ profile_image_url: publicUrl })
-                .eq('id', targetUserId)
-                .select()
-                .single();
-            
-            if (updateError) throw updateError;
-            
-            return {
-                url: publicUrl,
-                path: fileName,
-                member: updateData
-            };
-        } catch (error) {
-            console.error('Upload profile image error:', error);
-            throw error;
-        }
-    }
-    
-    async deleteProfileImage(userId) {
-        try {
-            const targetUserId = userId || (await this.getCurrentUser())?.id;
-            if (!targetUserId) throw new Error('User ID required');
-            
-            // Get current profile to find image path
-            const { data: member } = await this.supabase
-                .from('members')
-                .select('profile_image_url')
-                .eq('id', targetUserId)
-                .single();
-            
-            if (member?.profile_image_url) {
-                // Extract path from URL
-                const url = new URL(member.profile_image_url);
-                const path = url.pathname.split('/').slice(-2).join('/'); // Gets "members/uuid-timestamp.ext"
-                
-                // Delete from storage
-                await this.supabase.storage
-                    .from('avatars')
-                    .remove([path]);
+        const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+            body: { 
+                priceId: priceId,
+                userId: session.user.id
             }
-            
-            // Clear URL in database
-            await this.supabase
-                .from('members')
-                .update({ profile_image_url: null })
-                .eq('id', targetUserId);
-            
-            return true;
-        } catch (error) {
-            console.error('Delete profile image error:', error);
-            throw error;
-        }
-    }
-    
-    // ============================================
-    // REAL-TIME SUBSCRIPTIONS
-    // ============================================
-    
-    subscribeToOpportunities(callback) {
-        try {
-            const channel = this.supabase
-                .channel('public-opportunities')
-                .on('postgres_changes', 
-                    { 
-                        event: 'INSERT', 
-                        schema: 'public', 
-                        table: 'speaking_opportunities',
-                        filter: 'status=eq.Open'
-                    },
-                    (payload) => {
-                        console.log('New opportunity:', payload);
-                        callback(payload.new);
-                    }
-                )
-                .subscribe();
-            
-            return channel;
-        } catch (error) {
-            console.error('Subscribe to opportunities error:', error);
-            return null;
-        }
-    }
-    
-    subscribeToApplicationUpdates(speakerId, callback) {
-        try {
-            const targetSpeakerId = speakerId || this.getCurrentUser()?.id;
-            if (!targetSpeakerId) return null;
-            
-            const channel = this.supabase
-                .channel(`applications-${targetSpeakerId}`)
-                .on('postgres_changes',
-                    {
-                        event: 'UPDATE',
-                        schema: 'public',
-                        table: 'applications',
-                        filter: `speaker_id=eq.${targetSpeakerId}`
-                    },
-                    (payload) => {
-                        console.log('Application updated:', payload);
-                        callback(payload.new);
-                    }
-                )
-                .subscribe();
-            
-            return channel;
-        } catch (error) {
-            console.error('Subscribe to application updates error:', error);
-            return null;
-        }
-    }
-    
-    unsubscribeChannel(channel) {
-        if (channel) {
-            this.supabase.removeChannel(channel);
-        }
-    }
-    
-    // ============================================
-    // BATCH OPERATIONS
-    // ============================================
-    
-    async batchUpdateApplicationStatus(applicationIds, newStatus, reviewerId) {
-        try {
-            const { data, error } = await this.supabase
-                .from('applications')
-                .update({ 
-                    status: newStatus,
-                    reviewed_by: reviewerId,
-                    reviewed_at: new Date().toISOString()
-                })
-                .in('id', applicationIds)
-                .select();
-            
-            if (error) throw error;
-            return data;
-        } catch (error) {
-            console.error('Batch update applications error:', error);
-            throw error;
-        }
-    }
+        });
+        
+        if (error) throw error;
+        return data;
+    },
 
-    // ============================================
-// EXPORT/IMPORT METHODS
-// ============================================
+    async createPortalSession() {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const { data, error } = await supabase.functions.invoke('create-portal-session', {
+            body: { userId: session.user.id }
+        });
+        
+        if (error) throw error;
+        return data;
+    },
 
-async exportSavedSpeakers(format = 'csv') {
-    try {
-        const savedSpeakers = await this.getSavedSpeakers();
+    async cancelSubscription() {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const { data, error } = await supabase.functions.invoke('cancel-subscription', {
+            body: { userId: session.user.id }
+        });
+        
+        if (error) throw error;
+        return data;
+    },
+
+    // ===========================================
+    // FILE UPLOAD
+    // ===========================================
+    
+    async uploadProfileImage(file) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        // Validate file
+        if (!file.type.startsWith('image/')) {
+            throw new Error('File must be an image');
+        }
+        
+        if (file.size > 5 * 1024 * 1024) {
+            throw new Error('Image must be less than 5MB');
+        }
+        
+        const fileName = `members/${session.user.id}-${Date.now()}.jpg`;
+        
+        const { data, error } = await supabase.storage
+            .from('avatars')
+            .upload(fileName, file, {
+                cacheControl: '3600',
+                upsert: true
+            });
+        
+        if (error) throw error;
+        
+        const { data: { publicUrl } } = supabase.storage
+            .from('avatars')
+            .getPublicUrl(fileName);
+        
+        await this.updateProfile({ profile_image_url: publicUrl });
+        
+        return { url: publicUrl };
+    },
+
+    async deleteProfileImage() {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const user = await this.getCurrentUser();
+        if (user?.profile_image_url) {
+            // Extract filename from URL
+            const urlParts = user.profile_image_url.split('/');
+            const fileName = urlParts[urlParts.length - 1];
+            
+            await supabase.storage
+                .from('avatars')
+                .remove([`members/${fileName}`]);
+            
+            await this.updateProfile({ profile_image_url: null });
+        }
+    },
+
+    async uploadOrganizationLogo(file, organizationId) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        // Validate file
+        if (!file.type.startsWith('image/')) {
+            throw new Error('File must be an image');
+        }
+        
+        if (file.size > 5 * 1024 * 1024) {
+            throw new Error('Image must be less than 5MB');
+        }
+        
+        const fileName = `organizations/${organizationId}-${Date.now()}.jpg`;
+        
+        const { data, error } = await supabase.storage
+            .from('avatars')
+            .upload(fileName, file, {
+                cacheControl: '3600',
+                upsert: true
+            });
+        
+        if (error) throw error;
+        
+        const { data: { publicUrl } } = supabase.storage
+            .from('avatars')
+            .getPublicUrl(fileName);
+        
+        await this.updateOrganization(organizationId, { logo_url: publicUrl });
+        
+        return { url: publicUrl };
+    },
+
+    // ===========================================
+    // EXPORT
+    // ===========================================
+    
+    async exportSavedSpeakers(format = 'csv') {
+        const speakers = await this.getSavedSpeakers();
         
         if (format === 'csv') {
-            const headers = ['Name', 'Email', 'Phone', 'Location', 'Specialties', 'Rating', 'Notes', 'Saved Date'];
-            const rows = savedSpeakers.map(item => [
-                item.speaker.name || '',
-                item.speaker.email || '',
-                item.speaker.phone || '',
-                item.speaker.location || '',
-                (item.speaker.specialties || []).join('; '),
-                item.speaker.average_rating || '',
-                item.notes || '',
-                new Date(item.created_at).toLocaleDateString()
+            const headers = ['Name', 'Email', 'Location', 'Specialties', 'Rating', 'Website', 'Notes'];
+            const rows = speakers.map(s => [
+                s.speaker.name || '',
+                s.speaker.email || '',
+                s.speaker.location || '',
+                (s.speaker.specialties || []).join('; '),
+                s.speaker.average_rating || '0',
+                s.speaker.website || '',
+                s.notes || ''
             ]);
             
-            const csvContent = [
+            const csv = [
                 headers.join(','),
-                ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+                ...rows.map(row => row.map(cell => `"${cell.replace(/"/g, '""')}"`).join(','))
             ].join('\n');
             
             return {
-                data: csvContent,
-                filename: `saved_speakers_${new Date().toISOString().split('T')[0]}.csv`,
-                mimeType: 'text/csv'
+                data: csv,
+                mimeType: 'text/csv',
+                filename: `saved_speakers_${new Date().toISOString().split('T')[0]}.csv`
             };
         }
         
-        // JSON format
-        return {
-            data: JSON.stringify(savedSpeakers, null, 2),
-            filename: `saved_speakers_${new Date().toISOString().split('T')[0]}.json`,
-            mimeType: 'application/json'
-        };
-    } catch (error) {
-        console.error('Export saved speakers error:', error);
-        throw error;
-    }
-}
-    
-    // ============================================
-    // ANALYTICS METHODS
-    // ============================================
-    
-    async getSpeakerAnalytics(speakerId, dateRange = 30) {
-        try {
-            const targetSpeakerId = speakerId || (await this.getCurrentUser())?.id;
-            if (!targetSpeakerId) return null;
-            
-            const startDate = new Date();
-            startDate.setDate(startDate.getDate() - dateRange);
-            
-            // Parallel queries for analytics
-            const [profileViews, applications, bookings, reviews] = await Promise.all([
-                // Profile views over time
-                this.supabase
-                    .from('activity')
-                    .select('created_at')
-                    .eq('target_id', targetSpeakerId)
-                    .eq('activity_type', 'profile_view')
-                    .gte('created_at', startDate.toISOString())
-                    .order('created_at', { ascending: true }),
-                
-                // Applications over time
-                this.supabase
-                    .from('applications')
-                    .select('created_at, status')
-                    .eq('speaker_id', targetSpeakerId)
-                    .gte('created_at', startDate.toISOString()),
-                
-                // Bookings
-                this.supabase
-                    .from('applications')
-                    .select('created_at, opportunity:speaking_opportunities(event_date, compensation_amount)')
-                    .eq('speaker_id', targetSpeakerId)
-                    .eq('status', 'Accepted')
-                    .gte('created_at', startDate.toISOString()),
-                
-                // Reviews
-                this.supabase
-                    .from('reviews')
-                    .select('rating, created_at')
-                    .eq('speaker_id', targetSpeakerId)
-                    .gte('created_at', startDate.toISOString())
-            ]);
+        if (format === 'json') {
+            const data = speakers.map(s => ({
+                name: s.speaker.name,
+                email: s.speaker.email,
+                location: s.speaker.location,
+                specialties: s.speaker.specialties,
+                rating: s.speaker.average_rating,
+                website: s.speaker.website,
+                notes: s.notes
+            }));
             
             return {
-                profileViews: profileViews.data || [],
-                applications: applications.data || [],
-                bookings: bookings.data || [],
-                reviews: reviews.data || [],
-                dateRange: dateRange
+                data: JSON.stringify(data, null, 2),
+                mimeType: 'application/json',
+                filename: `saved_speakers_${new Date().toISOString().split('T')[0]}.json`
             };
-        } catch (error) {
-            console.error('Get speaker analytics error:', error);
-            return null;
         }
-    }
+        
+        throw new Error('Unsupported format');
+    },
+
+    async exportApplications(format = 'csv') {
+        const applications = await this.getApplications((await this.checkAuth()).user.id);
+        
+        if (format === 'csv') {
+            const headers = ['Opportunity', 'Organization', 'Status', 'Date Applied', 'Event Date', 'Location'];
+            const rows = applications.map(a => [
+                a.opportunity?.title || '',
+                a.opportunity?.organization?.name || '',
+                a.status || '',
+                new Date(a.created_at).toLocaleDateString(),
+                a.opportunity?.event_date ? new Date(a.opportunity.event_date).toLocaleDateString() : '',
+                a.opportunity?.location || ''
+            ]);
+            
+            const csv = [
+                headers.join(','),
+                ...rows.map(row => row.map(cell => `"${cell.replace(/"/g, '""')}"`).join(','))
+            ].join('\n');
+            
+            return {
+                data: csv,
+                mimeType: 'text/csv',
+                filename: `applications_${new Date().toISOString().split('T')[0]}.csv`
+            };
+        }
+        
+        throw new Error('Unsupported format');
+    },
+
+    // ===========================================
+    // NOTIFICATIONS & PREFERENCES
+    // ===========================================
     
-    // ============================================
-    // HELPER METHODS
-    // ============================================
+    async getNotificationPreferences() {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const user = await this.getMemberProfile(session.user.id);
+        return user?.notification_preferences || {
+            email_notifications: true,
+            opportunity_notifications: true,
+            application_notifications: true,
+            message_notifications: true,
+            review_notifications: true,
+            marketing_emails: false
+        };
+    },
+
+    async updateNotificationPreferences(preferences) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const { data, error } = await supabase
+            .from('members')
+            .update({ notification_preferences: preferences })
+            .eq('id', session.user.id)
+            .select()
+            .single();
+        
+        if (error) throw error;
+        return data;
+    },
+
+    async getPrivacySettings() {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const user = await this.getMemberProfile(session.user.id);
+        return user?.privacy_settings || {
+            public_profile: true,
+            show_contact: true,
+            show_fees: false,
+            show_calendar: false
+        };
+    },
+
+    async updatePrivacySettings(settings) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const { data, error } = await supabase
+            .from('members')
+            .update({ privacy_settings: settings })
+            .eq('id', session.user.id)
+            .select()
+            .single();
+        
+        if (error) throw error;
+        return data;
+    },
+
+    // ===========================================
+    // CALENDAR & AVAILABILITY
+    // ===========================================
     
-    handleAuthChange(event, session) {
-        // Emit custom event for UI updates
-        window.dispatchEvent(new CustomEvent('auth-change', {
-            detail: { event, session }
+    async getAvailability(speakerId, month, year) {
+        const startDate = new Date(year, month, 1);
+        const endDate = new Date(year, month + 1, 0);
+        
+        const { data, error } = await supabase
+            .from('speaker_availability')
+            .select('*')
+            .eq('speaker_id', speakerId)
+            .gte('date', startDate.toISOString())
+            .lte('date', endDate.toISOString())
+            .order('date');
+        
+        if (error) throw error;
+        return data || [];
+    },
+
+    async updateAvailability(dates, available = true) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const updates = dates.map(date => ({
+            speaker_id: session.user.id,
+            date: date,
+            available: available
         }));
         
-        // Update navigation if the function exists
-        if (typeof window.updateNavigation === 'function') {
-            window.updateNavigation();
-        }
-    }
-}
+        const { data, error } = await supabase
+            .from('speaker_availability')
+            .upsert(updates, { onConflict: 'speaker_id,date' })
+            .select();
+        
+        if (error) throw error;
+        return data;
+    },
 
-// Initialize when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        window.covetalks = new CoveTalksClient();
-    });
-} else {
-    window.covetalks = new CoveTalksClient();
+    async getBookingCalendar(speakerId) {
+        const { data, error } = await supabase
+            .from('applications')
+            .select(`
+                *,
+                opportunity:speaking_opportunities(
+                    title,
+                    event_date,
+                    location,
+                    event_format
+                )
+            `)
+            .eq('speaker_id', speakerId)
+            .eq('status', 'Accepted')
+            .gte('opportunity.event_date', new Date().toISOString())
+            .order('opportunity.event_date');
+        
+        if (error) throw error;
+        return data || [];
+    },
+
+    // ===========================================
+    // SEARCH & FILTERS (Extended)
+    // ===========================================
+    
+    async searchEverything(query) {
+        const results = {
+            speakers: [],
+            opportunities: [],
+            organizations: []
+        };
+        
+        // Search speakers
+        const { data: speakers } = await supabase
+            .from('members')
+            .select('*')
+            .eq('member_type', 'Speaker')
+            .or(`name.ilike.%${query}%,bio.ilike.%${query}%,location.ilike.%${query}%`)
+            .limit(10);
+        
+        results.speakers = speakers || [];
+        
+        // Search opportunities
+        const { data: opportunities } = await supabase
+            .from('speaking_opportunities')
+            .select(`
+                *,
+                organization:organizations(name)
+            `)
+            .eq('status', 'Open')
+            .or(`title.ilike.%${query}%,description.ilike.%${query}%,location.ilike.%${query}%`)
+            .limit(10);
+        
+        results.opportunities = opportunities || [];
+        
+        // Search organizations
+        const { data: organizations } = await supabase
+            .from('organizations')
+            .select('*')
+            .or(`name.ilike.%${query}%,description.ilike.%${query}%`)
+            .limit(10);
+        
+        results.organizations = organizations || [];
+        
+        return results;
+    },
+
+    async getTopSpeakers(limit = 10, category = null) {
+        let query = supabase
+            .from('members')
+            .select(`
+                *,
+                reviews(count),
+                applications!applications_speaker_id_fkey(count)
+            `)
+            .eq('member_type', 'Speaker')
+            .gte('average_rating', 4.0)
+            .order('average_rating', { ascending: false })
+            .order('total_reviews', { ascending: false })
+            .limit(limit);
+        
+        if (category) {
+            query = query.contains('specialties', [category]);
+        }
+        
+        const { data, error } = await query;
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getTrendingTopics(days = 30) {
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - days);
+        
+        const { data, error } = await supabase
+            .from('speaking_opportunities')
+            .select('topics')
+            .gte('created_at', startDate.toISOString());
+        
+        if (error) throw error;
+        
+        // Count topic frequency
+        const topicCounts = {};
+        (data || []).forEach(opp => {
+            (opp.topics || []).forEach(topic => {
+                topicCounts[topic] = (topicCounts[topic] || 0) + 1;
+            });
+        });
+        
+        // Sort by count
+        return Object.entries(topicCounts)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 10)
+            .map(([topic, count]) => ({ topic, count }));
+    },
+
+    // ===========================================
+    // RECOMMENDATIONS
+    // ===========================================
+    
+    async getRecommendedSpeakers(opportunityId) {
+        const { data: opportunity } = await supabase
+            .from('speaking_opportunities')
+            .select('topics, location, event_format')
+            .eq('id', opportunityId)
+            .single();
+        
+        if (!opportunity) return [];
+        
+        let query = supabase
+            .from('members')
+            .select(`
+                *,
+                reviews(rating)
+            `)
+            .eq('member_type', 'Speaker')
+            .gte('average_rating', 4.0);
+        
+        // Match topics
+        if (opportunity.topics && opportunity.topics.length > 0) {
+            query = query.overlaps('specialties', opportunity.topics);
+        }
+        
+        // Consider location for in-person events
+        if (opportunity.event_format === 'In-Person' && opportunity.location) {
+            query = query.or(`location.ilike.%${opportunity.location.split(',')[0]}%,willing_to_travel.eq.true`);
+        }
+        
+        const { data, error } = await query.limit(10);
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getRecommendedOpportunities(speakerId) {
+        const speaker = await this.getMemberProfile(speakerId);
+        if (!speaker) return [];
+        
+        let query = supabase
+            .from('speaking_opportunities')
+            .select(`
+                *,
+                organization:organizations(name),
+                applications(count)
+            `)
+            .eq('status', 'Open')
+            .gte('application_deadline', new Date().toISOString());
+        
+        // Match specialties
+        if (speaker.specialties && speaker.specialties.length > 0) {
+            query = query.overlaps('topics', speaker.specialties);
+        }
+        
+        // Consider location
+        if (speaker.location) {
+            query = query.or(`location.ilike.%${speaker.location.split(',')[0]}%,event_format.eq.Virtual`);
+        }
+        
+        // Consider fee range
+        if (speaker.speaking_fee_range) {
+            query = query.gte('compensation_amount', speaker.speaking_fee_range.min);
+        }
+        
+        const { data, error } = await query.limit(10);
+        if (error) throw error;
+        return data || [];
+    },
+
+    // ===========================================
+    // ADMIN FUNCTIONS
+    // ===========================================
+    
+    async isAdmin() {
+        const session = await this.checkAuth();
+        if (!session) return false;
+        
+        const user = await this.getMemberProfile(session.user.id);
+        return user?.is_admin === true;
+    },
+
+    async getAdminStats() {
+        if (!await this.isAdmin()) throw new Error('Unauthorized');
+        
+        const stats = {};
+        
+        // User counts
+        const { count: totalUsers } = await supabase
+            .from('members')
+            .select('*', { count: 'exact', head: true });
+        
+        const { count: speakers } = await supabase
+            .from('members')
+            .select('*', { count: 'exact', head: true })
+            .eq('member_type', 'Speaker');
+        
+        const { count: organizations } = await supabase
+            .from('members')
+            .select('*', { count: 'exact', head: true })
+            .eq('member_type', 'Organization');
+        
+        // Activity stats
+        const { count: opportunities } = await supabase
+            .from('speaking_opportunities')
+            .select('*', { count: 'exact', head: true })
+            .eq('status', 'Open');
+        
+        const { count: applications } = await supabase
+            .from('applications')
+            .select('*', { count: 'exact', head: true })
+            .gte('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString());
+        
+        const { count: activeSubscriptions } = await supabase
+            .from('subscriptions')
+            .select('*', { count: 'exact', head: true })
+            .eq('status', 'Active');
+        
+        stats.totalUsers = totalUsers || 0;
+        stats.speakers = speakers || 0;
+        stats.organizations = organizations || 0;
+        stats.opportunities = opportunities || 0;
+        stats.recentApplications = applications || 0;
+        stats.activeSubscriptions = activeSubscriptions || 0;
+        
+        return stats;
+    },
+
+    async flagContent(contentType, contentId, reason) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const { data, error } = await supabase
+            .from('flagged_content')
+            .insert({
+                content_type: contentType,
+                content_id: contentId,
+                flagged_by: session.user.id,
+                reason: reason
+            })
+            .select()
+            .single();
+        
+        if (error) throw error;
+        return data;
+    },
+
+    // ===========================================
+    // REAL-TIME SUBSCRIPTIONS
+    // ===========================================
+    
+    subscribeToMessages(callback) {
+        const session = this.checkAuth();
+        if (!session) return null;
+        
+        return supabase
+            .channel('messages')
+            .on('postgres_changes', 
+                { 
+                    event: 'INSERT', 
+                    schema: 'public', 
+                    table: 'messages',
+                    filter: `recipient_id=eq.${session.user.id}`
+                },
+                callback
+            )
+            .subscribe();
+    },
+
+    subscribeToApplications(opportunityId, callback) {
+        return supabase
+            .channel(`applications-${opportunityId}`)
+            .on('postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'applications',
+                    filter: `opportunity_id=eq.${opportunityId}`
+                },
+                callback
+            )
+            .subscribe();
+    },
+
+    subscribeToActivity(userId, callback) {
+        return supabase
+            .channel(`activity-${userId}`)
+            .on('postgres_changes',
+                {
+                    event: 'INSERT',
+                    schema: 'public',
+                    table: 'activity',
+                    filter: `target_id=eq.${userId}`
+                },
+                callback
+            )
+            .subscribe();
+    },
+
+    unsubscribe(channel) {
+        if (channel) {
+            supabase.removeChannel(channel);
+        }
+    },
+
+    // ===========================================
+    // PAYMENT & INVOICING
+    // ===========================================
+    
+    async getInvoices() {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const { data, error } = await supabase
+            .from('invoices')
+            .select('*')
+            .eq('member_id', session.user.id)
+            .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        return data || [];
+    },
+
+    async downloadInvoice(invoiceId) {
+        const { data, error } = await supabase.functions.invoke('generate-invoice', {
+            body: { invoiceId }
+        });
+        
+        if (error) throw error;
+        return data;
+    },
+
+    async getPaymentMethods() {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const { data, error } = await supabase.functions.invoke('get-payment-methods', {
+            body: { userId: session.user.id }
+        });
+        
+        if (error) throw error;
+        return data;
+    },
+
+    async addPaymentMethod(paymentMethodId) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const { data, error } = await supabase.functions.invoke('add-payment-method', {
+            body: { 
+                userId: session.user.id,
+                paymentMethodId 
+            }
+        });
+        
+        if (error) throw error;
+        return data;
+    },
+
+    async removePaymentMethod(paymentMethodId) {
+        const { data, error } = await supabase.functions.invoke('remove-payment-method', {
+            body: { paymentMethodId }
+        });
+        
+        if (error) throw error;
+        return data;
+    },
+
+    // ===========================================
+    // UTILITY FUNCTIONS
+    // ===========================================
+    
+    async checkEmailExists(email) {
+        const { data } = await supabase
+            .from('members')
+            .select('id')
+            .eq('email', email)
+            .single();
+        
+        return !!data;
+    },
+
+    async validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    },
+
+    async validatePassword(password) {
+        return {
+            isValid: password.length >= 8,
+            hasUpperCase: /[A-Z]/.test(password),
+            hasLowerCase: /[a-z]/.test(password),
+            hasNumber: /[0-9]/.test(password),
+            hasSpecialChar: /[!@#$%^&*]/.test(password),
+            length: password.length
+        };
+    },
+
+    async validatePhone(phone) {
+        const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+        return phoneRegex.test(phone);
+    },
+
+    formatCurrency(amount) {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD'
+        }).format(amount);
+    },
+
+    formatDate(dateString) {
+        return new Date(dateString).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    },
+
+    formatTime(dateString) {
+        return new Date(dateString).toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+        });
+    },
+
+    formatTimeAgo(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 0) {
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            if (diffHours === 0) {
+                const diffMinutes = Math.floor(diffMs / (1000 * 60));
+                if (diffMinutes === 0) return 'just now';
+                return `${diffMinutes} minute${diffMinutes > 1 ? 's' : ''} ago`;
+            }
+            return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+        }
+        if (diffDays === 1) return 'yesterday';
+        if (diffDays < 7) return `${diffDays} days ago`;
+        if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) > 1 ? 's' : ''} ago`;
+        if (diffDays < 365) return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) > 1 ? 's' : ''} ago`;
+        return `${Math.floor(diffDays / 365)} year${Math.floor(diffDays / 365) > 1 ? 's' : ''} ago`;
+    },
+
+    sanitizeHtml(text) {
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text ? text.replace(/[&<>"']/g, m => map[m]) : '';
+    },
+
+    generateUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.random() * 16 | 0;
+            const v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    },
+
+    // ===========================================
+    // ERROR HANDLING
+    // ===========================================
+    
+    handleError(error) {
+        console.error('[CoveTalks Error]:', error);
+        
+        // Parse Supabase errors
+        if (error.code === '23505') {
+            return { message: 'This record already exists', code: 'DUPLICATE' };
+        }
+        if (error.code === '23503') {
+            return { message: 'Referenced record not found', code: 'REFERENCE_ERROR' };
+        }
+        if (error.code === '42501') {
+            return { message: 'Insufficient permissions', code: 'PERMISSION_DENIED' };
+        }
+        if (error.code === 'PGRST116') {
+            return { message: 'Record not found', code: 'NOT_FOUND' };
+        }
+        if (error.message?.includes('JWT')) {
+            return { message: 'Authentication required', code: 'AUTH_REQUIRED' };
+        }
+        
+        return { 
+            message: error.message || 'An unexpected error occurred', 
+            code: error.code || 'UNKNOWN_ERROR' 
+        };
+    },
+
+    async retryOperation(operation, maxRetries = 3, delay = 1000) {
+        for (let i = 0; i < maxRetries; i++) {
+            try {
+                return await operation();
+            } catch (error) {
+                if (i === maxRetries - 1) throw error;
+                await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
+            }
+        }
+    },
+
+    // ===========================================
+    // CACHE MANAGEMENT
+    // ===========================================
+    
+    cache: new Map(),
+    cacheTimeout: 5 * 60 * 1000, // 5 minutes
+
+    getCached(key) {
+        const cached = this.cache.get(key);
+        if (cached && Date.now() - cached.timestamp < this.cacheTimeout) {
+            return cached.data;
+        }
+        this.cache.delete(key);
+        return null;
+    },
+
+    setCached(key, data) {
+        this.cache.set(key, {
+            data,
+            timestamp: Date.now()
+        });
+        
+        // Limit cache size
+        if (this.cache.size > 100) {
+            const firstKey = this.cache.keys().next().value;
+            this.cache.delete(firstKey);
+        }
+    },
+
+    clearCache() {
+        this.cache.clear();
+    },
+
+    // ===========================================
+    // PAGINATION HELPERS
+    // ===========================================
+    
+    async paginateQuery(query, page = 1, pageSize = 20) {
+        const start = (page - 1) * pageSize;
+        const end = start + pageSize - 1;
+        
+        const { data, error, count } = await query
+            .range(start, end)
+            .select('*', { count: 'exact' });
+        
+        if (error) throw error;
+        
+        return {
+            data: data || [],
+            page,
+            pageSize,
+            totalCount: count || 0,
+            totalPages: Math.ceil((count || 0) / pageSize),
+            hasMore: end < (count || 0) - 1
+        };
+    },
+
+    // ===========================================
+    // BATCH OPERATIONS
+    // ===========================================
+    
+    async batchInsert(table, records, chunkSize = 100) {
+        const results = [];
+        
+        for (let i = 0; i < records.length; i += chunkSize) {
+            const chunk = records.slice(i, i + chunkSize);
+            const { data, error } = await supabase
+                .from(table)
+                .insert(chunk)
+                .select();
+            
+            if (error) throw error;
+            results.push(...(data || []));
+        }
+        
+        return results;
+    },
+
+    async batchUpdate(table, updates, chunkSize = 100) {
+        const results = [];
+        
+        for (let i = 0; i < updates.length; i += chunkSize) {
+            const chunk = updates.slice(i, i + chunkSize);
+            
+            for (const update of chunk) {
+                const { id, ...data } = update;
+                const { data: result, error } = await supabase
+                    .from(table)
+                    .update(data)
+                    .eq('id', id)
+                    .select()
+                    .single();
+                
+                if (error) throw error;
+                results.push(result);
+            }
+        }
+        
+        return results;
+    },
+
+    async batchDelete(table, ids, chunkSize = 100) {
+        for (let i = 0; i < ids.length; i += chunkSize) {
+            const chunk = ids.slice(i, i + chunkSize);
+            const { error } = await supabase
+                .from(table)
+                .delete()
+                .in('id', chunk);
+            
+            if (error) throw error;
+        }
+    },
+
+    // ===========================================
+    // FEATURE FLAGS
+    // ===========================================
+    
+    featureFlags: {
+        newDashboard: true,
+        advancedSearch: true,
+        videoUploads: false,
+        aiRecommendations: false,
+        liveStreaming: false
+    },
+
+    isFeatureEnabled(feature) {
+        return this.featureFlags[feature] || false;
+    },
+
+    async getFeatureFlags() {
+        try {
+            const { data } = await supabase
+                .from('feature_flags')
+                .select('*')
+                .eq('enabled', true);
+            
+            if (data) {
+                data.forEach(flag => {
+                    this.featureFlags[flag.name] = true;
+                });
+            }
+        } catch (error) {
+            console.error('Failed to load feature flags:', error);
+        }
+        
+        return this.featureFlags;
+    },
+
+    // ===========================================
+    // LOGGING & ANALYTICS
+    // ===========================================
+    
+    async logEvent(eventName, properties = {}) {
+        try {
+            const session = await this.checkAuth();
+            
+            await supabase
+                .from('analytics_events')
+                .insert({
+                    event_name: eventName,
+                    user_id: session?.user?.id,
+                    properties,
+                    session_id: this.getSessionId(),
+                    page_url: window.location.href,
+                    referrer: document.referrer,
+                    user_agent: navigator.userAgent
+                });
+        } catch (error) {
+            console.error('Analytics error:', error);
+        }
+    },
+
+    getSessionId() {
+        let sessionId = sessionStorage.getItem('covetalks_session_id');
+        if (!sessionId) {
+            sessionId = this.generateUUID();
+            sessionStorage.setItem('covetalks_session_id', sessionId);
+        }
+        return sessionId;
+    },
+
+    async trackPageView(pageName) {
+        await this.logEvent('page_view', { page_name: pageName });
+    },
+
+    async trackClick(element, label) {
+        await this.logEvent('click', { element, label });
+    },
+
+    async trackFormSubmit(formName, success = true) {
+        await this.logEvent('form_submit', { form_name: formName, success });
+    },
+
+    async trackSearch(query, resultCount) {
+        await this.logEvent('search', { query, result_count: resultCount });
+    },
+
+    async trackError(error, context) {
+        await this.logEvent('error', { 
+            error_message: error.message,
+            error_code: error.code,
+            context 
+        });
+    },
+
+    // ===========================================
+    // DATA VALIDATION
+    // ===========================================
+    
+    validateRequired(value, fieldName) {
+        if (!value || (typeof value === 'string' && !value.trim())) {
+            throw new Error(`${fieldName} is required`);
+        }
+        return true;
+    },
+
+    validateLength(value, min, max, fieldName) {
+        if (value.length < min || value.length > max) {
+            throw new Error(`${fieldName} must be between ${min} and ${max} characters`);
+        }
+        return true;
+    },
+
+    validateUrl(url) {
+        try {
+            new URL(url);
+            return true;
+        } catch {
+            return false;
+        }
+    },
+
+    validateDate(date) {
+        const d = new Date(date);
+        return d instanceof Date && !isNaN(d);
+    },
+
+    validateFutureDate(date) {
+        const d = new Date(date);
+        return this.validateDate(date) && d > new Date();
+    },
+
+    sanitizeInput(input) {
+        if (typeof input !== 'string') return input;
+        
+        return input
+            .trim()
+            .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+            .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '');
+    },
+
+    // ===========================================
+    // PERFORMANCE MONITORING
+    // ===========================================
+    
+    performanceMarks: new Map(),
+
+    startPerformanceMark(name) {
+        this.performanceMarks.set(name, performance.now());
+    },
+
+    endPerformanceMark(name) {
+        const start = this.performanceMarks.get(name);
+        if (!start) return null;
+        
+        const duration = performance.now() - start;
+        this.performanceMarks.delete(name);
+        
+        // Log slow operations
+        if (duration > 1000) {
+            console.warn(`[Performance] ${name} took ${duration.toFixed(2)}ms`);
+            this.logEvent('slow_operation', { operation: name, duration });
+        }
+        
+        return duration;
+    },
+
+    // ===========================================
+    // INITIALIZATION
+    // ===========================================
+    
+    initialized: false,
+
+    async initialize() {
+        if (this.initialized) return;
+        
+        try {
+            // Load feature flags
+            await this.getFeatureFlags();
+            
+            // Set up auth listener
+            supabase.auth.onAuthStateChange((event, session) => {
+                if (event === 'SIGNED_OUT') {
+                    this.clearCache();
+                    window.location.href = '/';
+                }
+            });
+            
+            // Load user preferences if logged in
+            const session = await this.checkAuth();
+            if (session) {
+                await this.loadUserPreferences();
+            }
+            
+            this.initialized = true;
+            console.log('[CoveTalks] Initialized successfully');
+            
+        } catch (error) {
+            console.error('[CoveTalks] Initialization failed:', error);
+            throw error;
+        }
+    },
+
+    async loadUserPreferences() {
+        try {
+            const user = await this.getCurrentUser();
+            if (user?.preferences) {
+                // Apply theme
+                if (user.preferences.theme) {
+                    document.body.setAttribute('data-theme', user.preferences.theme);
+                }
+                // Apply language
+                if (user.preferences.language) {
+                    document.documentElement.lang = user.preferences.language;
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load user preferences:', error);
+        }
+    },
+
+    // ===========================================
+    // NETWORK STATUS
+    // ===========================================
+    
+    isOnline() {
+        return navigator.onLine;
+    },
+
+    onNetworkChange(callback) {
+        window.addEventListener('online', () => callback(true));
+        window.addEventListener('offline', () => callback(false));
+    },
+
+    async waitForNetwork(timeout = 30000) {
+        if (this.isOnline()) return true;
+        
+        return new Promise((resolve) => {
+            const timer = setTimeout(() => resolve(false), timeout);
+            
+            window.addEventListener('online', () => {
+                clearTimeout(timer);
+                resolve(true);
+            }, { once: true });
+        });
+    },
+
+    debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    },
+
+    throttle(func, limit) {
+        let inThrottle;
+        return function(...args) {
+            if (!inThrottle) {
+                func.apply(this, args);
+                inThrottle = true;
+                setTimeout(() => inThrottle = false, limit);
+            }
+        };
+    },
+
+    // ===========================================
+    // DEEP LINKING & ROUTING
+    // ===========================================
+    
+    async handleDeepLink(path) {
+        const parts = path.split('/').filter(Boolean);
+        
+        if (parts[0] === 'profile' && parts[1]) {
+            window.location.href = `/profile.html?id=${parts[1]}`;
+        } else if (parts[0] === 'opportunity' && parts[1]) {
+            window.location.href = `/opportunity-details.html?id=${parts[1]}`;
+        } else if (parts[0] === 'apply' && parts[1]) {
+            const session = await this.checkAuth();
+            if (session) {
+                window.location.href = `/apply.html?opportunity=${parts[1]}`;
+            } else {
+                sessionStorage.setItem('redirect_after_login', `/apply.html?opportunity=${parts[1]}`);
+                window.location.href = '/login.html';
+            }
+        }
+    },
+
+    getQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        const result = {};
+        for (const [key, value] of params) {
+            result[key] = value;
+        }
+        return result;
+    },
+
+    updateQueryParams(params) {
+        const url = new URL(window.location);
+        Object.entries(params).forEach(([key, value]) => {
+            if (value === null || value === undefined) {
+                url.searchParams.delete(key);
+            } else {
+                url.searchParams.set(key, value);
+            }
+        });
+        window.history.pushState({}, '', url);
+    },
+
+    // ===========================================
+    // LOCAL STORAGE MANAGEMENT
+    // ===========================================
+    
+    storage: {
+        get(key) {
+            try {
+                const item = localStorage.getItem(`covetalks_${key}`);
+                return item ? JSON.parse(item) : null;
+            } catch {
+                return null;
+            }
+        },
+        
+        set(key, value) {
+            try {
+                localStorage.setItem(`covetalks_${key}`, JSON.stringify(value));
+                return true;
+            } catch {
+                return false;
+            }
+        },
+        
+        remove(key) {
+            localStorage.removeItem(`covetalks_${key}`);
+        },
+        
+        clear() {
+            Object.keys(localStorage)
+                .filter(key => key.startsWith('covetalks_'))
+                .forEach(key => localStorage.removeItem(key));
+        }
+    },
+
+    // ===========================================
+    // SESSION MANAGEMENT
+    // ===========================================
+    
+    async refreshSession() {
+        const { data, error } = await supabase.auth.refreshSession();
+        if (error) throw error;
+        return data.session;
+    },
+
+    async getSessionTimeRemaining() {
+        const session = await this.checkAuth();
+        if (!session) return 0;
+        
+        const expiresAt = new Date(session.expires_at * 1000);
+        const now = new Date();
+        return Math.max(0, expiresAt - now);
+    },
+
+    async setupSessionRefresh() {
+        // Refresh session 5 minutes before expiry
+        const timeRemaining = await this.getSessionTimeRemaining();
+        if (timeRemaining > 5 * 60 * 1000) {
+            setTimeout(async () => {
+                await this.refreshSession();
+                this.setupSessionRefresh(); // Schedule next refresh
+            }, timeRemaining - 5 * 60 * 1000);
+        }
+    },
+
+    // ===========================================
+    // FORM HELPERS
+    // ===========================================
+    
+    serializeForm(formElement) {
+        const formData = new FormData(formElement);
+        const data = {};
+        
+        for (const [key, value] of formData.entries()) {
+            if (data[key]) {
+                if (!Array.isArray(data[key])) {
+                    data[key] = [data[key]];
+                }
+                data[key].push(value);
+            } else {
+                data[key] = value;
+            }
+        }
+        
+        return data;
+    },
+
+    populateForm(formElement, data) {
+        Object.entries(data).forEach(([key, value]) => {
+            const field = formElement.elements[key];
+            if (field) {
+                if (field.type === 'checkbox') {
+                    field.checked = !!value;
+                } else if (field.type === 'radio') {
+                    const radio = formElement.querySelector(`input[name="${key}"][value="${value}"]`);
+                    if (radio) radio.checked = true;
+                } else {
+                    field.value = value;
+                }
+            }
+        });
+    },
+
+    validateForm(formElement) {
+        const errors = {};
+        const requiredFields = formElement.querySelectorAll('[required]');
+        
+        requiredFields.forEach(field => {
+            if (!field.value || (field.type === 'checkbox' && !field.checked)) {
+                errors[field.name] = `${field.dataset.label || field.name} is required`;
+            }
+        });
+        
+        // Email validation
+        const emailFields = formElement.querySelectorAll('input[type="email"]');
+        emailFields.forEach(field => {
+            if (field.value && !this.validateEmail(field.value)) {
+                errors[field.name] = 'Invalid email address';
+            }
+        });
+        
+        // Phone validation
+        const phoneFields = formElement.querySelectorAll('input[type="tel"]');
+        phoneFields.forEach(field => {
+            if (field.value && !this.validatePhone(field.value)) {
+                errors[field.name] = 'Invalid phone number';
+            }
+        });
+        
+        return {
+            isValid: Object.keys(errors).length === 0,
+            errors
+        };
+    },
+
+    // ===========================================
+    // UI HELPERS
+    // ===========================================
+    
+    showToast(message, type = 'info', duration = 3000) {
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+        `;
+        
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => toast.remove(), 300);
+        }, duration);
+    },
+
+    showConfirm(message, onConfirm, onCancel) {
+        const modal = document.createElement('div');
+        modal.className = 'confirm-modal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        `;
+        
+        modal.innerHTML = `
+            <div style="background: white; padding: 2rem; border-radius: 10px; max-width: 400px;">
+                <p style="margin-bottom: 1.5rem;">${message}</p>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button id="confirmCancel" style="padding: 0.5rem 1rem; border: 1px solid #ccc; border-radius: 5px; cursor: pointer;">
+                        Cancel
+                    </button>
+                    <button id="confirmOk" style="padding: 0.5rem 1rem; background: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Confirm
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        document.getElementById('confirmOk').onclick = () => {
+            modal.remove();
+            if (onConfirm) onConfirm();
+        };
+        
+        document.getElementById('confirmCancel').onclick = () => {
+            modal.remove();
+            if (onCancel) onCancel();
+        };
+    },
+
+    showLoading(show = true) {
+        const existingLoader = document.getElementById('globalLoader');
+        
+        if (show && !existingLoader) {
+            const loader = document.createElement('div');
+            loader.id = 'globalLoader';
+            loader.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(255,255,255,0.9);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+            `;
+            loader.innerHTML = `
+                <div style="text-align: center;">
+                    <div class="spinner" style="
+                        border: 4px solid #f3f3f3;
+                        border-top: 4px solid #3498db;
+                        border-radius: 50%;
+                        width: 40px;
+                        height: 40px;
+                        animation: spin 1s linear infinite;
+                        margin: 0 auto 1rem;
+                    "></div>
+                    <p>Loading...</p>
+                </div>
+            `;
+            document.body.appendChild(loader);
+        } else if (!show && existingLoader) {
+            existingLoader.remove();
+        }
+    },
+
+    // ===========================================
+    // SEO & META TAGS
+    // ===========================================
+    
+    updateMetaTags(data) {
+        // Title
+        if (data.title) {
+            document.title = `${data.title} - CoveTalks`;
+        }
+        
+        // Description
+        if (data.description) {
+            let metaDesc = document.querySelector('meta[name="description"]');
+            if (!metaDesc) {
+                metaDesc = document.createElement('meta');
+                metaDesc.name = 'description';
+                document.head.appendChild(metaDesc);
+            }
+            metaDesc.content = data.description;
+        }
+        
+        // Open Graph
+        const ogTags = {
+            'og:title': data.title,
+            'og:description': data.description,
+            'og:image': data.image,
+            'og:url': window.location.href,
+            'og:type': data.type || 'website'
+        };
+        
+        Object.entries(ogTags).forEach(([property, content]) => {
+            if (content) {
+                let tag = document.querySelector(`meta[property="${property}"]`);
+                if (!tag) {
+                    tag = document.createElement('meta');
+                    tag.setAttribute('property', property);
+                    document.head.appendChild(tag);
+                }
+                tag.content = content;
+            }
+        });
+    },
+
+    generateStructuredData(type, data) {
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        
+        let structuredData = {
+            '@context': 'https://schema.org',
+            '@type': type
+        };
+        
+        if (type === 'Person' && data.speaker) {
+            structuredData = {
+                ...structuredData,
+                name: data.speaker.name,
+                description: data.speaker.bio,
+                image: data.speaker.profile_image_url,
+                jobTitle: data.speaker.title,
+                url: `${window.location.origin}/profile.html?id=${data.speaker.id}`
+            };
+        } else if (type === 'Event' && data.opportunity) {
+            structuredData = {
+                ...structuredData,
+                name: data.opportunity.title,
+                description: data.opportunity.description,
+                startDate: data.opportunity.event_date,
+                location: data.opportunity.location,
+                organizer: {
+                    '@type': 'Organization',
+                    name: data.opportunity.organization?.name
+                }
+            };
+        }
+        
+        script.textContent = JSON.stringify(structuredData);
+        document.head.appendChild(script);
+    }
+};
+
+// Export for module systems
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = window.covetalks;
 }

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Feed - CoveTalks</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- Activity Page Specific Styles -->
+    <link rel="stylesheet" href="/css/pages/activity.css">
+</head>
+<body>
+    <!-- Header will be auto-injected by header.js -->
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Activity Header -->
+        <div class="activity-header" id="activityHeader">
+            <div class="container">
+                <h1>Activity Feed</h1>
+                <p id="headerSubtext">Track all your recent activity and interactions</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Stats Summary -->
+            <div class="stats-summary" id="statsSummary">
+                <div class="stat-box">
+                    <div class="stat-value" id="todayCount">0</div>
+                    <div class="stat-label">Today's Activities</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="weekCount">0</div>
+                    <div class="stat-label">This Week</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="monthCount">0</div>
+                    <div class="stat-label">This Month</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="unreadCount">0</div>
+                    <div class="stat-label">Unread Items</div>
+                </div>
+            </div>
+
+            <!-- Filters Bar -->
+            <div class="filters-bar">
+                <div class="filter-group">
+                    <label class="filter-label">Activity Type</label>
+                    <select class="filter-select" id="typeFilter">
+                        <option value="all">All Activities</option>
+                        <option value="profile_view">Profile Views</option>
+                        <option value="application">Applications</option>
+                        <option value="booking">Bookings</option>
+                        <option value="message">Messages</option>
+                        <option value="review">Reviews</option>
+                        <option value="opportunity">Opportunities</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Time Period</label>
+                    <select class="filter-select" id="periodFilter">
+                        <option value="all">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="3months">Last 3 Months</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Sort By</label>
+                    <select class="filter-select" id="sortFilter">
+                        <option value="recent">Most Recent</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="type">By Type</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">&nbsp;</label>
+                    <button id="clearFiltersBtn" class="btn btn-secondary">
+                        Clear Filters
+                    </button>
+                </div>
+            </div>
+
+            <!-- Activity Timeline -->
+            <div class="activity-timeline" id="activityTimeline">
+                <!-- Loading State -->
+                <div id="loadingState" class="loading">
+                    <div class="loading-spinner"></div>
+                    Loading your activity...
+                </div>
+
+                <!-- Activities will be inserted here -->
+                <div id="activitiesContainer"></div>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="empty-activity hidden">
+                    <div class="empty-activity-icon">📊</div>
+                    <h3>No Activity Yet</h3>
+                    <p>Your activity feed will show profile views, applications, messages, and other interactions.</p>
+                    <a href="/dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+                </div>
+            </div>
+
+            <!-- Load More -->
+            <div class="load-more-container" id="loadMoreContainer" style="display: none;">
+                <button class="load-more-btn" id="loadMoreBtn">
+                    Load More Activities
+                </button>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer will be auto-injected by footer.js -->
+
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load config and Supabase client -->
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
+    
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
+    <script src="/js/pages/activity.js"></script>
+</body>
+</html>

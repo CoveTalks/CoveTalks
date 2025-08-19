@@ -1,6 +1,6 @@
 /**
  * CoveTalks Profile Page
- * Unified profile for both speakers and organizations
+ * Unified profile for both speakers and organizations with proper activity tracking
  */
 
 // Page state
@@ -102,6 +102,19 @@ async function loadProfile() {
         if (isOwnProfile) {
             document.body.classList.add('is-own-profile');
             console.log('[Profile] Viewing own profile');
+        } else {
+            // TRACK PROFILE VIEW - Only if viewing someone else's profile and logged in
+            if (currentUser && window.covetalks?.trackProfileView) {
+                try {
+                    await window.covetalks.trackProfileView(profileUser.id);
+                    console.log('[Profile] Profile view tracked successfully for:', profileUser.id);
+                } catch (trackError) {
+                    console.error('[Profile] Failed to track profile view:', trackError);
+                    // Don't fail the page load if tracking fails
+                }
+            } else if (!currentUser) {
+                console.log('[Profile] Not tracking view - user not logged in');
+            }
         }
         
         // Load organization data if needed
@@ -123,10 +136,42 @@ async function loadProfile() {
             loadStats()
         ]);
         
+        // If logged in, subscribe to real-time updates for this profile
+        if (currentUser && !isOwnProfile) {
+            subscribeToProfileUpdates();
+        }
+        
     } catch (error) {
         console.error('[Profile] Error loading profile:', error);
         showError('Failed to load profile');
     }
+}
+
+// Subscribe to real-time profile updates
+function subscribeToProfileUpdates() {
+    // Subscribe to updates for this profile
+    const profileChannel = window.covetalks.supabase
+        .channel(`profile-${profileId}`)
+        .on('postgres_changes', 
+            { 
+                event: 'UPDATE', 
+                schema: 'public', 
+                table: 'members',
+                filter: `id=eq.${profileId}`
+            },
+            (payload) => {
+                console.log('[Profile] Profile updated:', payload.new);
+                // Update displayed data
+                profileUser = payload.new;
+                displayProfile();
+            }
+        )
+        .subscribe();
+    
+    // Clean up on page unload
+    window.addEventListener('beforeunload', () => {
+        profileChannel.unsubscribe();
+    });
 }
 
 // Load organization data
@@ -402,7 +447,7 @@ async function loadOrganizationOpportunities() {
     }
 }
 
-// Load stats
+// Load stats including profile views
 async function loadStats() {
     try {
         if (profileUser.member_type === 'Speaker') {
@@ -412,6 +457,15 @@ async function loadStats() {
             document.getElementById('totalBookings').textContent = stats.bookings || '0';
             document.getElementById('avgRating').textContent = 
                 profileUser.average_rating ? profileUser.average_rating.toFixed(1) : '0.0';
+            
+            // If viewing own profile, show profile views
+            if (isOwnProfile && stats.profileViews !== undefined) {
+                // Add profile views stat if element exists
+                const viewsElement = document.getElementById('profileViews');
+                if (viewsElement) {
+                    viewsElement.textContent = `${stats.profileViews} profile views (30 days)`;
+                }
+            }
             
             const memberSince = new Date(profileUser.created_at);
             document.getElementById('memberSince').textContent = memberSince.getFullYear();
@@ -485,6 +539,14 @@ function shareProfile(platform) {
     
     if (shareUrl) {
         window.open(shareUrl, '_blank', 'width=600,height=400');
+        
+        // Track share activity
+        if (window.covetalks && currentUser) {
+            window.covetalks.trackActivity('profile_shared', profileUser.id, {
+                platform: platform,
+                sharer_id: currentUser.id
+            });
+        }
     }
     
     document.getElementById('shareDropdown').classList.remove('show');
@@ -494,6 +556,13 @@ function copyProfileLink() {
     navigator.clipboard.writeText(window.location.href);
     alert('Profile link copied to clipboard!');
     document.getElementById('shareDropdown').classList.remove('show');
+    
+    // Track copy activity
+    if (window.covetalks && currentUser) {
+        window.covetalks.trackActivity('profile_link_copied', profileUser.id, {
+            copier_id: currentUser.id
+        });
+    }
 }
 
 // Show error
@@ -514,6 +583,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Please login to contact this user');
                 window.location.href = `/login.html?redirect=${encodeURIComponent(window.location.href)}`;
             } else {
+                // Track contact intent
+                if (window.covetalks) {
+                    window.covetalks.trackActivity('contact_initiated', profileUser.id, {
+                        from_profile: true
+                    });
+                }
                 window.location.href = `/inbox.html?compose=true&to=${profileUser.id}&name=${encodeURIComponent(profileUser.name || '')}`;
             }
         });
@@ -539,6 +614,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 saveBtn.disabled = true;
                 
                 await window.covetalks.saveSpeaker(profileUser.id, '');
+                // The saveSpeaker function already tracks this activity
                 
                 saveBtn.textContent = 'Speaker Saved!';
                 saveBtn.classList.remove('btn-warning');
