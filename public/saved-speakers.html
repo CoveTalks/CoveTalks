@@ -11,23 +11,34 @@
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="/css/main.css">
     
-    <!-- Page-specific styles ONLY for unique elements -->
+    <!-- Page-specific styles aligned with brand -->
     <style>
-        /* Page Header - Saved Speakers specific */
+        /* Page Header - Using brand gradient */
         .page-header {
-            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
+            background: linear-gradient(135deg, var(--color-sand) 0%, var(--color-calm) 100%);
             color: white;
             padding: 8rem 0 4rem 0;
             margin-bottom: var(--spacing-xl);
             border-radius: 15px;
+            text-align: center;
         }
 
         .page-header h1 {
             margin-bottom: var(--spacing-sm);
             color: white;
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 900; /* Brandon Text Black */
+            font-size: 2.5rem;
         }
 
-        /* Stats Bar */
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 400; /* Brandon Text Regular */
+        }
+
+        /* Stats Bar - Clean and minimal with brand colors */
         .stats-bar {
             background: white;
             padding: var(--spacing-lg);
@@ -35,7 +46,7 @@
             box-shadow: var(--shadow-md);
             margin-bottom: var(--spacing-xl);
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
             align-items: center;
         }
 
@@ -44,54 +55,94 @@
         }
 
         .stat-value {
-            font-size: 1.8rem;
-            font-weight: var(--font-weight-black);
-            color: var(--color-deep);
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--color-sand);
+            font-family: 'Brandon Text', var(--font-primary);
         }
 
         .stat-label {
             color: var(--color-gray);
             font-size: 0.9rem;
+            margin-top: 0.25rem;
         }
 
-        /* Actions Bar */
+        /* Actions Bar - Cleaner design */
         .actions-bar {
             background: white;
-            padding: var(--spacing-lg);
+            padding: var(--spacing-xl);
             border-radius: 15px;
             box-shadow: var(--shadow-md);
             margin-bottom: var(--spacing-xl);
+        }
+
+        .actions-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: var(--spacing-lg);
             flex-wrap: wrap;
             gap: var(--spacing-md);
         }
 
-        .search-filters {
+        .actions-title {
+            color: var(--color-deep);
+            font-size: 1.5rem;
+            font-weight: 900;
+            font-family: 'Brandon Text', var(--font-primary);
+        }
+
+        .view-toggle {
             display: flex;
+            background: var(--color-foam);
+            border-radius: 25px;
+            padding: 0.25rem;
+        }
+
+        .view-btn {
+            padding: 0.5rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-weight: 500;
+            color: var(--color-gray);
+        }
+
+        .view-btn.active {
+            background: white;
+            box-shadow: var(--shadow-sm);
+            color: var(--color-deep);
+        }
+
+        /* Search and Filters */
+        .search-filters {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
             gap: var(--spacing-md);
-            flex: 1;
-            min-width: 300px;
+            margin-bottom: var(--spacing-lg);
         }
 
         .search-box {
-            flex: 1;
             position: relative;
         }
 
         .search-box input {
             width: 100%;
             padding: 0.75rem 1rem 0.75rem 2.5rem;
-            border: 2px solid var(--color-border);
-            border-radius: 25px;
-            font-size: 1rem;
-            transition: border-color var(--transition-fast);
+            border: 2px solid var(--color-foam);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: all var(--transition-fast);
+            background: var(--color-foam);
         }
 
         .search-box input:focus {
             outline: none;
-            border-color: var(--color-deep);
+            border-color: var(--color-calm);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(29, 147, 183, 0.1);
         }
 
         .search-icon {
@@ -104,102 +155,91 @@
 
         .filter-select {
             padding: 0.75rem 1rem;
-            border: 2px solid var(--color-border);
-            border-radius: 25px;
-            font-size: 1rem;
-            transition: border-color var(--transition-fast);
-            background: white;
+            border: 2px solid var(--color-foam);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: all var(--transition-fast);
+            background: var(--color-foam);
         }
 
         .filter-select:focus {
             outline: none;
-            border-color: var(--color-deep);
+            border-color: var(--color-calm);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(29, 147, 183, 0.1);
         }
 
         .action-buttons {
             display: flex;
             gap: var(--spacing-md);
+            justify-content: center;
         }
 
-        /* View Toggle */
-        .view-toggle {
-            display: flex;
-            background: var(--color-foam);
-            border-radius: 25px;
-            padding: 0.25rem;
-        }
-
-        .view-btn {
-            padding: 0.5rem 1rem;
-            background: transparent;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-
-        .view-btn.active {
-            background: white;
-            box-shadow: var(--shadow-sm);
-        }
-
-        /* Speakers Grid */
+        /* Speakers Grid - More spacious */
         .speakers-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
             gap: var(--spacing-xl);
             margin-bottom: var(--spacing-xl);
         }
 
-        /* Speaker Card */
+        /* Speaker Card - Redesigned with brand colors */
         .speaker-card {
             background: white;
             border-radius: 15px;
-            padding: var(--spacing-lg);
+            overflow: hidden;
             box-shadow: var(--shadow-md);
-            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+            transition: all var(--transition-normal);
             position: relative;
         }
 
         .speaker-card:hover {
             transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow-xl);
         }
 
+        /* Saved Indicator - Using Sand color */
         .saved-indicator {
             position: absolute;
             top: 1rem;
             right: 1rem;
             background: var(--color-sand);
             color: white;
-            width: 30px;
-            height: 30px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
+            box-shadow: var(--shadow-sm);
+            z-index: 10;
         }
 
+        /* Speaker Header */
         .speaker-header {
+            background: linear-gradient(135deg, var(--color-foam) 0%, white 100%);
+            padding: var(--spacing-lg);
             display: flex;
             align-items: center;
-            margin-bottom: var(--spacing-md);
+            gap: var(--spacing-md);
         }
 
         .speaker-avatar {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--color-deep), var(--color-calm));
+            background: linear-gradient(135deg, var(--color-sand), var(--color-calm));
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            font-weight: var(--font-weight-bold);
-            margin-right: var(--spacing-md);
+            font-size: 2rem;
+            font-weight: 900;
+            flex-shrink: 0;
             overflow: hidden;
+            border: 3px solid white;
+            box-shadow: var(--shadow-sm);
         }
 
         .speaker-avatar img {
@@ -208,25 +248,33 @@
             object-fit: cover;
         }
 
+        .speaker-info {
+            flex: 1;
+        }
+
         .speaker-info h3 {
             color: var(--color-deep);
             margin-bottom: 0.25rem;
+            font-weight: 900;
+            font-family: 'Brandon Text', var(--font-primary);
+            font-size: 1.35rem;
         }
 
         .speaker-location {
             color: var(--color-gray);
             font-size: 0.9rem;
+            margin-bottom: 0.5rem;
         }
 
         .speaker-rating {
             display: flex;
             align-items: center;
-            gap: 0.25rem;
-            margin-top: 0.25rem;
+            gap: 0.5rem;
         }
 
         .stars {
             color: var(--color-sand);
+            font-size: 1rem;
         }
 
         .rating-value {
@@ -234,34 +282,41 @@
             font-size: 0.9rem;
         }
 
+        /* Speaker Body */
+        .speaker-body {
+            padding: var(--spacing-lg);
+        }
+
         .speaker-bio {
             color: var(--color-gray);
             margin-bottom: var(--spacing-md);
             font-size: 0.95rem;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .speaker-specialties {
             display: flex;
             flex-wrap: wrap;
             gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
         }
 
         .specialty-tag {
-            background: #e8f4fd;
-            color: var(--color-deep);
+            background: rgba(29, 147, 183, 0.1);
+            color: var(--color-calm);
             padding: 0.25rem 0.75rem;
             border-radius: 15px;
             font-size: 0.85rem;
+            font-weight: 500;
+            border: 1px solid rgba(29, 147, 183, 0.2);
         }
 
-        /* Notes Section */
+        /* Notes Section - More inviting */
         .speaker-notes {
             background: var(--color-foam);
             padding: var(--spacing-md);
             border-radius: 10px;
-            margin-bottom: var(--spacing-md);
+            margin: 0 var(--spacing-lg) var(--spacing-lg);
         }
 
         .notes-header {
@@ -272,34 +327,41 @@
         }
 
         .notes-label {
-            font-weight: var(--font-weight-bold);
-            color: var(--color-gray-dark);
+            font-weight: 700;
+            color: var(--color-deep);
             font-size: 0.9rem;
+            font-family: 'Brandon Text', var(--font-primary);
         }
 
         .edit-notes-btn {
             background: none;
             border: none;
-            color: var(--color-deep);
+            color: var(--color-calm);
             cursor: pointer;
             font-size: 0.85rem;
+            font-weight: 500;
             text-decoration: underline;
+        }
+
+        .edit-notes-btn:hover {
+            color: var(--color-deep);
         }
 
         .notes-content {
             color: var(--color-gray);
             font-size: 0.9rem;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .notes-input {
             width: 100%;
             padding: var(--spacing-sm);
-            border: 1px solid var(--color-border);
-            border-radius: 5px;
+            border: 2px solid var(--color-calm);
+            border-radius: 8px;
             font-size: 0.9rem;
             resize: vertical;
-            min-height: 60px;
+            min-height: 80px;
+            background: white;
         }
 
         .notes-actions {
@@ -311,12 +373,37 @@
 
         /* Card Actions */
         .card-actions {
+            padding: var(--spacing-md) var(--spacing-lg) var(--spacing-lg);
             display: flex;
             gap: var(--spacing-sm);
-            justify-content: space-between;
+            justify-content: center;
         }
 
-        /* List View */
+        .card-actions .btn {
+            flex: 1;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-3xl);
+            color: var(--color-gray);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: var(--spacing-md);
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-md);
+            font-weight: 900;
+            font-family: 'Brandon Text', var(--font-primary);
+        }
+
+        /* List View Table */
         .speakers-list {
             background: white;
             border-radius: 15px;
@@ -333,72 +420,135 @@
             text-align: left;
             padding: var(--spacing-md);
             background: var(--color-foam);
-            font-weight: var(--font-weight-bold);
-            color: var(--color-gray);
+            font-weight: 700;
+            color: var(--color-deep);
             font-size: 0.9rem;
-            border-bottom: 2px solid var(--color-border);
+            border-bottom: 2px solid white;
+            font-family: 'Brandon Text', var(--font-primary);
         }
 
         .speakers-table td {
             padding: var(--spacing-md);
-            border-bottom: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-foam);
         }
 
         .speakers-table tr:hover {
-            background: var(--color-foam);
+            background: rgba(243, 179, 56, 0.05);
         }
 
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
+        /* Modals - Brand styled */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: var(--spacing-xl);
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .modal-header h3 {
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-lg);
+            font-weight: 900;
+            font-family: 'Brandon Text', var(--font-primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .speakers-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+            
             .stats-bar {
-                flex-direction: column;
-                gap: var(--spacing-md);
+                flex-wrap: wrap;
+                gap: var(--spacing-lg);
             }
-
-            .actions-bar {
-                flex-direction: column;
-            }
-
+            
             .search-filters {
-                flex-direction: column;
-                width: 100%;
+                grid-template-columns: 1fr;
             }
+        }
 
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
             .speakers-grid {
                 grid-template-columns: 1fr;
             }
-
-            .speakers-table {
-                font-size: 0.85rem;
+            
+            .actions-header {
+                flex-direction: column;
+                align-items: stretch;
             }
-
-            .speakers-table th,
-            .speakers-table td {
-                padding: var(--spacing-sm);
+            
+            .view-toggle {
+                justify-content: center;
             }
-
-            .page-header {
-                padding: var(--spacing-lg) 0;
+            
+            .stats-bar {
+                flex-direction: column;
+            }
+            
+            .stat-item {
+                width: 100%;
+                padding: var(--spacing-md) 0;
+                border-bottom: 1px solid var(--color-foam);
+            }
+            
+            .stat-item:last-child {
+                border-bottom: none;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-buttons .btn {
+                width: 100%;
             }
         }
 
         @media (max-width: 576px) {
+            .page-header {
+                padding: var(--spacing-xl) 0 var(--spacing-lg) 0;
+            }
+            
+            .page-header h1 {
+                font-size: 1.75rem;
+            }
+            
             .speaker-header {
                 flex-direction: column;
                 text-align: center;
             }
-
+            
             .speaker-avatar {
-                margin-right: 0;
-                margin-bottom: var(--spacing-sm);
+                margin-bottom: var(--spacing-md);
             }
-
+            
             .card-actions {
                 flex-direction: column;
-            }
-
-            .card-actions .btn {
-                width: 100%;
             }
         }
     </style>
@@ -409,10 +559,10 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Page Header -->
+            <!-- Page Header with Brand Gradient -->
             <div class="page-header">
-                <h1>Saved Speakers</h1>
-                <p>Manage your collection of saved speakers for future opportunities</p>
+                <h1>Your Saved Speakers</h1>
+                <p>Build your perfect speaker roster for upcoming events</p>
             </div>
 
             <!-- Stats Bar -->
@@ -431,25 +581,33 @@
                 </div>
                 <div class="stat-item">
                     <div class="stat-value" id="topRated">0</div>
-                    <div class="stat-label">5-Star Speakers</div>
+                    <div class="stat-label">Top Rated</div>
                 </div>
             </div>
 
             <!-- Actions Bar -->
             <div class="actions-bar">
+                <div class="actions-header">
+                    <h2 class="actions-title">Manage Speakers</h2>
+                    <div class="view-toggle">
+                        <button class="view-btn active" onclick="setView('grid')">Grid</button>
+                        <button class="view-btn" onclick="setView('list')">List</button>
+                    </div>
+                </div>
+                
                 <div class="search-filters">
                     <div class="search-box">
                         <span class="search-icon">🔍</span>
                         <input type="text" id="searchInput" placeholder="Search saved speakers..." onkeyup="filterSpeakers()">
                     </div>
                     <select class="filter-select" id="specialtyFilter" onchange="filterSpeakers()">
-                        <option value="">All Specialties</option>
+                        <option value="">All Topics</option>
                         <option value="Leadership">Leadership</option>
                         <option value="Technology">Technology</option>
-                        <option value="Health">Health & Wellness</option>
                         <option value="Business">Business</option>
+                        <option value="Health">Health & Wellness</option>
                         <option value="Education">Education</option>
-                        <option value="Motivation">Motivation</option>
+                        <option value="Innovation">Innovation</option>
                     </select>
                     <select class="filter-select" id="sortBy" onchange="sortSpeakers()">
                         <option value="recent">Recently Added</option>
@@ -458,16 +616,13 @@
                         <option value="location">Location</option>
                     </select>
                 </div>
+                
                 <div class="action-buttons">
-                    <div class="view-toggle">
-                        <button class="view-btn active" onclick="setView('grid')">Grid</button>
-                        <button class="view-btn" onclick="setView('list')">List</button>
-                    </div>
                     <button onclick="exportSpeakers()" class="btn btn-secondary">
-                        📥 Export
+                        📥 Export List
                     </button>
                     <a href="/members.html" class="btn btn-primary">
-                        + Find More Speakers
+                        ➕ Find More Speakers
                     </a>
                 </div>
             </div>
@@ -494,11 +649,14 @@
                 <form id="contactForm">
                     <div class="form-group">
                         <label class="form-label" for="contactSubject">Subject</label>
-                        <input type="text" class="form-control" id="contactSubject" required placeholder="Speaking opportunity at...">
+                        <input type="text" class="form-control" id="contactSubject" required 
+                               placeholder="Speaking opportunity at...">
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="contactMessage">Message</label>
-                        <textarea class="form-control" id="contactMessage" required placeholder="Hello, we have an exciting speaking opportunity..."></textarea>
+                        <textarea class="form-control" id="contactMessage" required 
+                                  placeholder="We'd love to have you speak at our upcoming event..."
+                                  rows="5"></textarea>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="contactOpportunity">Related Opportunity (Optional)</label>
@@ -524,28 +682,22 @@
             <div class="modal-body">
                 <p>Are you sure you want to remove <strong id="removeSpeakerName"></strong> from your saved speakers?</p>
                 <p style="margin-top: var(--spacing-md); color: var(--color-gray);">
-                    This action cannot be undone. Any notes you've added will also be deleted.
+                    Any notes you've added will also be removed.
                 </p>
             </div>
             <div class="modal-footer">
-                <button onclick="closeModal()" class="btn btn-secondary">Cancel</button>
-                <button onclick="confirmRemoveSpeaker()" class="btn btn-danger">Remove Speaker</button>
+                <button onclick="closeModal()" class="btn btn-secondary">Keep Speaker</button>
+                <button onclick="confirmRemoveSpeaker()" class="btn btn-danger">Remove</button>
             </div>
         </div>
     </div>
 
-    <!-- Load Supabase from CDN -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- Load config and Supabase client -->
     <script src="/js/config.js"></script>
     <script src="/js/supabase-client.js"></script>
-    
-    <!-- Load header and footer components -->
     <script src="/js/components/header.js"></script>
     <script src="/js/components/footer.js"></script>
-    
-    <!-- Page-specific JavaScript -->
     <script src="/js/pages/saved-speakers.js"></script>
 </body>
 </html>
