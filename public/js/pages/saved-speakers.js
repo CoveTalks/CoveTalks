@@ -103,11 +103,15 @@ function updateStats() {
     const total = savedSpeakers.length;
     const withNotes = savedSpeakers.filter(s => s.notes && s.notes.trim()).length;
     
-    const thisMonth = new Date();
-    thisMonth.setDate(1);
-    const recentlyAdded = savedSpeakers.filter(s => 
-        new Date(s.created_at) >= thisMonth
-    ).length;
+    // Handle missing created_at gracefully
+    let recentlyAdded = 0;
+    if (savedSpeakers.length > 0 && savedSpeakers[0].created_at) {
+        const thisMonth = new Date();
+        thisMonth.setDate(1);
+        recentlyAdded = savedSpeakers.filter(s => 
+            s.created_at && new Date(s.created_at) >= thisMonth
+        ).length;
+    }
     
     const topRated = savedSpeakers.filter(s => 
         s.speaker?.average_rating >= 4.5
@@ -339,6 +343,8 @@ window.sortSpeakers = function() {
                 return (a.speaker.location || '').localeCompare(b.speaker.location || '');
             case 'recent':
             default:
+                // Handle missing created_at
+                if (!a.created_at || !b.created_at) return 0;
                 return new Date(b.created_at) - new Date(a.created_at);
         }
     });

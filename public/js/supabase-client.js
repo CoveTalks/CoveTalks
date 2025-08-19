@@ -789,7 +789,8 @@ window.covetalks = {
         
         if (!orgMember) return [];
         
-        const { data, error } = await supabase
+        // Try with created_at first, fallback to without if it fails
+        let { data, error } = await supabase
             .from('saved_speakers')
             .select(`
                 *,
@@ -797,6 +798,20 @@ window.covetalks = {
             `)
             .eq('organization_id', orgMember.organization_id)
             .order('created_at', { ascending: false });
+        
+        // If error is about created_at column, try without ordering
+        if (error && error.message.includes('created_at does not exist')) {
+            const result = await supabase
+                .from('saved_speakers')
+                .select(`
+                    *,
+                    speaker:members!saved_speakers_speaker_id_fkey(*)
+                `)
+                .eq('organization_id', orgMember.organization_id);
+            
+            data = result.data;
+            error = result.error;
+        }
         
         if (error) throw error;
         return data || [];
