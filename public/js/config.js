@@ -1,5 +1,5 @@
 // config.js - Works with both hardcoded values and environment variables
-window.APP_CONFIG = {
+window.CONFIG = {  // Changed from APP_CONFIG to CONFIG
     // Try to use environment variables if available (in Netlify Functions)
     // Otherwise fall back to hardcoded values
     SUPABASE_URL: window.SUPABASE_URL || 'https://rzunxswrglopenyfpeqq.supabase.co',
