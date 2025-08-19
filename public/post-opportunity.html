@@ -12,16 +12,15 @@
     <link rel="stylesheet" href="/css/main.css">
     
     <!-- Page-specific styles aligned with brand consistency -->
-    <!-- Replace the existing <style> section in post-opportunity.html with this corrected version -->
     <style>
-        /* Page Header - Matching My Opportunities & Saved Speakers */
+        /* Page Header - Fixed for proper mobile rendering */
         .page-header {
             background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
             padding: 8rem 0 4rem 0;
             margin-bottom: var(--spacing-xl);
-            border-radius: 15px;
             text-align: center;
+            width: 100%;
         }
 
         .page-header h1 {
@@ -45,10 +44,9 @@
         .content-wrapper {
             max-width: 900px;
             margin: 0 auto;
-            /* Remove any fixed padding here - let container handle it */
         }
 
-        /* Progress Container - Simplified to match brand */
+        /* Progress Container */
         .progress-container {
             background: white;
             border-radius: 15px;
@@ -62,7 +60,6 @@
             justify-content: space-between;
             position: relative;
             margin-bottom: var(--spacing-sm);
-            /* Add padding to prevent cutoff on mobile */
             padding: 0 25px;
         }
 
@@ -147,7 +144,7 @@
             color: var(--color-calm);
         }
 
-        /* Tips Banner - Clean like stats sections */
+        /* Tips Banner */
         .tips-banner {
             background: white;
             border-radius: 15px;
@@ -190,7 +187,7 @@
             font-family: 'Brandon Text', var(--font-primary);
         }
 
-        /* Form Sections - Matching card style */
+        /* Form Sections */
         .form-step {
             background: white;
             border-radius: 15px;
@@ -213,7 +210,7 @@
             font-size: 1.8rem;
         }
 
-        /* Form Elements - Consistent with other pages */
+        /* Form Elements */
         .form-group {
             margin-bottom: var(--spacing-lg);
         }
@@ -285,7 +282,7 @@
             font-weight: 700;
         }
 
-        /* Topics Input - Simplified */
+        /* Topics Input */
         .topics-input-wrapper {
             border: 2px solid var(--color-foam);
             border-radius: 10px;
@@ -339,7 +336,7 @@
             background: transparent;
         }
 
-        /* Preview Section - Clean and simple */
+        /* Preview Section */
         .preview-section {
             background: white;
             border-radius: 15px;
@@ -410,7 +407,7 @@
             gap: var(--spacing-md);
         }
 
-        /* Buttons - Consistent with brand */
+        /* Buttons */
         .btn {
             padding: 0.75rem 1.5rem;
             font-weight: 700;
@@ -438,6 +435,11 @@
         .btn-secondary:hover {
             background: var(--color-calm);
             color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
         }
 
         #submitBtn {
@@ -545,9 +547,7 @@
             cursor: pointer;
         }
 
-        /* ============================================
-        RESPONSIVE DESIGN - FIXED FOR MOBILE
-        ============================================ */
+        /* Responsive Design */
         @media (max-width: 992px) {
             .content-wrapper {
                 max-width: 100%;
@@ -559,11 +559,9 @@
         }
 
         @media (max-width: 768px) {
-            /* Fix page header padding */
             .page-header {
-                padding: 4rem var(--spacing-md) 2rem;
+                padding: calc(var(--header-height-mobile) + 2rem) 0 2rem 0;
                 margin-bottom: var(--spacing-md);
-                border-radius: 0;
             }
 
             .page-header h1 {
@@ -572,10 +570,8 @@
 
             .page-header p {
                 font-size: 1rem;
-                padding: 0 var(--spacing-md);
             }
 
-            /* Simplify progress indicator for mobile */
             .progress-container {
                 padding: var(--spacing-md);
                 margin-bottom: var(--spacing-md);
@@ -606,14 +602,12 @@
                 display: none;
             }
 
-            /* Only show active step title */
             .progress-step.active .step-title {
                 display: block;
                 position: static;
                 margin-top: var(--spacing-xs);
             }
 
-            /* Tips banner adjustments */
             .tips-banner {
                 padding: var(--spacing-md);
                 margin-bottom: var(--spacing-md);
@@ -628,7 +622,6 @@
                 font-size: 0.9rem;
             }
 
-            /* Form step padding */
             .form-step {
                 padding: var(--spacing-md);
                 margin-bottom: var(--spacing-md);
@@ -640,17 +633,14 @@
                 padding-bottom: var(--spacing-sm);
             }
 
-            /* Form grid responsive */
             .form-grid-2 {
                 grid-template-columns: 1fr;
             }
 
-            /* Form group spacing */
             .form-group {
                 margin-bottom: var(--spacing-md);
             }
 
-            /* Preview section adjustments */
             .preview-section {
                 padding: var(--spacing-md);
                 margin-top: var(--spacing-md);
@@ -672,7 +662,6 @@
                 margin-bottom: var(--spacing-xs);
             }
 
-            /* Form navigation responsive */
             .form-navigation {
                 padding-top: var(--spacing-md);
                 margin-top: var(--spacing-md);
@@ -691,22 +680,19 @@
                 flex: 1;
             }
 
-            /* Button adjustments */
             .btn {
                 padding: 0.75rem 1.25rem;
                 font-size: 0.9rem;
             }
 
-            /* Modal responsive */
             .modal-content {
                 margin: var(--spacing-md);
             }
         }
 
         @media (max-width: 576px) {
-            /* Further mobile optimizations */
             .page-header {
-                padding: 3rem var(--spacing-sm) 1.5rem;
+                padding: calc(var(--header-height-mobile) + 1.5rem) 0 1.5rem 0;
             }
 
             .page-header h1 {
@@ -717,7 +703,6 @@
                 font-size: 0.95rem;
             }
 
-            /* Cards and forms with minimal padding */
             .progress-container,
             .tips-banner,
             .form-step,
@@ -730,7 +715,6 @@
                 font-size: 1.3rem;
             }
 
-            /* Compact progress steps */
             .progress-step {
                 margin: 0 var(--spacing-xs);
             }
@@ -742,13 +726,11 @@
                 border-width: 2px;
             }
 
-            /* Smaller form controls */
             .form-control {
                 padding: 0.625rem 0.875rem;
                 font-size: 0.9rem;
             }
 
-            /* Compact buttons */
             .btn {
                 width: 100%;
                 padding: 0.625rem 1rem;
@@ -758,19 +740,16 @@
                 padding: 0.75rem 1.25rem;
             }
 
-            /* Stack all navigation buttons */
             .nav-left,
             .nav-right {
                 flex-direction: column;
             }
 
-            /* Topic tags */
             .topic-tag {
                 font-size: 0.85rem;
                 padding: 0.25rem 0.5rem;
             }
 
-            /* Reduce spacing throughout */
             .form-group {
                 margin-bottom: var(--spacing-sm);
             }
@@ -783,7 +762,6 @@
                 padding: var(--spacing-xs) 0;
             }
 
-            /* Alerts */
             .alert {
                 padding: var(--spacing-sm) var(--spacing-md);
                 font-size: 0.9rem;
@@ -791,7 +769,6 @@
         }
 
         @media (max-width: 400px) {
-            /* Ultra-small screens */
             .page-header h1 {
                 font-size: 1.35rem;
             }
@@ -811,7 +788,7 @@
 <body>
     <!-- Header will be auto-injected by header.js -->
 
-    <!-- Page Header -->
+    <!-- Page Header - OUTSIDE CONTAINER -->
     <div class="page-header">
         <div class="container">
             <h1>Post a Speaking Opportunity</h1>
@@ -1147,9 +1124,8 @@
     <script src="/js/components/header.js"></script>
     <script src="/js/components/footer.js"></script>
     
-    <!-- Page JavaScript (keeping existing functionality) -->
+    <!-- Page JavaScript -->
     <script>
-        // [Keep all existing JavaScript functionality unchanged]
         // Page state
         let currentUser = null;
         let organizationData = null;
@@ -1618,6 +1594,13 @@
         function showLoading(show) {
             document.getElementById('loadingOverlay').classList.toggle('show', show);
         }
+
+        // Make functions globally available
+        window.nextStep = nextStep;
+        window.previousStep = previousStep;
+        window.editSection = editSection;
+        window.saveDraft = saveDraft;
+        window.removeTopic = removeTopic;
 
         // Initialize on load
         if (document.readyState === 'loading') {
