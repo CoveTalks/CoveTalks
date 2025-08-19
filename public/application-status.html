@@ -6,6 +6,25 @@
     <title>Application Status - CoveTalks</title>    
     <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
     <style>
+        /* Brandon Text Font Declarations */
+        /* Brandon Text Font Declaration - Single File */
+        @font-face {
+            font-family: 'Brandon Text';
+            src: url('/fonts/brandontext.woff2') format('woff2'),
+                url('/fonts/brandontext.woff') format('woff');
+            font-weight: 300 900; /* Allows browser to handle all weights */
+            font-style: normal;
+            font-display: swap;
+        }
+
+        /* Brand colors from CoveTalks guidelines */
+        :root {
+            --color-sand: #f3b338;  /* Gold/beach color */
+            --color-calm: #1d93b7;  /* Cool blue */
+            --color-deep: #155487;  /* Deep blue */
+            --color-foam: #f8f9fa;  /* Grey/smooth */
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,10 +32,11 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Brandon Text', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 400; /* Regular */
             line-height: 1.6;
             color: #333;
-            background: #f8f9fa;
+            background: var(--color-foam);
         }
 
         .container {
@@ -70,17 +90,17 @@
         .nav-links a {
             color: #333;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 500; /* Medium weight */
             transition: color 0.3s;
         }
 
         .nav-links a:hover {
-            color: #155588;
+            color: var(--color-deep);
         }
 
         .nav-links a.active {
-            color: #155588;
-            border-bottom: 2px solid #155588;
+            color: var(--color-deep);
+            border-bottom: 2px solid var(--color-deep);
             padding-bottom: 2px;
         }
 
@@ -88,6 +108,12 @@
             display: flex;
             align-items: center;
             gap: 1rem;
+        }
+
+        /* Headlines using Brandon Text Black */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Brandon Text', sans-serif;
+            font-weight: 900; /* Black weight */
         }
 
         .btn {
@@ -98,12 +124,12 @@
             text-decoration: none;
             display: inline-block;
             transition: all 0.3s;
-            font-weight: 500;
+            font-weight: 500; /* Medium weight */
             text-align: center;
         }
 
         .btn-primary {
-            background: #155588;
+            background: var(--color-deep);
             color: white;
         }
 
@@ -114,12 +140,12 @@
 
         .btn-secondary {
             background: transparent;
-            color: #155588;
-            border: 2px solid #155588;
+            color: var(--color-deep);
+            border: 2px solid var(--color-deep);
         }
 
         .btn-secondary:hover {
-            background: #155588;
+            background: var(--color-deep);
             color: white;
         }
 
@@ -152,12 +178,12 @@
             width: 45px;
             height: 45px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #1e93b7);
+            background: linear-gradient(135deg, #667eea, var(--color-calm));
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            font-weight: 700; /* Bold */
             cursor: pointer;
             font-size: 1.1rem;
             transition: transform 0.2s;
@@ -193,7 +219,7 @@
         }
 
         .dropdown-menu a:hover {
-            background: #f8f9fa;
+            background: var(--color-foam);
         }
 
         .dropdown-divider {
@@ -211,7 +237,7 @@
 
         /* Status Header */
         .status-header {
-            background: linear-gradient(135deg, #667eea 0%, #1e93b7 100%);
+            background: linear-gradient(135deg, #667eea 0%, var(--color-calm) 100%);
             color: white;
             padding: 3rem;
             margin: 2rem 0;
@@ -228,13 +254,13 @@
             padding: 0.75rem 2rem;
             border-radius: 30px;
             font-size: 1.1rem;
-            font-weight: 600;
+            font-weight: 700; /* Bold */
             background: rgba(255, 255, 255, 0.2);
             margin-bottom: 1rem;
         }
 
         .status-badge-large.pending {
-            background: #ffc107;
+            background: var(--color-sand);
             color: #333;
         }
 
@@ -269,7 +295,8 @@
         .meta-icon {
             width: 20px;
             height: 20px;
-            object-fit: contain;            
+            object-fit: contain;
+            filter: brightness(0) invert(1);
         }
 
         /* Content Grid */
@@ -289,14 +316,14 @@
         }
 
         .card h2 {
-            color: #155588;
+            color: var(--color-deep);
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
             border-bottom: 2px solid #f0f0f0;
         }
 
         .card h3 {
-            color: #155588;
+            color: var(--color-deep);
             margin-bottom: 1rem;
         }
 
@@ -344,7 +371,7 @@
         }
 
         .timeline-marker.pending {
-            border-color: #ffc107;
+            border-color: var(--color-sand);
         }
 
         .timeline-marker.accepted {
@@ -360,8 +387,8 @@
         }
 
         .timeline-marker.current {
-            background: #155588;
-            border-color: #155588;
+            background: var(--color-deep);
+            border-color: var(--color-deep);
         }
 
         /* Timeline icon styling */
@@ -371,8 +398,12 @@
             object-fit: contain;
         }
 
+        .timeline-marker.current img {
+            filter: brightness(0) invert(1); /* Makes the icon white when current */
+        }
+
         .timeline-content {
-            background: #f8f9fa;
+            background: var(--color-foam);
             padding: 1rem;
             border-radius: 10px;
             margin-left: 10px;
@@ -385,7 +416,7 @@
         }
 
         .timeline-title {
-            font-weight: 600;
+            font-weight: 700; /* Bold */
             color: #333;
             margin-bottom: 0.25rem;
         }
@@ -407,7 +438,7 @@
         }
 
         .detail-label {
-            font-weight: 600;
+            font-weight: 700; /* Bold */
             color: #555;
             flex: 0 0 150px;
         }
@@ -423,13 +454,13 @@
         }
 
         .application-section h4 {
-            color: #155588;
+            color: var(--color-deep);
             margin-bottom: 0.75rem;
             font-size: 1.1rem;
         }
 
         .cover-letter-box {
-            background: #f8f9fa;
+            background: var(--color-foam);
             padding: 1.5rem;
             border-radius: 10px;
             line-height: 1.6;
@@ -439,7 +470,7 @@
         /* Message Box */
         .message-box {
             background: #e8f4fd;
-            border-left: 4px solid #155588;
+            border-left: 4px solid var(--color-deep);
             padding: 1rem;
             border-radius: 5px;
             margin-top: 1rem;
@@ -461,13 +492,13 @@
 
         /* Next Steps */
         .next-steps {
-            background: #f8f9fa;
+            background: var(--color-foam);
             padding: 1.5rem;
             border-radius: 10px;
         }
 
         .next-steps h4 {
-            color: #155588;
+            color: var(--color-deep);
             margin-bottom: 1rem;
         }
 
@@ -487,7 +518,7 @@
             position: absolute;
             left: 0;
             color: #27ae60;
-            font-weight: bold;
+            font-weight: 700;
         }
 
         /* Action Buttons */
@@ -524,7 +555,7 @@
             width: 30px;
             height: 30px;
             border: 3px solid #f3f3f3;
-            border-top: 3px solid #155588;
+            border-top: 3px solid var(--color-deep);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-right: 1rem;
@@ -566,7 +597,7 @@
         }
 
         .modal-header h3 {
-            color: #155588;
+            color: var(--color-deep);
         }
 
         .modal-body {
@@ -1183,8 +1214,8 @@
         function getStatusIcon(status) {
             const icons = {
                 'Submitted': 'mail_icon.png',
-                'Pending': 'under_review_icon.png',
-                'Accepted': 'event_accepted_icon.png',
+                'Pending': 'pending_icon.png', 
+                'Accepted': 'accepted_icon.png',
                 'Rejected': 'rejected_icon.png',
                 'Withdrawn': 'withdrawn_icon.png'
             };
