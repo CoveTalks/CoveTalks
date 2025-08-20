@@ -784,7 +784,7 @@
         // Confirm withdraw
         async function confirmWithdraw() {
             try {
-                await window.covetalks.updateApplicationStatus(applicationId, 'Withdrawn');
+                await window.covetalks.withdrawApplication(applicationId);
                 alert('Application withdrawn successfully');
                 window.location.href = '/dashboard.html';
             } catch (error) {

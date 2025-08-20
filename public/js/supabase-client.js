@@ -851,6 +851,63 @@ window.covetalks = {
         return data;
     },
 
+        async getApplicationById(applicationId) {
+        const { data, error } = await supabase
+            .from('applications')
+            .select(`
+                *,
+                opportunity:speaking_opportunities(
+                    *,
+                    organization:organizations(*)
+                ),
+                speaker:members!applications_speaker_id_fkey(*)
+            `)
+            .eq('id', applicationId)
+            .single();
+        
+        if (error) throw error;
+        return data;
+    },
+
+    async getApplicationTimeline(applicationId) {
+        const { data, error } = await supabase
+            .from('application_timeline')
+            .select('*')
+            .eq('application_id', applicationId)
+            .order('created_at', { ascending: true });
+        
+        if (error) {
+            console.error('Timeline fetch error:', error);
+            return [];
+        }
+        return data || [];
+    },
+
+    async withdrawApplication(applicationId) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        const { data, error } = await supabase
+            .from('applications')
+            .update({ 
+                status: 'Withdrawn',
+                updated_at: new Date().toISOString()
+            })
+            .eq('id', applicationId)
+            .eq('speaker_id', session.user.id)
+            .select()
+            .single();
+        
+        if (error) throw error;
+        
+        // Add to timeline
+        await this.addApplicationTimelineEntry(applicationId, 'Withdrawn', 'Application withdrawn by speaker');
+        
+        return data;
+    },
+
+    
+
     // ===========================================
     // SAVED SPEAKERS
     // ===========================================
