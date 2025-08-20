@@ -659,8 +659,7 @@ window.covetalks = {
             .from('applications')
             .select(`
                 *,
-                opportunity:speaking_opportunities(*),
-                timeline:application_timeline(*)
+                opportunity:speaking_opportunities(*)
             `)
             .eq('speaker_id', userId)
             .order('created_at', { ascending: false });
@@ -675,14 +674,31 @@ window.covetalks = {
             .select(`
                 *,
                 opportunity:speaking_opportunities(*),
-                speaker:members!applications_speaker_id_fkey(*),
-                timeline:application_timeline(*),
-                notes:application_notes(*)
+                speaker:members!applications_speaker_id_fkey(*)
             `)
             .eq('id', applicationId)
             .single();
         
         if (error) throw error;
+        
+        // Get timeline entries separately if needed
+        if (data) {
+            const { data: timeline } = await supabase
+                .from('application_timeline')
+                .select('*')
+                .eq('application_id', applicationId)
+                .order('created_at', { ascending: false });
+            
+            const { data: notes } = await supabase
+                .from('application_notes')
+                .select('*')
+                .eq('application_id', applicationId)
+                .order('created_at', { ascending: false });
+            
+            data.timeline = timeline || [];
+            data.notes = notes || [];
+        }
+        
         return data;
     },
 
@@ -1270,11 +1286,18 @@ window.covetalks = {
             `)
             .eq('speaker_id', speakerId)
             .eq('status', 'Accepted')
-            .gte('opportunity.event_date', new Date().toISOString())
-            .order('opportunity.event_date', { ascending: true });
+            .order('created_at', { ascending: false });
         
         if (error) throw error;
-        return data || [];
+        
+        // Filter for upcoming events
+        const now = new Date();
+        const upcoming = (data || []).filter(app => 
+            app.opportunity?.event_date && 
+            new Date(app.opportunity.event_date) > now
+        );
+        
+        return upcoming;
     },
 
     async getPastBookings(speakerId) {
@@ -1282,16 +1305,34 @@ window.covetalks = {
             .from('applications')
             .select(`
                 *,
-                opportunity:speaking_opportunities(*),
-                review:reviews(*)
+                opportunity:speaking_opportunities(*)
             `)
             .eq('speaker_id', speakerId)
             .eq('status', 'Accepted')
-            .lt('opportunity.event_date', new Date().toISOString())
-            .order('opportunity.event_date', { ascending: false });
+            .order('created_at', { ascending: false });
         
         if (error) throw error;
-        return data || [];
+        
+        // Filter for past events and get reviews separately
+        const now = new Date();
+        const past = (data || []).filter(app => 
+            app.opportunity?.event_date && 
+            new Date(app.opportunity.event_date) < now
+        );
+        
+        // Get reviews for past bookings
+        for (const booking of past) {
+            const { data: review } = await supabase
+                .from('reviews')
+                .select('*')
+                .eq('speaker_id', speakerId)
+                .eq('opportunity_id', booking.opportunity?.id)
+                .single();
+            
+            booking.review = review;
+        }
+        
+        return past;
     },
 
     async getBookingDetails(bookingId) {
@@ -1299,15 +1340,36 @@ window.covetalks = {
             .from('applications')
             .select(`
                 *,
-                opportunity:speaking_opportunities(*),
-                organization:opportunity.organization:organizations(*),
-                messages:messages(*)
+                opportunity:speaking_opportunities(*)
             `)
             .eq('id', bookingId)
             .eq('status', 'Accepted')
             .single();
         
         if (error) throw error;
+        
+        // Get organization details if opportunity exists
+        if (data?.opportunity?.organization_id) {
+            const { data: org } = await supabase
+                .from('organizations')
+                .select('*')
+                .eq('id', data.opportunity.organization_id)
+                .single();
+            
+            data.organization = org;
+        }
+        
+        // Get related messages if needed
+        if (data?.opportunity?.id) {
+            const { data: messages } = await supabase
+                .from('messages')
+                .select('*')
+                .eq('opportunity_id', data.opportunity.id)
+                .order('created_at', { ascending: false });
+            
+            data.messages = messages || [];
+        }
+        
         return data;
     },
 
