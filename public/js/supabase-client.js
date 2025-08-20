@@ -127,8 +127,12 @@ window.covetalks = {
             .select(`
                 *,
                 reviews!reviews_speaker_id_fkey(rating)
-            `)
-            .eq('member_type', filters.memberType || 'Speaker');
+            `);
+        
+        // Only filter by member_type if explicitly provided
+        if (filters.memberType) {
+            query = query.eq('member_type', filters.memberType);
+        }
         
         if (filters.specialties && filters.specialties.length > 0) {
             query = query.contains('specialties', filters.specialties);
