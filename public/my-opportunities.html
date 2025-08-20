@@ -940,10 +940,36 @@
             if (!selectedOpportunityId) return;
             
             try {
-                await window.covetalks.updateOpportunity(selectedOpportunityId, { status: 'Closed' });
-                closeModal();
-                await loadOpportunities();
+                // Update the opportunity status to 'Closed'
+                const { data, error } = await window.covetalks.supabase
+                    .from('speaking_opportunities')
+                    .update({ 
+                        status: 'Closed',
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', selectedOpportunityId)
+                    .eq('posted_by', currentUser.id) // Ensure user owns this opportunity
+                    .select()
+                    .single();
+                
+                if (error) {
+                    console.error('Error closing opportunity:', error);
+                    throw error;
+                }
+                
+                // Update local data
+                const opportunity = opportunities.find(o => o.id === selectedOpportunityId);
+                if (opportunity) {
+                    opportunity.status = 'Closed';
+                }
+                
+                // Close modal and refresh display
+                closeModal('closeModal');
+                displayOpportunities();
+                
+                // Show success message
                 alert('Opportunity closed successfully');
+                
             } catch (error) {
                 console.error('Error closing opportunity:', error);
                 alert('Failed to close opportunity. Please try again.');
