@@ -13,22 +13,38 @@
     
     <!-- Page-specific styles ONLY for unique elements -->
     <style>
-        /* Page1 Header - Matching opportunities.html style */
-        .page-header {
+        /* Ensure clean slate */
+        body {
+            overflow-x: hidden;
+        }
+        
+        /* Page Header - Exactly matching opportunities.html */
+        .post-opportunity-header {
             background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
             padding: 4rem 0;
             margin-top: var(--header-height);
             text-align: center;
+            position: relative;
+            z-index: 5;
+            isolation: isolate; /* Create new stacking context */
         }
 
-        .page-header h1 {
+        .post-opportunity-header h1 {
             font-size: 2.5rem;
             margin-bottom: var(--spacing-md);
             color: white;
+            margin-top: 0;
+            position: relative;
+        }
+        
+        /* Ensure no pseudo elements interfere */
+        .post-opportunity-header h1::before,
+        .post-opportunity-header h1::after {
+            display: none !important;
         }
 
-        .page-header p {
+        .post-opportunity-header p {
             font-size: 1.2rem;
             max-width: 600px;
             margin: 0 auto;
@@ -39,6 +55,8 @@
         .content-wrapper {
             max-width: 900px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         /* Progress Container */
@@ -51,6 +69,7 @@
             margin-top: calc(var(--spacing-2xl) * -1);
             position: relative;
             z-index: 10;
+            overflow: hidden; /* Prevent any content from bleeding out */
         }
 
         .progress-track {
@@ -80,6 +99,54 @@
             background: var(--color-sand);
             z-index: 1;
             transition: width 0.5s ease;
+            width: 60px;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-indicator {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid var(--color-bg-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--spacing-sm);
+            font-weight: var(--font-weight-black);
+            color: var(--color-gray);
+            transition: all var(--transition-normal);
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        .progress-step.active .step-indicator {
+            background: var(--color-sand);
+            border-color: var(--color-sand);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(243, 179, 56, 0.3);
+        }
+
+        .progress-step.completed .step-indicator {
+            background: var(--color-calm);
+            border-color: var(--color-calm);
+            color: white;
+        }
+
+        .progress-step.completed .step-indicator span {
+            display: none;
+        }
+
+        .progress-step.completed .step-indicator::after {
+            content: '✓';
+            font-size: 1.5rem;
         }
 
         .progress-step {
@@ -119,9 +186,12 @@
             color: white;
         }
 
+        .progress-step.completed .step-indicator span {
+            display: none;
+        }
+
         .progress-step.completed .step-indicator::after {
             content: '✓';
-            position: absolute;
             font-size: 1.5rem;
         }
 
@@ -495,18 +565,18 @@
                 max-width: 100%;
             }
 
-            .page-header h1 {
+            .post-opportunity-header h1 {
                 font-size: 2rem;
             }
         }
 
         @media (max-width: 768px) {
-            .page-header {
+            .post-opportunity-header {
                 padding: var(--spacing-2xl) var(--spacing-lg);
                 margin-top: var(--header-height-mobile);
             }
 
-            .page-header h1 {
+            .post-opportunity-header h1 {
                 font-size: 1.8rem;
             }
 
@@ -595,11 +665,11 @@
         }
 
         @media (max-width: 576px) {
-            .page-header h1 {
+            .post-opportunity-header h1 {
                 font-size: 1.5rem;
             }
 
-            .page-header p {
+            .post-opportunity-header p {
                 font-size: 1rem;
             }
 
@@ -619,17 +689,17 @@
 </head>
 <body>
     <!-- Header will be auto-injected by header.js -->
-
-    <!-- Page Header -->
-    <div class="page-header">
+    
+    <!-- Page Header Section -->
+    <section class="post-opportunity-header">
         <div class="container">
-            <h1>1Post a Speaking Opportunity</h1>
+            <h1>Post a Speaking Opportunity</h1>
             <p>Connect with talented speakers to inspire your audience</p>
         </div>
-    </div>
+    </section>
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="main-content" style="overflow: visible;">
         <div class="container">
             <div class="content-wrapper">
                 <!-- Alert Messages -->
@@ -646,15 +716,15 @@
                     <div class="progress-track">
                         <div class="progress-line" id="progressLine" style="width: 60px;"></div>
                         <div class="progress-step active" id="progress1">
-                            <div class="step-indicator">1</div>
+                            <div class="step-indicator"><span>1</span></div>
                             <div class="step-title">Event Details</div>
                         </div>
                         <div class="progress-step" id="progress2">
-                            <div class="step-indicator">2</div>
+                            <div class="step-indicator"><span>2</span></div>
                             <div class="step-title">Requirements</div>
                         </div>
                         <div class="progress-step" id="progress3">
-                            <div class="step-indicator">3</div>
+                            <div class="step-indicator"><span>3</span></div>
                             <div class="step-title">Review & Post</div>
                         </div>
                     </div>
@@ -781,12 +851,12 @@
                         
                         <div class="form-navigation">
                             <div class="nav-left">
-                                <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                                <button type="button" class="btn btn-secondary" id="saveDraftBtn1">
                                     Save Draft
                                 </button>
                             </div>
                             <div class="nav-right">
-                                <button type="button" class="btn btn-primary" onclick="nextStep(2)">
+                                <button type="button" class="btn btn-primary" id="continueBtn1">
                                     Continue →
                                 </button>
                             </div>
@@ -878,15 +948,15 @@
                         
                         <div class="form-navigation">
                             <div class="nav-left">
-                                <button type="button" class="btn btn-secondary" onclick="previousStep(1)">
+                                <button type="button" class="btn btn-secondary" id="backBtn2">
                                     ← Back
                                 </button>
                             </div>
                             <div class="nav-right">
-                                <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                                <button type="button" class="btn btn-secondary" id="saveDraftBtn2">
                                     Save Draft
                                 </button>
-                                <button type="button" class="btn btn-primary" onclick="nextStep(3)">
+                                <button type="button" class="btn btn-primary" id="continueBtn2">
                                     Review →
                                 </button>
                             </div>
@@ -900,7 +970,7 @@
                         <div class="preview-section">
                             <div class="preview-header">
                                 <div class="preview-title">Preview</div>
-                                <button type="button" class="btn btn-secondary btn-sm" onclick="editSection(1)">
+                                <button type="button" class="btn btn-secondary btn-sm" id="editDetailsBtn">
                                     Edit Details
                                 </button>
                             </div>
@@ -920,12 +990,12 @@
                         
                         <div class="form-navigation">
                             <div class="nav-left">
-                                <button type="button" class="btn btn-secondary" onclick="previousStep(2)">
+                                <button type="button" class="btn btn-secondary" id="backBtn3">
                                     ← Back
                                 </button>
                             </div>
                             <div class="nav-right">
-                                <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                                <button type="button" class="btn btn-secondary" id="saveDraftBtn3">
                                     Save as Draft
                                 </button>
                                 <button type="submit" class="btn" id="submitBtn">
@@ -1075,6 +1145,49 @@
             // Form submission
             document.getElementById('opportunityForm').addEventListener('submit', handleSubmit);
             
+            // Navigation buttons - Step 1
+            const continueBtn1 = document.getElementById('continueBtn1');
+            if (continueBtn1) {
+                continueBtn1.addEventListener('click', () => nextStep(2));
+            }
+            
+            const saveDraftBtn1 = document.getElementById('saveDraftBtn1');
+            if (saveDraftBtn1) {
+                saveDraftBtn1.addEventListener('click', saveDraft);
+            }
+            
+            // Navigation buttons - Step 2
+            const backBtn2 = document.getElementById('backBtn2');
+            if (backBtn2) {
+                backBtn2.addEventListener('click', () => previousStep(1));
+            }
+            
+            const continueBtn2 = document.getElementById('continueBtn2');
+            if (continueBtn2) {
+                continueBtn2.addEventListener('click', () => nextStep(3));
+            }
+            
+            const saveDraftBtn2 = document.getElementById('saveDraftBtn2');
+            if (saveDraftBtn2) {
+                saveDraftBtn2.addEventListener('click', saveDraft);
+            }
+            
+            // Navigation buttons - Step 3
+            const backBtn3 = document.getElementById('backBtn3');
+            if (backBtn3) {
+                backBtn3.addEventListener('click', () => previousStep(2));
+            }
+            
+            const saveDraftBtn3 = document.getElementById('saveDraftBtn3');
+            if (saveDraftBtn3) {
+                saveDraftBtn3.addEventListener('click', saveDraft);
+            }
+            
+            const editDetailsBtn = document.getElementById('editDetailsBtn');
+            if (editDetailsBtn) {
+                editDetailsBtn.addEventListener('click', () => editSection(1));
+            }
+            
             // Character counter
             document.getElementById('description').addEventListener('input', updateCharCounter);
             
@@ -1182,17 +1295,23 @@
             });
             
             // Show current step
-            document.getElementById(`step${step}`).classList.add('active');
+            const targetStep = document.getElementById(`step${step}`);
+            if (targetStep) {
+                targetStep.classList.add('active');
+            }
             
-            // Update progress
-            document.querySelectorAll('.progress-step').forEach((el, index) => {
-                el.classList.remove('active', 'completed');
-                if (index < step - 1) {
-                    el.classList.add('completed');
-                } else if (index === step - 1) {
-                    el.classList.add('active');
+            // Update progress indicators
+            for (let i = 1; i <= 3; i++) {
+                const progressStep = document.getElementById(`progress${i}`);
+                if (progressStep) {
+                    progressStep.classList.remove('active', 'completed');
+                    if (i < step) {
+                        progressStep.classList.add('completed');
+                    } else if (i === step) {
+                        progressStep.classList.add('active');
+                    }
                 }
-            });
+            }
             
             // Update progress line
             const progressLine = document.getElementById('progressLine');
@@ -1202,10 +1321,13 @@
             }
             
             currentStep = step;
+            
+            // Scroll to top of page
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function editSection(step) {
+            // Don't validate when going backwards to edit
             showStep(step);
         }
 
@@ -1214,12 +1336,26 @@
             let isValid = true;
             const section = document.getElementById(`step${step}`);
             
+            if (!section) {
+                console.error(`Step ${step} not found`);
+                return false;
+            }
+            
+            // Clear previous validation states
+            section.querySelectorAll('.form-control').forEach(field => {
+                field.style.borderColor = '';
+            });
+            
+            // Check required fields
             section.querySelectorAll('[required]').forEach(field => {
-                if (!field.value) {
+                if (!field.value || field.value.trim() === '') {
                     field.style.borderColor = 'var(--color-danger)';
                     isValid = false;
-                } else {
-                    field.style.borderColor = '';
+                    
+                    // Focus on first invalid field
+                    if (isValid === false && document.activeElement !== field) {
+                        field.focus();
+                    }
                 }
             });
             
@@ -1427,11 +1563,7 @@
             document.getElementById('loadingOverlay').classList.toggle('show', show);
         }
 
-        // Make functions globally available
-        window.nextStep = nextStep;
-        window.previousStep = previousStep;
-        window.editSection = editSection;
-        window.saveDraft = saveDraft;
+        // Make removeTopic globally available for dynamic elements
         window.removeTopic = removeTopic;
 
         // Initialize on load
