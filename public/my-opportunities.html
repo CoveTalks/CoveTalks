@@ -943,64 +943,32 @@
                 console.log('Attempting to close opportunity:', selectedOpportunityId);
                 console.log('Current user ID:', currentUser.id);
                 
-                // First, check the current status
-                const { data: checkData, error: checkError } = await window.covetalks.supabase
-                    .from('speaking_opportunities')
-                    .select('status, posted_by')
-                    .eq('id', selectedOpportunityId)
-                    .single();
+                // Get the session to ensure we have the correct auth.uid()
+                const session = await window.covetalks.checkAuth();
+                const authUserId = session?.user?.id;
                 
-                if (checkError) {
-                    console.error('Error checking opportunity:', checkError);
-                    throw new Error('Failed to verify opportunity');
-                }
+                console.log('Auth User ID from session:', authUserId);
                 
-                console.log('Current opportunity status:', checkData.status);
-                console.log('Opportunity owner:', checkData.posted_by);
-                
-                // Check if already closed
-                if (checkData.status === 'Closed') {
-                    alert('This opportunity is already closed');
-                    closeModal('closeModal');
-                    displayOpportunities();
-                    return;
-                }
-                
-                // Verify ownership
-                if (checkData.posted_by !== currentUser.id) {
-                    throw new Error('You do not have permission to close this opportunity');
-                }
-                
-                // Now update - try without the posted_by filter since we already verified
+                // Update using the session user ID
                 const { data, error } = await window.covetalks.supabase
                     .from('speaking_opportunities')
                     .update({ 
-                        status: 'Closed'
+                        status: 'Closed',
+                        updated_at: new Date().toISOString()
                     })
                     .eq('id', selectedOpportunityId)
                     .select();
                 
                 if (error) {
                     console.error('Supabase update error:', error);
-                    // Try a different approach - use RPC if available
                     throw error;
                 }
                 
-                // Check if update was successful
                 if (!data || data.length === 0) {
-                    console.error('No rows updated despite ownership match');
-                    
-                    // Try using the updateOpportunity function from supabase-client.js
-                    try {
-                        await window.covetalks.updateOpportunity(selectedOpportunityId, { status: 'Closed' });
-                        console.log('Updated using updateOpportunity function');
-                    } catch (updateError) {
-                        console.error('updateOpportunity also failed:', updateError);
-                        throw new Error('Failed to close opportunity. This might be due to database permissions.');
-                    }
-                } else {
-                    console.log('Successfully closed opportunity:', data);
+                    throw new Error('Failed to close opportunity. Please refresh and try again.');
                 }
+                
+                console.log('Successfully closed opportunity:', data);
                 
                 // Update local data
                 const opportunity = opportunities.find(o => o.id === selectedOpportunityId);
