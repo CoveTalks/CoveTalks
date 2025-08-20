@@ -203,7 +203,8 @@ window.covetalks = {
     async trackApplicationSubmitted(opportunityId, applicationId) {
         const opportunity = await this.getOpportunityDetails(opportunityId);
         
-        await this.trackActivity('application_submitted', applicationId, {
+        // The target should be the person who posted the opportunity (they receive the application)
+        await this.trackActivity('application_submitted', opportunity?.posted_by, {
             opportunity_id: opportunityId,
             opportunity_title: opportunity?.title,
             organization_id: opportunity?.organization_id,
@@ -212,7 +213,8 @@ window.covetalks = {
     },
 
     async trackApplicationReviewed(applicationId, status, speakerId) {
-        await this.trackActivity('application_reviewed', applicationId, {
+    // The target should be the speaker who gets notified of the review
+        await this.trackActivity('application_reviewed', speakerId, {
             status: status,
             application_id: applicationId,
             speaker_id: speakerId
