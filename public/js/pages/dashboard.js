@@ -2,6 +2,7 @@
 /**
  * CoveTalks Unified Dashboard
  * Handles both Speaker and Organization dashboards with consistent design
+ * FIXED VERSION - Resources display correctly
  */
 
 class UnifiedDashboard {
@@ -128,10 +129,10 @@ class UnifiedDashboard {
                 Your account is all set up. Start exploring speaking opportunities or complete your profile for better visibility.
             </p>
             <div style="margin-top: 1.5rem;">
-                <a href="/opportunities.html" class="btn btn-white" style="margin-right: 1rem;">
+                <a href="/opportunities.html" class="btn btn-white" style="margin-right: 1rem; background: white; color: var(--color-deep);">
                     Browse Opportunities
                 </a>
-                <a href="/settings.html" class="btn btn-white">
+                <a href="/settings.html" class="btn btn-white" style="background: white; color: var(--color-deep);">
                     Complete Profile
                 </a>
             </div>
@@ -140,25 +141,6 @@ class UnifiedDashboard {
                 ×
             </button>
         `;
-        
-        // Add animation styles if not present
-        if (!document.getElementById('dashboard-animations')) {
-            const style = document.createElement('style');
-            style.id = 'dashboard-animations';
-            style.textContent = `
-                @keyframes slideDown {
-                    from {
-                        opacity: 0;
-                        transform: translateY(-20px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-            `;
-            document.head.appendChild(style);
-        }
         
         const mainContent = document.getElementById('mainContent');
         if (mainContent) {
@@ -439,11 +421,11 @@ class UnifiedDashboard {
                 <div class="quick-actions">
                     <a href="/settings.html" class="action-btn">
                         <i>✏️</i>
-                        Edit Profile
+                        <span>Edit Profile</span>
                     </a>
                     <a href="/reviews.html" class="action-btn">
                         <i>⭐</i>
-                        Reviews
+                        <span>Reviews</span>
                     </a>
                 </div>
             </div>
@@ -452,15 +434,9 @@ class UnifiedDashboard {
             <div class="dashboard-card">
                 <h3 style="color: var(--color-deep); margin-bottom: var(--spacing-md); font-weight: 900; font-family: 'Brandon Text', var(--font-primary);">Resources</h3>
                 <div class="resources-list">
-                    <a href="/speaking-tips.html">
-                        📚 Speaking Tips & Best Practices
-                    </a>
-                    <a href="/templates.html">
-                        📝 Proposal Templates
-                    </a>
-                    <a href="/help.html">
-                        ❓ Help Center
-                    </a>
+                    <a href="/speaking-tips.html">📚 Speaking Tips & Best Practices</a>
+                    <a href="/templates.html">📝 Proposal Templates</a>
+                    <a href="/help.html">❓ Help Center</a>
                 </div>
             </div>
         `;
@@ -513,22 +489,22 @@ class UnifiedDashboard {
         if (!statsGrid) return;
         
         statsGrid.innerHTML = `
-            <div class="stat-card">
+            <div class="stat-card org-stat">
                 <div class="stat-icon">📢</div>
                 <div class="stat-value">${activeOps}</div>
                 <div class="stat-label">Active Opportunities</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card org-stat">
                 <div class="stat-icon">📝</div>
                 <div class="stat-value">${this.data.applications.length}</div>
                 <div class="stat-label">Total Applications</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card org-stat">
                 <div class="stat-icon">⏳</div>
                 <div class="stat-value">${pendingApps}</div>
                 <div class="stat-label">Pending Reviews</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card org-stat">
                 <div class="stat-icon">⭐</div>
                 <div class="stat-value">${this.data.savedSpeakers.length}</div>
                 <div class="stat-label">Saved Speakers</div>
@@ -594,19 +570,19 @@ class UnifiedDashboard {
                 <div class="quick-actions">
                     <a href="/post-opportunity.html" class="action-btn">
                         <i>➕</i>
-                        Post Opportunity
+                        <span>Post Opportunity</span>
                     </a>
                     <a href="/members.html" class="action-btn">
                         <i>🔍</i>
-                        Find Speakers
+                        <span>Find Speakers</span>
                     </a>
                     <a href="/saved-speakers.html" class="action-btn">
                         <i>💾</i>
-                        Saved Speakers
+                        <span>Saved Speakers</span>
                     </a>
                     <a href="/settings.html" class="action-btn">
                         <i>⚙️</i>
-                        Settings
+                        <span>Settings</span>
                     </a>
                 </div>
             </div>
@@ -643,15 +619,9 @@ class UnifiedDashboard {
             <div class="dashboard-card">
                 <h3 style="color: var(--color-sand); margin-bottom: var(--spacing-md); font-weight: 900; font-family: 'Brandon Text', var(--font-primary);">Resources</h3>
                 <div class="resources-list">
-                    <a href="/organization-guide.html">
-                        📖 Organization Guide
-                    </a>
-                    <a href="/speaker-criteria.html">
-                        ✅ Speaker Selection Tips
-                    </a>
-                    <a href="/help.html">
-                        ❓ Help Center
-                    </a>
+                    <a href="/organization-guide.html">📖 Organization Guide</a>
+                    <a href="/speaker-criteria.html">✅ Speaker Selection Tips</a>
+                    <a href="/help.html">❓ Help Center</a>
                 </div>
             </div>
         `;

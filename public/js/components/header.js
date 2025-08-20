@@ -129,9 +129,17 @@ class CoveTalksHeader {
 
         // Logout button (desktop only now)
         const logoutBtn = document.getElementById('logoutBtn');
+        const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
         
         if (logoutBtn) {
             logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.logout();
+            });
+        }
+        
+        if (mobileLogoutBtn) {
+            mobileLogoutBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.logout();
             });

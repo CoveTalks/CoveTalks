@@ -69,12 +69,13 @@
 
         .stat-card {
             background: white;
-            padding: var(--spacing-lg);
+            padding: var(--spacing-xl);
             border-radius: 15px;
             box-shadow: var(--shadow-md);
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: var(--spacing-md);
+            text-align: center;
             position: relative;
             overflow: hidden;
             transition: transform var(--transition-normal);
@@ -89,43 +90,36 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(135deg, var(--color-deep), var(--color-calm));
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-deep), var(--color-calm));
         }
         
         .stat-card.org-stat::before {
-            background: linear-gradient(135deg, var(--color-deep), var(--color-calm));
+            background: linear-gradient(90deg, var(--color-sand), var(--color-calm));
         }
 
         .stat-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-md);
         }
 
-        .stat-icon.blue { background: #e8f4fd; color: var(--color-deep); }
-        .stat-icon.green { background: #d4edda; color: var(--color-success); }
-        .stat-icon.purple { background: #f3e5f5; color: var(--color-calm); }
-        .stat-icon.orange { background: #fff3e0; color: var(--color-sand); }
-
-        .stat-content h3 {
-            font-size: 2rem;
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: var(--font-weight-black);
             color: var(--color-deep);
-            margin-bottom: var(--spacing-xs);
+            margin-bottom: var(--spacing-sm);
         }
         
-        .org-view .stat-content h3 {
+        .org-view .stat-value {
             color: var(--color-sand);
         }
 
-        .stat-content p {
+        .stat-label {
             color: var(--color-gray);
             font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         /* Dashboard Main Layout - 2 column grid */
@@ -151,7 +145,7 @@
         .dashboard-card {
             background: white;
             border-radius: 15px;
-            padding: var(--spacing-lg);
+            padding: var(--spacing-xl);
             box-shadow: var(--shadow-md);
         }
 
@@ -171,6 +165,17 @@
         
         .org-view .card-header h2 {
             color: var(--color-sand);
+        }
+
+        .card-header a {
+            color: var(--color-calm);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color var(--transition-fast);
+        }
+
+        .card-header a:hover {
+            color: var(--color-deep);
         }
 
         /* Activity/Application Lists */
@@ -203,12 +208,13 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            font-size: 1.2rem;
         }
 
-        .activity-icon.view { background: #e8f4fd; color: var(--color-deep); }
-        .activity-icon.booking { background: #d4edda; color: var(--color-success); }
-        .activity-icon.message { background: #fff3e0; color: var(--color-sand); }
-        .activity-icon.application { background: #f3e5f5; color: var(--color-calm); }
+        .activity-icon.view { background: #e8f4fd; }
+        .activity-icon.booking { background: #d4edda; }
+        .activity-icon.message { background: #fff3e0; }
+        .activity-icon.application { background: #f3e5f5; }
 
         .activity-content {
             flex: 1;
@@ -218,6 +224,7 @@
         .activity-content h4 {
             color: #333;
             margin-bottom: var(--spacing-xs);
+            font-weight: var(--font-weight-bold);
         }
 
         .activity-content p {
@@ -251,10 +258,12 @@
         .view-btn:hover {
             background: var(--color-deep-dark);
             transform: translateX(-2px);
+            color: white;
         }
         
         .org-view .view-btn:hover {
             background: #d4941e;
+            color: white;
         }
 
         /* Applications Table (for organizations) */
@@ -330,16 +339,26 @@
         .subscription-card {
             background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
-            padding: var(--spacing-lg);
+            padding: var(--spacing-xl);
+            border-radius: 15px;
         }
         
         .subscription-card.org-card {
-            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
+            background: linear-gradient(135deg, var(--color-sand) 0%, var(--color-calm) 100%);
         }
 
         .subscription-card h3 {
             margin-bottom: var(--spacing-md);
             color: white;
+        }
+
+        .subscription-card .btn {
+            background: white;
+            color: var(--color-deep);
+        }
+
+        .subscription-card .btn:hover {
+            background: var(--color-foam);
         }
 
         /* Quick Actions Grid */
@@ -350,7 +369,11 @@
         }
 
         .action-btn {
-            padding: var(--spacing-md);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-lg);
             background: var(--color-foam);
             border: 2px solid var(--color-border);
             border-radius: 10px;
@@ -358,6 +381,7 @@
             color: #333;
             text-decoration: none;
             transition: all var(--transition-normal);
+            min-height: 100px;
         }
 
         .action-btn:hover {
@@ -365,15 +389,17 @@
             border-color: var(--color-deep);
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
+            color: var(--color-deep);
         }
         
         .org-view .action-btn:hover {
             border-color: var(--color-sand);
+            color: var(--color-sand);
         }
 
         .action-btn i {
             display: block;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: var(--color-deep);
             margin-bottom: var(--spacing-sm);
             font-style: normal;
@@ -381,6 +407,40 @@
         
         .org-view .action-btn i {
             color: var(--color-sand);
+        }
+
+        /* Resources List - FIXED STYLING */
+        .resources-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .resources-list a {
+            display: block;
+            padding: var(--spacing-md);
+            background: var(--color-foam);
+            border-radius: 8px;
+            color: var(--color-deep);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+            border: 1px solid transparent;
+            font-size: 0.95rem;
+        }
+
+        .resources-list a:hover {
+            background: white;
+            border-color: var(--color-deep);
+            transform: translateX(5px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .org-view .resources-list a {
+            color: var(--color-sand);
+        }
+
+        .org-view .resources-list a:hover {
+            border-color: var(--color-sand);
         }
 
         /* Opportunity Items (for organizations) */
@@ -419,6 +479,19 @@
             gap: var(--spacing-lg);
             font-size: 0.85rem;
             margin-top: var(--spacing-sm);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-3xl);
+            color: var(--color-gray);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: var(--spacing-md);
+            opacity: 0.5;
         }
 
         /* Mobile Responsive */
@@ -496,20 +569,25 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Empty states */
-        .empty-state {
-            text-align: center;
-            padding: var(--spacing-xl);
-            color: var(--color-gray);
+        /* Welcome banner animation */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .empty-state-icon {
-            font-size: 3rem;
-            margin-bottom: var(--spacing-md);
-            opacity: 0.5;
+        .welcome-banner {
+            animation: slideDown 0.5s ease;
         }
 
-
+        .success-banner {
+            animation: slideDown 0.5s ease;
+        }
     </style>
 </head>
 <body>

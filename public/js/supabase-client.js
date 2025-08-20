@@ -69,6 +69,10 @@ window.covetalks = {
     async logout() {
         const { error } = await supabase.auth.signOut();
         if (error) throw error;
+        
+        // Clear cache and redirect to home or login page
+        this.clearCache();
+        window.location.href = '/login.html';
     },
 
     async resetPassword(email) {
@@ -597,6 +601,57 @@ window.covetalks = {
     // ===========================================
     // APPLICATIONS
     // ===========================================
+
+    async checkApplicationStatus(opportunityId, speakerId) {
+        try {
+            const { data, error } = await supabase
+                .from('applications')
+                .select('*')
+                .eq('opportunity_id', opportunityId)
+                .eq('speaker_id', speakerId)
+                .single();
+            
+            if (error && error.code !== 'PGRST116') { // PGRST116 = not found
+                throw error;
+            }
+            
+            return data; // Returns null if not found
+        } catch (error) {
+            console.error('Error checking application status:', error);
+            return null;
+        }
+    },
+
+    async applyToOpportunity(opportunityId, applicationData) {
+        const session = await this.checkAuth();
+        if (!session) throw new Error('Not authenticated');
+        
+        // Check if already applied
+        const existing = await this.checkApplicationStatus(opportunityId, session.user.id);
+        if (existing) {
+            throw new Error('You have already applied to this opportunity');
+        }
+        
+        const { data, error } = await supabase
+            .from('applications')
+            .insert({
+                opportunity_id: opportunityId,
+                speaker_id: session.user.id,
+                status: 'Pending',
+                cover_letter: applicationData.coverLetter,
+                requested_fee: applicationData.requestedFee,
+                created_at: new Date().toISOString()
+            })
+            .select()
+            .single();
+        
+        if (error) throw error;
+        
+        // Track the application
+        await this.trackApplicationSubmitted(opportunityId, data.id);
+        
+        return data;
+    },
     
     async getApplications(userId) {
         const { data, error } = await supabase
