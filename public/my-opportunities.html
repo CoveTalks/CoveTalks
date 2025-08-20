@@ -941,15 +941,8 @@
             
             try {
                 console.log('Attempting to close opportunity:', selectedOpportunityId);
-                console.log('Current user ID:', currentUser.id);
                 
-                // Get the session to ensure we have the correct auth.uid()
-                const session = await window.covetalks.checkAuth();
-                const authUserId = session?.user?.id;
-                
-                console.log('Auth User ID from session:', authUserId);
-                
-                // Update using the session user ID
+                // Update in database
                 const { data, error } = await window.covetalks.supabase
                     .from('speaking_opportunities')
                     .update({ 
@@ -970,23 +963,14 @@
                 
                 console.log('Successfully closed opportunity:', data);
                 
-                // Update local data
-                const opportunity = opportunities.find(o => o.id === selectedOpportunityId);
-                if (opportunity) {
-                    opportunity.status = 'Closed';
-                }
-                
-                // Update filtered list too
-                filteredOpportunities = filteredOpportunities.map(o => 
-                    o.id === selectedOpportunityId ? { ...o, status: 'Closed' } : o
-                );
-                
-                // Close modal and refresh display
+                // Close modal first
                 closeModal('closeModal');
-                displayOpportunities();
                 
                 // Show success message
                 alert('Opportunity closed successfully');
+                
+                // Reload the opportunities to reflect the change
+                await loadOpportunities();
                 
             } catch (error) {
                 console.error('Error closing opportunity:', error);
