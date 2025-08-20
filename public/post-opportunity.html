@@ -17,10 +17,10 @@
         .page-header {
             background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
             color: white;
-            padding: 8rem 0 4rem 0;
+            padding: 4rem 0;
             margin-bottom: var(--spacing-xl);
             text-align: center;
-            width: 100%;
+            border-radius: 15px; /* Rounded corners by default (desktop) */
         }
 
         .page-header h1 {
@@ -560,8 +560,8 @@
 
         @media (max-width: 768px) {
             .page-header {
-                padding: calc(var(--header-height-mobile) + 2rem) 0 2rem 0;
-                margin-bottom: var(--spacing-md);
+                border-radius: 0; /* Edge-to-edge on mobile only */
+                padding-top: calc(var(--header-height-mobile) + 2rem);
             }
 
             .page-header h1 {
