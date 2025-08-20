@@ -247,7 +247,8 @@ window.covetalks = {
     },
 
     async trackMessageSent(messageId, recipientId, subject) {
-        await this.trackActivity('message_sent', messageId, {
+        await this.trackActivity('message_sent', recipientId, {
+            message_id: messageId,
             recipient_id: recipientId,
             subject: subject
         });
