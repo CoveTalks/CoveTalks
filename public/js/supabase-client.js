@@ -820,17 +820,10 @@ window.covetalks = {
     },
 
     async addApplicationTimelineEntry(applicationId, status, description) {
-        const { error } = await supabase
-            .from('application_timeline')
-            .insert({
-                application_id: applicationId,
-                status: status,
-                title: status,
-                description: description
-            });
-        
-        if (error) console.error('Timeline entry error:', error);
-    },
+    // Since application_timeline table doesn't exist, just log this
+            console.log('[Timeline Entry]', applicationId, status, description);
+    // In the future, you could store this in a different way or create the table
+        },
 
     async addApplicationNote(applicationId, note, isInternal = true) {
         const session = await this.checkAuth();
@@ -870,17 +863,58 @@ window.covetalks = {
     },
 
     async getApplicationTimeline(applicationId) {
-        const { data, error } = await supabase
-            .from('application_timeline')
-            .select('*')
-            .eq('application_id', applicationId)
-            .order('created_at', { ascending: true });
-        
-        if (error) {
-            console.error('Timeline fetch error:', error);
+    // Since application_timeline table doesn't exist, create timeline from application data
+        try {
+            const { data: application, error } = await supabase
+                .from('applications')
+                .select('*')
+                .eq('id', applicationId)
+                .single();
+            
+            if (error || !application) {
+                console.error('Error fetching application for timeline:', error);
+                return [];
+            }
+            
+            // Build timeline from application status
+            const timeline = [
+                {
+                    status: 'Submitted',
+                    title: 'Application Submitted',
+                    description: 'Your application has been received',
+                    created_at: application.created_at
+                }
+            ];
+            
+            // Add current status if not pending
+            if (application.status === 'Accepted') {
+                timeline.push({
+                    status: 'Accepted',
+                    title: 'Application Accepted',
+                    description: 'Congratulations! Your application has been accepted',
+                    created_at: application.reviewed_at || application.updated_at
+                });
+            } else if (application.status === 'Rejected') {
+                timeline.push({
+                    status: 'Rejected',
+                    title: 'Application Not Selected',
+                    description: application.review_message || 'Your application was not selected for this opportunity',
+                    created_at: application.reviewed_at || application.updated_at
+                });
+            } else if (application.status === 'Withdrawn') {
+                timeline.push({
+                    status: 'Withdrawn',
+                    title: 'Application Withdrawn',
+                    description: 'You withdrew your application',
+                    created_at: application.updated_at
+                });
+            }
+            
+            return timeline;
+        } catch (err) {
+            console.error('Timeline generation error:', err);
             return [];
         }
-        return data || [];
     },
 
     async withdrawApplication(applicationId) {
