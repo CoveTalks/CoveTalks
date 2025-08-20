@@ -390,6 +390,79 @@
             padding: var(--spacing-3xl);
         }
 
+        /* List View Styles */
+        .members-list {
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .list-container {
+            overflow-x: auto;
+        }
+
+        .members-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .members-table th {
+            text-align: left;
+            padding: var(--spacing-md);
+            background: var(--color-foam);
+            font-weight: 700;
+            color: var(--color-deep);
+            font-size: 0.9rem;
+            border-bottom: 2px solid white;
+            font-family: 'Brandon Text', var(--font-primary);
+        }
+
+        .members-table td {
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--color-foam);
+            vertical-align: middle;
+        }
+
+        .members-table tr:hover {
+            background: rgba(243, 179, 56, 0.05);
+        }
+
+        .members-table .member-type-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Fix button alignment in footer */
+        .member-footer {
+            padding: var(--spacing-md) var(--spacing-lg);
+            background: var(--color-foam);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .member-footer .btn {
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .contact-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-gray);
+            font-size: 0.85rem;
+            flex: 1;
+            min-width: 0;
+        }
+
         /* Responsive Design */
         @media (max-width: 992px) {
             .members-grid {
@@ -579,79 +652,342 @@
     
     <!-- Page JavaScript -->
     <script>
-        /* List View Styles */
-        .members-list {
-            background: white;
-            border-radius: 15px;
-            box-shadow: var(--shadow-md);
-            overflow: hidden;
-            margin-bottom: var(--spacing-xl);
+        let currentUser = null;
+        let isAuthenticated = false;
+        let allMembers = [];
+        let currentView = 'grid';
+
+        async function initializePage() {
+            try {
+                await waitForSupabase();
+                
+                const session = await window.covetalks.checkAuth();
+                if (session) {
+                    isAuthenticated = true;
+                    currentUser = await window.covetalks.getMemberProfile(session.user.id);
+                    document.getElementById('authBanner').classList.add('hidden');
+                } else {
+                    document.getElementById('authBanner').classList.remove('hidden');
+                }
+                
+                await loadMembers();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                displaySampleMembers();
+            }
         }
 
-        .list-container {
-            overflow-x: auto;
+        function waitForSupabase() {
+            return new Promise((resolve) => {
+                let attempts = 0;
+                const maxAttempts = 20;
+                
+                function check() {
+                    attempts++;
+                    if (window.covetalks?.supabase) {
+                        resolve();
+                    } else if (attempts < maxAttempts) {
+                        setTimeout(check, 250);
+                    } else {
+                        resolve();
+                    }
+                }
+                check();
+            });
         }
 
-        .members-table {
-            width: 100%;
-            border-collapse: collapse;
+        async function loadMembers() {
+            try {
+                const members = await window.covetalks.searchMembers({});
+                allMembers = members || [];
+                
+                if (allMembers.length === 0) {
+                    displaySampleMembers();
+                } else {
+                    updateStats(allMembers);
+                    displayMembers(allMembers);
+                }
+            } catch (error) {
+                console.error('Load error:', error);
+                displaySampleMembers();
+            }
         }
 
-        .members-table th {
-            text-align: left;
-            padding: var(--spacing-md);
-            background: var(--color-foam);
-            font-weight: 700;
-            color: var(--color-deep);
-            font-size: 0.9rem;
-            border-bottom: 2px solid white;
-            font-family: 'Brandon Text', var(--font-primary);
+        function displaySampleMembers() {
+            const samples = [
+                {
+                    id: '1',
+                    name: 'Dr. Sarah Johnson',
+                    member_type: 'Speaker',
+                    location: 'New York, NY',
+                    bio: 'Leadership expert and keynote speaker with 15+ years helping Fortune 500 companies transform their culture',
+                    specialties: ['Leadership', 'Team Building', 'Culture'],
+                    average_rating: 4.8,
+                    total_reviews: 42
+                },
+                {
+                    id: '2',
+                    name: 'Tech Innovators Conference',
+                    member_type: 'Organization',
+                    location: 'San Francisco, CA',
+                    bio: 'Annual technology conference bringing together the brightest minds in tech',
+                    specialties: ['Technology', 'Innovation', 'AI']
+                },
+                {
+                    id: '3',
+                    name: 'Michael Chen',
+                    member_type: 'Speaker',
+                    location: 'Austin, TX',
+                    bio: 'AI and machine learning expert helping businesses leverage cutting-edge technology',
+                    specialties: ['AI', 'Machine Learning', 'Digital Transformation'],
+                    average_rating: 4.9,
+                    total_reviews: 38
+                }
+            ];
+            
+            allMembers = samples;
+            updateStats(samples);
+            displayMembers(samples);
         }
 
-        .members-table td {
-            padding: var(--spacing-md);
-            border-bottom: 1px solid var(--color-foam);
-            vertical-align: middle;
+        function updateStats(members) {
+            const speakers = members.filter(m => m.member_type === 'Speaker');
+            const orgs = members.filter(m => m.member_type === 'Organization');
+            
+            const avgRating = speakers.length > 0 ? 
+                (speakers.reduce((sum, s) => sum + (s.average_rating || 0), 0) / speakers.length).toFixed(1) : 
+                '0.0';
+            
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            const newMembers = members.filter(m => 
+                m.created_at && new Date(m.created_at) > thirtyDaysAgo
+            ).length;
+            
+            document.getElementById('totalSpeakers').textContent = speakers.length;
+            document.getElementById('totalOrgs').textContent = orgs.length;
+            document.getElementById('avgRating').textContent = avgRating;
+            document.getElementById('newMembers').textContent = newMembers;
         }
 
-        .members-table tr:hover {
-            background: rgba(243, 179, 56, 0.05);
+        function displayMembers(members) {
+            const grid = document.getElementById('membersGrid');
+            
+            if (members.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="empty-state-icon">🔍</div>
+                        <h3>No Members Found</h3>
+                        <p>Try adjusting your search criteria</p>
+                        <button class="btn btn-secondary mt-3" onclick="clearFilters()">
+                            Clear Filters
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            if (currentView === 'grid') {
+                displayGridView(members);
+            } else {
+                displayListView(members);
+            }
         }
 
-        .members-table .member-type-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
+        function displayGridView(members) {
+            const grid = document.getElementById('membersGrid');
+            grid.className = 'members-grid'; // Reset class for grid view
+            
+            grid.innerHTML = members.map(member => {
+                const initials = member.name ? 
+                    member.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                    '??';
+                
+                const avatarContent = member.profile_image_url ? 
+                    `<img src="${member.profile_image_url}" alt="${member.name}">` :
+                    initials;
+                
+                const typeClass = member.member_type === 'Organization' ? 
+                    'badge-organization' : 'badge-speaker';
+                
+                const specialties = member.specialties || [];
+                
+                let ratingHtml = '';
+                if (member.member_type === 'Speaker' && member.average_rating) {
+                    const stars = '★'.repeat(Math.floor(member.average_rating)) + 
+                                '☆'.repeat(5 - Math.floor(member.average_rating));
+                    ratingHtml = `
+                        <div class="member-rating">
+                            <span class="stars">${stars}</span>
+                            <span class="rating-text">${member.average_rating.toFixed(1)} (${member.total_reviews || 0} reviews)</span>
+                        </div>
+                    `;
+                }
+                
+                const statusIndicator = isAuthenticated ? 
+                    '<span class="status-indicator"></span> Available' :
+                    '<span class="status-indicator locked"></span> Login to contact';
+                
+                return `
+                    <div class="member-card" onclick="viewProfile('${member.id}')">
+                        <div class="member-header">
+                            <div class="member-avatar">${avatarContent}</div>
+                            <div class="member-basic-info">
+                                <span class="member-type-badge ${typeClass}">
+                                    ${member.member_type}
+                                </span>
+                                <h3 class="member-name">${member.name || 'Member'}</h3>
+                                <div class="member-location">
+                                    📍 ${member.location || 'Location not specified'}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="member-body">
+                            <p class="member-bio">
+                                ${member.bio || 'No bio available'}
+                            </p>
+                            <div class="member-specialties">
+                                ${specialties.slice(0, 3).map(s => 
+                                    `<span class="specialty-tag">${s}</span>`
+                                ).join('')}
+                            </div>
+                            ${ratingHtml}
+                        </div>
+                        <div class="member-footer">
+                            <div class="contact-status">${statusIndicator}</div>
+                            <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); viewProfile('${member.id}')">
+                                View Profile
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
-        /* Fix button alignment in footer */
-        .member-footer {
-            padding: var(--spacing-md) var(--spacing-lg);
-            background: var(--color-foam);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: var(--spacing-md);
+        function displayListView(members) {
+            const grid = document.getElementById('membersGrid');
+            grid.className = 'members-list'; // Change class for list view
+            
+            grid.innerHTML = `
+                <div class="list-container">
+                    <table class="members-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Location</th>
+                                <th>Specialties</th>
+                                <th>Rating</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${members.map(member => {
+                                const specialties = member.specialties || [];
+                                const rating = member.average_rating || 0;
+                                const typeClass = member.member_type === 'Organization' ? 
+                                    'badge-organization' : 'badge-speaker';
+                                
+                                return `
+                                    <tr onclick="viewProfile('${member.id}')" style="cursor: pointer;">
+                                        <td>
+                                            <strong>${member.name || 'Unknown'}</strong><br>
+                                            <small>${member.email || ''}</small>
+                                        </td>
+                                        <td>
+                                            <span class="member-type-badge ${typeClass}">
+                                                ${member.member_type}
+                                            </span>
+                                        </td>
+                                        <td>${member.location || '-'}</td>
+                                        <td>${specialties.slice(0, 2).join(', ') || '-'}</td>
+                                        <td>${rating > 0 ? `⭐ ${rating.toFixed(1)}` : '-'}</td>
+                                        <td>
+                                            <button onclick="event.stopPropagation(); viewProfile('${member.id}')" 
+                                                    class="btn btn-primary btn-sm">
+                                                View Profile
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
         }
 
-        .member-footer .btn {
-            white-space: nowrap;
-            flex-shrink: 0;
+        function setView(view) {
+            currentView = view;
+            
+            // Update toggle buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Re-display members with new view
+            performSearch(); // This will apply current filters and display in new view
         }
 
-        .contact-status {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--color-gray);
-            font-size: 0.85rem;
-            flex: 1;
-            min-width: 0;
+        function performSearch() {
+            const searchTerm = document.getElementById('searchTerm').value.toLowerCase();
+            const typeFilter = document.getElementById('typeFilter').value;
+            const locationFilter = document.getElementById('locationFilter').value.toLowerCase();
+            const specialtyFilter = document.getElementById('specialtyFilter').value;
+            
+            let filtered = allMembers;
+            
+            if (typeFilter) {
+                filtered = filtered.filter(m => m.member_type === typeFilter);
+            }
+            
+            if (searchTerm) {
+                filtered = filtered.filter(m => 
+                    m.name?.toLowerCase().includes(searchTerm) ||
+                    m.bio?.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (locationFilter) {
+                filtered = filtered.filter(m => 
+                    m.location?.toLowerCase().includes(locationFilter)
+                );
+            }
+            
+            if (specialtyFilter) {
+                filtered = filtered.filter(m => 
+                    m.specialties?.includes(specialtyFilter)
+                );
+            }
+            
+            displayMembers(filtered);
+        }
+
+        function clearFilters() {
+            document.getElementById('searchTerm').value = '';
+            document.getElementById('typeFilter').value = '';
+            document.getElementById('locationFilter').value = '';
+            document.getElementById('specialtyFilter').value = '';
+            displayMembers(allMembers);
+        }
+
+        function viewProfile(memberId) {
+            if (isAuthenticated) {
+                window.location.href = `/profile.html?id=${memberId}`;
+            } else {
+                window.location.href = `/login.html?redirect=${encodeURIComponent(`/profile.html?id=${memberId}`)}`;
+            }
+        }
+
+        // Initialize
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
         }
     </script>
-    
+
 </body>
 </html>
