@@ -940,7 +940,10 @@
             if (!selectedOpportunityId) return;
             
             try {
-                // Update the opportunity status to 'Closed'
+                console.log('Attempting to close opportunity:', selectedOpportunityId);
+                console.log('Current user ID:', currentUser.id);
+                
+                // Update without .single() since it might return 0 rows
                 const { data, error } = await window.covetalks.supabase
                     .from('speaking_opportunities')
                     .update({ 
@@ -948,14 +951,34 @@
                         updated_at: new Date().toISOString()
                     })
                     .eq('id', selectedOpportunityId)
-                    .eq('posted_by', currentUser.id) // Ensure user owns this opportunity
-                    .select()
-                    .single();
+                    .eq('posted_by', currentUser.id) // This might not be matching
+                    .select();
                 
                 if (error) {
-                    console.error('Error closing opportunity:', error);
+                    console.error('Supabase error:', error);
                     throw error;
                 }
+                
+                // Check if any rows were actually updated
+                if (!data || data.length === 0) {
+                    console.error('No rows updated. User may not own this opportunity.');
+                    
+                    // Try to get the actual opportunity to see who owns it
+                    const { data: oppData } = await window.covetalks.supabase
+                        .from('speaking_opportunities')
+                        .select('posted_by')
+                        .eq('id', selectedOpportunityId)
+                        .single();
+                    
+                    if (oppData) {
+                        console.log('Opportunity is owned by:', oppData.posted_by);
+                        console.log('Current user ID:', currentUser.id);
+                    }
+                    
+                    throw new Error('You do not have permission to close this opportunity');
+                }
+                
+                console.log('Successfully closed opportunity:', data);
                 
                 // Update local data
                 const opportunity = opportunities.find(o => o.id === selectedOpportunityId);
@@ -972,7 +995,7 @@
                 
             } catch (error) {
                 console.error('Error closing opportunity:', error);
-                alert('Failed to close opportunity. Please try again.');
+                alert(error.message || 'Failed to close opportunity. Please try again.');
             }
         }
 
