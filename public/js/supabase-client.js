@@ -610,13 +610,14 @@ window.covetalks = {
                 .select('*')
                 .eq('opportunity_id', opportunityId)
                 .eq('speaker_id', speakerId)
-                .single();
+                .maybeSingle();  // Changed from .single() to .maybeSingle()
             
-            if (error && error.code !== 'PGRST116') { // PGRST116 = not found
-                throw error;
+            if (error) {
+                console.error('Error checking application status:', error);
+                return null;
             }
             
-            return data; // Returns null if not found
+            return data; // Returns null if not found, or the application if found
         } catch (error) {
             console.error('Error checking application status:', error);
             return null;
