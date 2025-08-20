@@ -11,19 +11,33 @@
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="/css/main.css">
     
-    <!-- Page-specific styles -->
-    <link rel="stylesheet" href="/css/pages/review-applications.css">
+    <!-- Page-specific styles - FIXED PATH -->
+    <link rel="stylesheet" href="/css/review-applications.css">
 </head>
 <body>
     <!-- Header will be auto-injected by header.js -->
 
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Page Header -->
-        <div class="page-header">
+        <!-- Status Header (similar to application-status page) -->
+        <div class="status-header">
             <div class="container">
-                <h1>Review Applications</h1>
+                <h1>Application Review Center</h1>
                 <p>Manage speaker applications for your opportunities</p>
+                <div class="application-meta">
+                    <div class="meta-item">
+                        <img src="/Images/calendar_icon.png" alt="Date" class="meta-icon">
+                        <span>Today: <strong id="todayDate"></strong></span>
+                    </div>
+                    <div class="meta-item">
+                        <img src="/Images/building_icon.png" alt="Organization" class="meta-icon">
+                        <span>Organization: <strong id="orgName">Loading...</strong></span>
+                    </div>
+                    <div class="meta-item">
+                        <img src="/Images/mail_icon.png" alt="Applications" class="meta-icon">
+                        <span>New Today: <strong id="newToday">0</strong></span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -31,96 +45,151 @@
             <!-- Success/Error Messages -->
             <div id="messageBanner" class="message-banner"></div>
 
-            <!-- Stats Summary -->
-            <div class="stats-summary">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
                 <div class="stat-card">
+                    <div class="stat-icon">📝</div>
                     <div class="stat-value" id="totalApplications">0</div>
                     <div class="stat-label">Total Applications</div>
                 </div>
                 <div class="stat-card">
+                    <div class="stat-icon">⏳</div>
                     <div class="stat-value" id="pendingReview">0</div>
                     <div class="stat-label">Pending Review</div>
                 </div>
                 <div class="stat-card">
+                    <div class="stat-icon">✅</div>
                     <div class="stat-value" id="acceptedCount">0</div>
                     <div class="stat-label">Accepted</div>
                 </div>
                 <div class="stat-card">
+                    <div class="stat-icon">📊</div>
                     <div class="stat-value" id="responseRate">0%</div>
                     <div class="stat-label">Response Rate</div>
                 </div>
             </div>
 
-            <!-- Filters Section -->
-            <div class="filters-section">
-                <div class="filters-header">
-                    <h2 class="filters-title">Filter Applications</h2>
-                    <button id="clearFiltersBtn" class="btn btn-secondary btn-sm">
-                        Clear Filters
-                    </button>
-                </div>
-                <div class="filters-grid">
-                    <div class="filter-group">
-                        <label class="filter-label">Opportunity</label>
-                        <select class="filter-select" id="opportunityFilter">
-                            <option value="all">All Opportunities</option>
-                        </select>
+            <!-- Content Grid (similar to application-status) -->
+            <div class="content-grid">
+                <!-- Left Column - Main Content -->
+                <div>
+                    <!-- Filters Card -->
+                    <div class="card">
+                        <h2>Filter Applications</h2>
+                        <div class="filters-grid">
+                            <div class="form-group">
+                                <label class="form-label">Opportunity</label>
+                                <select class="form-control" id="opportunityFilter">
+                                    <option value="all">All Opportunities</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Status</label>
+                                <select class="form-control" id="statusFilter">
+                                    <option value="all">All Status</option>
+                                    <option value="Pending">Pending Review</option>
+                                    <option value="Accepted">Accepted</option>
+                                    <option value="Rejected">Rejected</option>
+                                    <option value="Withdrawn">Withdrawn</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Date Range</label>
+                                <select class="form-control" id="dateFilter">
+                                    <option value="all">All Time</option>
+                                    <option value="today">Today</option>
+                                    <option value="week">This Week</option>
+                                    <option value="month">This Month</option>
+                                    <option value="3months">Last 3 Months</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Sort By</label>
+                                <select class="form-control" id="sortFilter">
+                                    <option value="recent">Most Recent</option>
+                                    <option value="oldest">Oldest First</option>
+                                    <option value="rating">Speaker Rating</option>
+                                    <option value="fee">Requested Fee</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="action-buttons" style="margin-top: var(--spacing-md);">
+                            <button id="clearFiltersBtn" class="btn btn-secondary">
+                                Clear Filters
+                            </button>
+                        </div>
                     </div>
-                    <div class="filter-group">
-                        <label class="filter-label">Status</label>
-                        <select class="filter-select" id="statusFilter">
-                            <option value="all">All Status</option>
-                            <option value="Pending">Pending Review</option>
-                            <option value="Accepted">Accepted</option>
-                            <option value="Rejected">Rejected</option>
-                            <option value="Withdrawn">Withdrawn</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label class="filter-label">Date Range</label>
-                        <select class="filter-select" id="dateFilter">
-                            <option value="all">All Time</option>
-                            <option value="today">Today</option>
-                            <option value="week">This Week</option>
-                            <option value="month">This Month</option>
-                            <option value="3months">Last 3 Months</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label class="filter-label">Sort By</label>
-                        <select class="filter-select" id="sortFilter">
-                            <option value="recent">Most Recent</option>
-                            <option value="oldest">Oldest First</option>
-                            <option value="rating">Speaker Rating</option>
-                            <option value="fee">Requested Fee</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Applications List -->
-            <div class="applications-container">
-                <div class="applications-header">
-                    <h2 class="applications-title">Applications</h2>
-                </div>
-                
-                <!-- Loading State -->
-                <div id="loadingState" class="loading">
-                    <div class="loading-spinner"></div>
-                    Loading applications...
+                    <!-- Applications List Card -->
+                    <div class="card">
+                        <h2>Applications</h2>
+                        
+                        <!-- Loading State -->
+                        <div id="loadingState" class="loading">
+                            <div class="loading-spinner"></div>
+                            Loading applications...
+                        </div>
+
+                        <!-- Applications List -->
+                        <div id="applicationsList"></div>
+
+                        <!-- Empty State -->
+                        <div id="emptyState" class="empty-state hidden">
+                            <div class="empty-state-icon">📝</div>
+                            <h3>No Applications Found</h3>
+                            <p>No applications match your current filters.</p>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Applications List -->
-                <div id="applicationsList"></div>
+                <!-- Right Column - Sidebar -->
+                <div>
+                    <!-- Quick Stats -->
+                    <div class="card">
+                        <h3>Quick Stats</h3>
+                        <div class="detail-row">
+                            <div class="detail-label">Today's Applications</div>
+                            <div class="detail-value" id="todayApplications">0</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Avg. Review Time</div>
+                            <div class="detail-value" id="avgReviewTime">N/A</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Active Opportunities</div>
+                            <div class="detail-value" id="activeOpportunities">0</div>
+                        </div>
+                    </div>
 
-                <!-- Empty State -->
-                <div id="emptyState" class="empty-state hidden">
-                    <div class="empty-state-icon">📝</div>
-                    <h3>No Applications Found</h3>
-                    <p>No applications match your current filters.</p>
-                    <button onclick="reviewManager.clearFilters()" class="btn btn-primary mt-3">
-                        Clear Filters
-                    </button>
+                    <!-- Actions -->
+                    <div class="card">
+                        <h3>Actions</h3>
+                        <div class="action-buttons" style="flex-direction: column;">
+                            <a href="/my-opportunities.html" class="btn btn-primary btn-block">
+                                Manage Opportunities
+                            </a>
+                            <a href="/post-opportunity.html" class="btn btn-secondary btn-block">
+                                Post New Opportunity
+                            </a>
+                            <a href="/saved-speakers.html" class="btn btn-secondary btn-block">
+                                Saved Speakers
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Help -->
+                    <div class="card">
+                        <h3>Need Help?</h3>
+                        <p style="color: var(--color-gray); margin-bottom: var(--spacing-md);">
+                            Tips for reviewing applications effectively
+                        </p>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 0.5rem 0;">✓ Review within 48 hours</li>
+                            <li style="padding: 0.5rem 0;">✓ Provide feedback when declining</li>
+                            <li style="padding: 0.5rem 0;">✓ Check speaker profiles thoroughly</li>
+                            <li style="padding: 0.5rem 0;">✓ Consider experience and fit</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -136,6 +205,14 @@
     <script src="/js/components/footer.js"></script>
     
     <!-- Page-specific JavaScript -->
+    <script>
+        // Set today's date
+        document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+        });
+    </script>
     <script src="/js/pages/review-applications.js"></script>
 </body>
 </html>
