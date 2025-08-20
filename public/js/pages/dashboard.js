@@ -244,9 +244,9 @@ class UnifiedDashboard {
             }
             if (headerActions) {
                 headerActions.innerHTML = `
-                    <a href="/post-opportunity.html" class="btn">📢 Post Opportunity</a>
-                    <a href="/members.html" class="btn">🔍 Find Speakers</a>
-                    <a href="/my-opportunities.html" class="btn">📋 My Opportunities</a>
+                    <a href="/post-opportunity.html" class="btn" style="background-color: var(--color-foam);">📢 Post Opportunity</a>
+                    <a href="/members.html" class="btn" style="background-color: var(--color-foam);">🔍 Find Speakers</a>
+                    <a href="/my-opportunities.html" class="btn" style="background-color: var(--color-foam);">📋 My Opportunities</a>
                 `;
             }
         } else {
