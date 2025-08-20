@@ -496,7 +496,8 @@
         // Load opportunity details
         async function loadOpportunityDetails() {
             try {
-                opportunityData = await window.covetalks.getOpportunityWithRelations(opportunityId);
+                // FIX: Use the correct function name
+                opportunityData = await window.covetalks.getOpportunityDetails(opportunityId);
                 
                 if (!opportunityData) {
                     showError('Opportunity not found');
@@ -596,20 +597,36 @@
             document.getElementById('applyDetails').textContent = 
                 travelAccom.length > 0 ? travelAccom.join(' • ') : 'No additional coverage';
 
-            // Application stats
+            // FIX 5: Application stats with proper handling
             document.getElementById('applyDeadline').textContent = 
                 opportunityData.application_deadline ? formatDate(opportunityData.application_deadline) : 'Open until filled';
-            document.getElementById('applyCount').textContent = opportunityData.application_count || '0';
+            
+            // Handle application count properly
+            const appCount = opportunityData.applications?.length || 
+                             opportunityData.applications?.[0]?.count || 
+                             opportunityData.application_count || 
+                             0;
+            document.getElementById('applyCount').textContent = appCount;
+            
             document.getElementById('applyPosted').textContent = formatTimeAgo(opportunityData.created_at);
 
-            // Organization info
+            // FIX 4: Organization info with better handling
             const org = opportunityData.organization;
+            const postedBy = opportunityData.posted_by;
+
             if (org) {
-                document.getElementById('orgName').textContent = org.name;
+                document.getElementById('orgName').textContent = org.name || 'Organization';
                 document.getElementById('orgType').textContent = org.organization_type || 'Organization';
                 document.getElementById('orgLocation').textContent = org.location || 'Location not specified';
                 document.getElementById('orgDescription').textContent = org.description || '';
-                document.getElementById('viewOrgProfile').href = `/profile.html?id=${org.id}`;
+                document.getElementById('viewOrgProfile').href = `/profile.html?id=${postedBy?.id || opportunityData.posted_by}`;
+            } else if (postedBy) {
+                // Fallback if organization data isn't available
+                document.getElementById('orgName').textContent = postedBy.name || 'Organization';
+                document.getElementById('orgType').textContent = postedBy.member_type || 'Organization';
+                document.getElementById('orgLocation').textContent = 'See profile for details';
+                document.getElementById('orgDescription').textContent = '';
+                document.getElementById('viewOrgProfile').href = `/profile.html?id=${postedBy.id || opportunityData.posted_by}`;
             }
 
             // Set suggested fee in form
