@@ -126,7 +126,7 @@ window.covetalks = {
             .from('members')
             .select(`
                 *,
-                reviews(rating)
+                reviews!reviews_speaker_id_fkey(rating)
             `)
             .eq('member_type', filters.memberType || 'Speaker');
         
