@@ -492,7 +492,7 @@
             try {
                 if (!currentUser) return;
                 
-                userApplications = await window.covetalks.getUserApplications(currentUser.id);
+                userApplications = await window.covetalks.getApplications(currentUser.id);
                 console.log('[Opportunities] Loaded user applications:', userApplications.length);
             } catch (error) {
                 console.error('[Opportunities] Error loading user applications:', error);
@@ -521,7 +521,7 @@
                     }
                 });
                 
-                const opportunities = await window.covetalks.searchOpportunitiesOptimized(searchFilters);
+                const opportunities = await window.covetalks.searchOpportunities(searchFilters);
                 
                 if (!opportunities || opportunities.length === 0) {
                     console.log('[Opportunities] No opportunities found');
