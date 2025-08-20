@@ -1,7 +1,7 @@
 // /js/pages/dashboard.js
 /**
  * CoveTalks Unified Dashboard
- * Handles both Speaker and Organization dashboards
+ * Handles both Speaker and Organization dashboards with consistent design
  */
 
 class UnifiedDashboard {
@@ -186,7 +186,7 @@ class UnifiedDashboard {
             background: #d4edda;
             color: #155724;
             padding: 1.5rem;
-            border-radius: 10px;
+            border-radius: 15px;
             margin-bottom: 1.5rem;
             border: 1px solid #c3e6cb;
             display: flex;
@@ -236,14 +236,14 @@ class UnifiedDashboard {
         if (this.userType === 'Organization') {
             body.classList.add('org-view');
             if (header) {
-                header.classList.remove('speaker-gradient');
                 header.classList.add('org-gradient');
             }
-            
-            // Add org-stat class to stat cards
-            document.querySelectorAll('.stat-card').forEach(card => {
-                card.classList.add('org-stat');
-            });
+        } else {
+            // Keep default speaker styling
+            body.classList.remove('org-view');
+            if (header) {
+                header.classList.remove('org-gradient');
+            }
         }
     }
 
@@ -262,19 +262,19 @@ class UnifiedDashboard {
             }
             if (headerActions) {
                 headerActions.innerHTML = `
-                    <a href="/post-opportunity.html" class="btn btn-white">Post Opportunity</a>
-                    <a href="/members.html" class="btn btn-white">Find Speakers</a>
-                    <a href="/my-opportunities.html" class="btn btn-white">My Opportunities</a>
+                    <a href="/post-opportunity.html" class="btn">📢 Post Opportunity</a>
+                    <a href="/members.html" class="btn">🔍 Find Speakers</a>
+                    <a href="/my-opportunities.html" class="btn">📋 My Opportunities</a>
                 `;
             }
         } else {
             if (welcomeMessage) {
-                welcomeMessage.textContent = "Here's what's happening with your speaker profile today.";
+                welcomeMessage.textContent = "Here's what's happening with your speaker profile today";
             }
             if (headerActions) {
                 headerActions.innerHTML = `
-                    <a href="/settings.html" class="btn btn-white">Edit Profile</a>
-                    <a href="/opportunities.html" class="btn btn-white">Browse Opportunities</a>
+                    <a href="/settings.html" class="btn">✏️ Edit Profile</a>
+                    <a href="/opportunities.html" class="btn">🔍 Browse Opportunities</a>
                 `;
             }
         }
@@ -310,32 +310,24 @@ class UnifiedDashboard {
         
         statsGrid.innerHTML = `
             <div class="stat-card">
-                <div class="stat-icon blue">👁️</div>
-                <div class="stat-content">
-                    <h3>${this.data.stats.profileViews || 0}</h3>
-                    <p>Profile Views This Month</p>
-                </div>
+                <div class="stat-icon">👁️</div>
+                <div class="stat-value">${this.data.stats.profileViews || 0}</div>
+                <div class="stat-label">Profile Views This Month</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon green">📅</div>
-                <div class="stat-content">
-                    <h3>${this.data.stats.bookings || 0}</h3>
-                    <p>Confirmed Bookings</p>
-                </div>
+                <div class="stat-icon">📅</div>
+                <div class="stat-value">${this.data.stats.bookings || 0}</div>
+                <div class="stat-label">Confirmed Bookings</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon purple">🎯</div>
-                <div class="stat-content">
-                    <h3>${this.data.stats.applications || 0}</h3>
-                    <p>Active Applications</p>
-                </div>
+                <div class="stat-icon">🎯</div>
+                <div class="stat-value">${this.data.stats.applications || 0}</div>
+                <div class="stat-label">Active Applications</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon orange">⭐</div>
-                <div class="stat-content">
-                    <h3>${this.currentUser.average_rating?.toFixed(1) || '0.0'}</h3>
-                    <p>Average Rating</p>
-                </div>
+                <div class="stat-icon">⭐</div>
+                <div class="stat-value">${this.currentUser.average_rating?.toFixed(1) || '0.0'}</div>
+                <div class="stat-label">Average Rating</div>
             </div>
         `;
     }
@@ -347,7 +339,7 @@ class UnifiedDashboard {
         // Recent Activity
         const activityHTML = this.data.activity.length > 0 ? 
             this.data.activity.map(activity => this.renderActivityItem(activity)).join('') :
-            '<p style="padding: var(--spacing-md); color: var(--color-gray);">No recent activity</p>';
+            '<p style="padding: var(--spacing-md); color: var(--color-gray); text-align: center;">No recent activity</p>';
         
         // Upcoming Bookings
         const upcomingBookings = this.data.applications.filter(app => 
@@ -358,19 +350,19 @@ class UnifiedDashboard {
         
         const bookingsHTML = upcomingBookings.length > 0 ?
             upcomingBookings.slice(0, 3).map(booking => this.renderBookingItem(booking)).join('') :
-            '<p style="padding: var(--spacing-md); color: var(--color-gray);">No upcoming bookings</p>';
+            '<p style="padding: var(--spacing-md); color: var(--color-gray); text-align: center;">No upcoming bookings</p>';
         
         // Recent Opportunities
         const opportunitiesHTML = this.data.opportunities.length > 0 ?
             this.data.opportunities.map(opp => this.renderOpportunityItem(opp)).join('') :
-            '<p style="padding: var(--spacing-md); color: var(--color-gray);">No new opportunities</p>';
+            '<p style="padding: var(--spacing-md); color: var(--color-gray); text-align: center;">No new opportunities</p>';
         
         mainContent.innerHTML = `
             <!-- Recent Activity -->
             <div class="dashboard-card">
                 <div class="card-header">
                     <h2>Recent Activity</h2>
-                    <a href="/activity.html">View All</a>
+                    <a href="/activity.html">View All →</a>
                 </div>
                 <div class="activity-list">
                     ${activityHTML}
@@ -381,7 +373,7 @@ class UnifiedDashboard {
             <div class="dashboard-card">
                 <div class="card-header">
                     <h2>Upcoming Bookings</h2>
-                    <a href="/bookings.html">Manage All</a>
+                    <a href="/bookings.html">Manage All →</a>
                 </div>
                 <div class="activity-list">
                     ${bookingsHTML}
@@ -392,7 +384,7 @@ class UnifiedDashboard {
             <div class="dashboard-card">
                 <div class="card-header">
                     <h2>New Speaking Opportunities</h2>
-                    <a href="/opportunities.html">Browse All</a>
+                    <a href="/opportunities.html">Browse All →</a>
                 </div>
                 <div class="activity-list">
                     ${opportunitiesHTML}
@@ -416,7 +408,7 @@ class UnifiedDashboard {
         sidebar.innerHTML = `
             <!-- Profile Completion -->
             <div class="dashboard-card">
-                <h3 style="color: var(--color-deep); margin-bottom: var(--spacing-md);">Profile Completion</h3>
+                <h3 style="color: var(--color-deep); margin-bottom: var(--spacing-md); font-weight: 900; font-family: 'Brandon Text', var(--font-primary);">Profile Completion</h3>
                 <div class="profile-completion">
                     <div class="completion-header">
                         <span>Profile Strength</span>
@@ -430,7 +422,7 @@ class UnifiedDashboard {
             </div>
 
             <!-- Subscription Status -->
-            <div class="dashboard-card subscription-card">
+            <div class="subscription-card">
                 <h3>Your Subscription</h3>
                 <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: var(--spacing-sm);">
                     ${planType} Plan
@@ -438,12 +430,12 @@ class UnifiedDashboard {
                 <div style="opacity: 0.9; margin-bottom: var(--spacing-md);">
                     ${amount > 0 ? `$${amount}/month` : 'No active subscription'}
                 </div>
-                <a href="/billing.html" class="btn btn-outline-white">Manage Billing</a>
+                <a href="/billing.html" class="btn">Manage Billing</a>
             </div>
 
             <!-- Quick Actions -->
             <div class="dashboard-card">
-                <h3 style="color: var(--color-deep); margin-bottom: var(--spacing-md);">Quick Actions</h3>
+                <h3 style="color: var(--color-deep); margin-bottom: var(--spacing-md); font-weight: 900; font-family: 'Brandon Text', var(--font-primary);">Quick Actions</h3>
                 <div class="quick-actions">
                     <a href="/settings.html" class="action-btn">
                         <i>✏️</i>
@@ -458,15 +450,15 @@ class UnifiedDashboard {
 
             <!-- Resources -->
             <div class="dashboard-card">
-                <h3 style="color: var(--color-deep); margin-bottom: var(--spacing-md);">Resources</h3>
-                <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
-                    <a href="/speaking-tips.html" style="color: var(--color-deep); text-decoration: none;">
+                <h3 style="color: var(--color-deep); margin-bottom: var(--spacing-md); font-weight: 900; font-family: 'Brandon Text', var(--font-primary);">Resources</h3>
+                <div class="resources-list">
+                    <a href="/speaking-tips.html">
                         📚 Speaking Tips & Best Practices
                     </a>
-                    <a href="/templates.html" style="color: var(--color-deep); text-decoration: none;">
+                    <a href="/templates.html">
                         📝 Proposal Templates
                     </a>
-                    <a href="/help.html" style="color: var(--color-deep); text-decoration: none;">
+                    <a href="/help.html">
                         ❓ Help Center
                     </a>
                 </div>
@@ -521,33 +513,25 @@ class UnifiedDashboard {
         if (!statsGrid) return;
         
         statsGrid.innerHTML = `
-            <div class="stat-card org-stat">
-                <div class="stat-icon orange">📢</div>
-                <div class="stat-content">
-                    <h3>${activeOps}</h3>
-                    <p>Active Opportunities</p>
-                </div>
+            <div class="stat-card">
+                <div class="stat-icon">📢</div>
+                <div class="stat-value">${activeOps}</div>
+                <div class="stat-label">Active Opportunities</div>
             </div>
-            <div class="stat-card org-stat">
-                <div class="stat-icon blue">📝</div>
-                <div class="stat-content">
-                    <h3>${this.data.applications.length}</h3>
-                    <p>Total Applications</p>
-                </div>
+            <div class="stat-card">
+                <div class="stat-icon">📝</div>
+                <div class="stat-value">${this.data.applications.length}</div>
+                <div class="stat-label">Total Applications</div>
             </div>
-            <div class="stat-card org-stat">
-                <div class="stat-icon purple">⏳</div>
-                <div class="stat-content">
-                    <h3>${pendingApps}</h3>
-                    <p>Pending Reviews</p>
-                </div>
+            <div class="stat-card">
+                <div class="stat-icon">⏳</div>
+                <div class="stat-value">${pendingApps}</div>
+                <div class="stat-label">Pending Reviews</div>
             </div>
-            <div class="stat-card org-stat">
-                <div class="stat-icon green">⭐</div>
-                <div class="stat-content">
-                    <h3>${this.data.savedSpeakers.length}</h3>
-                    <p>Saved Speakers</p>
-                </div>
+            <div class="stat-card">
+                <div class="stat-icon">⭐</div>
+                <div class="stat-value">${this.data.savedSpeakers.length}</div>
+                <div class="stat-label">Saved Speakers</div>
             </div>
         `;
     }
@@ -574,7 +558,7 @@ class UnifiedDashboard {
             <div class="dashboard-card">
                 <div class="card-header">
                     <h2>Recent Applications</h2>
-                    <a href="/my-opportunities.html">View All</a>
+                    <a href="/my-opportunities.html">View All →</a>
                 </div>
                 ${applicationsHTML}
             </div>
@@ -583,7 +567,7 @@ class UnifiedDashboard {
             <div class="dashboard-card">
                 <div class="card-header">
                     <h2>Your Active Opportunities</h2>
-                    <a href="/post-opportunity.html">Post New</a>
+                    <a href="/post-opportunity.html">Post New →</a>
                 </div>
                 <div>
                     ${opportunitiesHTML}
@@ -606,7 +590,7 @@ class UnifiedDashboard {
         sidebar.innerHTML = `
             <!-- Quick Actions -->
             <div class="dashboard-card">
-                <h3 style="color: var(--color-sand); margin-bottom: var(--spacing-md);">Quick Actions</h3>
+                <h3 style="color: var(--color-sand); margin-bottom: var(--spacing-md); font-weight: 900; font-family: 'Brandon Text', var(--font-primary);">Quick Actions</h3>
                 <div class="quick-actions">
                     <a href="/post-opportunity.html" class="action-btn">
                         <i>➕</i>
@@ -629,7 +613,7 @@ class UnifiedDashboard {
 
             <!-- Monthly Stats -->
             <div class="dashboard-card">
-                <h3 style="color: var(--color-sand); margin-bottom: var(--spacing-md);">This Month</h3>
+                <h3 style="color: var(--color-sand); margin-bottom: var(--spacing-md); font-weight: 900; font-family: 'Brandon Text', var(--font-primary);">This Month</h3>
                 <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
                     <div style="display: flex; justify-content: space-between;">
                         <span>New Applications:</span>
@@ -647,25 +631,25 @@ class UnifiedDashboard {
             </div>
 
             <!-- CoveTalks Pro -->
-            <div class="dashboard-card subscription-card org-card">
+            <div class="subscription-card org-card">
                 <h3>CoveTalks for Organizations</h3>
                 <div style="opacity: 0.9; margin-bottom: var(--spacing-md);">
                     Free forever for organizations to find and connect with speakers
                 </div>
-                <a href="/help.html" class="btn btn-outline-white">Learn More</a>
+                <a href="/help.html" class="btn">Learn More</a>
             </div>
 
             <!-- Resources -->
             <div class="dashboard-card">
-                <h3 style="color: var(--color-sand); margin-bottom: var(--spacing-md);">Resources</h3>
-                <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
-                    <a href="/organization-guide.html" style="color: var(--color-sand); text-decoration: none;">
+                <h3 style="color: var(--color-sand); margin-bottom: var(--spacing-md); font-weight: 900; font-family: 'Brandon Text', var(--font-primary);">Resources</h3>
+                <div class="resources-list">
+                    <a href="/organization-guide.html">
                         📖 Organization Guide
                     </a>
-                    <a href="/speaker-criteria.html" style="color: var(--color-sand); text-decoration: none;">
+                    <a href="/speaker-criteria.html">
                         ✅ Speaker Selection Tips
                     </a>
-                    <a href="/help.html" style="color: var(--color-sand); text-decoration: none;">
+                    <a href="/help.html">
                         ❓ Help Center
                     </a>
                 </div>
@@ -679,7 +663,7 @@ class UnifiedDashboard {
                 <div class="empty-state">
                     <div class="empty-state-icon">📝</div>
                     <p>No applications yet</p>
-                    <p style="font-size: 0.9rem; margin-top: var(--spacing-sm);">
+                    <p style="font-size: 0.9rem; margin-top: var(--spacing-sm); color: var(--color-gray-light);">
                         Applications will appear here when speakers apply to your opportunities
                     </p>
                 </div>
@@ -703,22 +687,27 @@ class UnifiedDashboard {
                             speaker.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
                             '??';
                         
+                        let statusClass = '';
+                        if (app.status === 'Pending') statusClass = 'pending';
+                        else if (app.status === 'Accepted') statusClass = 'accepted';
+                        else if (app.status === 'Rejected') statusClass = 'rejected';
+                        
                         return `
                             <tr>
                                 <td>
                                     <div class="applicant-info">
                                         <div class="applicant-avatar">${initials}</div>
                                         <div>
-                                            <div>${speaker.name || 'Unknown'}</div>
+                                            <div style="font-weight: 600; color: var(--color-deep);">${speaker.name || 'Unknown'}</div>
                                             <div style="font-size: 0.85rem; color: var(--color-gray);">
                                                 ${speaker.location || 'Location not specified'}
                                             </div>
                                         </div>
                                     </div>
                                 </td>
-                                <td>${app.opportunity?.title || 'Unknown'}</td>
+                                <td style="color: var(--color-gray);">${app.opportunity?.title || 'Unknown'}</td>
                                 <td>
-                                    <span class="status-badge ${app.status.toLowerCase()}">${app.status}</span>
+                                    <span class="status-badge ${statusClass}">${app.status}</span>
                                 </td>
                                 <td>
                                     <a href="/application-review.html?id=${app.id}" class="btn btn-primary btn-sm">
@@ -746,7 +735,7 @@ class UnifiedDashboard {
                     <span>📝 ${opp.applications?.count || 0} applications</span>
                     <span>⏰ Posted ${this.formatTimeAgo(opp.created_at)}</span>
                 </div>
-                <a href="/manage-opportunity.html?id=${opp.id}" class="view-btn">
+                <a href="/manage-opportunity.html?id=${opp.id}" class="view-btn" style="margin-top: var(--spacing-md); display: inline-block;">
                     Manage
                 </a>
             </div>
@@ -793,7 +782,7 @@ class UnifiedDashboard {
                 
             case 'application_reviewed':
                 icon = activity.metadata?.status === 'Accepted' ? '✅' : '📝';
-                iconClass = activity.metadata?.status === 'Accepted' ? 'success' : 'review';
+                iconClass = activity.metadata?.status === 'Accepted' ? 'booking' : 'application';
                 title = 'Application ' + (activity.metadata?.status || 'Reviewed');
                 description = `Your application was ${activity.metadata?.status?.toLowerCase() || 'reviewed'}`;
                 actionLink = `/application-status.html?id=${activity.target_id}`;
@@ -801,7 +790,7 @@ class UnifiedDashboard {
                 
             case 'opportunity_posted':
                 icon = '📢';
-                iconClass = 'opportunity';
+                iconClass = 'message';
                 title = 'Opportunity Posted';
                 description = `New opportunity: ${meta.title || 'Speaking Opportunity'}`;
                 if (meta.event_date) {
@@ -812,7 +801,7 @@ class UnifiedDashboard {
                 
             case 'speaker_saved':
                 icon = '⭐';
-                iconClass = 'saved';
+                iconClass = 'booking';
                 title = 'Speaker Saved';
                 if (this.userType === 'Speaker') {
                     description = 'An organization saved your profile';
@@ -824,7 +813,7 @@ class UnifiedDashboard {
                 
             case 'review_posted':
                 icon = '⭐';
-                iconClass = 'review';
+                iconClass = 'booking';
                 title = 'New Review';
                 description = `You received a ${meta.rating || 0}-star review`;
                 if (meta.would_recommend) {
@@ -936,14 +925,14 @@ class UnifiedDashboard {
         
         let tips = '';
         if (percentage === 100) {
-            tips = '<div style="color: var(--color-success); text-align: center; padding: var(--spacing-md);">✅ Your profile is complete!</div>';
+            tips = '<div style="color: var(--color-success); text-align: center; padding: var(--spacing-md); background: rgba(39, 174, 96, 0.1); border-radius: 8px; margin-top: var(--spacing-md);">✅ Your profile is complete!</div>';
         } else if (missingFields.length > 0) {
             tips = `
                 <div style="margin-top: var(--spacing-md); padding: var(--spacing-md); background: var(--color-foam); border-radius: 10px;">
-                    <h4 style="color: var(--color-deep); margin-bottom: var(--spacing-sm);">Complete Your Profile:</h4>
-                    <ul style="list-style: none; padding: 0;">
-                        ${missingFields.slice(0, 3).map(field => `<li style="padding: 0.25rem 0;">→ ${field}</li>`).join('')}
-                        ${missingFields.length > 3 ? `<li style="padding: 0.25rem 0;">...and ${missingFields.length - 3} more</li>` : ''}
+                    <h4 style="color: var(--color-deep); margin-bottom: var(--spacing-sm); font-size: 0.9rem; font-weight: 700;">Complete Your Profile:</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        ${missingFields.slice(0, 3).map(field => `<li style="padding: 0.25rem 0; color: var(--color-gray); font-size: 0.85rem;">→ ${field}</li>`).join('')}
+                        ${missingFields.length > 3 ? `<li style="padding: 0.25rem 0; color: var(--color-gray); font-size: 0.85rem;">...and ${missingFields.length - 3} more</li>` : ''}
                     </ul>
                 </div>
             `;
