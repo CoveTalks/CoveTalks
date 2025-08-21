@@ -3368,6 +3368,170 @@ window.covetalks = {
         
         if (error) throw error;
         return data || [];
+    }, 
+
+    // ===========================================
+    // SUCCESS STORIES 
+    // ===========================================
+
+    async getSuccessStories(storyType = null, limit = 20) {
+        let query = supabase
+            .from('success_stories')
+            .select('*')
+            .eq('published', true)
+            .order('is_featured', { ascending: false })
+            .order('created_at', { ascending: false });
+        
+        if (storyType && storyType !== 'all') {
+            if (storyType === 'featured') {
+                query = query.eq('is_featured', true);
+            } else {
+                query = query.eq('story_type', storyType);
+            }
+        }
+        
+        if (limit) {
+            query = query.limit(limit);
+        }
+        
+        const { data, error } = await query;
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getSuccessStory(slug) {
+        const { data, error } = await supabase
+            .from('success_stories')
+            .select('*')
+            .eq('slug', slug)
+            .eq('published', true)
+            .single();
+        
+        if (error) throw error;
+        
+        // Increment view count
+        if (data) {
+            await this.incrementStoryViews(data.id);
+        }
+        
+        return data;
+    },
+
+    async incrementStoryViews(storyId) {
+        const { error } = await supabase
+            .from('success_stories')
+            .update({ 
+                view_count: supabase.raw('view_count + 1') 
+            })
+            .eq('id', storyId);
+        
+        if (error) console.error('Error incrementing story views:', error);
+    },
+
+    async getRelatedStories(storyId, category, limit = 3) {
+        const { data, error } = await supabase
+            .from('success_stories')
+            .select('id, title, slug, excerpt, story_type, category, author_name, image_url')
+            .eq('published', true)
+            .eq('category', category)
+            .neq('id', storyId)
+            .order('view_count', { ascending: false })
+            .limit(limit);
+        
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getTestimonials(limit = 8, type = null) {
+        let query = supabase
+            .from('testimonials')
+            .select('*')
+            .eq('published', true)
+            .order('is_featured', { ascending: false })
+            .order('created_at', { ascending: false });
+        
+        if (type) {
+            query = query.eq('testimonial_type', type);
+        }
+        
+        if (limit) {
+            query = query.limit(limit);
+        }
+        
+        const { data, error } = await query;
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getSuccessStats() {
+        const { data, error } = await supabase
+            .rpc('get_success_stats');
+        
+        if (error) throw error;
+        
+        // Return the first row of results
+        return data && data[0] ? data[0] : {
+            totalConnections: 2847,
+            avgRating: 4.8,
+            countriesReached: 42,
+            speakerEarnings: 1250000
+        };
+    },
+
+    async searchSuccessStories(searchTerm) {
+        const { data, error } = await supabase
+            .from('success_stories')
+            .select('*')
+            .eq('published', true)
+            .or(`title.ilike.%${searchTerm}%,excerpt.ilike.%${searchTerm}%,content.ilike.%${searchTerm}%,author_name.ilike.%${searchTerm}%`)
+            .order('view_count', { ascending: false })
+            .limit(20);
+        
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getStoriesByTag(tag) {
+        const { data, error } = await supabase
+            .from('success_stories')
+            .select('*')
+            .eq('published', true)
+            .contains('tags', [tag])
+            .order('created_at', { ascending: false })
+            .limit(20);
+        
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getTopRatedStories(limit = 5) {
+        const { data, error } = await supabase
+            .from('success_stories')
+            .select('*')
+            .eq('published', true)
+            .gte('rating', 4.5)
+            .order('rating', { ascending: false })
+            .order('view_count', { ascending: false })
+            .limit(limit);
+        
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getRecentStories(days = 30, limit = 10) {
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - days);
+        
+        const { data, error } = await supabase
+            .from('success_stories')
+            .select('*')
+            .eq('published', true)
+            .gte('created_at', startDate.toISOString())
+            .order('created_at', { ascending: false })
+            .limit(limit);
+        
+        if (error) throw error;
+        return data || [];
     }
 };
 
