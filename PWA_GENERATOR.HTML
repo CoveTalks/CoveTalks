@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Icon Generator - CoveTalks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #155487 0%, #1d93b7 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #155487;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .upload-area {
+            border: 3px dashed #155487;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            background: #f0f8ff;
+        }
+        
+        .upload-area.dragover {
+            background: #e8f4fd;
+            border-color: #1d93b7;
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        .upload-label {
+            display: block;
+            cursor: pointer;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            background: #155487;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #0d3659;
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .preview-section {
+            display: none;
+            margin-top: 30px;
+        }
+        
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .icon-preview {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .icon-preview canvas {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .icon-label {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .download-all-btn {
+            background: #f3b338;
+            margin-top: 20px;
+            width: 100%;
+        }
+        
+        .download-all-btn:hover {
+            background: #d4941e;
+        }
+        
+        .instructions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .instructions h3 {
+            color: #155487;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            color: #666;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 PWA Icon Generator</h1>
+        <p class="subtitle">Generate all required PWA icons from your logo</p>
+        
+        <div class="upload-area" id="uploadArea">
+            <label for="fileInput" class="upload-label">
+                <div class="upload-icon">📁</div>
+                <p><strong>Click to upload or drag & drop</strong></p>
+                <p style="margin-top: 10px; color: #666;">Supports PNG, JPG, or SVG (recommended: 512x512px or larger)</p>
+            </label>
+            <input type="file" id="fileInput" accept="image/*">
+        </div>
+        
+        <button class="btn" id="generateBtn" disabled>Generate Icons</button>
+        
+        <div class="preview-section" id="previewSection">
+            <h2>Generated Icons</h2>
+            <div class="preview-grid" id="previewGrid"></div>
+            <button class="btn download-all-btn" id="downloadAllBtn">📥 Download All Icons as ZIP</button>
+        </div>
+        
+        <div class="instructions">
+            <h3>📖 Instructions</h3>
+            <ol>
+                <li>Upload your logo (preferably square, 512x512px or larger)</li>
+                <li>Click "Generate Icons" to create all PWA icon sizes</li>
+                <li>Download all icons as a ZIP file</li>
+                <li>Extract the ZIP and place the icons in your /Images/ directory</li>
+                <li>The manifest.json is already configured to use these icon filenames</li>
+            </ol>
+        </div>
+    </div>
+    
+    <!-- Include JSZip library for creating ZIP files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <script>
+        const sizes = [
+            { size: 72, name: 'icon-72x72.png' },
+            { size: 96, name: 'icon-96x96.png' },
+            { size: 128, name: 'icon-128x128.png' },
+            { size: 144, name: 'icon-144x144.png' },
+            { size: 152, name: 'icon-152x152.png' },
+            { size: 192, name: 'icon-192x192.png' },
+            { size: 384, name: 'icon-384x384.png' },
+            { size: 512, name: 'icon-512x512.png' }
+        ];
+        
+        let uploadedImage = null;
+        let generatedIcons = [];
+        
+        const fileInput = document.getElementById('fileInput');
+        const uploadArea = document.getElementById('uploadArea');
+        const generateBtn = document.getElementById('generateBtn');
+        const previewSection = document.getElementById('previewSection');
+        const previewGrid = document.getElementById('previewGrid');
+        const downloadAllBtn = document.getElementById('downloadAllBtn');
+        
+        // File upload handling
+        fileInput.addEventListener('change', handleFileSelect);
+        
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+        
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+        
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('Please upload an image file');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    uploadedImage = img;
+                    generateBtn.disabled = false;
+                    uploadArea.innerHTML = `
+                        <img src="${e.target.result}" style="max-width: 200px; max-height: 200px; border-radius: 8px;">
+                        <p style="margin-top: 15px; color: #155487; font-weight: 600;">Image loaded! Click "Generate Icons" to continue</p>
+                    `;
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        generateBtn.addEventListener('click', generateIcons);
+        
+        function generateIcons() {
+            if (!uploadedImage) return;
+            
+            previewGrid.innerHTML = '';
+            generatedIcons = [];
+            
+            sizes.forEach(({ size, name }) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                canvas.width = size;
+                canvas.height = size;
+                
+                // Fill background with white for transparency handling
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(0, 0, size, size);
+                
+                // Draw the image centered and scaled
+                const scale = Math.min(size / uploadedImage.width, size / uploadedImage.height);
+                const width = uploadedImage.width * scale;
+                const height = uploadedImage.height * scale;
+                const x = (size - width) / 2;
+                const y = (size - height) / 2;
+                
+                ctx.drawImage(uploadedImage, x, y, width, height);
+                
+                // Create preview
+                const previewDiv = document.createElement('div');
+                previewDiv.className = 'icon-preview';
+                previewDiv.innerHTML = `
+                    <canvas></canvas>
+                    <div class="icon-label">${name}<br>${size}x${size}px</div>
+                `;
+                
+                const previewCanvas = previewDiv.querySelector('canvas');
+                previewCanvas.width = size;
+                previewCanvas.height = size;
+                const previewCtx = previewCanvas.getContext('2d');
+                previewCtx.drawImage(canvas, 0, 0);
+                
+                previewGrid.appendChild(previewDiv);
+                
+                // Store for download
+                canvas.toBlob((blob) => {
+                    generatedIcons.push({ name, blob });
+                });
+            });
+            
+            previewSection.style.display = 'block';
+            previewSection.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        downloadAllBtn.addEventListener('click', async () => {
+            if (generatedIcons.length === 0) return;
+            
+            const zip = new JSZip();
+            const imgFolder = zip.folder('pwa-icons');
+            
+            for (const { name, blob } of generatedIcons) {
+                imgFolder.file(name, blob);
+            }
+            
+            // Add a readme
+            imgFolder.file('README.txt', `PWA Icons for CoveTalks
+============================
+Place these icons in your /public/Images/ directory.
+
+The icons are already referenced in your manifest.json file.
+
+Icon sizes included:
+${sizes.map(s => `- ${s.name}: ${s.size}x${s.size}px`).join('\n')}
+
+For best results, also create maskable versions of the 192x192 and 512x512 icons
+with additional padding (about 10-15% on each side).
+`);
+            
+            const content = await zip.generateAsync({ type: 'blob' });
+            
+            // Download the ZIP
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(content);
+            link.download = 'covetalks-pwa-icons.zip';
+            link.click();
+            
+            URL.revokeObjectURL(link.href);
+        });
+    </script>
+</body>
+</html>

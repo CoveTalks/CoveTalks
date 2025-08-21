@@ -10,6 +10,16 @@
     
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="/css/main.css">
+
+    <!-- PWA Support -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#155487">
+    <link rel="apple-touch-icon" href="/Images/icon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="CoveTalks">
+    <meta name="msapplication-TileImage" content="/Images/icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#155487">
     
     <!-- Page-specific styles ONLY for unique elements -->
     <style>
@@ -1030,5 +1040,9 @@
             initializePage();
         }
     </script>
+
+    <!-- Service Worker Registration -->
+    <script src="/js/sw-register.js"></script>
+
 </body>
 </html>
