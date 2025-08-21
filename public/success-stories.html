@@ -21,31 +21,8 @@
     <meta name="msapplication-TileImage" content="/Images/icon-144x144.png">
     <meta name="msapplication-TileColor" content="#155487">
     
-    <!-- Page-specific styles aligned with brand -->
+    <!-- Page-specific styles (non-duplicate) -->
     <style>
-        :root {
-            --color-deep: #155487;
-            --color-calm: #2B9AC9;
-            --color-sand: #F3B338;
-            --color-foam: #E5E5E5;
-            --color-gray: #666;
-            --color-gray-light: #999;
-            --color-gray-dark: #333;
-            --spacing-sm: 0.5rem;
-            --spacing-md: 1rem;
-            --spacing-lg: 1.5rem;
-            --spacing-xl: 2rem;
-            --spacing-2xl: 3rem;
-            --spacing-3xl: 4rem;
-            --transition-fast: 0.2s ease;
-            --transition-normal: 0.3s ease;
-            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
-            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
-            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.16);
-            --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.2);
-            --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-        }
-
         /* Hero Section with Brand Gradient */
         .hero-section {
             background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
@@ -79,16 +56,15 @@
         .hero-content h1 {
             font-size: 3rem;
             margin-bottom: var(--spacing-md);
-            font-family: 'Brandon Text', var(--font-primary);
             font-weight: 900;
             animation: fadeInUp 0.6s ease;
+            color: white;
         }
 
         .hero-content p {
             font-size: 1.25rem;
             opacity: 0.95;
             margin-bottom: var(--spacing-xl);
-            font-family: 'Brandon Text', var(--font-primary);
             font-weight: 400;
             animation: fadeInUp 0.6s ease 0.1s;
             animation-fill-mode: both;
@@ -141,14 +117,12 @@
             font-size: 2.5rem;
             font-weight: 900;
             color: var(--color-sand);
-            font-family: 'Brandon Text', var(--font-primary);
             margin-bottom: var(--spacing-sm);
         }
 
         .stat-label {
             color: var(--color-gray);
             font-size: 0.95rem;
-            font-family: 'Brandon Text', var(--font-primary);
         }
 
         /* Filter Tabs */
@@ -170,7 +144,6 @@
             background: transparent;
             border: none;
             border-radius: 25px;
-            font-family: 'Brandon Text', var(--font-primary);
             font-weight: 600;
             color: var(--color-gray);
             cursor: pointer;
@@ -579,42 +552,32 @@
             flex-wrap: wrap;
         }
 
-        .btn {
-            padding: var(--spacing-md) var(--spacing-xl);
-            border-radius: 25px;
-            font-weight: 700;
-            font-family: 'Brandon Text', var(--font-primary);
-            text-decoration: none;
-            display: inline-block;
-            transition: all var(--transition-normal);
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-
-        .btn-primary {
+        /* Override primary button for CTA section */
+        .cta-section .btn-primary {
             background: var(--color-sand);
             color: white;
         }
 
-        .btn-primary:hover {
+        .cta-section .btn-primary:hover {
             background: #e5a030;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(243, 179, 56, 0.3);
         }
 
-        .btn-secondary {
+        .cta-section .btn-secondary {
             background: rgba(255, 255, 255, 0.2);
             color: white;
             border-color: white;
         }
 
-        .btn-secondary:hover {
+        .cta-section .btn-secondary:hover {
             background: white;
             color: var(--color-deep);
         }
 
-        /* Loading State */
-        .loading-skeleton {
+        /* Loading skeleton for stories */
+        .stories-grid .loading-skeleton,
+        #featuredStory .loading-skeleton {
             background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
             background-size: 200% 100%;
             animation: loading 1.5s infinite;
@@ -623,12 +586,7 @@
             margin-bottom: var(--spacing-xl);
         }
 
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        /* Responsive Design */
+        /* Page-specific responsive adjustments */
         @media (max-width: 992px) {
             .hero-content h1 {
                 font-size: 2.5rem;
@@ -705,7 +663,7 @@
                 flex-direction: column;
             }
 
-            .btn {
+            .cta-buttons .btn {
                 width: 100%;
                 text-align: center;
             }
@@ -749,22 +707,22 @@
         <div class="container">
             <div class="impact-stats">
                 <div class="stat-item">
-                    <div class="stat-icon"></div>
+                    <div class="stat-icon">🎤</div>
                     <div class="stat-value" id="totalConnections">0</div>
                     <div class="stat-label">Successful Connections</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-icon"></div>
+                    <div class="stat-icon">⭐</div>
                     <div class="stat-value" id="avgRating">0</div>
                     <div class="stat-label">Average Rating</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-icon"></div>
+                    <div class="stat-icon">🌍</div>
                     <div class="stat-value" id="countriesReached">0</div>
                     <div class="stat-label">Countries Reached</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-icon"></div>
+                    <div class="stat-icon">💰</div>
                     <div class="stat-value" id="speakerEarnings">$0</div>
                     <div class="stat-label">Speaker Earnings</div>
                 </div>
@@ -835,7 +793,7 @@
     <script src="/js/components/footer.js"></script>
     
     <!-- Page-specific JavaScript -->
-    <script src="/public/pages/success-stories.js"></script>
+    <script src="/js/pages/success-stories.js"></script>
     
     <!-- Service Worker Registration -->
     <script src="/js/sw-register.js"></script>
