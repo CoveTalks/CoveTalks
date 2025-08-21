@@ -40,8 +40,9 @@ const ArticlePage = {
     // Load article from database or use mock data
     async loadArticle(slug) {
         try {
-            // Mock article data - in production, fetch from Supabase
+            // Comprehensive mock article data for all categories
             const mockArticles = {
+                // Original articles
                 'creating-speaker-profile': {
                     title: 'Creating Your Speaker Profile',
                     category: 'getting_started',
@@ -204,13 +205,39 @@ Always be transparent about what's included in your fee and what requires additi
                 }
             };
 
-            // Get the article (mock or from Supabase)
+            // Generate content for category-based articles dynamically
+            const categoryArticles = {
+                'speakers': 'For Speakers',
+                'organizations': 'For Organizations',
+                'billing': 'Billing & Subscriptions',
+                'technical': 'Technical Support'
+            };
+
+            // Check if this is a category-based article
+            for (const [categoryKey, categoryName] of Object.entries(categoryArticles)) {
+                const articleTypes = ['getting-started', 'best-practices', 'faq', 'tips', 'advanced'];
+                
+                for (const type of articleTypes) {
+                    const generatedSlug = `${categoryKey}-${type}`;
+                    if (slug === generatedSlug && !mockArticles[generatedSlug]) {
+                        // Generate content for this article
+                        mockArticles[generatedSlug] = this.generateCategoryArticle(categoryKey, categoryName, type);
+                    }
+                }
+            }
+
+            // Get the article
             let article = mockArticles[slug];
             
             if (!article) {
-                // Try to fetch from Supabase if available
+                // Try to fetch from Supabase if available, but handle errors
                 if (window.covetalks && window.covetalks.getHelpArticle) {
-                    article = await window.covetalks.getHelpArticle(slug);
+                    try {
+                        article = await window.covetalks.getHelpArticle(slug);
+                    } catch (supabaseError) {
+                        console.log('Supabase fetch failed, article not found:', slug);
+                        // Continue with article not found flow
+                    }
                 }
             }
             
@@ -237,6 +264,333 @@ Always be transparent about what's included in your fee and what requires additi
             console.error('Error loading article:', error);
             this.showError('Unable to load article. Please try again.');
         }
+    },
+
+    // Generate dynamic content for category articles
+    generateCategoryArticle(categoryKey, categoryName, type) {
+        const typeContent = {
+            'getting-started': {
+                title: `Getting Started - ${categoryName}`,
+                content: `
+# Getting Started with ${categoryName}
+
+Welcome to the ${categoryName} section of CoveTalks. This guide will help you get started quickly.
+
+## Overview
+
+${categoryKey === 'speakers' ? 
+'As a speaker on CoveTalks, you have access to numerous opportunities to share your expertise and grow your speaking career.' :
+categoryKey === 'organizations' ?
+'CoveTalks makes it easy for organizations to find and book the perfect speakers for any event.' :
+categoryKey === 'billing' ?
+'Managing your subscription and payments on CoveTalks is simple and secure.' :
+'Get technical support and troubleshooting help for any issues you encounter.'}
+
+## First Steps
+
+1. **Create Your Account** - Sign up with your email and choose your account type
+2. **Complete Your Profile** - Add all relevant information to maximize your visibility
+3. **Explore Features** - Familiarize yourself with the platform's capabilities
+4. **Start Connecting** - Begin ${categoryKey === 'speakers' ? 'applying to opportunities' : categoryKey === 'organizations' ? 'posting opportunities' : 'using the platform'}
+
+## Key Features
+
+### ${categoryKey === 'speakers' ? 'Speaker Dashboard' : categoryKey === 'organizations' ? 'Organization Portal' : 'Account Management'}
+- View your activity and statistics
+- Manage your profile and settings
+- Track your progress and engagement
+
+### ${categoryKey === 'speakers' ? 'Opportunity Search' : categoryKey === 'organizations' ? 'Speaker Database' : 'Payment Center'}
+- ${categoryKey === 'speakers' ? 'Find speaking opportunities that match your expertise' : categoryKey === 'organizations' ? 'Search for speakers by topic, location, and more' : 'Manage payment methods and view invoices'}
+- Use advanced filters to refine results
+- Save searches for quick access
+
+[!TIP]
+Take time to explore all the features available in your account type to get the most out of CoveTalks.
+                `
+            },
+            'best-practices': {
+                title: `Best Practices - ${categoryName}`,
+                content: `
+# Best Practices for ${categoryName}
+
+Follow these proven strategies to maximize your success on CoveTalks.
+
+## Essential Tips
+
+${categoryKey === 'speakers' ? `
+### Profile Optimization
+- Use a professional headshot
+- Write a compelling bio that highlights your unique value
+- List specific topics you're passionate about
+- Include testimonials and past speaking engagements
+
+### Application Strategy
+- Apply only to relevant opportunities
+- Customize your cover letter for each application
+- Respond promptly to messages
+- Follow up professionally` :
+categoryKey === 'organizations' ? `
+### Creating Effective Opportunities
+- Write clear, detailed descriptions
+- Specify requirements and expectations
+- Set realistic deadlines
+- Offer competitive compensation
+
+### Speaker Selection
+- Review profiles thoroughly
+- Check references and past events
+- Conduct brief interviews when needed
+- Communicate expectations clearly` :
+categoryKey === 'billing' ? `
+### Subscription Management
+- Choose the right plan for your needs
+- Keep payment information updated
+- Review invoices regularly
+- Take advantage of annual pricing
+
+### Cost Optimization
+- Evaluate your usage monthly
+- Upgrade when you need more features
+- Consider team plans for multiple users` :
+`### Getting Help
+- Check documentation first
+- Provide detailed information in support requests
+- Include screenshots when reporting issues
+- Follow up if you don't receive a response`}
+
+## Common Mistakes to Avoid
+
+1. Incomplete profiles or listings
+2. Poor communication with other users
+3. Ignoring platform guidelines
+4. Not utilizing available features
+
+[!NOTE]
+Consistency and professionalism are key to building a strong reputation on CoveTalks.
+                `
+            },
+            'faq': {
+                title: `FAQ - ${categoryName}`,
+                content: `
+# Frequently Asked Questions - ${categoryName}
+
+Find answers to the most common questions about ${categoryName}.
+
+## General Questions
+
+### How do I get started?
+Start by creating your account and completing your profile. The more complete your profile, the better your results will be on the platform.
+
+### What does it cost?
+CoveTalks offers various subscription plans to meet different needs. Visit our pricing page for current rates and features.
+
+### How long does approval take?
+Most accounts are approved within 24 hours. You'll receive an email confirmation once your account is active.
+
+## ${categoryKey === 'speakers' ? 'Speaker-Specific' : categoryKey === 'organizations' ? 'Organization-Specific' : 'Account'} Questions
+
+${categoryKey === 'speakers' ? `
+### How many opportunities can I apply to?
+There's no limit to the number of opportunities you can apply to, but we recommend focusing on quality over quantity.
+
+### Can I negotiate fees?
+Yes, fee negotiation is encouraged. Be transparent about your rates and what's included.
+
+### How do I get more visibility?
+Complete your profile, stay active on the platform, collect testimonials, and respond quickly to inquiries.` :
+categoryKey === 'organizations' ? `
+### How do I find the right speaker?
+Use our advanced search filters to narrow down speakers by topic, location, fee range, and availability.
+
+### Can I contact speakers directly?
+Yes, once you've posted an opportunity or identified potential speakers, you can message them directly.
+
+### What if a speaker cancels?
+We recommend having backup options and clear cancellation policies in your agreements.` :
+categoryKey === 'billing' ? `
+### How do I update my payment method?
+Go to your account settings, select "Billing," and update your payment information.
+
+### Can I change plans anytime?
+Yes, you can upgrade or downgrade your plan at any time. Changes take effect at the next billing cycle.
+
+### Do you offer refunds?
+We offer refunds within 30 days of purchase for annual plans. See our refund policy for details.` :
+`### How do I reset my password?
+Click "Forgot Password" on the login page and follow the email instructions.
+
+### Why can't I log in?
+Check that you're using the correct email and password. Clear your browser cache if issues persist.
+
+### How do I delete my account?
+Contact support to request account deletion. Note that this action is permanent.`}
+
+[!TIP]
+Can't find your answer? Contact our support team for personalized assistance.
+                `
+            },
+            'tips': {
+                title: `Tips and Tricks - ${categoryName}`,
+                content: `
+# Tips and Tricks - ${categoryName}
+
+Discover insider tips to make the most of your CoveTalks experience.
+
+## Power User Tips
+
+${categoryKey === 'speakers' ? `
+### Stand Out from the Crowd
+- **Video Introduction**: Add a short video to your profile
+- **Unique Topics**: Offer niche expertise that's in demand
+- **Quick Response**: Reply to inquiries within 2 hours
+- **Portfolio Samples**: Include slides or videos from past talks
+
+### Networking Strategies
+- Connect with other speakers in your field
+- Attend virtual meetups and events
+- Share insights and engage with the community
+- Build relationships with event organizers` :
+categoryKey === 'organizations' ? `
+### Efficient Speaker Selection
+- **Saved Searches**: Create templates for common speaker needs
+- **Team Collaboration**: Invite colleagues to review candidates
+- **Rating System**: Develop internal criteria for evaluation
+- **Pipeline Management**: Track speakers through your selection process
+
+### Event Success Tips
+- Book speakers well in advance
+- Provide detailed event briefs
+- Offer support for travel and logistics
+- Collect feedback after events` :
+categoryKey === 'billing' ? `
+### Maximize Your Investment
+- **Annual Plans**: Save 20% with yearly subscriptions
+- **Team Accounts**: Get discounts for multiple users
+- **Usage Tracking**: Monitor your platform usage monthly
+- **Feature Utilization**: Use all features included in your plan
+
+### Budget Management
+- Set spending alerts
+- Review monthly statements
+- Plan for seasonal variations
+- Consider upgrade timing carefully` :
+`### Productivity Hacks
+- **Keyboard Shortcuts**: Learn platform shortcuts for faster navigation
+- **Browser Bookmarks**: Save frequently accessed pages
+- **Email Filters**: Organize CoveTalks notifications
+- **Mobile App**: Use the mobile app for on-the-go access
+
+### Troubleshooting Tips
+- Clear browser cache for display issues
+- Check internet connection for loading problems
+- Update your browser to the latest version
+- Disable extensions that might interfere`}
+
+## Hidden Features
+
+1. **Advanced Search Operators**: Use quotes for exact matches
+2. **Bulk Actions**: Select multiple items for batch processing
+3. **Export Options**: Download your data in various formats
+4. **Custom Notifications**: Set specific alert preferences
+
+[!NOTE]
+These tips are based on successful user experiences. Experiment to find what works best for you.
+                `
+            },
+            'advanced': {
+                title: `Advanced Features - ${categoryName}`,
+                content: `
+# Advanced Features - ${categoryName}
+
+Take your CoveTalks experience to the next level with these advanced features.
+
+## Advanced Capabilities
+
+${categoryKey === 'speakers' ? `
+### Analytics and Insights
+- **Profile Views**: Track who's viewing your profile
+- **Application Success Rate**: Monitor your acceptance rate
+- **Engagement Metrics**: See which topics generate most interest
+- **Revenue Tracking**: Monitor your speaking income
+
+### Automation Features
+- Set up auto-responses for common inquiries
+- Create template applications for efficiency
+- Schedule availability updates
+- Automate follow-up messages` :
+categoryKey === 'organizations' ? `
+### Advanced Search and Filtering
+- **Boolean Search**: Use AND/OR/NOT operators
+- **Proximity Search**: Find speakers near specific locations
+- **Availability Matching**: Filter by specific date ranges
+- **Budget Optimization**: Find speakers within budget automatically
+
+### Team Collaboration Tools
+- Assign roles and permissions
+- Share shortlists with stakeholders
+- Collaborative rating and notes
+- Approval workflows for bookings` :
+categoryKey === 'billing' ? `
+### Financial Management
+- **Detailed Reports**: Export financial summaries
+- **Multi-Currency Support**: Handle international payments
+- **Tax Documentation**: Access tax-compliant receipts
+- **Budget Forecasting**: Plan future expenses
+
+### Enterprise Features
+- Single Sign-On (SSO) integration
+- Custom invoicing options
+- Volume discounts
+- Dedicated account management` :
+`### API and Integrations
+- **REST API Access**: Integrate with your systems
+- **Webhook Support**: Real-time event notifications
+- **Calendar Sync**: Connect with Google/Outlook
+- **CRM Integration**: Sync with Salesforce, HubSpot
+
+### Data Management
+- Bulk import/export capabilities
+- Custom fields and tags
+- Advanced reporting tools
+- Data retention policies`}
+
+## Pro Strategies
+
+### Optimization Techniques
+1. Use A/B testing for profile elements
+2. Analyze peak activity times
+3. Optimize for search algorithms
+4. Track conversion metrics
+
+### Integration Workflows
+- Connect with your existing tools
+- Automate repetitive tasks
+- Create custom workflows
+- Monitor performance metrics
+
+[!WARNING]
+Advanced features may require higher-tier subscriptions. Check your plan details for availability.
+
+## Getting Help with Advanced Features
+
+Contact our enterprise support team for assistance with advanced features and custom configurations.
+                `
+            }
+        };
+
+        const articleType = typeContent[type] || typeContent['getting-started'];
+        
+        return {
+            title: articleType.title,
+            category: categoryKey,
+            content: articleType.content,
+            meta_description: `${articleType.title} - Comprehensive guide for ${categoryName} on CoveTalks.`,
+            updated_at: new Date().toISOString(),
+            view_count: Math.floor(Math.random() * 1000) + 100,
+            helpful_count: Math.floor(Math.random() * 100) + 10,
+            not_helpful_count: Math.floor(Math.random() * 10)
+        };
     },
 
     // Render article content
