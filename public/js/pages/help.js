@@ -151,10 +151,15 @@ const HelpPage = {
 
     // Show search results in main content area
     showSearchResults(searchTerm, loading = false) {
-        const mainContent = document.querySelector('.container > *:not(.help-hero)');
+        // Get the main container and clear everything except the hero
+        const container = document.querySelector('.main-content .container');
+        const heroSection = document.querySelector('.help-hero');
+        
+        // Clear container and keep only hero if it exists
+        container.innerHTML = '';
         
         if (loading) {
-            mainContent.innerHTML = `
+            container.innerHTML = `
                 <div class="search-results-container">
                     <h2>Searching for "${this.escapeHtml(searchTerm)}"...</h2>
                     <div class="loading-spinner" style="margin: 3rem auto; width: 40px; height: 40px; border: 4px solid #E5E5E5; border-top-color: #2B9AC9; border-radius: 50%; animation: spin 1s linear infinite;"></div>
@@ -164,7 +169,7 @@ const HelpPage = {
         }
 
         const resultsHtml = this.searchResults.length > 0 ? `
-            <div class="search-results-container">
+            <div class="search-results-container" style="padding: 2rem 0;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                     <h2>${this.searchResults.length} results for "${this.escapeHtml(searchTerm)}"</h2>
                     <button onclick="HelpPage.clearSearch()" class="btn btn-secondary">Clear Search</button>
@@ -195,7 +200,7 @@ const HelpPage = {
             </div>
         `;
 
-        mainContent.innerHTML = resultsHtml;
+        container.innerHTML = resultsHtml;
     },
 
     // Clear search and return to normal view
@@ -207,7 +212,8 @@ const HelpPage = {
 
     // Show category articles
     async showCategoryArticles(category) {
-        const mainContent = document.querySelector('.container');
+        // Hide the original content and show category view
+        const mainContent = document.querySelector('.main-content');
         
         // Category display names
         const categoryInfo = {
@@ -245,10 +251,10 @@ const HelpPage = {
         ];
 
         mainContent.innerHTML = `
-            <div style="background: linear-gradient(135deg, #155487 0%, #2B9AC9 100%); color: white; padding: 4rem 2rem; margin: -2rem -2rem 2rem; border-radius: 0;">
-                <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <div style="background: linear-gradient(135deg, #155487 0%, #2B9AC9 100%); color: white; padding: 4rem 2rem; margin-bottom: 2rem;">
+                <div class="container" style="max-width: 800px; margin: 0 auto; text-align: center;">
                     <div style="font-size: 3rem; margin-bottom: 1rem;">${info.icon}</div>
-                    <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">${info.title}</h1>
+                    <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: white;">${info.title}</h1>
                     <p style="font-size: 1.1rem; opacity: 0.95;">${info.description}</p>
                     <button onclick="HelpPage.clearSearch()" style="margin-top: 1.5rem; background: white; color: #155487; border: none; padding: 0.75rem 1.5rem; border-radius: 25px; font-weight: 600; cursor: pointer;">
                         ← Back to Help Center
@@ -256,7 +262,7 @@ const HelpPage = {
                 </div>
             </div>
             
-            <div style="max-width: 800px; margin: 2rem auto; padding: 0 1rem;">
+            <div class="container" style="max-width: 800px; margin: 2rem auto; padding: 0 1rem;">
                 <div style="display: grid; gap: 1rem;">
                     ${mockCategoryArticles.map(article => `
                         <div style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.3s ease;"
@@ -397,8 +403,8 @@ const HelpPage = {
 
     // Show search error
     showSearchError(searchTerm) {
-        const mainContent = document.querySelector('.container > *:not(.help-hero)');
-        mainContent.innerHTML = `
+        const container = document.querySelector('.main-content .container');
+        container.innerHTML = `
             <div style="text-align: center; padding: 3rem;">
                 <h2 style="color: #e74c3c;">Search Error</h2>
                 <p style="color: #666;">Unable to search for "${this.escapeHtml(searchTerm)}". Please try again.</p>
