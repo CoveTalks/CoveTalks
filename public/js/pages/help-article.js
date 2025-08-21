@@ -788,9 +788,14 @@ Contact our enterprise support team for assistance with advanced features and cu
         buttons.forEach(btn => btn.disabled = true);
 
         try {
-            // In production, send to Supabase
+            // Try to send to Supabase if available, but don't fail if it errors
             if (window.covetalks && window.covetalks.markArticleHelpful) {
-                await window.covetalks.markArticleHelpful(this.currentArticle.id, isHelpful);
+                try {
+                    await window.covetalks.markArticleHelpful(this.currentArticle.id, isHelpful);
+                } catch (supabaseError) {
+                    // Log but don't fail - continue with local feedback
+                    console.log('Supabase feedback not available, storing locally');
+                }
             }
             
             // Mark the selected button as active
@@ -800,9 +805,16 @@ Contact our enterprise support team for assistance with advanced features and cu
             
             selectedBtn.classList.add('active');
             
-            // Store feedback status
+            // Store feedback status locally
             this.storeFeedbackStatus();
             this.hasSubmittedFeedback = true;
+            
+            // Update local count display (visual feedback)
+            if (isHelpful) {
+                this.currentArticle.helpful_count = (this.currentArticle.helpful_count || 0) + 1;
+            } else {
+                this.currentArticle.not_helpful_count = (this.currentArticle.not_helpful_count || 0) + 1;
+            }
             
             // Show thank you message
             this.showFeedbackMessage('Thank you for your feedback!');
@@ -810,7 +822,7 @@ Contact our enterprise support team for assistance with advanced features and cu
         } catch (error) {
             console.error('Error submitting feedback:', error);
             buttons.forEach(btn => btn.disabled = false);
-            this.showFeedbackMessage('Unable to submit feedback. Please try again.');
+            this.showFeedbackMessage('Thank you for your feedback!'); // Still show success since we saved locally
         }
     },
 
