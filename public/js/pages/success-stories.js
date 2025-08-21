@@ -278,9 +278,7 @@ const SuccessStories = {
         
         this.renderStories();
         
-        // Smooth scroll to stories grid
-        const gridElement = document.getElementById('storiesGrid');
-        gridElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // No scrolling - just update the content
     },
 
     // View individual story - when clicking on story card
@@ -482,12 +480,19 @@ const SuccessStories = {
 
     // Setup event listeners
     setupEventListeners() {
-        // Smooth scroll for anchor links
+        // Smooth scroll for anchor links (only valid ones)
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
+                const href = this.getAttribute('href');
+                // Skip if it's just '#' or empty
+                if (href === '#' || href === '') {
+                    e.preventDefault();
+                    return;
+                }
+                
+                const target = document.querySelector(href);
                 if (target) {
+                    e.preventDefault();
                     target.scrollIntoView({
                         behavior: 'smooth',
                         block: 'start'
