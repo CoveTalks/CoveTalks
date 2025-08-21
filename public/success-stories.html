@@ -81,6 +81,11 @@
             }
         }
 
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
         /* Impact Stats */
         .impact-stats {
             background: white;
@@ -586,6 +591,265 @@
             margin-bottom: var(--spacing-xl);
         }
 
+        /* Add this CSS to success-stories.html in the <style> section */
+
+/* Story Modal */
+.story-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 3000;
+    overflow-y: auto;
+    padding: var(--spacing-xl);
+}
+
+.story-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.story-modal-content {
+    background: white;
+    border-radius: 20px;
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.story-modal-close {
+    position: absolute;
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    background: var(--color-foam);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gray);
+}
+
+.story-modal-close:hover {
+    background: var(--color-deep);
+    color: white;
+    transform: rotate(90deg);
+}
+
+.story-modal-header {
+    background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
+    color: white;
+    padding: var(--spacing-2xl);
+    border-radius: 20px 20px 0 0;
+}
+
+.story-modal-category {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+    margin-bottom: var(--spacing-sm);
+}
+
+.story-modal-title {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-md);
+    font-weight: 900;
+    color: white;
+}
+
+.story-modal-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-lg);
+    font-size: 0.95rem;
+    opacity: 0.95;
+}
+
+.story-modal-meta span {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.story-modal-body {
+    padding: var(--spacing-2xl);
+}
+
+.story-quote {
+    background: var(--color-foam);
+    border-left: 4px solid var(--color-sand);
+    padding: var(--spacing-lg);
+    margin: 0 0 var(--spacing-xl) 0;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--color-deep);
+    border-radius: 0 10px 10px 0;
+}
+
+.story-full-content {
+    line-height: 1.8;
+    color: var(--color-gray-dark);
+    font-size: 1.05rem;
+}
+
+.story-full-content p {
+    margin-bottom: var(--spacing-lg);
+}
+
+.story-impact {
+    background: linear-gradient(135deg, rgba(243, 179, 56, 0.1) 0%, rgba(243, 179, 56, 0.05) 100%);
+    border-radius: 15px;
+    padding: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+    border: 2px solid var(--color-sand);
+}
+
+.story-impact h3 {
+    color: var(--color-deep);
+    margin-bottom: var(--spacing-sm);
+    font-size: 1.25rem;
+}
+
+.impact-metric {
+    font-size: 1.5rem;
+    color: var(--color-sand);
+    font-weight: 700;
+    margin: 0;
+}
+
+.story-modal-footer {
+    border-top: 1px solid var(--color-foam);
+    padding: var(--spacing-xl) var(--spacing-2xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+.story-modal-author {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.story-modal-author .author-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-sand), var(--color-calm));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1.25rem;
+    overflow: hidden;
+}
+
+.story-modal-author .author-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.story-modal-author .author-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.story-modal-author .author-name {
+    font-weight: 700;
+    color: var(--color-deep);
+}
+
+.story-modal-author .author-role {
+    color: var(--color-gray);
+    font-size: 0.9rem;
+}
+
+.story-modal-author .author-company {
+    color: var(--color-gray-light);
+    font-size: 0.85rem;
+}
+
+.story-modal-actions {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .story-modal {
+        padding: var(--spacing-md);
+    }
+
+    .story-modal-content {
+        max-height: 100vh;
+        border-radius: 15px;
+    }
+
+    .story-modal-header {
+        padding: var(--spacing-lg);
+    }
+
+    .story-modal-title {
+        font-size: 1.5rem;
+    }
+
+    .story-modal-body {
+        padding: var(--spacing-lg);
+    }
+
+    .story-modal-footer {
+        flex-direction: column;
+        padding: var(--spacing-lg);
+    }
+
+    .story-modal-author {
+        width: 100%;
+    }
+
+    .story-modal-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .story-modal-actions .btn {
+        width: 100%;
+    }
+}
+
         /* Page-specific responsive adjustments */
         @media (max-width: 992px) {
             .hero-content h1 {
@@ -707,22 +971,22 @@
         <div class="container">
             <div class="impact-stats">
                 <div class="stat-item">
-                    <div class="stat-icon">🎤</div>
+                    <div class="stat-icon"></div>
                     <div class="stat-value" id="totalConnections">0</div>
                     <div class="stat-label">Successful Connections</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-icon">⭐</div>
+                    <div class="stat-icon"></div>
                     <div class="stat-value" id="avgRating">0</div>
                     <div class="stat-label">Average Rating</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-icon">🌍</div>
+                    <div class="stat-icon"></div>
                     <div class="stat-value" id="countriesReached">0</div>
                     <div class="stat-label">Countries Reached</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-icon">💰</div>
+                    <div class="stat-icon"></div>
                     <div class="stat-value" id="speakerEarnings">$0</div>
                     <div class="stat-label">Speaker Earnings</div>
                 </div>

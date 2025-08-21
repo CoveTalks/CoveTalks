@@ -283,24 +283,159 @@ const SuccessStories = {
         gridElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     },
 
-    // View individual story
+    // View individual story - when clicking on story card
     viewStory(slug) {
-        // For now, scroll to the featured story or show an alert
-        // In production, this would go to a detail page
         const story = this.stories.find(s => s.slug === slug);
         if (story) {
-            // Render this as the featured story and scroll to it
-            this.renderFeaturedStory(story);
-            document.getElementById('featuredStory').scrollIntoView({ behavior: 'smooth' });
+            this.showStoryModal(story);
         }
     },
 
-    // Expand story (for featured story link)
+    // Expand story - when clicking "Read Full Story" on featured
     expandStory(slug) {
         const story = this.stories.find(s => s.slug === slug);
-        if (story && story.content) {
-            // Show full content in a modal or expand the featured section
-            alert(`Full story view coming soon!\n\n${story.title}\n\n${story.content.substring(0, 500)}...`);
+        if (story) {
+            this.showStoryModal(story);
+        }
+    },
+
+    // Show story in modal
+    showStoryModal(story) {
+        // Create modal if it doesn't exist
+        let modal = document.getElementById('storyModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'storyModal';
+            modal.className = 'story-modal';
+            modal.innerHTML = `
+                <div class="story-modal-content">
+                    <button class="story-modal-close" onclick="SuccessStories.closeStoryModal()">&times;</button>
+                    <div class="story-modal-header">
+                        <div class="story-modal-category"></div>
+                        <h2 class="story-modal-title"></h2>
+                        <div class="story-modal-meta"></div>
+                    </div>
+                    <div class="story-modal-body"></div>
+                    <div class="story-modal-footer">
+                        <div class="story-modal-author"></div>
+                        <div class="story-modal-actions">
+                            <button class="btn btn-secondary" onclick="SuccessStories.shareStory()">Share Story</button>
+                            <button class="btn btn-primary" onclick="SuccessStories.closeStoryModal()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Add click outside to close
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    this.closeStoryModal();
+                }
+            });
+
+            // Add ESC key to close
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('show')) {
+                    this.closeStoryModal();
+                }
+            });
+        }
+
+        // Populate modal with story content
+        modal.querySelector('.story-modal-category').textContent = this.getCategoryLabel(story.category);
+        modal.querySelector('.story-modal-title').textContent = story.title;
+        
+        // Meta information
+        const metaHtml = [];
+        if (story.event_name) metaHtml.push(`<span>📍 ${story.event_name}</span>`);
+        if (story.event_date) metaHtml.push(`<span>📅 ${new Date(story.event_date).toLocaleDateString()}</span>`);
+        if (story.location) metaHtml.push(`<span>🌍 ${story.location}</span>`);
+        if (story.event_size) metaHtml.push(`<span>👥 ${story.event_size} attendees</span>`);
+        modal.querySelector('.story-modal-meta').innerHTML = metaHtml.join(' • ');
+
+        // Main content
+        const contentHtml = `
+            ${story.quote ? `<blockquote class="story-quote">"${this.escapeHtml(story.quote)}"</blockquote>` : ''}
+            <div class="story-full-content">${this.formatContent(story.content)}</div>
+            ${story.impact_metric ? `
+                <div class="story-impact">
+                    <h3>Impact</h3>
+                    <p class="impact-metric">📈 ${story.impact_metric}</p>
+                </div>
+            ` : ''}
+        `;
+        modal.querySelector('.story-modal-body').innerHTML = contentHtml;
+
+        // Author information
+        modal.querySelector('.story-modal-author').innerHTML = `
+            <div class="author-avatar">
+                ${story.author_avatar ? 
+                    `<img src="${story.author_avatar}" alt="${this.escapeHtml(story.author_name)}">` :
+                    story.author_name.charAt(0).toUpperCase()
+                }
+            </div>
+            <div class="author-info">
+                <div class="author-name">${this.escapeHtml(story.author_name)}</div>
+                <div class="author-role">${this.escapeHtml(story.author_role)}</div>
+                ${story.author_company ? `<div class="author-company">${this.escapeHtml(story.author_company)}</div>` : ''}
+            </div>
+        `;
+
+        // Show modal
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        
+        // Track view
+        this.trackStoryView(story.slug);
+    },
+
+    // Close modal
+    closeStoryModal() {
+        const modal = document.getElementById('storyModal');
+        if (modal) {
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+    },
+
+    // Share story
+    shareStory() {
+        const modal = document.getElementById('storyModal');
+        const title = modal.querySelector('.story-modal-title').textContent;
+        const url = window.location.href;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: title,
+                text: `Check out this success story on CoveTalks: ${title}`,
+                url: url
+            }).catch(err => console.log('Share cancelled'));
+        } else {
+            // Fallback to copying link
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Story link copied to clipboard!');
+            }).catch(() => {
+                alert('Share this link: ' + url);
+            });
+        }
+    },
+
+    // Format content with paragraphs
+    formatContent(content) {
+        if (!content) return '';
+        return content.split('\n\n').map(para => `<p>${this.escapeHtml(para)}</p>`).join('');
+    },
+
+    // Track story view
+    async trackStoryView(slug) {
+        const story = this.stories.find(s => s.slug === slug);
+        if (story && window.covetalks && window.covetalks.incrementStoryViews) {
+            try {
+                await window.covetalks.incrementStoryViews(story.id);
+            } catch (error) {
+                console.log('View tracking not available');
+            }
         }
     },
 
