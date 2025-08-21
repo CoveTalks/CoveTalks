@@ -1,4 +1,4 @@
-// Help Article Page JavaScript
+// Help Article Page JavaScript - FIXED VERSION
 const ArticlePage = {
     currentArticle: null,
     hasSubmittedFeedback: false,
@@ -16,25 +16,215 @@ const ArticlePage = {
         this.setupEventListeners();
     },
 
-    // Get article slug from URL
+    // Get article slug from URL - FIXED to handle query param
     getArticleSlug() {
+        // Check for query parameter first
+        const urlParams = new URLSearchParams(window.location.search);
+        const articleParam = urlParams.get('article');
+        if (articleParam) {
+            return articleParam;
+        }
+        
+        // Fallback to path-based slug
         const pathParts = window.location.pathname.split('/');
-        return pathParts[pathParts.length - 1];
+        const lastPart = pathParts[pathParts.length - 1];
+        
+        // If we're on help-article.html, there's no slug in the path
+        if (lastPart === 'help-article.html' || lastPart === '') {
+            return null;
+        }
+        
+        return lastPart;
     },
 
-    // Load article from database
+    // Load article from database or use mock data
     async loadArticle(slug) {
         try {
-            const article = await window.covetalks.getHelpArticle(slug);
+            // Mock article data - in production, fetch from Supabase
+            const mockArticles = {
+                'creating-speaker-profile': {
+                    title: 'Creating Your Speaker Profile',
+                    category: 'getting_started',
+                    content: `
+# Creating Your Speaker Profile
+
+Your speaker profile is your digital business card on CoveTalks. It's the first thing organizations see when considering you for speaking opportunities.
+
+## Getting Started
+
+To create your speaker profile, follow these steps:
+
+1. **Sign up** for a CoveTalks account as a Speaker
+2. **Complete your basic information** including name, location, and contact details
+3. **Add your professional bio** - make it compelling and highlight your expertise
+4. **Upload a professional photo** - this increases engagement by 40%
+5. **List your speaking topics** - be specific about your areas of expertise
+
+## Profile Best Practices
+
+### Write a Compelling Bio
+Your bio should be:
+- **Concise**: 150-300 words is ideal
+- **Achievement-focused**: Highlight your accomplishments
+- **Audience-oriented**: Explain what value you bring
+- **Authentic**: Let your personality shine through
+
+### Choose the Right Topics
+Select 3-5 core topics that:
+- Align with your expertise
+- Have market demand
+- You're passionate about
+- Differentiate you from others
+
+### Set Your Speaking Fees
+Be transparent about your fees:
+- Research market rates for your experience level
+- Consider offering different packages
+- Be open to negotiation for the right opportunities
+
+## Optimizing for Search
+
+To increase your visibility:
+- Use relevant keywords in your bio
+- Keep your profile updated
+- Respond quickly to inquiries
+- Collect and display testimonials
+
+[!TIP]
+Complete profiles receive 3x more inquiries than incomplete ones. Take the time to fill out every section thoroughly.
+
+## Next Steps
+
+Once your profile is complete:
+1. Start browsing speaking opportunities
+2. Set up email alerts for relevant events
+3. Connect with organizations in your field
+4. Build your speaker portfolio with past events
+
+[!NOTE]
+Your profile is a living document. Update it regularly with new achievements, topics, and testimonials.
+                    `,
+                    meta_description: 'Learn how to create a compelling speaker profile on CoveTalks that attracts organizations and speaking opportunities.',
+                    updated_at: new Date().toISOString(),
+                    view_count: 1247,
+                    helpful_count: 89,
+                    not_helpful_count: 5
+                },
+                'finding-opportunities': {
+                    title: 'Finding Speaking Opportunities',
+                    category: 'getting_started',
+                    content: `
+# Finding Speaking Opportunities
+
+CoveTalks connects you with hundreds of speaking opportunities. Here's how to find the right ones for you.
+
+## Using the Search Function
+
+### Basic Search
+- Enter keywords related to your expertise
+- Filter by location, date, and compensation
+- Save searches for future reference
+
+### Advanced Filters
+- Event type (conference, workshop, webinar)
+- Audience size
+- Industry sector
+- Travel requirements
+
+## Setting Up Alerts
+
+Never miss an opportunity:
+1. Create saved searches for your topics
+2. Set email notification frequency
+3. Enable push notifications on mobile
+4. Track application deadlines
+
+## Evaluating Opportunities
+
+Consider these factors:
+- **Alignment** with your expertise
+- **Audience** fit and size
+- **Compensation** and expenses
+- **Time commitment** required
+- **Networking potential**
+
+[!TIP]
+Quality over quantity - apply to opportunities where you can deliver maximum value.
+                    `,
+                    meta_description: 'Discover how to find and apply to speaking opportunities that match your expertise on CoveTalks.',
+                    updated_at: new Date().toISOString(),
+                    view_count: 982,
+                    helpful_count: 76,
+                    not_helpful_count: 8
+                },
+                'setting-fees': {
+                    title: 'Setting Your Speaking Fees',
+                    category: 'getting_started',
+                    content: `
+# Setting Your Speaking Fees
+
+Determining your speaking fees can be challenging. This guide will help you set competitive and fair rates.
+
+## Factors to Consider
+
+### Experience Level
+- **Beginner** (0-2 years): $500-$2,500
+- **Intermediate** (2-5 years): $2,500-$7,500
+- **Advanced** (5-10 years): $7,500-$15,000
+- **Expert** (10+ years): $15,000+
+
+### Event Type
+Different events have different budgets:
+- Corporate events typically pay more
+- Non-profits may have limited budgets
+- Educational institutions vary widely
+- Virtual events may have different rates
+
+## Creating Your Fee Structure
+
+### Basic Package
+- Keynote presentation (45-60 minutes)
+- Q&A session
+- Meet and greet
+
+### Premium Package
+- Multiple sessions
+- Workshop facilitation
+- Executive coaching
+- Custom content creation
+
+[!NOTE]
+Always be transparent about what's included in your fee and what requires additional compensation.
+                    `,
+                    meta_description: 'Learn how to set competitive speaking fees that reflect your value and expertise.',
+                    updated_at: new Date().toISOString(),
+                    view_count: 1456,
+                    helpful_count: 124,
+                    not_helpful_count: 12
+                }
+            };
+
+            // Get the article (mock or from Supabase)
+            let article = mockArticles[slug];
+            
+            if (!article) {
+                // Try to fetch from Supabase if available
+                if (window.covetalks && window.covetalks.getHelpArticle) {
+                    article = await window.covetalks.getHelpArticle(slug);
+                }
+            }
             
             if (!article) {
                 this.showError('Article not found');
                 return;
             }
 
+            // Add slug to article object
+            article.slug = slug;
+            
             this.currentArticle = article;
             this.renderArticle(article);
-            this.loadRelatedArticles(article.category, article.id);
+            this.loadRelatedArticles(article.category, slug);
             
             // Update page title and meta
             document.title = `${article.title} - CoveTalks Help Center`;
@@ -55,10 +245,14 @@ const ArticlePage = {
         document.getElementById('articleTitle').textContent = article.title;
         document.getElementById('mainTitle').textContent = article.title;
         
-        // Update category link
+        // Update category link - make it functional
         const categoryLink = document.getElementById('categoryLink');
         categoryLink.textContent = this.formatCategoryName(article.category);
-        categoryLink.href = `/help/category/${article.category}`;
+        categoryLink.href = `/help.html?category=${article.category}`;
+        categoryLink.onclick = (e) => {
+            e.preventDefault();
+            window.location.href = `/help.html?category=${article.category}`;
+        };
         
         // Update meta information
         document.getElementById('lastUpdated').textContent = this.formatDate(article.updated_at);
@@ -198,21 +392,26 @@ const ArticlePage = {
     },
 
     // Load related articles
-    async loadRelatedArticles(category, currentArticleId) {
+    async loadRelatedArticles(category, currentSlug) {
         try {
-            const articles = await window.covetalks.getHelpArticles(category, 5);
-            const relatedArticles = articles.filter(a => a.id !== currentArticleId).slice(0, 4);
+            // Mock related articles - in production, fetch from Supabase
+            const mockRelated = [
+                { title: 'Getting Started Guide', slug: `${category}-getting-started` },
+                { title: 'Best Practices', slug: `${category}-best-practices` },
+                { title: 'Frequently Asked Questions', slug: `${category}-faq` },
+                { title: 'Advanced Tips', slug: `${category}-advanced` }
+            ].filter(a => a.slug !== currentSlug).slice(0, 4);
             
             const container = document.getElementById('relatedArticles');
             
-            if (relatedArticles.length === 0) {
+            if (mockRelated.length === 0) {
                 container.innerHTML = '<li style="color: #999; font-size: 0.9rem;">No related articles found</li>';
                 return;
             }
             
-            container.innerHTML = relatedArticles.map(article => `
+            container.innerHTML = mockRelated.map(article => `
                 <li>
-                    <a href="/help/article/${article.slug}">
+                    <a href="/help-article.html?article=${article.slug}">
                         <span>→</span>
                         <span>${this.escapeHtml(article.title)}</span>
                     </a>
@@ -235,7 +434,10 @@ const ArticlePage = {
         buttons.forEach(btn => btn.disabled = true);
 
         try {
-            await window.covetalks.markArticleHelpful(this.currentArticle.id, isHelpful);
+            // In production, send to Supabase
+            if (window.covetalks && window.covetalks.markArticleHelpful) {
+                await window.covetalks.markArticleHelpful(this.currentArticle.id, isHelpful);
+            }
             
             // Mark the selected button as active
             const selectedBtn = isHelpful ? 
@@ -250,15 +452,6 @@ const ArticlePage = {
             
             // Show thank you message
             this.showFeedbackMessage('Thank you for your feedback!');
-            
-            // Track activity
-            if (window.covetalks && window.covetalks.trackActivity) {
-                await window.covetalks.trackActivity('help_article_feedback', null, {
-                    article_id: this.currentArticle.id,
-                    article_slug: this.currentArticle.slug,
-                    is_helpful: isHelpful
-                });
-            }
             
         } catch (error) {
             console.error('Error submitting feedback:', error);
@@ -287,13 +480,13 @@ const ArticlePage = {
 
     // Store feedback status in localStorage
     storeFeedbackStatus() {
-        const feedbackKey = `article_feedback_${this.currentArticle.id}`;
+        const feedbackKey = `article_feedback_${this.currentArticle.slug}`;
         localStorage.setItem(feedbackKey, 'true');
     },
 
     // Check if user has already submitted feedback
     checkFeedbackStatus() {
-        const feedbackKey = `article_feedback_${this.currentArticle.id}`;
+        const feedbackKey = `article_feedback_${this.currentArticle.slug}`;
         this.hasSubmittedFeedback = localStorage.getItem(feedbackKey) === 'true';
         
         if (this.hasSubmittedFeedback) {
@@ -309,7 +502,7 @@ const ArticlePage = {
             <div style="text-align: center; padding: 3rem; color: #999;">
                 <h2 style="color: #e74c3c; margin-bottom: 1rem;">Oops!</h2>
                 <p>${message}</p>
-                <a href="/help" style="display: inline-block; margin-top: 1rem; padding: 0.75rem 1.5rem; background: #2B9AC9; color: white; text-decoration: none; border-radius: 8px;">
+                <a href="/help.html" style="display: inline-block; margin-top: 1rem; padding: 0.75rem 1.5rem; background: #2B9AC9; color: white; text-decoration: none; border-radius: 8px;">
                     Return to Help Center
                 </a>
             </div>
@@ -360,12 +553,24 @@ const ArticlePage = {
 
     // Setup event listeners
     setupEventListeners() {
-        // Print article
+        // Update breadcrumb home link
+        const breadcrumbHome = document.querySelector('.breadcrumb a[href="/help"]');
+        if (breadcrumbHome) {
+            breadcrumbHome.href = '/help.html';
+        }
+        
+        // Print article button
         const printBtn = document.createElement('button');
         printBtn.innerHTML = '🖨️ Print Article';
         printBtn.style.cssText = 'position: fixed; bottom: 2rem; right: 2rem; background: white; border: 2px solid #2B9AC9; color: #2B9AC9; padding: 0.75rem 1rem; border-radius: 25px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 100;';
         printBtn.addEventListener('click', () => window.print());
         document.body.appendChild(printBtn);
+        
+        // Update contact support link
+        const contactLink = document.querySelector('a[href="/contact"]');
+        if (contactLink) {
+            contactLink.href = '/contact.html';
+        }
     }
 };
 
