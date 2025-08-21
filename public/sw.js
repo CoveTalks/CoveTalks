@@ -1,24 +1,26 @@
 // Service Worker for CoveTalks PWA
 // Version 1.0.0
 
-const CACHE_NAME = 'covetalks-v1.0.0';
+'use strict';
+
+// Ensure proper error handling
+self.addEventListener('error', (event) => {
+  console.error('[Service Worker] Error:', event.error);
+});
+
+self.addEventListener('unhandledrejection', (event) => {
+  console.error('[Service Worker] Unhandled rejection:', event.reason);
+});
+
+const CACHE_NAME = 'covetalks-v1.0.1';
 const RUNTIME_CACHE = 'covetalks-runtime';
 
-// Core files to cache during install
+// Only cache essential files for offline
 const PRECACHE_URLS = [
   '/',
-  '/index.html',
-  '/login.html',
-  '/register.html',
+  '/offline.html',
   '/css/main.css',
-  '/js/config.js',
-  '/js/supabase-client.js',
-  '/js/components/header.js',
-  '/js/components/footer.js',
-  '/Images/CoveTalks_Vertical.svg',
-  '/Images/CoveTalks_Horizontal.svg',
-  // Add other critical assets
-  '/offline.html' // Create an offline fallback page
+  '/Images/CoveTalks_Vertical.svg'
 ];
 
 // Install event - cache core files
