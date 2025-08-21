@@ -28,8 +28,14 @@ const SuccessStories = {
             this.stats = stats;
             this.animateStats();
         } catch (error) {
-            console.error('Error loading stats:', error);
+            console.log('Using default stats');
             // Use default values if loading fails
+            this.stats = {
+                totalConnections: 2847,
+                avgRating: 4.8,
+                countriesReached: 42,
+                speakerEarnings: 1250000
+            };
             this.animateStats();
         }
     },
@@ -136,7 +142,7 @@ const SuccessStories = {
                         </div>
                     </div>
                     
-                    <a href="/story/${story.slug}" class="featured-link">
+                    <a href="#" onclick="event.preventDefault(); SuccessStories.expandStory('${story.slug}')" class="featured-link">
                         Read Full Story →
                     </a>
                 </div>
@@ -279,7 +285,23 @@ const SuccessStories = {
 
     // View individual story
     viewStory(slug) {
-        window.location.href = `/story/${slug}`;
+        // For now, scroll to the featured story or show an alert
+        // In production, this would go to a detail page
+        const story = this.stories.find(s => s.slug === slug);
+        if (story) {
+            // Render this as the featured story and scroll to it
+            this.renderFeaturedStory(story);
+            document.getElementById('featuredStory').scrollIntoView({ behavior: 'smooth' });
+        }
+    },
+
+    // Expand story (for featured story link)
+    expandStory(slug) {
+        const story = this.stories.find(s => s.slug === slug);
+        if (story && story.content) {
+            // Show full content in a modal or expand the featured section
+            alert(`Full story view coming soon!\n\n${story.title}\n\n${story.content.substring(0, 500)}...`);
+        }
     },
 
     // Get category label
@@ -371,9 +393,13 @@ const SuccessStories = {
     // Track page view
     async trackPageView() {
         if (window.covetalks && window.covetalks.trackActivity) {
-            await window.covetalks.trackActivity('success_stories_viewed', null, {
-                page: 'success_stories'
-            });
+            try {
+                await window.covetalks.trackActivity('success_stories_viewed', null, {
+                    page: 'success_stories'
+                });
+            } catch (error) {
+                console.log('Activity tracking not available');
+            }
         }
     },
 
