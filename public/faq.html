@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequently Asked Questions - CoveTalks</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- PWA Support -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#155487">
+    <link rel="apple-touch-icon" href="/Images/icon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="CoveTalks">
+    <meta name="msapplication-TileImage" content="/Images/icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#155487">
+    
+    <!-- Page-specific styles aligned with brand -->
+    <style>
+        :root {
+            --color-deep: #155487;
+            --color-calm: #2B9AC9;
+            --color-sand: #F3B338;
+            --color-foam: #E5E5E5;
+            --color-gray: #666;
+            --color-gray-light: #999;
+            --color-gray-dark: #333;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            --spacing-3xl: 4rem;
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.16);
+            --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.2);
+            --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        /* Page Header - Using brand gradient */
+        .page-header {
+            background: linear-gradient(135deg, var(--color-deep) 0%, var(--color-calm) 100%);
+            color: white;
+            padding: 8rem 0 4rem 0;
+            margin-bottom: var(--spacing-xl);
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(243, 179, 56, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-lg);
+        }
+
+        .page-header h1 {
+            margin-bottom: var(--spacing-sm);
+            color: white;
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 900;
+            font-size: 3rem;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .page-header p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 400;
+            margin-bottom: var(--spacing-xl);
+            animation: fadeInUp 0.6s ease 0.1s;
+            animation-fill-mode: both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Search Bar */
+        .faq-search {
+            background: white;
+            padding: var(--spacing-md);
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(21, 84, 135, 0.15);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 0.6s ease 0.2s;
+            animation-fill-mode: both;
+        }
+
+        .faq-search-icon {
+            color: var(--color-calm);
+            font-size: 1.5rem;
+            margin-left: var(--spacing-md);
+        }
+
+        .faq-search input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            font-family: 'Brandon Text', var(--font-primary);
+            color: var(--color-deep);
+        }
+
+        .faq-search input::placeholder {
+            color: var(--color-gray-light);
+        }
+
+        .faq-search button {
+            background: var(--color-sand);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-family: 'Brandon Text', var(--font-primary);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .faq-search button:hover {
+            background: #e5a030;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(243, 179, 56, 0.3);
+        }
+
+        /* Quick Links Bar */
+        .quick-links {
+            background: white;
+            padding: var(--spacing-lg);
+            border-radius: 15px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--spacing-xl);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--spacing-xl);
+            flex-wrap: wrap;
+        }
+
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: var(--color-deep);
+            text-decoration: none;
+            font-weight: 600;
+            font-family: 'Brandon Text', var(--font-primary);
+            transition: all var(--transition-fast);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: 10px;
+        }
+
+        .quick-link:hover {
+            background: var(--color-foam);
+            color: var(--color-calm);
+            transform: translateX(5px);
+        }
+
+        .quick-link-icon {
+            font-size: 1.25rem;
+        }
+
+        /* FAQ Categories */
+        .faq-categories {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-2xl);
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: 2px solid var(--color-foam);
+            border-radius: 25px;
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 600;
+            color: var(--color-gray);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .category-btn:hover {
+            border-color: var(--color-calm);
+            color: var(--color-calm);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .category-btn.active {
+            background: linear-gradient(135deg, var(--color-deep), var(--color-calm));
+            color: white;
+            border-color: transparent;
+        }
+
+        .category-icon {
+            font-size: 1.25rem;
+        }
+
+        .category-count {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 0.125rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* FAQ Item */
+        .faq-item {
+            background: white;
+            border-radius: 15px;
+            margin-bottom: var(--spacing-md);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-normal);
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .faq-item:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-foam);
+        }
+
+        .faq-item.active {
+            border-color: var(--color-calm);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .faq-question {
+            padding: var(--spacing-lg);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--spacing-md);
+            transition: all var(--transition-normal);
+        }
+
+        .faq-item.active .faq-question {
+            background: linear-gradient(135deg, rgba(21, 84, 135, 0.05) 0%, rgba(43, 154, 201, 0.05) 100%);
+        }
+
+        .faq-question-content {
+            flex: 1;
+        }
+
+        .faq-question h3 {
+            color: var(--color-deep);
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 900;
+            font-size: 1.15rem;
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+        }
+
+        .faq-meta {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-sm);
+        }
+
+        .faq-category-tag {
+            background: var(--color-foam);
+            color: var(--color-gray);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .faq-helpful {
+            color: var(--color-gray-light);
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .faq-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--color-foam);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all var(--transition-normal);
+            flex-shrink: 0;
+        }
+
+        .faq-item.active .faq-toggle {
+            background: var(--color-calm);
+            color: white;
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-normal);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 1000px;
+        }
+
+        .faq-answer-content {
+            padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
+            color: var(--color-gray-dark);
+            line-height: 1.7;
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 400;
+        }
+
+        .faq-answer-content p {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .faq-answer-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .faq-answer-content ul,
+        .faq-answer-content ol {
+            margin: var(--spacing-md) 0;
+            padding-left: var(--spacing-xl);
+        }
+
+        .faq-answer-content li {
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .faq-answer-content a {
+            color: var(--color-calm);
+            text-decoration: underline;
+        }
+
+        .faq-answer-content a:hover {
+            color: var(--color-deep);
+        }
+
+        /* Feedback Section */
+        .faq-feedback {
+            background: var(--color-foam);
+            padding: var(--spacing-md);
+            margin: var(--spacing-md) var(--spacing-lg) var(--spacing-lg);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--spacing-md);
+        }
+
+        .faq-feedback-text {
+            color: var(--color-gray);
+            font-size: 0.9rem;
+        }
+
+        .faq-feedback-buttons {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .feedback-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 2px solid var(--color-foam);
+            border-radius: 20px;
+            color: var(--color-gray);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 600;
+        }
+
+        .feedback-btn:hover {
+            border-color: var(--color-calm);
+            background: var(--color-calm);
+            color: white;
+        }
+
+        .feedback-btn.helpful:hover {
+            border-color: #27ae60;
+            background: #27ae60;
+        }
+
+        .feedback-btn.not-helpful:hover {
+            border-color: #e74c3c;
+            background: #e74c3c;
+        }
+
+        /* Still Need Help Section */
+        .need-help {
+            background: linear-gradient(135deg, var(--color-deep), var(--color-calm));
+            border-radius: 20px;
+            padding: var(--spacing-3xl);
+            color: white;
+            text-align: center;
+            margin-top: var(--spacing-3xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .need-help::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(243, 179, 56, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .need-help-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .need-help h2 {
+            color: white;
+            margin-bottom: var(--spacing-md);
+            font-family: 'Brandon Text', var(--font-primary);
+            font-weight: 900;
+            font-size: 2rem;
+        }
+
+        .need-help p {
+            margin-bottom: var(--spacing-xl);
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .help-options {
+            display: flex;
+            gap: var(--spacing-lg);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .help-option {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: 15px;
+            text-decoration: none;
+            color: white;
+            transition: all var(--transition-normal);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .help-option:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-5px);
+        }
+
+        .help-option-icon {
+            font-size: 2rem;
+        }
+
+        .help-option-title {
+            font-weight: 700;
+            font-family: 'Brandon Text', var(--font-primary);
+        }
+
+        .help-option-desc {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Loading State */
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 8px;
+            height: 80px;
+            margin-bottom: var(--spacing-md);
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-3xl);
+            color: var(--color-gray);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: var(--spacing-md);
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            color: var(--color-deep);
+            margin-bottom: var(--spacing-md);
+            font-weight: 900;
+            font-family: 'Brandon Text', var(--font-primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .quick-links {
+                gap: var(--spacing-md);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 6rem var(--spacing-lg) 3rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .page-header p {
+                font-size: 1.1rem;
+            }
+
+            .faq-search {
+                flex-direction: column;
+                padding: var(--spacing-md);
+                border-radius: 15px;
+            }
+
+            .faq-search input {
+                width: 100%;
+                padding: var(--spacing-md);
+            }
+
+            .faq-search button {
+                width: 100%;
+            }
+
+            .faq-categories {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .category-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .quick-links {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .quick-link {
+                justify-content: center;
+            }
+
+            .help-options {
+                flex-direction: column;
+            }
+
+            .faq-feedback {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .faq-meta {
+                flex-direction: column;
+                gap: var(--spacing-sm);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-header h1 {
+                font-size: 1.75rem;
+            }
+
+            .faq-question {
+                padding: var(--spacing-md);
+            }
+
+            .faq-question h3 {
+                font-size: 1rem;
+            }
+
+            .need-help h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header will be auto-injected by header.js -->
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header with Brand Gradient -->
+        <div class="page-header">
+            <div class="container">
+                <div class="page-header-content">
+                    <h1>Frequently Asked Questions</h1>
+                    <p>Find quick answers to common questions about CoveTalks</p>
+                    
+                    <!-- Search Bar -->
+                    <div class="faq-search">
+                        <span class="faq-search-icon">🔍</span>
+                        <input type="text" id="faqSearch" placeholder="Search FAQs..." onkeyup="FAQPage.searchFAQs(event)">
+                        <button onclick="FAQPage.performSearch()">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Quick Links -->
+            <div class="quick-links">
+                <a href="/help" class="quick-link">
+                    <span class="quick-link-icon"></span>
+                    <span>Help Center</span>
+                </a>
+                <a href="/contact" class="quick-link">
+                    <span class="quick-link-icon"></span>
+                    <span>Contact Support</span>
+                </a>
+                <a href="/pricing" class="quick-link">
+                    <span class="quick-link-icon"></span>
+                    <span>View Pricing</span>
+                </a>
+                <a href="/demo" class="quick-link">
+                    <span class="quick-link-icon"></span>
+                    <span>Watch Demo</span>
+                </a>
+            </div>
+
+            <!-- FAQ Categories -->
+            <div class="faq-categories">
+                <button class="category-btn active" onclick="FAQPage.filterByCategory('all')">
+                    <span class="category-icon"></span>
+                    <span>All Questions</span>
+                    <span class="category-count" id="countAll">0</span>
+                </button>
+                <button class="category-btn" onclick="FAQPage.filterByCategory('general')">
+                    <span class="category-icon">ℹ</span>
+                    <span>General</span>
+                    <span class="category-count" id="countGeneral">0</span>
+                </button>
+                <button class="category-btn" onclick="FAQPage.filterByCategory('speakers')">
+                    <span class="category-icon"></span>
+                    <span>For Speakers</span>
+                    <span class="category-count" id="countSpeakers">0</span>
+                </button>
+                <button class="category-btn" onclick="FAQPage.filterByCategory('organizations')">
+                    <span class="category-icon"></span>
+                    <span>For Organizations</span>
+                    <span class="category-count" id="countOrganizations">0</span>
+                </button>
+                <button class="category-btn" onclick="FAQPage.filterByCategory('billing')">
+                    <span class="category-icon"></span>
+                    <span>Billing</span>
+                    <span class="category-count" id="countBilling">0</span>
+                </button>
+                <button class="category-btn" onclick="FAQPage.filterByCategory('technical')">
+                    <span class="category-icon"></span>
+                    <span>Technical</span>
+                    <span class="category-count" id="countTechnical">0</span>
+                </button>
+            </div>
+
+            <!-- FAQ Section -->
+            <section class="faq-section">
+                <div class="faq-container" id="faqContainer">
+                    <!-- Loading state -->
+                    <div class="loading-skeleton"></div>
+                    <div class="loading-skeleton"></div>
+                    <div class="loading-skeleton"></div>
+                </div>
+            </section>
+
+            <!-- Still Need Help Section -->
+            <section class="need-help">
+                <div class="need-help-content">
+                    <h2>Still Have Questions?</h2>
+                    <p>We're here to help you get the most out of CoveTalks</p>
+                    
+                    <div class="help-options">
+                        <a href="/contact" class="help-option">
+                            <span class="help-option-icon">💬</span>
+                            <span class="help-option-title">Live Chat</span>
+                            <span class="help-option-desc">Mon-Fri, 9am-6pm EST</span>
+                        </a>
+                        
+                        <a href="mailto:support@covetalks.com" class="help-option">
+                            <span class="help-option-icon">📧</span>
+                            <span class="help-option-title">Email Us</span>
+                            <span class="help-option-desc">24-48 hour response</span>
+                        </a>
+                        
+                        <a href="/help" class="help-option">
+                            <span class="help-option-icon">📖</span>
+                            <span class="help-option-title">Help Center</span>
+                            <span class="help-option-desc">Browse all resources</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <!-- Footer will be auto-injected by footer.js -->
+
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load config and Supabase client -->
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
+    
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
+    <script src="/public/pages/faq.js"></script>
+    
+    <!-- Service Worker Registration -->
+    <script src="/js/sw-register.js"></script>
+</body>
+</html>

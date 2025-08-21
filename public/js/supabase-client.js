@@ -3160,8 +3160,218 @@ window.covetalks = {
         
         script.textContent = JSON.stringify(structuredData);
         document.head.appendChild(script);
+    },
+
+    // ===========================================
+    // HELP CENTER
+    // ===========================================
+
+    async getHelpArticles(category = null, limit = 10) {
+        let query = supabase
+            .from('help_articles')
+            .select('*')
+            .eq('published', true)
+            .order('created_at', { ascending: false });
+        
+        if (category) {
+            query = query.eq('category', category);
+        }
+        
+        if (limit) {
+            query = query.limit(limit);
+        }
+        
+        const { data, error } = await query;
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getPopularArticles(limit = 8) {
+        const { data, error } = await supabase
+            .from('help_articles')
+            .select('id, title, slug, category, is_new, view_count')
+            .eq('published', true)
+            .eq('is_popular', true)
+            .order('view_count', { ascending: false })
+            .limit(limit);
+        
+        if (error) throw error;
+        return data || [];
+    },
+
+    async searchHelpArticles(searchTerm) {
+        const { data, error } = await supabase
+            .from('help_articles')
+            .select('*')
+            .eq('published', true)
+            .textSearch('search_vector', searchTerm, {
+                type: 'websearch'
+            })
+            .limit(20);
+        
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getHelpArticle(slug) {
+        const { data, error } = await supabase
+            .from('help_articles')
+            .select('*')
+            .eq('slug', slug)
+            .eq('published', true)
+            .single();
+        
+        if (error) throw error;
+        
+        // Increment view count
+        if (data) {
+            await this.incrementArticleViews(data.id);
+        }
+        
+        return data;
+    },
+
+    async incrementArticleViews(articleId) {
+        const { error } = await supabase.rpc('increment', {
+            table_name: 'help_articles',
+            column_name: 'view_count',
+            row_id: articleId
+        });
+        
+        if (error) console.error('Error incrementing views:', error);
+    },
+
+    async markArticleHelpful(articleId, isHelpful) {
+        const column = isHelpful ? 'helpful_count' : 'not_helpful_count';
+        
+        const { error } = await supabase.rpc('increment', {
+            table_name: 'help_articles',
+            column_name: column,
+            row_id: articleId
+        });
+        
+        if (error) throw error;
+    },
+
+    // ===========================================
+    // FAQ CENTER
+    // ===========================================
+    async getFAQs(category = null) {
+        let query = supabase
+            .from('faqs')
+            .select('*')
+            .eq('published', true)
+            .order('sort_order', { ascending: true })
+            .order('created_at', { ascending: false });
+        
+        if (category && category !== 'all') {
+            query = query.eq('category', category);
+        }
+        
+        const { data, error } = await query;
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getFeaturedFAQs(limit = 5) {
+        const { data, error } = await supabase
+            .from('faqs')
+            .select('*')
+            .eq('published', true)
+            .eq('is_featured', true)
+            .order('view_count', { ascending: false })
+            .limit(limit);
+        
+        if (error) throw error;
+        return data || [];
+    },
+
+    async searchFAQs(searchTerm) {
+        // Using ILIKE for case-insensitive search
+        const { data, error } = await supabase
+            .from('faqs')
+            .select('*')
+            .eq('published', true)
+            .or(`question.ilike.%${searchTerm}%,answer.ilike.%${searchTerm}%`)
+            .order('view_count', { ascending: false })
+            .limit(20);
+        
+        if (error) throw error;
+        return data || [];
+    },
+
+    async getFAQById(faqId) {
+        const { data, error } = await supabase
+            .from('faqs')
+            .select('*')
+            .eq('id', faqId)
+            .eq('published', true)
+            .single();
+        
+        if (error) throw error;
+        
+        // Increment view count
+        if (data) {
+            await this.incrementFAQViews(data.id);
+        }
+        
+        return data;
+    },
+
+    async incrementFAQViews(faqId) {
+        const { error } = await supabase.rpc('increment_faq_counter', {
+            faq_id: faqId,
+            counter_name: 'view_count'
+        });
+        
+        if (error) console.error('Error incrementing FAQ views:', error);
+    },
+
+    async markFAQHelpful(faqId, isHelpful) {
+        const counterName = isHelpful ? 'helpful_count' : 'not_helpful_count';
+        
+        const { error } = await supabase.rpc('increment_faq_counter', {
+            faq_id: faqId,
+            counter_name: counterName
+        });
+        
+        if (error) throw error;
+    },
+
+    async getFAQCategories() {
+        // Get count of FAQs per category
+        const { data, error } = await supabase
+            .from('faqs')
+            .select('category')
+            .eq('published', true);
+        
+        if (error) throw error;
+        
+        // Count FAQs per category
+        const categoryCounts = {};
+        data.forEach(item => {
+            categoryCounts[item.category] = (categoryCounts[item.category] || 0) + 1;
+        });
+        
+        return categoryCounts;
+    },
+
+    async getRelatedFAQs(faqId, category, limit = 4) {
+        const { data, error } = await supabase
+            .from('faqs')
+            .select('id, question, category')
+            .eq('published', true)
+            .eq('category', category)
+            .neq('id', faqId)
+            .order('view_count', { ascending: false })
+            .limit(limit);
+        
+        if (error) throw error;
+        return data || [];
     }
 };
+
+
 
 // Export for module systems
 if (typeof module !== 'undefined' && module.exports) {

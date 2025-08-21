@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center - CoveTalks</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/Images/CoveTalks_Vertical.svg">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- PWA Support -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#155487">
+    <link rel="apple-touch-icon" href="/Images/icon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="CoveTalks">
+    <meta name="msapplication-TileImage" content="/Images/icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#155487">
+    
+    <!-- Page-specific styles -->
+    <style>
+        /* Hero Section with Brand Gradient */
+        .help-hero {
+            background: linear-gradient(135deg, #155487 0%, #2B9AC9 100%);
+            color: white;
+            padding: 6rem 0 4rem 0;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .help-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(243, 179, 56, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .help-hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .help-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-family: 'Brandon Text', sans-serif;
+            font-weight: 900;
+            color: white;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .help-hero p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+            font-family: 'Brandon Text', sans-serif;
+            font-weight: 400;
+            animation: fadeInUp 0.6s ease 0.1s;
+            animation-fill-mode: both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Search Bar */
+        .help-search {
+            background: white;
+            padding: 1rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(21, 84, 135, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 0.6s ease 0.2s;
+            animation-fill-mode: both;
+        }
+
+        .help-search-icon {
+            color: #2B9AC9;
+            font-size: 1.5rem;
+            margin-left: 1rem;
+        }
+
+        .help-search input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            font-family: 'Brandon Text', sans-serif;
+            color: #155487;
+        }
+
+        .help-search input::placeholder {
+            color: #999;
+        }
+
+        .help-search button {
+            background: #F3B338;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-family: 'Brandon Text', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .help-search button:hover {
+            background: #e5a030;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(243, 179, 56, 0.3);
+        }
+
+        /* Quick Help Cards */
+        .quick-help-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            color: #155487;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Brandon Text', sans-serif;
+            font-weight: 900;
+        }
+
+        .section-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .quick-help-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .help-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .help-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #155487, #2B9AC9);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .help-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            border-color: #2B9AC9;
+        }
+
+        .help-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .help-card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #155487, #2B9AC9);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .help-card.speakers .help-card-icon {
+            background: linear-gradient(135deg, #2B9AC9, #20a8c9);
+        }
+
+        .help-card.organizations .help-card-icon {
+            background: linear-gradient(135deg, #F3B338, #f5c551);
+        }
+
+        .help-card.billing .help-card-icon {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .help-card.technical .help-card-icon {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+        }
+
+        .help-card h3 {
+            color: #155487;
+            margin-bottom: 0.5rem;
+            font-family: 'Brandon Text', sans-serif;
+            font-weight: 900;
+            font-size: 1.25rem;
+        }
+
+        .help-card p {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .help-card-link {
+            color: #2B9AC9;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.2s ease;
+        }
+
+        .help-card-link:hover {
+            gap: 0.75rem;
+        }
+
+        /* Popular Articles */
+        .articles-section {
+            background: #E5E5E5;
+            padding: 3rem 0;
+            border-radius: 30px;
+            margin-bottom: 3rem;
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .article-category {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        }
+
+        .article-category h3 {
+            color: #155487;
+            margin-bottom: 1rem;
+            font-family: 'Brandon Text', sans-serif;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .article-category h3 span {
+            font-size: 1.25rem;
+        }
+
+        .article-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .article-list li {
+            border-bottom: 1px solid #E5E5E5;
+            padding: 0.75rem 0;
+        }
+
+        .article-list li:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .article-list a {
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.2s ease;
+        }
+
+        .article-list a:hover {
+            color: #155487;
+        }
+
+        .article-badge {
+            background: #F3B338;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .article-badge.popular {
+            background: #2B9AC9;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: linear-gradient(135deg, #155487, #2B9AC9);
+            border-radius: 20px;
+            padding: 3rem;
+            color: white;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-section::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(243, 179, 56, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .contact-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-section h2 {
+            color: white;
+            margin-bottom: 1rem;
+            font-family: 'Brandon Text', sans-serif;
+            font-weight: 900;
+            font-size: 2rem;
+        }
+
+        .contact-section p {
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .contact-options {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .contact-option {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-option:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+
+        .contact-option-icon {
+            font-size: 1.5rem;
+        }
+
+        .contact-option-text {
+            text-align: left;
+        }
+
+        .contact-option-label {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-option-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* Loading States */
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .article-loading {
+            height: 20px;
+            margin-bottom: 12px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .help-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .help-hero {
+                padding: 4rem 1rem 3rem;
+            }
+
+            .help-hero h1 {
+                font-size: 2rem;
+            }
+
+            .help-hero p {
+                font-size: 1.1rem;
+            }
+
+            .help-search {
+                flex-direction: column;
+                padding: 1rem;
+                border-radius: 15px;
+            }
+
+            .help-search input {
+                width: 100%;
+                padding: 0.75rem;
+            }
+
+            .help-search button {
+                width: 100%;
+            }
+
+            .quick-help-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-options {
+                flex-direction: column;
+            }
+
+            .contact-option {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header will be auto-injected by header.js -->
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <div class="help-hero">
+            <div class="container">
+                <div class="help-hero-content">
+                    <h1>How Can We Help You?</h1>
+                    <p>Find answers, explore guides, and get support for your CoveTalks journey</p>
+                    
+                    <!-- Search Bar -->
+                    <div class="help-search">
+                        <span class="help-search-icon">🔍</span>
+                        <input type="text" id="helpSearch" placeholder="Search for help articles..." onkeyup="HelpPage.searchHelp(event)">
+                        <button onclick="HelpPage.performSearch()">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Quick Help Cards -->
+            <section class="quick-help-section">
+                <div class="section-header">
+                    <h2>Quick Help Topics</h2>
+                    <p>Select a category to get started</p>
+                </div>
+
+                <div class="quick-help-grid">
+                    <div class="help-card speakers" onclick="HelpPage.navigateToCategory('speakers')">
+                        <div class="help-card-icon">🎤</div>
+                        <h3>For Speakers</h3>
+                        <p>Learn how to create your profile, apply to opportunities, and grow your speaking career.</p>
+                        <a href="#" class="help-card-link" onclick="event.stopPropagation()">
+                            Explore Speaker Guides →
+                        </a>
+                    </div>
+
+                    <div class="help-card organizations" onclick="HelpPage.navigateToCategory('organizations')">
+                        <div class="help-card-icon">🏢</div>
+                        <h3>For Organizations</h3>
+                        <p>Discover how to post opportunities, review applications, and find the perfect speakers.</p>
+                        <a href="#" class="help-card-link" onclick="event.stopPropagation()">
+                            Organization Resources →
+                        </a>
+                    </div>
+
+                    <div class="help-card billing" onclick="HelpPage.navigateToCategory('billing')">
+                        <div class="help-card-icon">💳</div>
+                        <h3>Billing & Subscriptions</h3>
+                        <p>Manage your subscription, understand pricing, and handle payment methods.</p>
+                        <a href="#" class="help-card-link" onclick="event.stopPropagation()">
+                            Billing Help →
+                        </a>
+                    </div>
+
+                    <div class="help-card technical" onclick="HelpPage.navigateToCategory('technical')">
+                        <div class="help-card-icon">⚙️</div>
+                        <h3>Technical Support</h3>
+                        <p>Troubleshoot issues, report bugs, and get technical assistance.</p>
+                        <a href="#" class="help-card-link" onclick="event.stopPropagation()">
+                            Get Tech Support →
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Popular Articles -->
+            <section class="articles-section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Popular Help Articles</h2>
+                        <p>Most frequently accessed guides and tutorials</p>
+                    </div>
+
+                    <div class="articles-grid" id="popularArticlesGrid">
+                        <!-- Articles will be dynamically loaded here -->
+                        <div class="article-category">
+                            <h3><span>🚀</span> Getting Started</h3>
+                            <ul class="article-list" id="gettingStartedArticles">
+                                <li class="article-loading loading-skeleton"></li>
+                                <li class="article-loading loading-skeleton"></li>
+                                <li class="article-loading loading-skeleton"></li>
+                            </ul>
+                        </div>
+
+                        <div class="article-category">
+                            <h3><span>📚</span> Best Practices</h3>
+                            <ul class="article-list" id="bestPracticesArticles">
+                                <li class="article-loading loading-skeleton"></li>
+                                <li class="article-loading loading-skeleton"></li>
+                                <li class="article-loading loading-skeleton"></li>
+                            </ul>
+                        </div>
+
+                        <div class="article-category">
+                            <h3><span>🔧</span> Account Management</h3>
+                            <ul class="article-list" id="accountArticles">
+                                <li class="article-loading loading-skeleton"></li>
+                                <li class="article-loading loading-skeleton"></li>
+                                <li class="article-loading loading-skeleton"></li>
+                            </ul>
+                        </div>
+
+                        <div class="article-category">
+                            <h3><span>💰</span> Payments & Billing</h3>
+                            <ul class="article-list" id="paymentsArticles">
+                                <li class="article-loading loading-skeleton"></li>
+                                <li class="article-loading loading-skeleton"></li>
+                                <li class="article-loading loading-skeleton"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Support -->
+            <section class="contact-section">
+                <div class="contact-content">
+                    <h2>Still Need Help?</h2>
+                    <p>Our support team is here to assist you with any questions or concerns</p>
+                    
+                    <div class="contact-options">
+                        <div class="contact-option">
+                            <span class="contact-option-icon">📧</span>
+                            <div class="contact-option-text">
+                                <div class="contact-option-label">Email Support</div>
+                                <div class="contact-option-value">support@covetalks.com</div>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-option">
+                            <span class="contact-option-icon">💬</span>
+                            <div class="contact-option-text">
+                                <div class="contact-option-label">Live Chat</div>
+                                <div class="contact-option-value">Mon-Fri, 9am-6pm EST</div>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-option">
+                            <span class="contact-option-icon">📞</span>
+                            <div class="contact-option-text">
+                                <div class="contact-option-label">Phone (Premium)</div>
+                                <div class="contact-option-value">1-800-COVETALKS</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <!-- Footer will be auto-injected by footer.js -->
+
+    <!-- Load Supabase from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Load config and Supabase client -->
+    <script src="/js/config.js"></script>
+    <script src="/js/supabase-client.js"></script>
+    
+    <!-- Load header and footer components -->
+    <script src="/js/components/header.js"></script>
+    <script src="/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
+    <script src="/public/pages/help.js"></script>
+    
+    <!-- Service Worker Registration -->
+    <script src="/js/sw-register.js"></script>
+</body>
+</html>
