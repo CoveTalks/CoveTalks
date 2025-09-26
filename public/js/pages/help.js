@@ -338,10 +338,6 @@ const HelpPage = {
                     // Email support - use mailto
                     e.preventDefault();
                     window.location.href = `mailto:support@covetalks.com?subject=Help Request`;
-                } else if (value.includes('800')) {
-                    // Phone support
-                    e.preventDefault();
-                    window.location.href = `tel:+18002683825`; // 1-800-COVETALKS
                 } else if (value.includes('9am-6pm')) {
                     // Live chat - go to contact page
                     e.preventDefault();
